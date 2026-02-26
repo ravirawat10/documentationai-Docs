@@ -2,10 +2,14 @@
   "name": "Starter Kit",
   "colors": {
     "light": {
-      "brand": "#F97316"
+      "brand": "#4FA83D",
+      "heading": "#1a1a1a",
+      "text": "#374151"
     },
     "dark": {
-      "brand": "#FDBA74"
+      "brand": "#4FA83D",
+      "heading": "#f2f2f2",
+      "text": "#c1c1c1"
     }
   },
   "navigation": {
@@ -150,5 +154,32 @@
         ]
       }
     ]
-  }
+  },
+  "logo-dark": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
+  "logo-light": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
+  "favicon": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875329738-h20psk07n97-favicon.png?q=85&fm=auto&auto=compress%2Cformat",
+  "initialRoute": "quickstart",
+  "navbar": {
+    "actions": {
+      "primary": {
+        "title": "Help Center",
+        "link": "https://www.5centscdn.net/help/"
+      },
+      "links": [
+        {
+          "title": "Login",
+          "link": "https://www.5centscdn.net/dashboard/login"
+        },
+        {
+          "title": "Blog",
+          "link": "https://www.5centscdn.net/blog/"
+        },
+        {
+          "title": "Developer Hub",
+          "link": "https://developer.5centscdn.net/"
+        }
+      ]
+    }
+  },
+  "template": "classic"
 }
