@@ -168,13 +168,13 @@
   "navbar": {
     "actions": {
       "primary": {
-        "title": "Help Center",
-        "link": "https://www.5centscdn.net/help/"
+        "title": "Login",
+        "link": "https://www.5centscdn.net/dashboard/login"
       },
       "links": [
         {
-          "title": "Login",
-          "link": "https://www.5centscdn.net/dashboard/login"
+          "title": "GitHub",
+          "link": "https://github.com/5centscdn"
         },
         {
           "title": "Blog",
@@ -183,6 +183,14 @@
         {
           "title": "Developer Hub",
           "link": "https://developer.5centscdn.net/"
+        },
+        {
+          "title": "Help Center",
+          "link": "https://www.5centscdn.net/help/"
+        },
+        {
+          "title": "Service Status",
+          "link": "https://status.5centscdn.net"
         }
       ]
     }
