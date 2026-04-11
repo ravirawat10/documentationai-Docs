@@ -94,7 +94,13 @@
           },
           {
             "group": "Sample Endpoints",
-            "openapi": "openapi.yaml"
+            "openapi": "openapi.yaml",
+            "pages": [
+              {
+                "title": "Live",
+                "path": "live"
+              }
+            ]
           }
         ]
       },
