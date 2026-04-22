@@ -108,12 +108,7 @@
           },
           {
             "group": "SimpleDNS",
-            "pages": [
-              {
-                "title": "SimpleDNS",
-                "path": "simpledns"
-              }
-            ],
+            "pages": [],
             "openapi": "api-reference/SimpleDNS.yaml"
           }
         ]
