@@ -90,7 +90,8 @@
                 "path": "authentication",
                 "icon": "lock"
               }
-            ]
+            ],
+            "openapi": "api-reference/Account.yaml"
           },
           {
             "group": "Sample Endpoints",
@@ -101,6 +102,16 @@
                 "path": "live"
               }
             ]
+          },
+          {
+            "group": "Account",
+            "pages": [],
+            "openapi": "api-reference/Account.yaml"
+          },
+          {
+            "group": "SimpleDNS",
+            "pages": [],
+            "openapi": "api-reference/Account.yaml"
           }
         ]
       },
