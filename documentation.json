@@ -105,8 +105,7 @@
           },
           {
             "group": "Account",
-            "pages": [],
-            "openapi": "api-reference/Account.yaml"
+            "pages": []
           },
           {
             "group": "SimpleDNS",
