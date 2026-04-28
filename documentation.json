@@ -93,6 +93,26 @@
             ]
           },
           {
+            "group": "Account",
+            "pages": [],
+            "openapi": "api-reference/account.yaml"
+          },
+          {
+            "group": "Zone",
+            "pages": [],
+            "openapi": "api-reference/zone.yaml"
+          },
+          {
+            "group": "SimpleDNS",
+            "pages": [],
+            "openapi": "api-reference/simpleDNS.yaml"
+          },
+          {
+            "group": "Analytics",
+            "pages": [],
+            "icon": "activity"
+          },
+          {
             "group": "Sample Endpoints",
             "openapi": "openapi.yaml",
             "pages": [
@@ -101,15 +121,6 @@
                 "path": "live"
               }
             ]
-          },
-          {
-            "group": "Account",
-            "pages": []
-          },
-          {
-            "group": "SimpleDNS",
-            "pages": [],
-            "openapi": "api-reference/SimpleDNS.yaml"
           }
         ]
       },

@@ -603,9 +603,14 @@ paths:
       parameters:
         - $ref: '#/components/parameters/serviceId'
       requestBody:
+        required: true
         content:
           application/x-www-form-urlencoded:
             schema:
+              type: object
+              required:
+                - domain
+                - _METHOD
               properties:
                 domain:
                   type: string
@@ -615,6 +620,9 @@ paths:
                   type: string
                   description: masking post -> put request
                   example: PUT
+            example:
+              domain: testdomain.com
+              _METHOD: PUT
       responses:
         '200':
           description: OK
