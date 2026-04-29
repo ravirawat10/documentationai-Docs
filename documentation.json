@@ -93,12 +93,12 @@
             ]
           },
           {
-            "group": "Account",
+            "group": "Accounts",
             "pages": [],
             "openapi": "api-reference/Account-API.yaml"
           },
           {
-            "group": "Zone",
+            "group": "Zones",
             "pages": [],
             "openapi": "api-reference/Zones-API.yaml"
           },
@@ -124,7 +124,7 @@
             "openapi": "api-reference/simpleDNS-API.yaml"
           },
           {
-            "group": "Transcoding",
+            "group": "Video Encoding",
             "pages": [],
             "openapi": "api-reference/Transcoding-Api-.yaml"
           }
