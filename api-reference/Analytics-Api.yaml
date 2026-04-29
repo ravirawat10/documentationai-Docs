@@ -4,9 +4,9 @@ info:
   description: |
     Unified API for CDN analytics and reporting in 5centsCDN.
 
-    **REST API** (server: `https://api.5centscdn.com/v2`): Unified traffic analytics
+    **REST API** (server: https://api.5centscdn.com/v2): Unified traffic analytics
     (breakdown and time-series data by location, country, browser, OS, device, status code,
-    referrer, file, visitor IP, and ASN). Authenticate with `X-API-Key` header.
+    referrer, file, visitor IP, and ASN). Authenticate with X-API-Key header.
   version: "2.0.0"
   contact:
     email: help@5centscdn.com
@@ -25,11 +25,11 @@ tags:
   description: REST API unified traffic analytics (breakdown and time-series by dimension)
 paths:
 
-  /{serviceId}/analytics/traffic/resources:
+  /{id}/analytics/traffic/resources:
     post:
       operationId: trafficResources
       summary: List available resources for filtering
-      description: Returns a map of resource-hash → resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in `resource_hashes` filter fields on all other analytics endpoints.
+      description: Returns a map of resource-hash → resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in resource_hashes filter fields on all other analytics endpoints.
       tags: [traffic-analytics]
       parameters:
       - $ref: '#/components/parameters/RestServiceId'
@@ -47,7 +47,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficResourcesResponse'
 
-  /{serviceId}/analytics/traffic/summary:
+  /{id}/analytics/traffic/summary:
     post:
       operationId: trafficSummary
       summary: Get traffic summary
@@ -63,8 +63,8 @@ paths:
               type: object
               required: [r]
               description: |
-                If `resource_type` is `all`, omit `resource_hashes`.
-                If `resource_type` is a specific type, `resource_hashes` must be provided.
+                If resource_type is all, omit resource_hashes.
+                If resource_type is a specific type, resource_hashes must be provided.
               properties:
                 r:
                   type: string
@@ -72,7 +72,7 @@ paths:
                   example: "2024-04-01 - 2024-04-22"
                 resource_type:
                   type: string
-                  description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+                  description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
                   enum: [push, pull, all, livestream]
                   example: push
                 resource_hashes:
@@ -80,7 +80,7 @@ paths:
                   items:
                     type: string
                   description: |
-                    Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+                    Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
                   example: ["exa8jekgpb63", "n4zpvl968j5o"]
                 granularity:
@@ -96,7 +96,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficSummaryResponse'
 
-  /{serviceId}/analytics/traffic/summary/line:
+  /{id}/analytics/traffic/summary/line:
     post:
       operationId: trafficSummaryLine
       summary: Get traffic summary time-series
@@ -118,7 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficSummaryLineResponse'
 
-  /{serviceId}/analytics/traffic/summary/card:
+  /{id}/analytics/traffic/summary/card:
     post:
       operationId: trafficSummaryCard
       summary: Get period-over-period traffic summary
@@ -140,7 +140,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficCardResponse'
 
-  /{serviceId}/analytics/traffic/cache:
+  /{id}/analytics/traffic/cache:
     post:
       operationId: trafficCache
       summary: Get traffic breakdown by cache status
@@ -156,8 +156,8 @@ paths:
               type: object
               required: [r]
               description: |
-                If `resource_type` is `all`, omit `resource_hashes`.
-                If `resource_type` is a specific type, `resource_hashes` must be provided.
+                If resource_type is all, omit resource_hashes.
+                If resource_type is a specific type, resource_hashes must be provided.
               properties:
                 r:
                   type: string
@@ -165,7 +165,7 @@ paths:
                   example: "2024-04-01 - 2024-04-22"
                 resource_type:
                   type: string
-                  description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+                  description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
                   enum: [push, pull, all, livestream]
                   example: push
                 resource_hashes:
@@ -173,7 +173,7 @@ paths:
                   items:
                     type: string
                   description: |
-                    Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+                    Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
                   example: ["exa8jekgpb63", "n4zpvl968j5o"]
                 granularity:
@@ -189,7 +189,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficCacheResponse'
 
-  /{serviceId}/analytics/traffic/cache/line:
+  /{id}/analytics/traffic/cache/line:
     post:
       operationId: trafficCacheLine
       summary: Get traffic time-series for a cache status
@@ -211,7 +211,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/cache/card:
+  /{id}/analytics/traffic/cache/card:
     post:
       operationId: trafficCacheCard
       summary: Get period-over-period cache status comparison
@@ -233,7 +233,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficCacheCardResponse'
 
-  /{serviceId}/analytics/traffic/location:
+  /{id}/analytics/traffic/location:
     post:
       operationId: trafficLocation
       summary: Get traffic breakdown by PoP location
@@ -255,7 +255,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/location/line:
+  /{id}/analytics/traffic/location/line:
     post:
       operationId: trafficLocationLine
       summary: Get traffic time-series for a PoP location
@@ -277,7 +277,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/country:
+  /{id}/analytics/traffic/country:
     post:
       operationId: trafficCountry
       summary: Get traffic breakdown by country
@@ -299,7 +299,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/country/line:
+  /{id}/analytics/traffic/country/line:
     post:
       operationId: trafficCountryLine
       summary: Get traffic time-series for a country
@@ -321,7 +321,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/browser:
+  /{id}/analytics/traffic/browser:
     post:
       operationId: trafficBrowser
       summary: Get traffic breakdown by browser
@@ -343,7 +343,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/browser/line:
+  /{id}/analytics/traffic/browser/line:
     post:
       operationId: trafficBrowserLine
       summary: Get traffic time-series for a browser
@@ -365,7 +365,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/os:
+  /{id}/analytics/traffic/os:
     post:
       operationId: trafficOS
       summary: Get traffic breakdown by operating system
@@ -387,7 +387,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/os/line:
+  /{id}/analytics/traffic/os/line:
     post:
       operationId: trafficOSLine
       summary: Get traffic time-series for an operating system
@@ -409,7 +409,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/device:
+  /{id}/analytics/traffic/device:
     post:
       operationId: trafficDevice
       summary: Get traffic breakdown by device type
@@ -431,7 +431,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/device/line:
+  /{id}/analytics/traffic/device/line:
     post:
       operationId: trafficDeviceLine
       summary: Get traffic time-series for a device type
@@ -453,7 +453,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/statuscode:
+  /{id}/analytics/traffic/statuscode:
     post:
       operationId: trafficStatusCode
       summary: Get traffic breakdown by HTTP status code
@@ -475,7 +475,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/statuscode/line:
+  /{id}/analytics/traffic/statuscode/line:
     post:
       operationId: trafficStatusCodeLine
       summary: Get traffic time-series for an HTTP status code
@@ -497,7 +497,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/referrer:
+  /{id}/analytics/traffic/referrer:
     post:
       operationId: trafficReferrer
       summary: Get traffic breakdown by referrer
@@ -519,7 +519,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/referrer/line:
+  /{id}/analytics/traffic/referrer/line:
     post:
       operationId: trafficReferrerLine
       summary: Get traffic time-series for a referrer
@@ -541,7 +541,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/file:
+  /{id}/analytics/traffic/file:
     post:
       operationId: trafficFile
       summary: Get traffic breakdown by file path
@@ -563,7 +563,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/file/line:
+  /{id}/analytics/traffic/file/line:
     post:
       operationId: trafficFileLine
       summary: Get traffic time-series for a file path
@@ -585,7 +585,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/visitor:
+  /{id}/analytics/traffic/visitor:
     post:
       operationId: trafficVisitor
       summary: Get traffic breakdown by unique visitor IP
@@ -607,7 +607,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/visitor/line:
+  /{id}/analytics/traffic/visitor/line:
     post:
       operationId: trafficVisitorLine
       summary: Get traffic time-series for a visitor IP
@@ -629,7 +629,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
-  /{serviceId}/analytics/traffic/asn:
+  /{id}/analytics/traffic/asn:
     post:
       operationId: trafficASN
       summary: Get traffic breakdown by ASN
@@ -651,7 +651,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrafficBreakdownResponse'
 
-  /{serviceId}/analytics/traffic/asn/line:
+  /{id}/analytics/traffic/asn/line:
     post:
       operationId: trafficASNLine
       summary: Get traffic time-series for an ASN
@@ -677,7 +677,7 @@ paths:
 components:
   parameters:
     RestServiceId:
-      name: serviceId
+      name: id
       in: path
       required: true
       description: CDN service ID (integer)
@@ -699,33 +699,33 @@ components:
     StatsSummaryRangeParam:
       description: |
         Slash-delimited filter string for stats summary endpoints.
-        Format: `{range}/{type}`
-        - range: `last_24hrs` | `last_7days` | `last_30days` | `YYYY-MM` (month key)
-        - type: `hourly` | `daily`
-        Example: `last_7days/daily`
+        Format: range/type
+        - range: last_24hrs | last_7days | last_30days | YYYY-MM (month key)
+        - type: hourly | daily
+        Example: last_7days/daily
       type: string
       example: "last_7days/daily"
 
     CacheFilterParam:
       description: |
         Slash-delimited filter string for cache statistics endpoints.
-        Format: `{frequency}/{filter_type}/{start_date}/{end_date}`
-        - frequency: `0` (minute) | `1` (hour) | `2` (day)
-        - filter_type: `0` (traffic) | `1` (HIT/MISS)
-        - start_date: `YYYY-MM-DD`
-        - end_date: `YYYY-MM-DD`
-        Example: `2/0/2024-01-01/2024-01-31`
+        Format: frequency/filter_type/start_date/end_date
+        - frequency: 0 (minute) | 1 (hour) | 2 (day)
+        - filter_type: 0 (traffic) | 1 (HIT/MISS)
+        - start_date: YYYY-MM-DD
+        - end_date: YYYY-MM-DD
+        Example: 2/0/2024-01-01/2024-01-31
       type: string
       example: "2/0/2024-01-01/2024-01-31"
 
     TopFilesFilterParam:
       description: |
         Slash-delimited filter string for top-files endpoints.
-        Format: `{start_date}/{end_date}/{type}`
-        - start_date: `YYYY-MM-DD`
-        - end_date: `YYYY-MM-DD`
-        - type: `dynamic` | `static` | `notfound`
-        Example: `2024-01-01/2024-01-31/dynamic`
+        Format: start_date/end_date/type
+        - start_date: YYYY-MM-DD
+        - end_date: YYYY-MM-DD
+        - type: dynamic | static | notfound
+        Example: 2024-01-01/2024-01-31/dynamic
       type: string
       example: "2024-01-01/2024-01-31/dynamic"
 
@@ -733,21 +733,21 @@ components:
       description: |
         Slash-delimited filter string for referrers, status-codes, countries,
         browsers, OS, and visitors endpoints.
-        Format: `{frequency}/{start_date}/{end_date}`
-        - frequency: `0` (minute) | `1` (hour) | `2` (day)
-        - start_date: `YYYY-MM-DD`
-        - end_date: `YYYY-MM-DD`
-        Example: `2/2024-01-01/2024-01-31`
+        Format: frequency/start_date/end_date
+        - frequency: 0 (minute) | 1 (hour) | 2 (day)
+        - start_date: YYYY-MM-DD
+        - end_date: YYYY-MM-DD
+        Example: 2/2024-01-01/2024-01-31
       type: string
       example: "2/2024-01-01/2024-01-31"
 
     TopReferrersFilterParam:
       description: |
         Slash-delimited filter string for top-referrers endpoint.
-        Format: `{start_date}/{end_date}`
-        - start_date: `YYYY-MM-DD`
-        - end_date: `YYYY-MM-DD`
-        Example: `2024-01-01/2024-01-31`
+        Format: start_date/end_date
+        - start_date: YYYY-MM-DD
+        - end_date: YYYY-MM-DD
+        Example: 2024-01-01/2024-01-31
       type: string
       example: "2024-01-01/2024-01-31"
 
@@ -756,7 +756,7 @@ components:
     # ------------------------------------------------------------------
     AkamaiRangeParam:
       description: |
-        Date-time range for Akamai reports. Format: `YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss`
+        Date-time range for Akamai reports. Format: YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss
         Defaults to last 7 days ending yesterday.
       type: string
       example: "2024-01-01 00:00:00 - 2024-01-08 00:00:00"
@@ -766,7 +766,7 @@ components:
     # ------------------------------------------------------------------
     MinutesRangeParam:
       description: |
-        Date-time range for DVR/transcode stats. Format: `YYYY-MM-DD HH:00:00 - YYYY-MM-DD HH:00:00`
+        Date-time range for DVR/transcode stats. Format: YYYY-MM-DD HH:00:00 - YYYY-MM-DD HH:00:00
         Defaults to last 7 days.
       type: string
       example: "2024-01-01 00:00:00 - 2024-01-08 00:00:00"
@@ -847,10 +847,10 @@ components:
       type: object
       description: |
         A single row in a traffic breakdown or time-series response.
-        The `key` identifies the dimension value:
+        The key identifies the dimension value:
         - For breakdown endpoints: a string (country, browser, PoP ID, etc.) or integer (HTTP status code)
         - For /line time-series endpoints: a Unix timestamp integer
-        Each metric includes a `percent` field showing share of the response-level total.
+        Each metric includes a percent field showing share of the response-level total.
       properties:
         key:
           description: Dimension value or Unix timestamp (for /line endpoints)
@@ -905,8 +905,8 @@ components:
       required: [r]
       description: |
         Request body for the traffic summary time-series endpoint.
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -914,7 +914,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -922,7 +922,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -935,8 +935,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -944,7 +944,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -952,7 +952,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -969,8 +969,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -978,7 +978,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -986,7 +986,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1003,8 +1003,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1012,7 +1012,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1020,7 +1020,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1037,8 +1037,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1046,7 +1046,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1054,7 +1054,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1071,8 +1071,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1080,7 +1080,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1088,7 +1088,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1105,8 +1105,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1114,7 +1114,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1122,7 +1122,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1139,8 +1139,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1148,7 +1148,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1156,7 +1156,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1173,8 +1173,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1182,7 +1182,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1190,7 +1190,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1207,8 +1207,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1216,7 +1216,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1224,7 +1224,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1241,8 +1241,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1250,7 +1250,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1258,7 +1258,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1268,7 +1268,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents the ASN (Autonomous System Name) being analyzed. This value must match the `key` field from the API response data.
+          description: Represents the ASN (Autonomous System Name) being analyzed. This value must match the key field from the API response data.
           example: Megatel Networks Private Limited
           x-examples:
             - Megatel Networks Private Limited
@@ -1278,8 +1278,8 @@ components:
       type: object
       required: [r, match]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1287,7 +1287,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1295,7 +1295,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1305,7 +1305,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents the cache status used to filter analytics data. This value must match the `key` field from the API response data.
+          description: Represents the cache status used to filter analytics data. This value must match the key field from the API response data.
           enum: [HIT, MISS, EXPIRED, BYPASS, STALE, UPDATING, "-"]
           example: MISS
           x-examples:
@@ -1316,8 +1316,8 @@ components:
       type: object
       required: [r]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1325,7 +1325,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1333,7 +1333,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1346,8 +1346,8 @@ components:
       type: object
       required: [r]
       description: |
-        If `resource_type` is `all`, omit `resource_hashes`.
-        If `resource_type` is a specific type, `resource_hashes` must be provided.
+        If resource_type is all, omit resource_hashes.
+        If resource_type is a specific type, resource_hashes must be provided.
       properties:
         r:
           type: string
@@ -1355,7 +1355,7 @@ components:
           example: "2024-04-01 - 2024-04-22"
         resource_type:
           type: string
-          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          description: Resource category to filter by. Use all to include all resources (omit resource_hashes when using all).
           enum: [push, pull, all, livestream]
           example: push
         resource_hashes:
@@ -1363,7 +1363,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /serviceId/analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1376,9 +1376,9 @@ components:
       type: object
       description: |
         Map of resource hash (string key) to resource database ID (integer value).
-        Use these hashes in `resource_hashes` filter fields on all analytics endpoints.
+        Use these hashes in resource_hashes filter fields on all analytics endpoints.
         Push/pull zones use short alphanumeric hashes as keys. Livestream resources
-        use path-style keys in the format `{stream_name}/{source_name}`.
+        use path-style keys in the format stream_name/source_name.
       properties:
         n4zpvl968j5o:
           type: integer
@@ -1573,7 +1573,7 @@ components:
       type: object
       description: |
         Traffic metrics broken down by a single dimension (country, browser, PoP, etc.).
-        The `data` array is sorted by total traffic descending.
+        The data array is sorted by total traffic descending.
       properties:
         summary:
           $ref: '#/components/schemas/TrafficSummary'
@@ -1593,7 +1593,7 @@ components:
           $ref: '#/components/schemas/TrafficSummary'
         data:
           type: array
-          description: Time-series data points, one per granularity bucket. `key` is a Unix timestamp.
+          description: Time-series data points, one per granularity bucket. key is a Unix timestamp.
           items:
             $ref: '#/components/schemas/TrafficDataItem'
 
@@ -1603,7 +1603,7 @@ components:
         Period-over-period comparison for summary metrics. The comparison period is
         equivalent to the selected range shifted backward by the same duration.
         Deviation values use the same TrafficSummary structure, where each metric's
-        `percent` or `formatted` field encodes the relative change (e.g. "-4%").
+        percent or formatted field encodes the relative change (e.g. "-4%").
       properties:
         current:
           $ref: '#/components/schemas/TrafficSummary'
