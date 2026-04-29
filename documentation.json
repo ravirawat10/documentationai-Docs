@@ -94,8 +94,7 @@
           },
           {
             "group": "Account",
-            "pages": [],
-            "openapi": "api-reference/account.yaml"
+            "pages": []
           },
           {
             "group": "Zone",
