@@ -98,12 +98,12 @@
           },
           {
             "group": "Zone",
-            "pages": [],
-            "openapi": "api-reference/zone.yaml"
+            "pages": []
           },
           {
             "group": "SimpleDNS",
-            "pages": []
+            "pages": [],
+            "openapi": "api-reference/simpleDNS-API.yaml"
           },
           {
             "group": "Analytics",
