@@ -122,6 +122,11 @@
             "group": "SimpleDNS",
             "pages": [],
             "openapi": "api-reference/simpleDNS-API.yaml"
+          },
+          {
+            "group": "Transcoding",
+            "pages": [],
+            "openapi": "api-reference/Transcoding-Api-.yaml"
           }
         ]
       },
