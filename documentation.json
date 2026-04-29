@@ -103,14 +103,12 @@
           },
           {
             "group": "SimpleDNS",
-            "pages": [],
-            "openapi": "api-reference/simpleDNS.yaml"
+            "pages": []
           },
           {
             "group": "Analytics",
             "pages": [],
-            "icon": "activity",
-            "openapi": "api-reference/analytics-api.yaml"
+            "icon": "activity"
           },
           {
             "group": "Sample Endpoints",

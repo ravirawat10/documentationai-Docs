@@ -664,7 +664,1099 @@ paths:
                       - code: 31
                         name: London, United Kingdom
                         country: Europe
-
+  /{id}/zones/http/push/new:
+    post:
+      tags: 
+      - HTTP Push Zones
+      summary: Create Zone
+      description: Create a new HTTP Push Zone
+      operationId: createZonePush
+      parameters:
+        - $ref: '#/components/parameters/serviceId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              - alias
+              - server
+              properties:
+                _METHOD:
+                  type: string
+                  description: Must always be PUT.
+                  example: PUT
+                alias:
+                  type: string
+                  description: Label for the zone.
+                  example: my-push-zone
+                server:
+                  type: integer
+                  format: int32
+                  description: Server location code. 30 = North America, 31 = Europe, 206 = SE Asia.
+                  enum: [30, 31, 206]
+                  example: 30
+                profiles:
+                  type: array
+                  items:
+                    type: string
+                  description: Transcoding profile IDs. Leave empty to disable auto transcoding.
+                  example: ["12", "15"]
+                ssl:
+                  type: object
+                  properties:
+                    http2:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    redirect:
+                      type: string
+                      enum: [Y, N]
+                      description: HTTP to HTTPS redirect.
+                      example: N
+                    mode:
+                      type: string
+                      description: SSL mode string.
+                      example: S
+                cache:
+                  type: object
+                  properties:
+                    cache:
+                      type: string
+                      description: Edge cache TTL duration code.
+                      example: 1h
+                    expiry:
+                      type: string
+                      description: Browser cache TTL duration code, or empty string to disable.
+                      example: ""
+                webhook:
+                  type: string
+                  description: HTTP/HTTPS URL to notify after files are transcoded.
+                  example: https://x.com/wh
+                cnames:
+                  type: string
+                  description: Comma-separated verified CNAMEs.
+                  example: cdn.example.com
+                domainlock:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    list:
+                      type: string
+                      description: Comma-separated domain names.
+                      example: ""
+                    ips:
+                      type: string
+                      example: ""
+                    noreferer:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                geoblock:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    list:
+                      type: array
+                      items:
+                        type: string
+                      description: ISO-3166 country codes.
+                      example: []
+                    ips:
+                      type: string
+                      example: ""
+                bwlimit:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    rate:
+                      type: number
+                      example: 0
+                    rateafter:
+                      type: number
+                      example: 0
+                ipaccess:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    list:
+                      type: string
+                      example: ""
+                    ips:
+                      type: string
+                      example: ""
+                securetoken:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Q, F]
+                      example: Q
+                    keyip:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    list:
+                      type: string
+                      description: 16-character hex secret key.
+                      example: ""
+                    timeout:
+                      type: number
+                      minimum: 5
+                      maximum: 25200
+                      example: 5
+                    session:
+                      type: string
+                      enum: ["0", S]
+                      example: "0"
+                    ips:
+                      type: string
+                      example: ""
+                useragent:
+                  type: object
+                  properties:
+                    enabled:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+                    policy:
+                      type: string
+                      enum: [Y, N]
+                      example: Y
+                    list:
+                      type: string
+                      example: ""
+                    ips:
+                      type: string
+                      example: ""
+                    casesensitive:
+                      type: string
+                      enum: [Y, N]
+                      example: N
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                  example: Zone Created
+                 zone:
+                  $ref: '#/components/schemas/zonePushResult'
+                 warnings:
+                  type: array
+                  nullable: true
+                  items:
+                   type: string
+                  example: ["SSL Certificate Create Failed"]
+  /{id}/zones/http/push/{zoneid}:
+    get:
+      tags: 
+      - HTTP Push Zones
+      summary: Zone
+      description: Return  HTTP push zone details
+      operationId: getDetailsZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      deprecated: false 
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  zone:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: push
+                      id:
+                        type: integer
+                        example: 5063
+                      serviceid:
+                        type: integer
+                        example: 103
+                      alias:
+                        type: string
+                        example: ahm/test
+                      hashid:
+                        type: string
+                        example: bgjokmx3a4my
+                      mode:
+                        type: string
+                        example: http
+                      optimizer:
+                        type: string
+                        example: "0"
+                      cnames:
+                        type: string
+                        nullable: true
+                        example: ""
+                      edgeruleids:
+                        type: integer
+                        example: 0
+                      rclone:
+                        type: integer
+                        example: 0
+                      disabled:
+                        type: string
+                        example: "0"
+                      created_at:
+                        type: string
+                        example: "2025-04-02 09:51:17"
+                      updated_at:
+                        type: string
+                        example: "2025-06-10 12:59:38"
+                      deleted:
+                        nullable: true
+                        example: null
+                      router:
+                        type: string
+                        example: mycdn
+                      remaining:
+                        type: integer
+                        example: 0
+                      status:
+                        type: string
+                        example: Enabled
+                      name:
+                        type: string
+                        example: push-5063
+                      fqdn:
+                        type: string
+                        example: push-5063.5centscdn.com
+                      ssl:
+                        type: object
+                        properties:
+                          http:
+                            type: string
+                            example: "N"
+                          http2:
+                            type: string
+                            example: "N"
+                          redirect:
+                            type: string
+                            example: "N"
+                          mode:
+                            type: string
+                            example: L
+                          certid:
+                            type: string
+                            nullable: true
+                            example: push-5063.5centscdn.com
+                          zerossl:
+                            type: object
+                            nullable: true
+                            properties:
+                              logDir:
+                                type: string
+                                example: /home/cp5cents/logs/crons/20260428/5
+                              messages:
+                                type: array
+                                items:
+                                  type: string
+                                example: ["Subject Altternative Names are Required"]
+                          enabled:
+                            type: string
+                            example: "Y"
+                          warning:
+                            oneOf:
+                              - type: boolean
+                              - type: string
+                            example: "Configured SSL. Please add corresponding Custom CNAME from here"
+                      cnamesArr:
+                        type: array
+                        items:
+                          type: string
+                        example: []
+                      cnamesArrFqdn:
+                        type: array
+                        items:
+                          type: string
+                        example: ["push-5063.5centscdn.com"]
+                      waf:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "N"
+                      defaultBehaviors:
+                        type: object
+                        additionalProperties:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 5945
+                              network:
+                                type: string
+                                example: gcore
+                              rule:
+                                type: object
+                      edgeRules:
+                        type: array
+                        items: {}
+                        example: []
+                      cache:
+                        type: object
+                        properties:
+                          smart:
+                            type: string
+                            example: "0"
+                          cache:
+                            type: string
+                            example: 4h
+                          expiry:
+                            type: string
+                            example: 1M
+                          querystring:
+                            type: string
+                            example: "N"
+                          cachecontrol:
+                            type: string
+                            example: "Y"
+                          usestale:
+                            type: string
+                            example: "Y"
+                          revalidate:
+                            type: string
+                            example: "Y"
+                          cacheInSecs:
+                            type: integer
+                            example: 14400
+                          cacheInMins:
+                            type: integer
+                            example: 240
+                          expiryInSecs:
+                            type: integer
+                            example: 2592000
+                          expiryInMins:
+                            type: integer
+                            example: 43200
+                      edge:
+                        type: object
+                        properties:
+                          compression:
+                            type: string
+                            example: "N"
+                          compressionlevel:
+                            type: string
+                            example: "5"
+                          disposition:
+                            type: string
+                            example: "N"
+                          stripcookie:
+                            type: string
+                            example: "N"
+                          xff:
+                            type: string
+                            example: "N"
+                          cors:
+                            type: string
+                            example: "Y"
+                          webp:
+                            type: string
+                            example: "N"
+                          pseudostreaming:
+                            type: string
+                            example: "N"
+                          wp:
+                            type: string
+                            example: "N"
+                          lfo:
+                            type: string
+                            example: "Y"
+                          prefresh:
+                            type: string
+                            example: "N"
+                      securetoken:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "N"
+                          policy:
+                            type: string
+                            example: "F"
+                          keyip:
+                            type: string
+                            example: "N"
+                          list:
+                            type: string
+                            example: ""
+                          timeout:
+                            type: integer
+                            example: 5
+                          session:
+                            type: string
+                            example: "0"
+                          ips:
+                            type: string
+                            example: ""
+                          dirs:
+                            type: string
+                            example: ""
+                          active:
+                            type: string
+                            example: "N"
+                      behaviorId:
+                        type: integer
+                        example: 5945
+                      linkedVideoManager:
+                        nullable: true
+                        example: null
+                      hostHeader:
+                        type: string
+                        example: push-5063.5centscdn.com
+                      storageHost:
+                        type: string
+                        example: storage-eu-01.5centscdn.com
+                      storageHostBackup:
+                        type: string
+                        example: storage-na-01.5centscdn.com
+                      osAuthUrl:
+                        type: string
+                        example: https://storage-eu-01.5centscdn.com/v3/
+                      horizonUrl:
+                        type: string
+                        example: https://storage-eu-01-01.5centscdn.com/horizon/
+                      domainlock:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "N"
+                          policy:
+                            type: string
+                            example: "N"
+                          list:
+                            type: string
+                            example: ""
+                          ips:
+                            type: string
+                            example: 111.2.3.4
+                          noreferer:
+                            type: string
+                            example: "N"
+                          active:
+                            type: string
+                            example: "N"
+                      geoblock:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "N"
+                          policy:
+                            type: string
+                            example: "N"
+                          list:
+                            type: array
+                            items:
+                              type: string
+                            example: ["AL"]
+                          ips:
+                            type: string
+                            example: ""
+                          active:
+                            type: string
+                            example: "N"
+                      ipaccess:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "Y"
+                          policy:
+                            type: string
+                            example: "N"
+                          list:
+                            type: string
+                            example: ""
+                          ips:
+                            type: string
+                            example: ""
+                          active:
+                            type: string
+                            example: "N"
+                      useragent:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "Y"
+                          policy:
+                            type: string
+                            example: "N"
+                          list:
+                            type: string
+                            example: ""
+                          ips:
+                            type: string
+                            example: ""
+                          casesensitive:
+                            type: string
+                            example: "N"
+                          active:
+                            type: string
+                            example: "N"
+                          listArr:
+                            type: array
+                            items:
+                              type: string
+                            example: [""]
+                      eac:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "N"
+                          policy:
+                            type: string
+                            example: "N"
+                          list:
+                            type: string
+                            example: ""
+                          ips:
+                            type: string
+                            example: ""
+                          active:
+                            type: string
+                            example: "N"
+                      bwlimit:
+                        type: object
+                        properties:
+                          enabled:
+                            type: string
+                            example: "Y"
+                          policy:
+                            type: string
+                            example: "1"
+                          rate:
+                            type: integer
+                            example: 30
+                          rateafter:
+                            type: integer
+                            example: 0
+                          payg:
+                            type: string
+                            example: "N"
+                          active:
+                            type: string
+                            example: "Y"
+                      cdnservice:
+                        type: object
+                        properties:
+                          purgeurls:
+                            type: array
+                            items:
+                              type: string
+                            example: ["/dashboard/103/zones/http/push/5063/purge"]
+                          purgeurl:
+                            type: string
+                            example: "[\"\\/dashboard\\/103\\/zones\\/http\\/push\\/5063\\/purge\"]"
+                          authtoken:
+                            type: string
+                            example: dmluZWV0aF8xMDNfcHVzaF81MDYzOjc4NWYzM2IwMGI=
+                          infourl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/info/5/push/5063
+                          listurl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/list/5/push/5063
+                          rawlisturl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/raw/list/5/push/5063
+                          transcodelisturl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/transcode/list/5/push/5063
+                          addurl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/add/5/push/5063
+                          editurl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/edit/5/push/5063
+                          deleteurl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/delete/5/push/5063
+                          uploadurl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/upload.php
+                          playlisturl:
+                            type: string
+                            example: https://fm-gb-lon-sl01.cdnized.com:443/service.php/playlist
+                      ftpdetails:
+                        type: object
+                        properties:
+                          username:
+                            type: string
+                            example: vineeth_103_push_5063
+                          password:
+                            type: string
+                            example: 785f33b00b
+                      playbackurls:
+                        type: object
+                        properties:
+                          scheme:
+                            type: string
+                            example: http
+                          name:
+                            type: string
+                            example: /path/to/filename.ext
+                          url_prefix:
+                            type: string
+                            example: http://push-5063.5centscdn.com
+                          http:
+                            type: string
+                            example: http://push-5063.5centscdn.com/path/to/filename.ext
+                          players:
+                            type: object
+                            properties:
+                              hostname:
+                                type: string
+                                example: iframes.5centscdn.com
+                              flowplayer:
+                                type: object
+                                properties:
+                                  base:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/flowplayer/hls/
+                                  hls:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/flowplayer/hls/
+                              videojs:
+                                type: object
+                                properties:
+                                  base:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/videojs/hls/
+                                  hls:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/videojs/hls/
+                              own:
+                                type: object
+                                properties:
+                                  hashes:
+                                    type: object
+                                    additionalProperties:
+                                      type: object
+                                      properties:
+                                        hash:
+                                          type: string
+                                        hls:
+                                          type: string
+                                        dash:
+                                          type: string
+                                  baseQ:
+                                    type: string
+                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                  base:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/5centscdn/auto/skin1/5myum2ioen3s7gey/
+                                  hls:
+                                    type: string
+                                    example: http://iframes.5centscdn.com/5centscdn/auto/skin1/5myum2ioen3s7gey/
+                      s3details:
+                        type: object
+                        properties:
+                          relid:
+                            type: integer
+                            example: 5063
+                          type:
+                            type: string
+                            example: push
+                          projectid:
+                            type: string
+                            example: fa8aada126e2481195ea548f65c1e067
+                          token:
+                            type: string
+                            example: gAAAAABp7rolY6_--8gLnJ0vLtNghJBw3baLUqVXv63gu-TXQ56W5Y3qamGUypK0699xM8Ltu-zWzmMzvIs47alYxJ0n4lgveprEMoW13nx0WCp8yL1Vpf8_-7PhIpi9HHTqvLItXzc2aFphrKvvmBPjBhECQOGG2Bo33N-93xBTzC2vDHP8ccw
+                          projectid2:
+                            type: string
+                            example: 3f32c4c3746e4933b98c5466a9753251
+                          token2:
+                            type: string
+                            example: gAAAAABp7romPsxs7PwGNtMAL2baFsBnxVAcPpYE2W6qcJZ7OIeVZxXqhFB26RaSlMcU2MrnNZg-4EdBRPB1DUSnLiFOFQhL2sF7ikm118D7wKSWubIPXvSkL1vaIyi9Imil-E5btWyHJ0uJoruOrxttXr8qctd1FAQSLJcx3BDX8C0gKn0MR24
+                          active:
+                            type: string
+                            example: "1"
+                          updated_at:
+                            type: string
+                            example: "2026-04-27 01:21:42"
+                          last_modified:
+                            type: string
+                            example: ""
+                      transcodefile:
+                        type: object
+                        properties:
+                          profiles:
+                            type: array
+                            items:
+                              type: string
+                            example: [""]
+                          emails:
+                            type: array
+                            items:
+                              type: string
+                            example: [""]
+                          webhooks:
+                            type: array
+                            items:
+                              type: string
+                            example: [""]
+                      server:
+                        type: object
+                        properties:
+                          code:
+                            type: integer
+                            example: 31
+                          name:
+                            type: string
+                            example: London, United Kingdom
+                          country:
+                            type: string
+                            example: Europe
+                          meta:
+                            type: object
+                            properties:
+                              uploadPort:
+                                type: string
+                                example: "21"
+                              uploadHost:
+                                type: string
+                                example: upload-gb.5centscdn.com
+                      hasEdgeRules:
+                        type: boolean
+                        example: true
+                  warnings:
+                    nullable: true
+                    example: null
+    post:
+      tags: 
+      - HTTP Push Zones
+      summary: Update Info
+      description: Update the information of HTTP Push Zone
+      operationId: updateZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/postZone'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                 zone:
+                  $ref: '#/components/schemas/zonePushResult'
+                 warnings:
+                  type: array
+                  items:
+                   type: string 
+    delete:
+      tags: 
+      - HTTP Push Zones
+      summary: Delete Info
+      description: Delete the information of HTTP Push Zone. To cast request method POST and parameters _METHOD = DELETE
+      operationId: deletZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  example: DELETE
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                  example: Zone Deleted
+  /{id}/zones/http/push/{zoneid}/ssl:
+    post:
+      tags: 
+      - HTTP Push Zones
+      summary: Update SSL
+      description: Update SSL of HTTP push zone
+      operationId: updateSslZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                http2:
+                  type: boolean
+                  description: Indicates whether HTTP/2 protocol is enabled. Y means HTTP/2 is enabled, while N means it is disabled.
+                  example: true
+                redirect:
+                  type: boolean
+                  description: Indicates whether HTTP traffic is automatically redirected to HTTPS. Y means redirection is enabled, while N means it is not.
+                  example: true
+                mode:
+                  type: string
+                  description: Specifies the SSL mode used for the server configuration. Typical values include S for strict mode or A for automated.
+                  example: S
+                certid:
+                  type: string
+                  nullable: true
+                  description: A unique identifier for the SSL certificate used. Optional; can be null if no certificate is assigned.
+                  example: null
+                enabled:
+                  type: string
+                  description: Indicates whether SSL is enabled for the zone.
+                  example: ""
+                warning:
+                  type: boolean
+                  description: Indicates whether there is a warning associated with the SSL configuration.
+                  example: false
+                name:
+                  type: string
+                  description: The name associated with the SSL certificate. Typically used to identify the certificate for a specific domain.
+                  example: ""
+                crt:
+                  type: string
+                  description: The SSL certificate content in PEM format. Required for custom SSL certificates.
+                  example: ""
+                key:
+                  type: string
+                  description: The private key associated with the SSL certificate in PEM format. Required for setting up custom SSL certificates.
+                  example: ""
+                cabundle:
+                  type: string
+                  description: The Certificate Authority (CA) bundle content in PEM format. Used to validate the SSL certificate chain.
+                  example: ""
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                  example: Zone Updated
+                 zone:
+                   $ref: '#/components/schemas/zonePushResult'
+                 warnings:
+                  type: array
+                  nullable: true
+                  items:
+                   type: string
+                  example: ["SSL Certificate Create Failed"]
+  /{id}/zones/http/push/{zoneid}/securetoken:
+    post:
+      tags: 
+      - HTTP Push Zones
+      summary: Update Secure Token
+      description: Update SecureToken of HTTP push zone
+      operationId: updateSecureTokenZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: string
+                  enum: [Y, N]
+                  description: Enable or disable secure token.
+                  example: Y
+                policy:
+                  type: string
+                  enum: [Q, F]
+                  description: Q = Query string mode, F = Full path mode.
+                  example: Q
+                keyip:
+                  type: string
+                  enum: [Y, N]
+                  description: Include client IP in token generation for added security.
+                  example: N
+                list:
+                  type: string
+                  pattern: '^[a-fA-F0-9]{16}$'
+                  description: Secret token key — 16-character hexadecimal string.
+                  example: a21fe029ccc27bf6
+                timeout:
+                  type: number
+                  minimum: 5
+                  maximum: 25200
+                  description: Token expiry time in seconds. Min 5, max 25200.
+                  example: 3600
+                session:
+                  type: string
+                  enum: ["0", S]
+                  description: '"0" = fixed expiry, "S" = session-based.'
+                  example: "0"
+                ips:
+                  type: string
+                  description: Comma-separated IPs excluded from the secure token check.
+                  example: ""
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                  example: Zone Updated
+                 zone:
+                    $ref: '#/components/schemas/zonePushResult'
+  /{id}/zones/http/push/{zoneid}/geoblock:
+    post:
+      tags: 
+      - HTTP Push Zones
+      summary: Update Geoblock
+      description: Update geblock of HTTP push zone
+      operationId: updateGeblockZonePush
+      parameters:
+      - $ref: '#/components/parameters/serviceId'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: string
+                  enum: [Y, N]
+                  description: Enable or disable geo-lock.
+                  example: Y
+                policy:
+                  type: string
+                  enum: [Y, N]
+                  description: Y = Whitelist (allow listed countries), N = Blacklist (block listed countries).
+                  example: N
+                list:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of ISO-3166 country codes to whitelist or blacklist.
+                  example: [IN]
+                ips:
+                  type: string
+                  description: Comma-separated IP addresses excluded from the geo check.
+                  example: ""
+                mode:
+                  type: string
+                  enum: [save, append, overwrite]
+                  description: Optional update mode — save replaces, append adds to, overwrite replaces entirely.
+                  example: save
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 result:
+                  type: string
+                  example: success
+                 message:
+                  type: string
+                  example: Zone Updated
+                 zone:
+                    $ref: '#/components/schemas/zonePushResult'
+                          
 components:
   parameters:
     serviceId:
