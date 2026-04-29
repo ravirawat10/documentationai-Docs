@@ -11783,63 +11783,6 @@ paths:
                   type: string
                  zone:
                    $ref: '#/components/schemas/zoneVodPullResult'
-  /{id}/zones/http/settings/security/domainlock:
-    post:
-      description: update zone http domain setting 
-      operationId: settingsZoneHTTPDomain
-      parameters:
-        - $ref: '#/components/parameters/serviceId'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                enabled:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                policy:
-                  type: string
-                  enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
-                  example: Y
-                list:
-                  type: string
-                  description: Comma-separated domain names.
-                  example: example.com,cdn.example.com
-                ips:
-                  type: string
-                  description: Comma-separated IPs whitelisted regardless of domain lock.
-                  example: 1.2.3.4,5.6.7.8
-                noreferer:
-                  type: string
-                  enum: [Y, N]
-                  description: Y=allow no-referer requests, N=block them.
-                  example: Y
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                mode:
-                  type: string
-                  description: S=shared (zone-level)
-                  example: S
-      deprecated: false  
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  result:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Zone Settings Updated
   /{id}/zones/http/settings/security/geoblock:
     post:
       tags: 
