@@ -101,11 +101,6 @@
             "pages": []
           },
           {
-            "group": "SimpleDNS",
-            "pages": [],
-            "openapi": "api-reference/simpleDNS-API.yaml"
-          },
-          {
             "group": "Analytics",
             "pages": [],
             "icon": "activity"
