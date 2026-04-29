@@ -119,6 +119,11 @@
                 "path": "live"
               }
             ]
+          },
+          {
+            "group": "SimpleDNS",
+            "pages": [],
+            "openapi": "api-reference/5centsCDN-SimpleDNS-API.yaml"
           }
         ]
       },
