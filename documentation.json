@@ -118,7 +118,7 @@
           {
             "group": "SimpleDNS",
             "pages": [],
-            "openapi": "api-reference/5centsCDN-SimpleDNS-API.yaml"
+            "openapi": "api-reference/simpleDNS-API.yaml"
           }
         ]
       },
