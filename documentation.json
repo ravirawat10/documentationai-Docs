@@ -105,8 +105,7 @@
           {
             "group": "Analytics",
             "pages": [],
-            "icon": "activity",
-            "openapi": "api-reference/Analytics-Api.yaml"
+            "icon": "activity"
           },
           {
             "group": "Sample Endpoints",
