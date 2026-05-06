@@ -66,11 +66,6 @@
             "openapi": "api-reference/Transcoding-Api-.yaml"
           },
           {
-            "group": "ADs Insertion",
-            "pages": [],
-            "openapi": "api-reference/Adinsertion-Api.yaml"
-          },
-          {
             "group": "Live Stream",
             "pages": [],
             "openapi": "api-reference/Livestreams-Api.yaml"
