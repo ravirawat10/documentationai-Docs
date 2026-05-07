@@ -1,10 +1,12 @@
 openapi: 3.0.3
 info:
   title: 5centsCDN - Account Management API
-  description: Account management endpoints for the 5centsCDN platform. Includes domain
-    verification, SSL certificate management, bandwidth overage protection, API key
-    management, raw log configuration, and sub-account user management. API v2 routes
-    use header-based API key authentication.
+  description: 'Account management endpoints for the 5centsCDN platform. Includes
+    domain verification, SSL certificate management, bandwidth overage protection,
+    API key management, raw log configuration, and sub-account user management. API
+    v2 routes use header-based API key authentication.
+
+    '
   version: 2.0.0
   contact:
     email: help@5centscdn.com
@@ -12,8 +14,6 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-- url: https://api.5centscdn.com/v2
-  description: 5centsCDN API Server - Production
 - url: /dashboard
   description: Dashboard base path
 security:
@@ -28,25 +28,13 @@ tags:
   description: Bandwidth Overage Protection and Auto Recharge settings
 - name: API Keys
   description: API key management (create, read, update, delete)
-- name: Account
-  description: Account overview and sub-user management
-- name: Logs
-  description: Raw log configuration and retrieval (S3 downloader, API viewer, Syslog
-    push)
 paths:
-  /account:
+  /account/dv:
     get:
+      summary: List verified domains
+      operationId: getDomainVerificationList
       tags:
       - Domain Verification
-      summary: Verify Domain
-      description: 'Performs a live DNS lookup for the TXT record and compares the
-        value against the expected hashid. On success updates validated_at in the
-        database.
-
-        '
-      operationId: verifyDomain
-      parameters:
-      - $ref: '#/components/parameters/domainIdParam'
       responses:
         '200':
           description: success
@@ -58,28 +46,40 @@ paths:
                   result:
                     type: string
                     example: success
-                  msg:
-                    type: string
-  /account/dv:
-    get:
-      summary: List verified domains
-      description: 'Renders the Domain Verification list page. Each row shows the
-        domain name and a verified (Y/N) indicator.
-
-        '
-      operationId: getDomainVerificationList
-      tags:
-      - Domain Verification
-      responses:
-        '200':
-          description: HTML table of all domain verification records for the service.
+                  domains:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 2150
+                        serviceid:
+                          type: integer
+                          example: 103
+                        domain:
+                          type: string
+                          example: 5centscdndemo.ca
+                        validated:
+                          type: string
+                          enum:
+                          - Y
+                          - N
+                          example: Y
+                        txtrecord:
+                          type: object
+                          properties:
+                            host:
+                              type: string
+                              example: j78dpam2ndq5
+                            ttl:
+                              type: integer
+                              example: 3600
+                            value:
+                              type: string
+                              example: g2qd3wjxay7a
     post:
       summary: Add a domain for verification
-      description: 'Creates a new domain verification record. Only top-level domains
-        are accepted. If the domain is already registered by a different user an error
-        is returned.
-
-        '
       operationId: storeDomainVerification
       tags:
       - Domain Verification
@@ -90,18 +90,52 @@ paths:
             schema:
               $ref: '#/components/schemas/DomainVerificationCreateRequest'
       responses:
-        '302':
-          description: 'On success: redirects to /(id)/account/dv/(dvid) with a success
-            flash message. On failure: redirects back with an error flash message.
-
-            '
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Domain added. Please add TXT DNS record for verification
+                  domain:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 3847
+                      serviceid:
+                        type: integer
+                        example: 103
+                      domain:
+                        type: string
+                        example: ravi.com
+                      validated:
+                        type: string
+                        enum:
+                        - Y
+                        - N
+                        example: N
+                      txtrecord:
+                        type: object
+                        properties:
+                          host:
+                            type: string
+                            example: zkpyw4ggalbe
+                          ttl:
+                            type: integer
+                            example: 3600
+                          value:
+                            type: string
+                            example: 932y4jqqeyjv
   /account/dv/{dvid}:
     get:
       summary: Show domain verification details
-      description: 'Renders the domain verification detail page. Shows the DNS TXT
-        record that must be added to verify ownership (Host, Value, TTL=3600).
-
-        '
       operationId: showDomainVerification
       tags:
       - Domain Verification
@@ -109,13 +143,47 @@ paths:
       - $ref: '#/components/parameters/dvId'
       responses:
         '200':
-          description: HTML page with TXT record details or verified status.
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  domain:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2150
+                      serviceid:
+                        type: integer
+                        example: 103
+                      domain:
+                        type: string
+                        example: 5centscdndemo.ca
+                      validated:
+                        type: string
+                        enum:
+                        - Y
+                        - N
+                        example: Y
+                      txtrecord:
+                        type: object
+                        properties:
+                          host:
+                            type: string
+                            example: j78dpam2ndq5
+                          ttl:
+                            type: integer
+                            example: 3600
+                          value:
+                            type: string
+                            example: g2qd3wjxay7a
     post:
       summary: Delete a domain verification record
-      description: 'Permanently deletes the domain verification record. The actual
-        HTTP method is POST with a body parameter _METHOD = DELETE to trigger deletion.
-
-        '
       operationId: destroyDomainVerification
       tags:
       - Domain Verification
@@ -135,17 +203,21 @@ paths:
                   description: Must be set to DELETE to trigger domain deletion.
                   example: DELETE
       responses:
-        '302':
-          description: Redirects to the domain verification list with a success flash
-            message.
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
   /account/dv/{dvid}/validate:
     get:
       summary: Trigger domain DNS TXT record validation
-      description: 'Performs a live DNS lookup for the TXT record at (hashid_host).(domain)
-        and compares the value against the expected hashid. Called asynchronously
-        via XHR from the domain detail page.
-
-        '
       operationId: validateDomain
       tags:
       - Domain Verification
@@ -153,43 +225,304 @@ paths:
       - $ref: '#/components/parameters/dvId'
       responses:
         '200':
-          description: JSON result object.
+          description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DomainVerificationValidateResponse'
-              examples:
-                success:
-                  summary: Verification passed
-                  value:
-                    result: success
-                notFound:
-                  summary: TXT record not found in DNS
-                  value:
-                    result: error
-                    msg: Record not found
-                valueMismatch:
-                  summary: TXT record value does not match
-                  value:
-                    result: error
-                    msg: TXT record value mismatch
-                noValid:
-                  summary: No valid record found
-                  value:
-                    result: error
-                    msg: No valid TXT record found
-    post:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+  /account/ssl:
+    get:
+      summary: List SSL certificates
+      operationId: indexSSL
       tags:
       - SSL Certificates
-      summary: Delete SSL Certificate
-      description: 'Delete an SSL certificate. The actual HTTP method is POST with
-        a body parameter _METHOD = DELETE. Deletion also removes the certificate assignment
-        from any CDN zones or streams that installed it.
-
-        '
-      operationId: deleteSSL
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  certs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 374
+                        name:
+                          type: string
+                          example: Arti
+                        crt:
+                          type: string
+                          description: PEM-encoded X.509 certificate.
+                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END\
+                            \ CERTIFICATE-----"
+                        key:
+                          type: string
+                          description: Always returned as redacted for security.
+                          example: '--- redacted ---'
+                        cabundle:
+                          type: string
+                          description: PEM-encoded CA bundle.
+                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END\
+                            \ CERTIFICATE-----"
+                        domain:
+                          type: string
+                          example: wmncdn.com
+                        sans:
+                          type: array
+                          items:
+                            type: string
+                          example:
+                          - wmncdn.com
+                          - www.wmncdn.com
+                        expiry:
+                          type: string
+                          format: date
+                          example: '2024-02-21'
+                        installs:
+                          type: integer
+                          example: 0
+                        expired:
+                          type: boolean
+                          example: true
+                        validFrom:
+                          type: string
+                          format: date
+                          example: '2023-11-23'
+  /account/ssl/new:
+    post:
+      summary: Upload a new SSL certificate
+      operationId: storeSSL
+      tags:
+      - SSL Certificates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SSLCertCreateRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Operation completed successfully
+                  cert:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 222
+                      name:
+                        type: string
+                        example: sss
+                      crt:
+                        type: string
+                        description: PEM-encoded X.509 certificate.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      key:
+                        type: string
+                        description: Always returned as redacted for security.
+                        example: '--- redacted ---'
+                      cabundle:
+                        type: string
+                        description: PEM-encoded CA bundle.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      domain:
+                        type: string
+                        example: mydomain.com
+                      sans:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - mydomain.com
+                        - www.mydomain.com
+                      expiry:
+                        type: string
+                        format: date
+                        example: '2024-03-12'
+                      installs:
+                        type: integer
+                        example: 1
+                      expired:
+                        type: boolean
+                        example: true
+                      validFrom:
+                        type: string
+                        format: date
+                        example: '2023-12-11'
+  /account/ssl/{sslcertid}:
+    get:
+      summary: Show SSL certificate details
+      operationId: showSSL
+      tags:
+      - SSL Certificates
       parameters:
-      - $ref: '#/components/parameters/sslCertIdParam'
+      - $ref: '#/components/parameters/sslcertId'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  cert:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 222
+                      name:
+                        type: string
+                        example: sss
+                      crt:
+                        type: string
+                        description: PEM-encoded X.509 certificate.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      key:
+                        type: string
+                        description: Always returned as redacted for security.
+                        example: '--- redacted ---'
+                      cabundle:
+                        type: string
+                        description: PEM-encoded CA bundle.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      domain:
+                        type: string
+                        example: mydomain.com
+                      sans:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - mydomain.com
+                        - www.mydomain.com
+                      expiry:
+                        type: string
+                        format: date
+                        example: '2024-03-12'
+                      installs:
+                        type: integer
+                        example: 1
+                      expired:
+                        type: boolean
+                        example: true
+                      validFrom:
+                        type: string
+                        format: date
+                        example: '2023-12-11'
+    post:
+      summary: Update an SSL certificate
+      operationId: updateSSL
+      tags:
+      - SSL Certificates
+      parameters:
+      - $ref: '#/components/parameters/sslcertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SSLCertUpdateRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Update successful
+                  cert:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 222
+                      name:
+                        type: string
+                        example: sss
+                      crt:
+                        type: string
+                        description: PEM-encoded X.509 certificate.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      key:
+                        type: string
+                        description: Always returned as redacted for security.
+                        example: '--- redacted ---'
+                      cabundle:
+                        type: string
+                        description: PEM-encoded CA bundle.
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
+                          \ CERTIFICATE-----"
+                      domain:
+                        type: string
+                        example: mydomain.com
+                      sans:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - mydomain.com
+                        - www.mydomain.com
+                      expiry:
+                        type: string
+                        format: date
+                        example: '2024-03-12'
+                      installs:
+                        type: integer
+                        example: 1
+                      expired:
+                        type: boolean
+                        example: true
+                      validFrom:
+                        type: string
+                        format: date
+                        example: '2023-12-11'
+  /account/ssl/{sslcertid}/delete:
+    delete:
+      summary: Delete an SSL certificate
+      operationId: destroySSL
+      tags:
+      - SSL Certificates
+      parameters:
+      - $ref: '#/components/parameters/sslcertId'
       requestBody:
         required: true
         content:
@@ -216,146 +549,28 @@ paths:
                     example: success
                   message:
                     type: string
-                    description: Human-readable success or error message.
-                    example: SSL Certificate deleted
-  /account/ssl:
-    get:
-      summary: List SSL certificates
-      description: 'Renders the SSL certificates list page showing Name, Domain, Expiration,
-        and Install count for each certificate.
-
-        '
-      operationId: indexSSL
-      tags:
-      - SSL Certificates
-      responses:
-        '200':
-          description: HTML table of all SSL certificates.
-  /account/ssl/new:
-    get:
-      summary: Show create SSL certificate form
-      description: 'Renders the form to upload a new SSL certificate. Fields: Name
-        (optional), Certificate (CRT, required), Private Key (required), CA Bundle
-        (optional).
-
-        '
-      operationId: createSSLForm
-      tags:
-      - SSL Certificates
-      responses:
-        '200':
-          description: HTML form page.
-    put:
-      summary: Upload a new SSL certificate
-      description: 'Creates a new SSL certificate record. Validation checks include:
-        cert/key match, expiry date, PEM structure, and name uniqueness. If name is
-        blank it is auto-generated as auto_(CN)_(expiry)_(timestamp).
-
-        '
-      operationId: storeSSL
-      tags:
-      - SSL Certificates
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SSLCertCreateRequest'
-      responses:
-        '302':
-          description: 'On success redirects to /(id)/account/ssl/(sslcertid). On
-            validation failure redirects back with error flash messages.
-
-            '
-  /account/ssl/{sslcertid}:
-    get:
-      summary: Show SSL certificate details
-      description: 'Renders the SSL certificate detail / edit page, including certificate
-        metadata (Installs, SANs, Valid From, Valid Till). The private key is shown
-        as a redacted placeholder.
-
-        '
-      operationId: showSSL
-      tags:
-      - SSL Certificates
-      parameters:
-      - $ref: '#/components/parameters/sslcertId'
-      responses:
-        '200':
-          description: HTML detail/edit page for the SSL certificate.
-    post:
-      summary: Update an SSL certificate
-      description: 'Updates the certificate. Providing new crt + key values replaces
-        the certificate material and re-pushes to all zones and streams using it.
-        Providing only name renames the certificate without touching crypto material.
-
-        '
-      operationId: updateSSL
-      tags:
-      - SSL Certificates
-      parameters:
-      - $ref: '#/components/parameters/sslcertId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SSLCertUpdateRequest'
-      responses:
-        '302':
-          description: 'On success redirects to the certificate detail page. On validation
-            failure redirects back with error flash messages.
-
-            '
-  /account/ssl/{sslcertid}/delete:
-    post:
-      summary: Delete an SSL certificate
-      description: 'Permanently deletes the certificate record. The actual HTTP method
-        is POST with a body parameter _METHOD = DELETE. Also removes the certificate
-        assignment from any CDN zones or streams and triggers an update on those resources.
-
-        '
-      operationId: destroySSL
-      tags:
-      - SSL Certificates
-      parameters:
-      - $ref: '#/components/parameters/sslcertId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - _METHOD
-              properties:
-                _METHOD:
-                  type: string
-                  description: Must be set to DELETE to trigger certificate deletion.
-                  example: DELETE
-      responses:
-        '302':
-          description: Redirects to the SSL certificates list with a flash message.
   /account/bwop:
     get:
       summary: Show Bandwidth Overage Protection settings
-      description: 'Renders the Bandwidth Overage Protection configuration page. Also
-        displays the Bandwidth Auto Recharge form on the same page.
-
-        '
       operationId: showBWOP
       tags:
       - Bandwidth Overage Protection
       responses:
         '200':
-          description: HTML page with the BWOP and Auto Recharge forms.
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  bwop:
+                    type: string
+                    example: '110'
     post:
       summary: Update Bandwidth Overage Protection limit
-      description: 'Saves the monthly bandwidth overage protection percentage. Valid
-        values are between 90 and 120 (inclusive). Values outside this range are clamped
-        automatically.
-
-        '
       operationId: updateBWOP
       tags:
       - Bandwidth Overage Protection
@@ -366,16 +581,21 @@ paths:
             schema:
               $ref: '#/components/schemas/BWOPRequest'
       responses:
-        '302':
-          description: Redirects back to /account/bwop with a success flash message.
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
   /account/recharge:
     post:
       summary: Update Bandwidth Auto Recharge settings
-      description: 'Configures automatic purchase of a bandwidth addon when the service''s
-        monthly usage reaches the specified percentage. Set autorecharge_at to 0 to
-        disable.
-
-        '
       operationId: updateAutoRecharge
       tags:
       - Bandwidth Overage Protection
@@ -386,43 +606,72 @@ paths:
             schema:
               $ref: '#/components/schemas/AutoRechargeRequest'
       responses:
-        '302':
-          description: 'Redirects back to /account/bwop. Flash message indicates success
-            or the specific validation error.
-
-            '
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Bandwidth Auto Recharge Updated
   /account/api:
     get:
       summary: List API keys
-      description: Renders the API keys list page for the service.
       operationId: indexAPI
       tags:
       - API Keys
       responses:
         '200':
-          description: HTML table of all API keys with Name, Description, and Permissions
-            columns.
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  apikeys:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 897
+                        serviceid:
+                          type: integer
+                          example: 103
+                        name:
+                          type: string
+                          example: test
+                        description:
+                          type: string
+                          example: testttt
+                        permission:
+                          type: array
+                          items:
+                            type: string
+                            enum:
+                            - create
+                            - read
+                            - update
+                            - delete
+                          example:
+                          - create
+                          - update
+                          - delete
+                        hash:
+                          type: string
+                          example: b8786ced9a366895405fa28f66ae192c
   /account/api/new:
-    get:
-      summary: Show create API key form
-      description: 'Renders the form to create a new API key. The form includes Name,
-        Description, and a multi-select Permissions field.
-
-        '
-      operationId: createAPIForm
-      tags:
-      - API Keys
-      responses:
-        '200':
-          description: HTML form page.
     post:
       summary: Create a new API key
-      description: 'Creates a new API key record. The key hash is derived as MD5(id
-        + char + serviceid). After creation the client is redirected to the detail
-        page where the hash is visible. The actual HTTP method is POST with a body
-        parameter _METHOD = PUT.
-
-        '
       operationId: storeAPI
       tags:
       - API Keys
@@ -434,6 +683,7 @@ paths:
               type: object
               required:
               - name
+              - description
               - permission[]
               - _METHOD
               properties:
@@ -466,16 +716,25 @@ paths:
                   description: Must be set to PUT to trigger API key creation.
                   example: PUT
       responses:
-        '302':
-          description: Redirects to /(id)/account/api/(apikeyid) with a success flash
-            message.
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: API Key Created
+                  id:
+                    type: integer
+                    example: 1143
   /account/api/{apikeyid}:
     get:
       summary: Show API key details
-      description: 'Renders the API key detail / edit page. The hash (token value)
-        is displayed in a read-only field with a clipboard copy button.
-
-        '
       operationId: showAPI
       tags:
       - API Keys
@@ -483,13 +742,47 @@ paths:
       - $ref: '#/components/parameters/apikeyId'
       responses:
         '200':
-          description: HTML detail/edit page for the API key.
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  apikey:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1143
+                      serviceid:
+                        type: integer
+                        example: 103
+                      name:
+                        type: string
+                        example: Testing123
+                      description:
+                        type: string
+                        example: Testtttt
+                      permission:
+                        type: array
+                        items:
+                          type: string
+                          enum:
+                          - create
+                          - read
+                          - update
+                          - delete
+                        example:
+                        - read
+                        - create
+                      hash:
+                        type: string
+                        example: 34ae4bf346e1915bd38a1dee9103145a
     post:
       summary: Update an API key
-      description: 'Updates the name, description, and permissions of an existing
-        API key. The hash (token value) is not regenerated on update.
-
-        '
       operationId: updateAPI
       tags:
       - API Keys
@@ -500,34 +793,81 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/APIKeyUpdateRequest'
+              type: object
+              required:
+              - name
+              - description
+              - permission[]
+              properties:
+                name:
+                  type: string
+                  description: Human-readable label for the API key / application.
+                  example: My Application
+                description:
+                  type: string
+                  description: Optional description of the key's purpose.
+                  example: Used by the mobile app
+                permission[]:
+                  type: array
+                  description: Set of CRUD permissions granted to this key.
+                  items:
+                    type: string
+                    enum:
+                    - create
+                    - read
+                    - update
+                    - delete
+                  example:
+                  - read
+                  - update
       responses:
-        '302':
-          description: Redirects back to the API key detail page with a success flash
-            message.
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: API Key Updated
   /account/api/{apikeyid}/delete:
-    post:
-      summary: Query log viewer (Elasticsearch / DataTables)
-      description: 'Server-side DataTables endpoint backed by Elasticsearch. Uses
-        cursor-based pagination via search_after.
-
-        '
-      operationId: queryAPILogs
+    delete:
+      summary: Delete an API key
+      operationId: destroyAPI
       tags:
-      - Logs
+      - API Keys
+      parameters:
+      - $ref: '#/components/parameters/apikeyId'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LogsAPIRequest'
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: Must be set to DELETE to trigger API key deletion.
+                  example: DELETE
       responses:
         '200':
-          description: DataTables-compatible JSON response with log rows.
+          description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LogsAPIResponse'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: success
+                  message:
+                    type: string
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -576,42 +916,6 @@ components:
         type: integer
         example: 7
   schemas:
-    createDomain:
-      type: object
-      required:
-      - domain
-      properties:
-        domain:
-          type: string
-          description: 'Top-level domain to verify (e.g. example.com). Subdomains
-            are not accepted. Unicode/IDN domains are accepted and converted to punycode
-            internally.
-
-            '
-          example: mydomain.com
-    domainList:
-      type: object
-      properties:
-        id:
-          type: integer
-        serviceid:
-          type: integer
-        domain:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        validated_at:
-          type: string
-        deleted_at:
-          type: string
-        validated:
-          type: string
-        deleted:
-          type: boolean
     DomainVerificationCreateRequest:
       type: object
       required:
@@ -676,108 +980,21 @@ components:
           type: string
           description: Human-readable error message (only present when result is error).
           example: Record not found
-    createSSL:
+    SSLCertCreateRequest:
       type: object
       required:
       - _METHOD
       - crt
       - key
-      - name
       properties:
         _METHOD:
           type: string
-          description: To cast method POST to PUT.
+          description: Must be set to PUT to trigger SSL certificate creation.
           example: PUT
         name:
           type: string
-          description: 'Friendly name for the certificate. If omitted on creation
-            the system auto-generates one as auto_(CN)_(expiry)_(timestamp).
-
-            '
-          example: my-wildcard-cert
-        crt:
-          type: string
-          description: 'PEM-encoded X.509 certificate (must contain BEGIN CERTIFICATE
-            / END CERTIFICATE markers).
-
-            '
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
-        key:
-          type: string
-          description: 'PEM-encoded private key (must contain PRIVATE KEY / END markers).
-
-            '
-          example: '-----BEGIN PRIVATE KEY-----
-
-            ...
-
-            -----END PRIVATE KEY-----'
-        cabundle:
-          type: string
-          description: 'PEM-encoded Certificate Authority (CA) bundle / intermediate
-            chain. Optional but recommended.
-
-            '
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
-    SSLUpdate:
-      type: object
-      required:
-      - crt
-      - key
-      - name
-      properties:
-        name:
-          type: string
-          description: Friendly name for the certificate.
-          example: my-wildcard-cert
-        crt:
-          type: string
-          description: 'PEM-encoded X.509 certificate. Provide to replace certificate
-            material.
-
-            '
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
-        key:
-          type: string
-          description: 'PEM-encoded private key. On update leave blank to keep the
-            existing key.
-
-            '
-          example: '-----BEGIN PRIVATE KEY-----
-
-            ...
-
-            -----END PRIVATE KEY-----'
-        cabundle:
-          type: string
-          description: PEM-encoded CA bundle / intermediate chain.
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
-    SSLCertCreateRequest:
-      type: object
-      required:
-      - crt
-      - key
-      properties:
-        name:
-          type: string
           description: Friendly name for the certificate. If omitted, auto-generated
-            from the CN, expiry and timestamp.
+            using the certificate CN, expiry date, and a timestamp.
           example: my-wildcard-cert
         crt:
           type: string
@@ -796,54 +1013,22 @@ components:
       properties:
         name:
           type: string
-          description: 'Friendly name for the certificate.
-
-            '
+          description: Friendly name for the certificate.
           example: my-wildcard-cert
         crt:
           type: string
-          description: 'PEM-encoded X.509 certificate. Provide crt + key to replace
+          description: PEM-encoded X.509 certificate. Provide crt + key to replace
             certificate material. Omitting both updates only the name.
-
-            '
           example: YOUR_PEM_CERTIFICATE
         key:
           type: string
-          description: 'PEM-encoded private key. Required when replacing certificate
+          description: PEM-encoded private key. Required when replacing certificate
             material.
-
-            '
           example: YOUR_PEM_PRIVATE_KEY
         cabundle:
           type: string
           description: PEM-encoded CA bundle.
           example: YOUR_PEM_CA_BUNDLE
-    certList:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        crt:
-          type: string
-        key:
-          type: string
-        cabundle:
-          type: string
-        domain:
-          type: string
-        sans:
-          type: array
-          items:
-            type: string
-        expiry:
-          type: string
-          format: date
-        installs:
-          type: integer
-        expired:
-          type: boolean
     SSLCertResponse:
       type: object
       properties:
@@ -894,24 +1079,8 @@ components:
         validFrom:
           type: string
           format: date
-          description: Certificate valid-from date (only present in API responses).
+          description: Certificate valid-from date.
           example: '2025-06-01'
-    createBop:
-      type: object
-      required:
-      - bwop
-      properties:
-        bwop:
-          type: integer
-          format: int32
-          description: 'Monthly bandwidth limit as a percentage of the plan''s included
-            bandwidth. When this threshold is reached the service is placed On Hold.
-            Valid values are between 90 and 120. Use 0 to indicate unlimited.
-
-            '
-          minimum: 0
-          maximum: 120
-          example: 0
     BWOPRequest:
       type: object
       required:
@@ -919,11 +1088,8 @@ components:
       properties:
         bwop:
           type: integer
-          description: 'Monthly bandwidth limit as a percentage of the plan''s included
-            bandwidth. Valid values between 90 and 120 (inclusive). Values outside
-            this range are clamped automatically. Non-numeric input defaults to 100.
-
-            '
+          description: Monthly bandwidth limit as a percentage of the plan's included
+            bandwidth. Valid values between 90 and 120 (inclusive). Use 0 to disable.
           minimum: 90
           maximum: 120
           multipleOf: 5
@@ -935,10 +1101,8 @@ components:
       properties:
         autorecharge_at:
           type: integer
-          description: 'Percentage of monthly bandwidth consumed at which an addon
-            bandwidth package is automatically purchased. 0 disables auto recharge.
-
-            '
+          description: Percentage of monthly bandwidth at which an addon package is
+            auto-purchased. Set to 0 to disable auto recharge.
           enum:
           - 0
           - 75
@@ -947,18 +1111,9 @@ components:
           example: 85
         autorecharge_id:
           type: integer
-          description: 'WHMCS addon service ID for the bandwidth package to purchase.
+          description: WHMCS addon service ID for the bandwidth package to purchase.
             Required when autorecharge_at is non-zero.
-
-            '
           example: 42
-        autorecharge_tos:
-          type: string
-          description: 'Timestamp string acknowledging the Terms of Service. Any value
-            parseable by PHP strtotime() is accepted.
-
-            '
-          example: '2026-03-24 12:00:00'
     APIKeyCreateRequest:
       type: object
       required:
@@ -975,10 +1130,8 @@ components:
           example: Used by the mobile app
         permission:
           type: array
-          description: 'Set of CRUD permissions granted to this key. At least one
-            value is required.
-
-            '
+          description: Set of CRUD permissions granted to this key. At least one value
+            is required.
           items:
             type: string
             enum:
@@ -1043,293 +1196,10 @@ components:
           - update
         hash:
           type: string
-          description: 'The actual API key token (MD5 hash). Used as the Bearer token
+          description: The actual API key token (MD5 hash). Used as the Bearer token
             in API v2 requests.
-
-            '
           example: d41d8cd98f00b204e9800998ecf8427e
         serviceid:
           type: integer
           description: WHMCS service ID that owns this key.
           example: 1234
-    LogsConfigRequest:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: Log push type being configured.
-          enum:
-          - s3
-          - api
-          - syslog
-          example: s3
-        resources:
-          type: array
-          description: 'Array of CDN resource identifiers (zone slugs) to enable log
-            shipping for.
-
-            '
-          items:
-            type: string
-          example:
-          - cdn-zone-abc
-          - cdn-zone-def
-        hostname:
-          type: string
-          description: 'Syslog server hostname or IP. Required when type is syslog.
-
-            '
-          example: log.example.com
-        port:
-          type: integer
-          description: 'Syslog server TCP/UDP port (1-65535). Required when type is
-            syslog.
-
-            '
-          minimum: 1
-          maximum: 65535
-          example: 514
-        protocol:
-          type: string
-          description: 'Transport protocol for the syslog endpoint. Required when
-            type is syslog.
-
-            '
-          enum:
-          - udp
-          - tcp
-          - tls
-          example: udp
-        format:
-          type: string
-          description: Log line format. Required when type is syslog.
-          enum:
-          - log
-          - json
-          example: log
-        syslogid:
-          type: integer
-          description: 'ID of an existing syslog endpoint to update. When absent a
-            new endpoint is created.
-
-            '
-          example: 2
-        anonymize:
-          type: object
-          description: IP anonymization settings. Required when type is syslog.
-          properties:
-            v4:
-              type: integer
-              description: 'IPv4 anonymization level. 0=Disabled, 1=Remove last octet,
-                2=Remove last 2 octets, 3=Remove last 3 octets, 4=Drop entire IP.
-
-                '
-              minimum: 0
-              maximum: 4
-              example: 0
-            v6:
-              type: integer
-              description: 'IPv6 anonymization level. 0=Disabled, 1-7=Remove N groups,
-                8=Drop entire IP.
-
-                '
-              minimum: 0
-              maximum: 8
-              example: 0
-    LogsS3Request:
-      type: object
-      required:
-      - r
-      properties:
-        r:
-          type: string
-          description: 'UTC datetime range in the format YYYY-MM-DD HH:mm:ss - YYYY-MM-DD
-            HH:mm:ss. Maximum span is 6 hours.
-
-            '
-          example: 2026-03-24 10:00:00 - 2026-03-24 12:00:00
-        resources:
-          type: array
-          description: 'Optional list of CDN resource identifiers to filter log files.
-
-            '
-          items:
-            type: string
-          example:
-          - cdn-zone-abc
-    LogsS3Response:
-      type: object
-      properties:
-        result:
-          type: string
-          enum:
-          - success
-          - error
-          example: success
-        files:
-          type: array
-          description: Relative object paths within the OpenStack Swift bucket.
-          items:
-            type: string
-          example:
-          - cdn-zone-abc/access.log-1742806800.gz
-        message:
-          type: string
-          description: Human-readable error message (only present when result is error).
-    LogsAPIRequest:
-      type: object
-      required:
-      - draw
-      - r
-      properties:
-        draw:
-          type: integer
-          description: DataTables draw counter (echoed back in the response).
-          example: 1
-        r:
-          type: string
-          description: 'UTC datetime range YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss.
-            Maximum span is 6 hours.
-
-            '
-          example: 2026-03-24 10:00:00 - 2026-03-24 12:00:00
-        resources:
-          type: array
-          description: CDN resource identifiers to query.
-          items:
-            type: string
-          example:
-          - cdn-zone-abc
-        pops:
-          type: array
-          description: Filter by edge location names.
-          items:
-            type: string
-          example:
-          - ams
-        clientips:
-          type: array
-          description: Filter by client IP addresses.
-          items:
-            type: string
-          example:
-          - 1.2.3.4
-        verbs:
-          type: array
-          description: Filter by HTTP methods.
-          items:
-            type: string
-            enum:
-            - GET
-            - HEAD
-            - POST
-            - PUT
-            - DELETE
-            - CONNECT
-            - OPTIONS
-            - TRACE
-            - PATCH
-          example:
-          - GET
-        requests:
-          type: array
-          description: Filter by request path patterns.
-          items:
-            type: string
-          example:
-          - /video/
-        responses:
-          type: array
-          description: Filter by HTTP response status codes.
-          items:
-            type: integer
-          example:
-          - 200
-          - 206
-        caches:
-          type: array
-          description: Filter by Nginx cache status values.
-          items:
-            type: string
-            enum:
-            - MISS
-            - BYPASS
-            - EXPIRED
-            - STALE
-            - UPDATING
-            - REVALIDATED
-            - HIT
-            - '-'
-          example:
-          - HIT
-        search_after:
-          type: string
-          description: Elasticsearch search_after cursor value for pagination.
-        start:
-          type: integer
-          description: DataTables row offset (used for paging).
-          example: 0
-        length:
-          type: integer
-          description: DataTables page size.
-          example: 25
-    LogsAPIResponse:
-      type: object
-      properties:
-        draw:
-          type: integer
-          description: DataTables draw counter echoed from the request.
-          example: 1
-        recordsTotal:
-          type: integer
-          description: Total number of matching log records.
-          example: 1500
-        recordsFiltered:
-          type: integer
-          description: Same as recordsTotal (no secondary filtering applied).
-          example: 1500
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              DT_RowId:
-                type: string
-                description: Elasticsearch document ID used as DataTables row ID.
-              timestamp:
-                type: string
-                description: Log entry timestamp (UTC ISO 8601).
-                example: '2026-03-24T10:05:32.000Z'
-              pop:
-                type: string
-                description: Edge location / PoP identifier.
-                example: ams
-              clientip:
-                type: string
-                description: Client IP address.
-                example: 1.2.3.4
-              verb:
-                type: string
-                description: HTTP method.
-                example: GET
-              request:
-                type: string
-                description: HTTP request path.
-                example: /video/sample.mp4
-              bytes:
-                type: integer
-                description: Response body size in bytes.
-                example: 2048000
-              response:
-                type: integer
-                description: HTTP status code.
-                example: 200
-              cache:
-                type: string
-                description: Nginx cache status.
-                example: HIT
-              sort:
-                type: string
-                description: Opaque sort cursor used for search_after pagination.
