@@ -91,7 +91,7 @@ paths:
               $ref: '#/components/schemas/DomainVerificationCreateRequest'
       responses:
         '302':
-          description: 'On success: redirects to /{id}/account/dv/{dvid} with a success
+          description: 'On success: redirects to /(id)/account/dv/(dvid) with a success
             flash message. On failure: redirects back with an error flash message.
 
             '
@@ -141,7 +141,7 @@ paths:
   /account/dv/{dvid}/validate:
     get:
       summary: Trigger domain DNS TXT record validation
-      description: 'Performs a live DNS lookup for the TXT record at {hashid_host}.{domain}
+      description: 'Performs a live DNS lookup for the TXT record at (hashid_host).(domain)
         and compares the value against the expected hashid. Called asynchronously
         via XHR from the domain detail page.
 
@@ -249,7 +249,7 @@ paths:
       summary: Upload a new SSL certificate
       description: 'Creates a new SSL certificate record. Validation checks include:
         cert/key match, expiry date, PEM structure, and name uniqueness. If name is
-        blank it is auto-generated as auto_{CN}_{expiry}_{timestamp}.
+        blank it is auto-generated as auto_(CN)_(expiry)_(timestamp).
 
         '
       operationId: storeSSL
@@ -263,7 +263,7 @@ paths:
               $ref: '#/components/schemas/SSLCertCreateRequest'
       responses:
         '302':
-          description: 'On success redirects to /{id}/account/ssl/{sslcertid}. On
+          description: 'On success redirects to /(id)/account/ssl/(sslcertid). On
             validation failure redirects back with error flash messages.
 
             '
@@ -467,7 +467,7 @@ paths:
                   example: PUT
       responses:
         '302':
-          description: Redirects to /{id}/account/api/{apikeyid} with a success flash
+          description: Redirects to /(id)/account/api/(apikeyid) with a success flash
             message.
   /account/api/{apikeyid}:
     get:
@@ -691,7 +691,7 @@ components:
         name:
           type: string
           description: 'Friendly name for the certificate. If omitted on creation
-            the system auto-generates one as auto_{CN}_{expiry}_{timestamp}.
+            the system auto-generates one as auto_(CN)_(expiry)_(timestamp).
 
             '
           example: my-wildcard-cert
@@ -776,35 +776,21 @@ components:
       properties:
         name:
           type: string
-          description: 'Friendly name for the certificate. If omitted, auto-generated
-            as auto_{CN}_{expiry}_{timestamp}.
-
-            '
+          description: Friendly name for the certificate. If omitted, auto-generated
+            from the CN, expiry and timestamp.
           example: my-wildcard-cert
         crt:
           type: string
           description: PEM-encoded X.509 certificate. Required.
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
+          example: YOUR_PEM_CERTIFICATE
         key:
           type: string
           description: PEM-encoded private key. Required.
-          example: '-----BEGIN PRIVATE KEY-----
-
-            ...
-
-            -----END PRIVATE KEY-----'
+          example: YOUR_PEM_PRIVATE_KEY
         cabundle:
           type: string
           description: PEM-encoded CA bundle. Optional but recommended.
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
+          example: YOUR_PEM_CA_BUNDLE
     SSLCertUpdateRequest:
       type: object
       properties:
@@ -820,30 +806,18 @@ components:
             certificate material. Omitting both updates only the name.
 
             '
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
+          example: YOUR_PEM_CERTIFICATE
         key:
           type: string
           description: 'PEM-encoded private key. Required when replacing certificate
             material.
 
             '
-          example: '-----BEGIN PRIVATE KEY-----
-
-            ...
-
-            -----END PRIVATE KEY-----'
+          example: YOUR_PEM_PRIVATE_KEY
         cabundle:
           type: string
           description: PEM-encoded CA bundle.
-          example: '-----BEGIN CERTIFICATE-----
-
-            ...
-
-            -----END CERTIFICATE-----'
+          example: YOUR_PEM_CA_BUNDLE
     certList:
       type: object
       properties:
