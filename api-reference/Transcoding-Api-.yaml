@@ -15,33 +15,27 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
-  - url: https://api.5centscdn.com/v2
-    description: 5centsCDN API Server - Production
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
 
 security:
-  - ApiKeyAuth: []
+- ApiKeyAuth: []
 
 tags:
-  - name: Video Encoding Jobs
-    description: Manage active, pending, and historical video encoding jobs.
-  - name: Video Encoding Profiles
-    description: Manage encoding preset profiles and configurable video filters.
-  - name: Transcoding Notifications
-    description: Email and webhook notification configuration for encode-completion events.
+- name: Video Encoding Jobs
+  description: Manage active, pending, and historical video encoding jobs.
+- name: Video Encoding Profiles
+  description: Manage encoding preset profiles and configurable video filters.
+- name: Transcoding Notifications
+  description: Email and webhook notification configuration for encode-completion events.
 
 paths:
 
-  # ---------------------------------------------------------------------------
-  # Transcoding Dashboard — list / filter by date range
-  # ---------------------------------------------------------------------------
-  /{id}/transcoding:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding:
     get:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: List All Encoding Jobs (current)
-      description: List all encoding jobs for the service. No date filter — returns all.
+      description: List all encoding jobs for the service. No date filter - returns all.
       operationId: listEncodingJobs
       responses:
         '200':
@@ -50,870 +44,37 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  zonesInRange:
-                    type: array
-                    items:
-                      type: integer
-                    example: [2331, 6643]
-                  logsInRange:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        index:
-                          type: integer
-                          example: 146206
-                        serviceid:
-                          type: integer
-                          example: 103
-                        zoneid:
-                          type: integer
-                          example: 6643
-                        hash:
-                          type: string
-                          example: 229e554d862e9338f42c81e6bc3ba0e4
-                        meta:
-                          type: object
-                          properties:
-                            zoneid:
-                              type: string
-                              example: "6643"
-                            profileid:
-                              type: string
-                              example: "1"
-                            infile:
-                              type: string
-                              example: /vineeth_103_push_6643/levitating.mp4
-                            extension:
-                              type: string
-                              example: mp4
-                            sbrmp4:
-                              type: array
-                              items: {}
-                              example: []
-                            outfile:
-                              type: string
-                              example: /vineeth_103_push_6643/mp4/levitating_720p.mp4
-                            outdir:
-                              type: string
-                              example: /vineeth_103_push_6643/mp4
-                            relativepath:
-                              type: object
-                              properties:
-                                infile:
-                                  type: string
-                                  example: /levitating.mp4
-                                outfile:
-                                  type: string
-                                  example: /mp4/levitating_720p.mp4
-                            orientationLock:
-                              type: boolean
-                              example: true
-                            hlsUnifiedSegments:
-                              type: boolean
-                              example: false
-                            hlsfMP4Segments:
-                              type: boolean
-                              example: false
-                            time:
-                              type: object
-                              properties:
-                                process:
-                                  type: object
-                                  properties:
-                                    start:
-                                      type: string
-                                      example: "1777227925968"
-                                    end:
-                                      type: string
-                                      example: "1777228373550"
-                                infile:
-                                  type: object
-                                  properties:
-                                    check:
-                                      type: object
-                                      properties:
-                                        start:
-                                          type: string
-                                          example: "1777227926036"
-                                        end:
-                                          type: string
-                                          example: "1777227926751"
-                                    probe:
-                                      type: object
-                                      properties:
-                                        start:
-                                          type: string
-                                          example: "1777227926751"
-                                        end:
-                                          type: string
-                                          example: "1777227929617"
-                                download:
-                                  type: object
-                                  properties:
-                                    start:
-                                      type: string
-                                      example: "1777227929688"
-                                    end:
-                                      type: string
-                                      example: "1777227935071"
-                                encoder:
-                                  type: object
-                                  properties:
-                                    start:
-                                      type: string
-                                      example: "1777227935139"
-                                    end:
-                                      type: string
-                                      example: "1777228373140"
-                                outfile:
-                                  type: object
-                                  properties:
-                                    check:
-                                      type: object
-                                    probe:
-                                      type: object
-                                      properties:
-                                        start:
-                                          type: string
-                                          example: "1777228373140"
-                                        end:
-                                          type: string
-                                          example: "1777228373199"
-                                    segment:
-                                      type: object
-                                thumbs:
-                                  type: object
-                                  properties:
-                                    process:
-                                      type: object
-                                upload:
-                                  type: object
-                                  properties:
-                                    start:
-                                      type: string
-                                      example: "1777228373489"
-                                    end:
-                                      type: string
-                                      example: "1777228373540"
-                            probe:
-                              type: object
-                              properties:
-                                infile:
-                                  type: object
-                                  properties:
-                                    streams:
-                                      type: array
-                                      items:
-                                        type: object
-                                        properties:
-                                          index:
-                                            type: integer
-                                            example: 0
-                                          codec_name:
-                                            type: string
-                                            example: h264
-                                          codec_long_name:
-                                            type: string
-                                            example: H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
-                                          profile:
-                                            type: string
-                                            example: High
-                                          codec_type:
-                                            type: string
-                                            example: video
-                                          codec_tag_string:
-                                            type: string
-                                            example: avc1
-                                          codec_tag:
-                                            type: string
-                                            example: "0x31637661"
-                                          width:
-                                            type: integer
-                                            example: 1920
-                                          height:
-                                            type: integer
-                                            example: 1080
-                                          coded_width:
-                                            type: integer
-                                            example: 1920
-                                          coded_height:
-                                            type: integer
-                                            example: 1080
-                                          closed_captions:
-                                            type: integer
-                                            example: 0
-                                          film_grain:
-                                            type: integer
-                                            example: 0
-                                          has_b_frames:
-                                            type: integer
-                                            example: 1
-                                          sample_aspect_ratio:
-                                            type: string
-                                            example: "1:1"
-                                          display_aspect_ratio:
-                                            type: string
-                                            example: "16:9"
-                                          pix_fmt:
-                                            type: string
-                                            example: yuv420p
-                                          level:
-                                            type: integer
-                                            example: 40
-                                          color_range:
-                                            type: string
-                                            example: tv
-                                          color_space:
-                                            type: string
-                                            example: bt709
-                                          color_transfer:
-                                            type: string
-                                            example: bt709
-                                          color_primaries:
-                                            type: string
-                                            example: bt709
-                                          chroma_location:
-                                            type: string
-                                            example: left
-                                          field_order:
-                                            type: string
-                                            example: progressive
-                                          refs:
-                                            type: integer
-                                            example: 1
-                                          is_avc:
-                                            type: string
-                                            example: "true"
-                                          nal_length_size:
-                                            type: string
-                                            example: "4"
-                                          sample_fmt:
-                                            type: string
-                                            example: fltp
-                                          sample_rate:
-                                            type: string
-                                            example: "44100"
-                                          channels:
-                                            type: integer
-                                            example: 2
-                                          channel_layout:
-                                            type: string
-                                            example: stereo
-                                          bits_per_sample:
-                                            type: integer
-                                            example: 0
-                                          initial_padding:
-                                            type: integer
-                                            example: 0
-                                          id:
-                                            type: string
-                                            example: "0x1"
-                                          r_frame_rate:
-                                            type: string
-                                            example: 24000/1001
-                                          avg_frame_rate:
-                                            type: string
-                                            example: 462960000/19309289
-                                          time_base:
-                                            type: string
-                                            example: 1/90000
-                                          start_pts:
-                                            type: integer
-                                            example: 0
-                                          start_time:
-                                            type: string
-                                            example: "0.000000"
-                                          duration_ts:
-                                            type: integer
-                                            example: 19309289
-                                          duration:
-                                            type: string
-                                            example: "214.547656"
-                                          bit_rate:
-                                            type: string
-                                            example: "3001829"
-                                          bits_per_raw_sample:
-                                            type: string
-                                            example: "8"
-                                          nb_frames:
-                                            type: string
-                                            example: "5144"
-                                          extradata_size:
-                                            type: integer
-                                            example: 48
-                                          disposition:
-                                            type: object
-                                            properties:
-                                              default:
-                                                type: integer
-                                                example: 1
-                                              dub:
-                                                type: integer
-                                                example: 0
-                                              original:
-                                                type: integer
-                                                example: 0
-                                              comment:
-                                                type: integer
-                                                example: 0
-                                              lyrics:
-                                                type: integer
-                                                example: 0
-                                              karaoke:
-                                                type: integer
-                                                example: 0
-                                              forced:
-                                                type: integer
-                                                example: 0
-                                              hearing_impaired:
-                                                type: integer
-                                                example: 0
-                                              visual_impaired:
-                                                type: integer
-                                                example: 0
-                                              clean_effects:
-                                                type: integer
-                                                example: 0
-                                              attached_pic:
-                                                type: integer
-                                                example: 0
-                                              timed_thumbnails:
-                                                type: integer
-                                                example: 0
-                                              non_diegetic:
-                                                type: integer
-                                                example: 0
-                                              captions:
-                                                type: integer
-                                                example: 0
-                                              descriptions:
-                                                type: integer
-                                                example: 0
-                                              metadata:
-                                                type: integer
-                                                example: 0
-                                              dependent:
-                                                type: integer
-                                                example: 0
-                                              still_image:
-                                                type: integer
-                                                example: 0
-                                          tags:
-                                            type: object
-                                            properties:
-                                              language:
-                                                type: string
-                                                example: und
-                                              handler_name:
-                                                type: string
-                                                example: VideoHandler
-                                              vendor_id:
-                                                type: string
-                                                example: "[0][0][0][0]"
-                                              encoder:
-                                                type: string
-                                                example: Lavc61.3.100 libx264
-                                          dar:
-                                            type: object
-                                            properties:
-                                              width:
-                                                type: string
-                                                example: "16"
-                                              height:
-                                                type: string
-                                                example: "9"
-                                              ratio:
-                                                type: number
-                                                example: 1.78
-                                    format:
-                                      type: object
-                                      properties:
-                                        nb_streams:
-                                          type: integer
-                                          example: 2
-                                        nb_programs:
-                                          type: integer
-                                          example: 0
-                                        nb_stream_groups:
-                                          type: integer
-                                          example: 0
-                                        format_name:
-                                          type: string
-                                          example: "mov,mp4,m4a,3gp,3g2,mj2"
-                                        format_long_name:
-                                          type: string
-                                          example: QuickTime / MOV
-                                        start_time:
-                                          type: string
-                                          example: "0.000000"
-                                        duration:
-                                          type: string
-                                          example: "214.552381"
-                                        size:
-                                          type: string
-                                          example: "168235626"
-                                        bit_rate:
-                                          type: string
-                                          example: "6272990"
-                                        probe_score:
-                                          type: integer
-                                          example: 100
-                                        tags:
-                                          type: object
-                                          properties:
-                                            major_brand:
-                                              type: string
-                                              example: isom
-                                            minor_version:
-                                              type: string
-                                              example: "512"
-                                            compatible_brands:
-                                              type: string
-                                              example: isomiso2avc1mp41
-                                            encoder:
-                                              type: string
-                                              example: Lavf60.16.100
-                                outfile:
-                                  type: object
-                                  properties:
-                                    streams:
-                                      type: array
-                                      items:
-                                        type: object
-                                        properties:
-                                          index:
-                                            type: integer
-                                            example: 0
-                                          codec_name:
-                                            type: string
-                                            example: h264
-                                          codec_long_name:
-                                            type: string
-                                            example: H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
-                                          profile:
-                                            type: string
-                                            example: High
-                                          codec_type:
-                                            type: string
-                                            example: video
-                                          codec_tag_string:
-                                            type: string
-                                            example: avc1
-                                          codec_tag:
-                                            type: string
-                                            example: "0x31637661"
-                                          width:
-                                            type: integer
-                                            example: 1280
-                                          height:
-                                            type: integer
-                                            example: 720
-                                          coded_width:
-                                            type: integer
-                                            example: 1280
-                                          coded_height:
-                                            type: integer
-                                            example: 720
-                                          closed_captions:
-                                            type: integer
-                                            example: 0
-                                          film_grain:
-                                            type: integer
-                                            example: 0
-                                          has_b_frames:
-                                            type: integer
-                                            example: 2
-                                          sample_aspect_ratio:
-                                            type: string
-                                            example: "1:1"
-                                          display_aspect_ratio:
-                                            type: string
-                                            example: "16:9"
-                                          pix_fmt:
-                                            type: string
-                                            example: yuv420p
-                                          level:
-                                            type: integer
-                                            example: 42
-                                          color_range:
-                                            type: string
-                                            example: tv
-                                          color_space:
-                                            type: string
-                                            example: bt709
-                                          color_transfer:
-                                            type: string
-                                            example: bt709
-                                          color_primaries:
-                                            type: string
-                                            example: bt709
-                                          chroma_location:
-                                            type: string
-                                            example: left
-                                          field_order:
-                                            type: string
-                                            example: progressive
-                                          refs:
-                                            type: integer
-                                            example: 1
-                                          is_avc:
-                                            type: string
-                                            example: "true"
-                                          nal_length_size:
-                                            type: string
-                                            example: "4"
-                                          sample_fmt:
-                                            type: string
-                                            example: fltp
-                                          sample_rate:
-                                            type: string
-                                            example: "44100"
-                                          channels:
-                                            type: integer
-                                            example: 2
-                                          channel_layout:
-                                            type: string
-                                            example: stereo
-                                          bits_per_sample:
-                                            type: integer
-                                            example: 0
-                                          initial_padding:
-                                            type: integer
-                                            example: 0
-                                          id:
-                                            type: string
-                                            example: "0x1"
-                                          r_frame_rate:
-                                            type: string
-                                            example: 30/1
-                                          avg_frame_rate:
-                                            type: string
-                                            example: 30/1
-                                          time_base:
-                                            type: string
-                                            example: 1/15360
-                                          start_pts:
-                                            type: integer
-                                            example: 0
-                                          start_time:
-                                            type: string
-                                            example: "0.000000"
-                                          duration_ts:
-                                            type: integer
-                                            example: 872448
-                                          duration:
-                                            type: string
-                                            example: "56.800000"
-                                          bit_rate:
-                                            type: string
-                                            example: "1497168"
-                                          bits_per_raw_sample:
-                                            type: string
-                                            example: "8"
-                                          nb_frames:
-                                            type: string
-                                            example: "1704"
-                                          extradata_size:
-                                            type: integer
-                                            example: 48
-                                          disposition:
-                                            type: object
-                                            properties:
-                                              default:
-                                                type: integer
-                                                example: 1
-                                              dub:
-                                                type: integer
-                                                example: 0
-                                              original:
-                                                type: integer
-                                                example: 0
-                                              comment:
-                                                type: integer
-                                                example: 0
-                                              lyrics:
-                                                type: integer
-                                                example: 0
-                                              karaoke:
-                                                type: integer
-                                                example: 0
-                                              forced:
-                                                type: integer
-                                                example: 0
-                                              hearing_impaired:
-                                                type: integer
-                                                example: 0
-                                              visual_impaired:
-                                                type: integer
-                                                example: 0
-                                              clean_effects:
-                                                type: integer
-                                                example: 0
-                                              attached_pic:
-                                                type: integer
-                                                example: 0
-                                              timed_thumbnails:
-                                                type: integer
-                                                example: 0
-                                              non_diegetic:
-                                                type: integer
-                                                example: 0
-                                              captions:
-                                                type: integer
-                                                example: 0
-                                              descriptions:
-                                                type: integer
-                                                example: 0
-                                              metadata:
-                                                type: integer
-                                                example: 0
-                                              dependent:
-                                                type: integer
-                                                example: 0
-                                              still_image:
-                                                type: integer
-                                                example: 0
-                                          tags:
-                                            type: object
-                                            properties:
-                                              language:
-                                                type: string
-                                                example: und
-                                              handler_name:
-                                                type: string
-                                                example: VideoHandler
-                                              vendor_id:
-                                                type: string
-                                                example: "[0][0][0][0]"
-                                              encoder:
-                                                type: string
-                                                example: Lavc61.3.100 libx264
-                                    format:
-                                      type: object
-                                      properties:
-                                        nb_streams:
-                                          type: integer
-                                          example: 2
-                                        nb_programs:
-                                          type: integer
-                                          example: 0
-                                        nb_stream_groups:
-                                          type: integer
-                                          example: 0
-                                        format_name:
-                                          type: string
-                                          example: "mov,mp4,m4a,3gp,3g2,mj2"
-                                        format_long_name:
-                                          type: string
-                                          example: QuickTime / MOV
-                                        start_time:
-                                          type: string
-                                          example: "0.000000"
-                                        duration:
-                                          type: string
-                                          example: "56.800000"
-                                        size:
-                                          type: string
-                                          example: "11613187"
-                                        bit_rate:
-                                          type: string
-                                          example: "1635660"
-                                        probe_score:
-                                          type: integer
-                                          example: 100
-                                        tags:
-                                          type: object
-                                          properties:
-                                            major_brand:
-                                              type: string
-                                              example: isom
-                                            minor_version:
-                                              type: string
-                                              example: "512"
-                                            compatible_brands:
-                                              type: string
-                                              example: isomiso2avc1mp41
-                                            encoder:
-                                              type: string
-                                              example: Lavf61.1.100
-                            serviceid:
-                              type: string
-                              example: "103"
-                            codec:
-                              type: string
-                              example: h264
-                            zone:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                  example: 6643
-                                serviceid:
-                                  type: integer
-                                  example: 103
-                                alias:
-                                  type: string
-                                  example: ""
-                                hashid:
-                                  type: string
-                                  example: r7parjr4oqe9
-                                mode:
-                                  type: string
-                                  example: http
-                                optimizer:
-                                  type: string
-                                  example: "0"
-                                server:
-                                  type: integer
-                                  example: 206
-                                cnames:
-                                  type: string
-                                  example: ""
-                                zoneids:
-                                  nullable: true
-                                  example: null
-                                edgeruleids:
-                                  type: integer
-                                  example: 0
-                                profile:
-                                  nullable: true
-                                  example: null
-                                rclone:
-                                  type: integer
-                                  example: 0
-                                lsd_count:
-                                  type: integer
-                                  example: 0
-                                disabled:
-                                  type: string
-                                  example: "0"
-                                created_at:
-                                  type: string
-                                  example: "2026-04-09 09:35:43"
-                                updated_at:
-                                  type: string
-                                  example: "2026-04-26 17:50:21"
-                                deleted:
-                                  nullable: true
-                                  example: null
-                            jobid:
-                              type: string
-                              example: "1346217"
-                            isDemo:
-                              type: boolean
-                              example: false
-                            processLog:
-                              type: string
-                              example: ""
-                            duration:
-                              type: string
-                              example: "214.552381"
-                            billedSecs:
-                              type: integer
-                              example: 57
-                            infileLink:
-                              type: string
-                              example: https://push-6643.5centscdn.com/levitating.mp4
-                            outfileLink:
-                              type: string
-                              example: https://push-6643.5centscdn.com/mp4/levitating_720p.mp4
-                        notified:
-                          type: string
-                          example: "0"
-                        response:
-                          type: object
-                        created_at:
-                          type: string
-                          example: "2026-04-26 18:25:25"
-                        jobid:
-                          type: string
-                          example: "1346217"
-                        profile:
-                          type: string
-                          example: 720p
-                        billedMins:
-                          type: string
-                          example: "0m 57s"
-                        notificationConfigured:
-                          type: boolean
-                          example: false
-                        encoder:
-                          type: string
-                          example: Super
-                        progress:
-                          type: string
-                          example: Completed
-                        canCancel:
-                          type: boolean
-                          example: false
-                        canRetry:
-                          type: boolean
-                          example: false
-                        speed:
-                          type: string
-                          example: 0.49x
-                        billedSecs:
-                          type: integer
-                          example: 57
-                  billed:
-                    type: object
-                    properties:
-                      jobs:
-                        type: integer
-                        example: 4
-                      secs:
-                        type: integer
-                        example: 4495
-                      mins:
-                        type: string
-                        example: 75 mins
-                      sourceMins:
-                        type: string
-                        example: 72 mins
-                      completed:
-                        type: integer
-                        example: 4
-                      active:
-                        type: integer
-                        example: 0
     post:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: List Jobs / Get Job Details
       description: >
-        Multi-purpose POST endpoint. Behaviour depends on body content:
-        - No body + query string `r` / `r&i`: filter jobs by date range and optionally zone.
-        - Body `view=job`: get single job details by jobid and index (form-encoded).
-        - Body `view=new`: get new / polling jobs (form-encoded).
+        Multi-purpose POST endpoint. Behaviour depends on body content.
       operationId: postEncodingJobs
       parameters:
-        - name: r
-          in: query
-          required: false
-          description: >
-            Date range filter. Format: YYYY-MM-DD - YYYY-MM-DD.
-            Example: 2025-01-01 - 2025-01-31
-          schema:
-            type: string
-            example: "2025-01-01 - 2025-01-31"
-        - name: i
-          in: query
-          required: false
-          description: Zone ID to filter by.
-          schema:
-            type: integer
-            example: 15
+      - name: r
+        in: query
+        required: false
+        description: >
+          Date range filter. Format: YYYY-MM-DD - YYYY-MM-DD.
+        schema:
+          type: string
+          example: "2025-01-01 - 2025-01-31"
+      - name: i
+        in: query
+        required: false
+        description: Zone ID to filter by.
+        schema:
+          type: integer
+          example: 15
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
                 view:
                   type: string
-                  description: "Operation mode: `job` to fetch a single job, `new` to poll new jobs."
+                  description: "Operation mode: job to fetch a single job, new to poll new jobs."
                   enum: [job, new]
                   example: job
                 jobid:
@@ -931,47 +92,10 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  zonesInRange:
-                    type: array
-                    items:
-                      type: integer
-                    example: [2102, 2332, 2442, 2591, 2614, 3606, 3759, 3812, 3849, 4000, 4114, 4171, 4218, 4292, 4305, 4329, 4340, 4393, 4438, 4451, 4475, 4485, 4497, 4499, 4524, 4552, 4566, 4580, 4583, 4891, 4898, 4899, 4970, 5013, 5015, 5022, 5063, 5088, 5098, 5100, 5107, 5111, 5127, 5129, 5170, 5236, 5258, 5279, 5296, 5325, 5341, 5535, 5552]
-                  logsInRange:
-                    type: array
-                    items: {}
-                    example: []
-                  billed:
-                    type: object
-                    properties:
-                      jobs:
-                        type: integer
-                        example: 0
-                      secs:
-                        type: integer
-                        example: 0
-                      mins:
-                        type: string
-                        example: 0 mins
-                      sourceMins:
-                        type: string
-                        example: 0 mins
-                      completed:
-                        type: integer
-                        example: 0
-                      active:
-                        type: integer
-                        example: 0
 
-  # ---------------------------------------------------------------------------
-  # Encoding Jobs
-  # ---------------------------------------------------------------------------
-  /{id}/transcoding/jobs:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/jobs:
     get:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: List Active Video Encoding Jobs
       description: List all active / pending video encoding job queue for the service.
       operationId: getEncodingJobs
@@ -984,133 +108,15 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 2331
-                    jobid:
-                      type: string
-                      example: "1343703"
-                    profileid:
-                      type: string
-                      example: "2939"
-                    infile:
-                      type: string
-                      example: /hosanna.mp4
-                    outfile:
-                      type: string
-                      example: /mp4/hosanna_1080p.mp4
-                    percent:
-                      type: string
-                      example: "100"
-                    log:
-                      type: string
-                      example: ""
-                    error:
-                      type: string
-                      example: ""
-                    created_at:
-                      type: string
-                      example: "2026-04-25 12:29:13"
-                    updated_at:
-                      type: string
-                      example: "2026-04-25 12:33:52"
-                    timings:
-                      type: object
-                      properties:
-                        process:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777120159097"
-                            end:
-                              type: string
-                              example: "1777120432214"
-                        infile:
-                          type: object
-                          properties:
-                            check:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777120159166"
-                                end:
-                                  type: string
-                                  example: "1777120160243"
-                            probe:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777120160243"
-                                end:
-                                  type: string
-                                  example: "1777120161860"
-                        download:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777120161932"
-                            end:
-                              type: string
-                              example: "1777120168733"
-                        encoder:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777120168803"
-                            end:
-                              type: string
-                              example: "1777120431882"
-                        outfile:
-                          type: object
-                          properties:
-                            check:
-                              type: object
-                            probe:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777120431882"
-                                end:
-                                  type: string
-                                  example: "1777120431928"
-                            segment:
-                              type: object
-                        thumbs:
-                          type: object
-                          properties:
-                            process:
-                              type: object
-                        upload:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777120432173"
-                            end:
-                              type: string
-                              example: "1777120432203"
-                    profile:
-                      type: string
-                      example: 1080p
 
-  /{id}/transcoding/jobs/{zoneId}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/jobs/{zoneId}:
     get:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: Get Active Jobs for a Zone
       description: List all active encoding jobs for a specific zone.
       operationId: getEncodingJobsByZone
       parameters:
-        - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
       responses:
         '200':
           description: success
@@ -1120,136 +126,18 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 6643
-                    jobid:
-                      type: string
-                      example: "1346186"
-                    profileid:
-                      type: string
-                      example: "1"
-                    infile:
-                      type: string
-                      example: /badguy.mp4
-                    outfile:
-                      type: string
-                      example: /mp4/badguy_720p.mp4
-                    percent:
-                      type: string
-                      example: "100"
-                    log:
-                      type: string
-                      example: ""
-                    error:
-                      type: string
-                      example: ""
-                    created_at:
-                      type: string
-                      example: "2026-04-26 17:54:34"
-                    updated_at:
-                      type: string
-                      example: "2026-04-26 17:57:29"
-                    timings:
-                      type: object
-                      properties:
-                        process:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777226080001"
-                            end:
-                              type: string
-                              example: "1777226249617"
-                        infile:
-                          type: object
-                          properties:
-                            check:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777226080073"
-                                end:
-                                  type: string
-                                  example: "1777226081293"
-                            probe:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777226081293"
-                                end:
-                                  type: string
-                                  example: "1777226083693"
-                        download:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777226083767"
-                            end:
-                              type: string
-                              example: "1777226087759"
-                        encoder:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777226087832"
-                            end:
-                              type: string
-                              example: "1777226249331"
-                        outfile:
-                          type: object
-                          properties:
-                            check:
-                              type: object
-                            probe:
-                              type: object
-                              properties:
-                                start:
-                                  type: string
-                                  example: "1777226249331"
-                                end:
-                                  type: string
-                                  example: "1777226249367"
-                            segment:
-                              type: object
-                        thumbs:
-                          type: object
-                          properties:
-                            process:
-                              type: object
-                        upload:
-                          type: object
-                          properties:
-                            start:
-                              type: string
-                              example: "1777226249579"
-                            end:
-                              type: string
-                              example: "1777226249606"
-                    profile:
-                      type: string
-                      example: 720p
 
-  /{id}/transcoding/jobs/{profileid}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/jobs/{profileid}:
     post:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: Add Video Encoding Job
       description: Add a file encoding job.
       operationId: addEncodingJob
       parameters:
-        - $ref: '#/components/parameters/profileIdParam'
+      - $ref: '#/components/parameters/profileIdParam'
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -1259,13 +147,11 @@ paths:
                   example: "/uploads/source_clip.mp4"
                 priority:
                   type: integer
-                  description: Encode job priority. 0 = High, 100 = Lowest.
+                  description: "Encode job priority. 0 = High, 100 = Lowest."
                   example: 0
                 map:
                   type: string
-                  description: >
-                    Video/Audio/Subtitle stream selection from input source.
-                    Passed as a string value to the encoder.
+                  description: Video/Audio/Subtitle stream selection from input source.
                   example: "0:v:0 0:a:0 0:s:0"
       responses:
         '200':
@@ -1274,28 +160,15 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  result:
-                    type: string
-                    description: success/error
-                  jobid:
-                    type: integer
-                    description: Video encoding job ID.
-                  message:
-                    type: string
-                    description: Error message, only present if an error occurs.
 
-  /{id}/transcoding/jobs/retry/{jobid}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/jobs/retry/{jobid}:
     get:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: Retry Encoding Job
       description: Retry an encoding job after fixing issues.
       operationId: retryEncodingJob
       parameters:
-        - $ref: '#/components/parameters/jobIdParam'
+      - $ref: '#/components/parameters/jobIdParam'
       responses:
         '200':
           description: success
@@ -1305,26 +178,15 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    result:
-                      type: string
-                      description: success/error
-                    message:
-                      type: string
-                      description: Success/error message detail.
 
-  /{id}/transcoding/jobs/cancel/{jobid}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/jobs/cancel/{jobid}:
     get:
-      tags:
-        - Video Encoding Jobs
+      tags: [Video Encoding Jobs]
       summary: Cancel Encoding Job
-      description: >
-        Cancel an encoding job. Jobs can only be cancelled before they are processed.
+      description: Cancel an encoding job. Jobs can only be cancelled before they are processed.
       operationId: cancelEncodingJob
       parameters:
-        - $ref: '#/components/parameters/jobIdParam'
+      - $ref: '#/components/parameters/jobIdParam'
       responses:
         '200':
           description: success
@@ -1334,23 +196,10 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    result:
-                      type: string
-                      description: success/error
-                    message:
-                      type: string
-                      description: Success/error message detail.
 
-  # ---------------------------------------------------------------------------
-  # File Transcoding Profiles
-  # ---------------------------------------------------------------------------
-  /{id}/transcoding/profiles:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/profiles:
     get:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: List File Transcoding Profiles
       description: List all file transcoding profiles for the service.
       operationId: ProfilesList
@@ -1361,434 +210,25 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  result:
-                    type: string
-                    example: success
-                  profiles:
-                    type: object
-                    properties:
-                      "114730":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 114730
-                          serviceid:
-                            type: integer
-                            example: 103
-                          vmid:
-                            type: integer
-                            example: 242
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 2160p
-                          filemode:
-                            type: string
-                            example: Single
-                          settings:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 2160p
-                              outdir:
-                                type: string
-                                example: mp4/
-                              f:
-                                type: string
-                                example: mp4
-                              cv:
-                                type: string
-                                example: libx264
-                              sv:
-                                type: string
-                                example: 2160p
-                              svvalue:
-                                type: string
-                                example: ""
-                              crfv:
-                                type: string
-                                example: "24"
-                              bv:
-                                type: string
-                                example: "1"
-                              bvvalue:
-                                type: integer
-                                example: 12000
-                              vpass:
-                                type: string
-                                example: "1"
-                              vprofile:
-                                type: string
-                                example: main
-                              vlevel:
-                                type: string
-                                example: "3.1"
-                              upscale:
-                                type: string
-                                example: "N"
-                              ca:
-                                type: string
-                                example: aac
-                              aca:
-                                type: string
-                                example: "2"
-                              ba:
-                                type: string
-                                example: "1"
-                              bavalue:
-                                type: string
-                                example: "128"
-                              ara:
-                                type: string
-                                example: "44100"
-                              filemode:
-                                type: string
-                                example: Single
-                              threads:
-                                type: integer
-                                example: 2
-                              bframe:
-                                type: integer
-                                example: 1
-                              preset:
-                                type: string
-                                example: superfast
-                              format:
-                                type: string
-                                example: mp4
-                              weight:
-                                type: integer
-                                example: 8294400
-                          codec:
-                            type: string
-                            example: h264
-                      "115638":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 115638
-                          serviceid:
-                            type: integer
-                            example: 103
-                          vmid:
-                            type: integer
-                            example: 347
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 2160p
-                          filemode:
-                            type: string
-                            example: Single
-                          settings:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 2160p
-                              outdir:
-                                type: string
-                                example: mp4/
-                              f:
-                                type: string
-                                example: mp4
-                              cv:
-                                type: string
-                                example: libx264
-                              sv:
-                                type: string
-                                example: 2160p
-                              svvalue:
-                                type: string
-                                example: ""
-                              crfv:
-                                type: string
-                                example: "24"
-                              bv:
-                                type: string
-                                example: "1"
-                              bvvalue:
-                                type: integer
-                                example: 12000
-                              vpass:
-                                type: string
-                                example: "1"
-                              vprofile:
-                                type: string
-                                example: main
-                              vlevel:
-                                type: string
-                                example: "3.1"
-                              upscale:
-                                type: string
-                                example: "N"
-                              ca:
-                                type: string
-                                example: aac
-                              aca:
-                                type: string
-                                example: "2"
-                              ba:
-                                type: string
-                                example: "1"
-                              bavalue:
-                                type: string
-                                example: "128"
-                              ara:
-                                type: string
-                                example: "44100"
-                              filemode:
-                                type: string
-                                example: Single
-                              threads:
-                                type: integer
-                                example: 2
-                              bframe:
-                                type: integer
-                                example: 1
-                              preset:
-                                type: string
-                                example: superfast
-                              format:
-                                type: string
-                                example: mp4
-                              weight:
-                                type: integer
-                                example: 8294400
-                          codec:
-                            type: string
-                            example: h264
-                      "114298":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 114298
-                          serviceid:
-                            type: integer
-                            example: 103
-                          vmid:
-                            type: integer
-                            example: 151
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 2160p
-                          filemode:
-                            type: string
-                            example: Single
-                          settings:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 2160p
-                              outdir:
-                                type: string
-                                example: mp4/
-                              f:
-                                type: string
-                                example: mp4
-                              cv:
-                                type: string
-                                example: libx264
-                              sv:
-                                type: string
-                                example: 2160p
-                              svvalue:
-                                type: string
-                                example: ""
-                              crfv:
-                                type: string
-                                example: "24"
-                              bv:
-                                type: string
-                                example: "1"
-                              bvvalue:
-                                type: integer
-                                example: 12000
-                              vpass:
-                                type: string
-                                example: "1"
-                              vprofile:
-                                type: string
-                                example: main
-                              vlevel:
-                                type: string
-                                example: "3.1"
-                              upscale:
-                                type: string
-                                example: "N"
-                              ca:
-                                type: string
-                                example: aac
-                              aca:
-                                type: string
-                                example: "2"
-                              ba:
-                                type: string
-                                example: "1"
-                              bavalue:
-                                type: string
-                                example: "128"
-                              ara:
-                                type: string
-                                example: "44100"
-                              filemode:
-                                type: string
-                                example: Single
-                              threads:
-                                type: integer
-                                example: 2
-                              bframe:
-                                type: integer
-                                example: 1
-                              preset:
-                                type: string
-                                example: superfast
-                              format:
-                                type: string
-                                example: mp4
-                              weight:
-                                type: integer
-                                example: 8294400
-                          codec:
-                            type: string
-                            example: h264
-                      "117131":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 117131
-                          serviceid:
-                            type: integer
-                            example: 103
-                          vmid:
-                            type: integer
-                            example: 397
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 2160p
-                          filemode:
-                            type: string
-                            example: Single
-                          settings:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 2160p
-                              outdir:
-                                type: string
-                                example: mp4/
-                              f:
-                                type: string
-                                example: mp4
-                              cv:
-                                type: string
-                                example: libx264
-                              sv:
-                                type: string
-                                example: 2160p
-                              svvalue:
-                                type: string
-                                example: ""
-                              crfv:
-                                type: string
-                                example: "24"
-                              bv:
-                                type: string
-                                example: "1"
-                              bvvalue:
-                                type: integer
-                                example: 12000
-                              vpass:
-                                type: string
-                                example: "1"
-                              vprofile:
-                                type: string
-                                example: main
-                              vlevel:
-                                type: string
-                                example: "3.1"
-                              upscale:
-                                type: string
-                                example: "N"
-                              ca:
-                                type: string
-                                example: aac
-                              aca:
-                                type: string
-                                example: "2"
-                              ba:
-                                type: string
-                                example: "1"
-                              bavalue:
-                                type: string
-                                example: "128"
-                              ara:
-                                type: string
-                                example: "44100"
-                              filemode:
-                                type: string
-                                example: Single
-                              threads:
-                                type: integer
-                                example: 2
-                              bframe:
-                                type: integer
-                                example: 1
-                              preset:
-                                type: string
-                                example: superfast
-                              format:
-                                type: string
-                                example: mp4
-                              weight:
-                                type: integer
-                                example: 8294400
-                          codec:
-                            type: string
-                            example: h264
 
-  /{id}/transcoding/profiles/defaults:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/profiles/defaults:
     post:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Create Global Auto Transcode Preset Profiles
       description: These presets will be automatically added to your new zones.
       operationId: createAutoTranscodeProfiles
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
                 defaultprofiles:
                   type: array
-                  description: >
-                    Array of profile IDs to set as default auto-apply presets.
-                    Should be profile IDs from GET /transcoding/file/profiles.
+                  description: Array of profile IDs to set as default auto-apply presets.
                   items:
                     type: string
                   example: ["profileId1", "profileId2"]
-      deprecated: false
       responses:
         '200':
           description: success
@@ -1804,24 +244,19 @@ paths:
                     type: string
                     example: Transcoding Settings Updated
 
-  /{id}/transcoding/profiles/new:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/profiles/new:
     post:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Create Transcoding Profile
       description: Create a new transcoding profile.
       operationId: createTranscodingProfile
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-                - name
-                - _METHOD
+              required: [name, _METHOD]
               properties:
                 _METHOD:
                   type: string
@@ -1829,7 +264,7 @@ paths:
                   example: PUT
                 name:
                   type: string
-                  description: Enter profile name. Each name should have minimum 3 characters.
+                  description: Profile name. Minimum 3 characters.
                   example: My Profile
                 cv:
                   type: string
@@ -1943,7 +378,6 @@ paths:
                   items:
                     type: string
                   example: []
-      deprecated: false
       responses:
         '200':
           description: success
@@ -1962,21 +396,18 @@ paths:
                     type: integer
                     example: 129017
 
-  /{id}/transcoding/profiles/{profileid}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/profiles/{profileid}:
     post:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Edit Transcoding Profile
       description: Edit an existing transcoding profile.
       operationId: editTranscodingProfile
       parameters:
-        - $ref: '#/components/parameters/profileIdParam'
+      - $ref: '#/components/parameters/profileIdParam'
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -2100,7 +531,6 @@ paths:
                   type: string
                   description: Signal DELETE to the backend when deleting.
                   example: DELETE
-      deprecated: false
       responses:
         '200':
           description: success
@@ -2116,30 +546,26 @@ paths:
                     type: string
                     example: Transcoding Settings Updated
     delete:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Delete Transcoding Profile
       description: >
-        Delete the information of a transcoding profile. To cast request method
-        POST, include parameter _METHOD = DELETE.
+        Delete the information of a transcoding profile.
       operationId: deleteTranscodingProfile
       parameters:
-        - $ref: '#/components/parameters/profileIdParam'
+      - $ref: '#/components/parameters/profileIdParam'
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-                - _METHOD
+              required: [_METHOD]
               properties:
                 _METHOD:
                   type: string
                   description: Signals DELETE to the backend.
                   enum: [DELETE]
                   example: DELETE
-      deprecated: false
       responses:
         '200':
           description: success
@@ -2155,15 +581,9 @@ paths:
                     type: string
                     example: Transcoding Settings Updated
 
-  # ---------------------------------------------------------------------------
-  # File Transcoding Filters
-  # ---------------------------------------------------------------------------
-  /{id}/transcoding/filters:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/filters:
     get:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: List File Transcoding Filters
       description: List all file transcoding filters for the service.
       operationId: transcodingFileFilter
@@ -2174,495 +594,20 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  result:
-                    type: string
-                    example: success
-                  filters:
-                    type: object
-                    properties:
-                      "1":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 1
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: Horizontal Flip
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: hflip
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "2":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 2
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: Vertical Flip
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: vflip
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "5":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 5
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 5centsText
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                type: object
-                                properties:
-                                  filter:
-                                    type: string
-                                    example: drawtext
-                                  position:
-                                    type: string
-                                    example: Center
-                                  fontcolor:
-                                    type: string
-                                    example: "#1cb74d"
-                                  fontsize:
-                                    type: integer
-                                    example: 36
-                                  text:
-                                    type: string
-                                    example: 5centsCDN Incg55
-                      "6":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 6
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: 5centsLogo
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: overlay
-                              args:
-                                type: object
-                                properties:
-                                  url:
-                                    type: string
-                                    example: https://cp.5centscdn.net/templates/5cents/img/5CC_V_White.png
-                                  scale:
-                                    type: integer
-                                    example: 15
-                                  position:
-                                    type: string
-                                    example: Center
-                                  filter:
-                                    type: string
-                                    example: overlay
-                      "43":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 43
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: Demo Text
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                type: object
-                                properties:
-                                  text:
-                                    type: string
-                                    example: "This is free demo powered by www.5centscdn.com!"
-                                  fontsize:
-                                    type: string
-                                    example: "20"
-                                  fontcolor:
-                                    type: string
-                                    example: "#4caf50"
-                                  position:
-                                    type: string
-                                    example: Bottom Center
-                      "155":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 155
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: "Rotate 90&deg;Clockwise"
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: c90
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "157":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 157
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: "Rotate 180&deg;Clockwise"
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: c180
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "159":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 159
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: "Rotate 90&deg;CounterClockwise"
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: cc90
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "161":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 161
-                          serviceid:
-                            type: integer
-                            example: 0
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: "Rotate 180&deg;CounterClockwise"
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: cc180
-                              args:
-                                type: array
-                                items: {}
-                                example: []
-                      "292":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 292
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: pradhyuman text
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                type: object
-                                properties:
-                                  text:
-                                    type: string
-                                    example: pradhyuman goswami
-                                  fontsize:
-                                    type: integer
-                                    example: 48
-                                  fontcolor:
-                                    type: string
-                                    example: "#00ff40"
-                                  position:
-                                    type: string
-                                    example: Top Center
-                                  filter:
-                                    type: string
-                                    example: drawtext
-                      "295":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 295
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: tteststst
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: overlay
-                              args:
-                                type: object
-                                properties:
-                                  url:
-                                    type: string
-                                    example: https://cp.5centscdn.net/templates/5cents/img/newlogo.svg
-                                  scale:
-                                    type: string
-                                    example: "50"
-                                  position:
-                                    type: string
-                                    example: Top Right
-                      "297":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 297
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: pradhyuman
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: overlay
-                              args:
-                                type: object
-                                properties:
-                                  url:
-                                    type: string
-                                    example: https://cp.5centscdn.net/templates/5cents/img/newlogo.svg
-                                  scale:
-                                    type: string
-                                    example: "150"
-                                  position:
-                                    type: string
-                                    example: Center Right
-                      "298":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 298
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: testesetsesetse
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                type: object
-                                properties:
-                                  text:
-                                    type: string
-                                    example: test
-                                  fontsize:
-                                    type: string
-                                    example: "15"
-                                  fontcolor:
-                                    type: string
-                                    example: "#FF9507"
-                                  position:
-                                    type: string
-                                    example: Center
-                      "317":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 317
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: validation
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                type: object
-                                properties:
-                                  text:
-                                    type: string
-                                    example: test
-                                  fontsize:
-                                    type: string
-                                    example: "15"
-                                  fontcolor:
-                                    type: string
-                                    example: "#FF9507"
-                                  position:
-                                    type: string
-                                    example: Top Center
-                      "324":
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 324
-                          serviceid:
-                            type: integer
-                            example: 103
-                          type:
-                            type: string
-                            example: file
-                          name:
-                            type: string
-                            example: flutter
-                          settings:
-                            type: object
-                            properties:
-                              filter:
-                                type: string
-                                example: drawtext
-                              args:
-                                nullable: true
-                                example: null
 
-  /{id}/transcoding/filters/new:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/filters/new:
     post:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Create File Transcoding Filter
       description: Create a new file transcoding filter.
       operationId: createFileTranscodingFilter
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-                - name
-                - filter
-                - _METHOD
+              required: [name, filter, _METHOD]
               properties:
                 name:
                   type: string
@@ -2724,21 +669,18 @@ paths:
                     type: integer
                     example: 429
 
-  /{id}/transcoding/filters/{filterid}:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/filters/{filterid}:
     post:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Edit Transcoding Profile Filter
       description: Edit an existing transcoding profile filter.
       operationId: editTranscodingProfileFilter
       parameters:
-        - $ref: '#/components/parameters/filterIdParam'
+      - $ref: '#/components/parameters/filterIdParam'
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -2762,7 +704,6 @@ paths:
                   type: string
                   description: The position of the text on the screen.
                   example: Top Left
-      deprecated: false
       responses:
         '200':
           description: success
@@ -2778,30 +719,26 @@ paths:
                     type: string
                     example: Transcoding Settings Updated
     delete:
-      tags:
-        - Video Encoding Profiles
+      tags: [Video Encoding Profiles]
       summary: Delete Transcoding Profile Filter
       description: >
-        Delete the information of a transcoding profile filter. To cast request
-        method POST, include parameter _METHOD = DELETE.
+        Delete the information of a transcoding profile filter.
       operationId: deleteTranscodingProfileFilter
       parameters:
-        - $ref: '#/components/parameters/filterIdParam'
+      - $ref: '#/components/parameters/filterIdParam'
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-                - _METHOD
+              required: [_METHOD]
               properties:
                 _METHOD:
                   type: string
                   description: Signals DELETE to the backend.
                   enum: [DELETE]
                   example: DELETE
-      deprecated: false
       responses:
         '200':
           description: success
@@ -2817,39 +754,27 @@ paths:
                     type: string
                     example: Transcoding Filter Deleted
 
-  # ---------------------------------------------------------------------------
-  # Transcoding Notifications
-  # ---------------------------------------------------------------------------
-  /{id}/transcoding/notifications/defaults:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/notifications/defaults:
     post:
-      tags:
-        - Transcoding Notifications
+      tags: [Transcoding Notifications]
       summary: Save Notification Emails and Webhook URLs
       description: >
-        Updates email addresses and webhook URLs for encode-completion
-        notifications. The emails field is a comma-separated list of email
-        addresses; webhooks is a comma-separated list of HTTP/HTTPS URLs.
+        Updates email addresses and webhook URLs for encode-completion notifications.
       operationId: updateNotifications
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
                 emails:
                   type: string
-                  description: >
-                    Comma-separated list of email addresses to receive
-                    encode-completion notifications.
+                  description: Comma-separated list of email addresses to receive encode-completion notifications.
                   example: "admin@example.com,ops@example.com"
                 webhooks:
                   type: string
-                  description: >
-                    Comma-separated list of HTTP/HTTPS URLs to POST
-                    encode-completion payloads to.
+                  description: Comma-separated list of HTTP/HTTPS URLs to POST encode-completion payloads to.
                   example: "https://hooks.example.com/encode,https://api.example.com/notify"
       responses:
         '200':
@@ -2866,27 +791,20 @@ paths:
                     type: string
                     example: Transcoding Settings Updated
 
-  /{id}/transcoding/notifications/resend:
-    parameters:
-      - $ref: '#/components/parameters/serviceIdParam'
+  /transcoding/notifications/resend:
     post:
-      tags:
-        - Transcoding Notifications
+      tags: [Transcoding Notifications]
       summary: Resend Encode-Completion Webhook Notification
       description: >
-        Looks up a completed encode job and re-POSTs the original completion
-        payload to all configured webhook URLs. Exactly one of index, infile,
-        or outfile must be provided along with zoneid.
+        Re-POSTs the original completion payload to all configured webhook URLs.
       operationId: resendNotification
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-                - zoneid
-                - index
+              required: [zoneid, index]
               properties:
                 zoneid:
                   type: integer
@@ -2905,41 +823,12 @@ paths:
                 type: array
                 items:
                   type: object
-                  properties:
-                    time:
-                      type: integer
-                      description: Unix timestamp of the call.
-                      example: 1742810400
-                    hook:
-                      type: string
-                      description: Webhook URL that was called.
-                      example: "https://hooks.example.com/encode"
-                    body:
-                      type: array
-                      description: JSON payload posted to the webhook.
-                      items:
-                        type: object
-                    respCode:
-                      type: integer
-                      description: HTTP response status code from the webhook endpoint.
-                      example: 200
-                    respBody:
-                      type: string
-                      description: HTTP response body from the webhook endpoint.
-                      example: "OK"
-                    error:
-                      type: string
-                      description: Exception message if the HTTP call threw an exception.
         '400':
           description: Lookup or configuration error.
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  error:
-                    type: string
-                    example: "No Match Found"
 
 components:
   securitySchemes:
@@ -2949,19 +838,10 @@ components:
       name: X-API-Key
 
   parameters:
-    serviceIdParam:
-      name: id
-      in: path
-      required: true
-      description: service id.
-      schema:
-        type: integer
-        example: 42
-
     zoneIdParam:
       name: zoneId
       in: path
-      description: ID of the Push Zone (`fs_pushzones.id`).
+      description: ID of the Push Zone.
       required: true
       style: simple
       explode: false
@@ -2972,7 +852,7 @@ components:
     jobIdParam:
       name: jobid
       in: path
-      description: ID of the Video Encoding job (Beanstalkd job ID stored in `fs_encodejobs.jobid`).
+      description: ID of the Video Encoding job.
       required: true
       style: simple
       explode: false
@@ -2983,7 +863,7 @@ components:
     profileIdParam:
       name: profileid
       in: path
-      description: ID of the Transcode Profile (`fs_transcodeprofiles.id`).
+      description: ID of the Transcode Profile.
       required: true
       style: simple
       explode: false
@@ -2994,7 +874,7 @@ components:
     filterIdParam:
       name: filterid
       in: path
-      description: ID of the Transcode Profile filter (`fs_transcodefilters.id`).
+      description: ID of the Transcode Profile filter.
       required: true
       style: simple
       explode: false
@@ -3005,12 +885,9 @@ components:
   schemas:
     createProfileCombined:
       type: object
-
     editProfileCombined:
       type: object
-
     createFileTranscodingFilter:
       type: object
-
     editFileTranscodingFilter:
       type: object
