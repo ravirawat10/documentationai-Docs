@@ -76,7 +76,7 @@ paths:
                   items:
                     type: string
                   description: |
-                    Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+                    Array of resource hashes to filter by (from /analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
                   example: ["exa8jekgpb63", "n4zpvl968j5o"]
                 granularity:
@@ -163,7 +163,7 @@ paths:
                   items:
                     type: string
                   description: |
-                    Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+                    Array of resource hashes to filter by (from /analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
                   example: ["exa8jekgpb63", "n4zpvl968j5o"]
                 granularity:
@@ -636,7 +636,7 @@ components:
     StatsSummaryRangeParam:
       description: |
         Slash-delimited filter string for stats summary endpoints.
-        Format: `{range}/{type}`
+        Format: `[range]/[type]`
         - range: `last_24hrs` | `last_7days` | `last_30days` | `YYYY-MM` (month key)
         - type: `hourly` | `daily`
         Example: `last_7days/daily`
@@ -646,7 +646,7 @@ components:
     CacheFilterParam:
       description: |
         Slash-delimited filter string for cache statistics endpoints.
-        Format: `{frequency}/{filter_type}/{start_date}/{end_date}`
+        Format: `[frequency]/[filter_type]/[start_date]/[end_date]`
         - frequency: `0` (minute) | `1` (hour) | `2` (day)
         - filter_type: `0` (traffic) | `1` (HIT/MISS)
         - start_date: `YYYY-MM-DD`
@@ -658,7 +658,7 @@ components:
     TopFilesFilterParam:
       description: |
         Slash-delimited filter string for top-files endpoints.
-        Format: `{start_date}/{end_date}/{type}`
+        Format: `[start_date]/[end_date]/[type]`
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
         - type: `dynamic` | `static` | `notfound`
@@ -670,7 +670,7 @@ components:
       description: |
         Slash-delimited filter string for referrers, status-codes, countries,
         browsers, OS, and visitors endpoints.
-        Format: `{frequency}/{start_date}/{end_date}`
+        Format: `[frequency]/[start_date]/[end_date]`
         - frequency: `0` (minute) | `1` (hour) | `2` (day)
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
@@ -681,7 +681,7 @@ components:
     TopReferrersFilterParam:
       description: |
         Slash-delimited filter string for top-referrers endpoint.
-        Format: `{start_date}/{end_date}`
+        Format: `[start_date]/[end_date]`
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
         Example: `2024-01-01/2024-01-31`
@@ -859,7 +859,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -889,7 +889,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -923,7 +923,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -957,7 +957,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -991,7 +991,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1025,7 +1025,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1059,7 +1059,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1093,7 +1093,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1127,7 +1127,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1161,7 +1161,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1195,7 +1195,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1232,7 +1232,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1270,7 +1270,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1300,7 +1300,7 @@ components:
           items:
             type: string
           description: |
-            Array of resource hashes to filter by (from /{serviceId}/analytics/traffic/resources).
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
           example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
         granularity:
@@ -1316,7 +1316,7 @@ components:
         Map of resource hash (string key) to resource database ID (integer value).
         Use these hashes in `resource_hashes` filter fields on all analytics endpoints.
         Push/pull zones use short alphanumeric hashes as keys. Livestream resources
-        use path-style keys in the format `{stream_name}/{source_name}`.
+        use path-style keys in the format `[stream_name]/[source_name]`.
       properties:
         n4zpvl968j5o:
           type: integer
