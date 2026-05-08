@@ -34,6 +34,8 @@ tags:
   description: Reports for Recording Minutes
 - name: Global Settings
   description: Global Stream Settings
+- name: Live Transcoding Profiles/Filters
+  description: Live stream transcoding profile and filter management
 - name: Ad Insertion
   description: Enable, configure and control SCTE-35 ad insertion on a live stream
 - name: Ad Server
@@ -45937,6 +45939,8 @@ components:
       in: path
       name: streamid
       required: true
+      style: simple
+      explode: false
       schema:
         type: integer
       description: Numeric stream ID.
@@ -45944,6 +45948,8 @@ components:
       in: path
       name: scheduleid
       required: true
+      style: simple
+      explode: false
       schema:
         type: integer
       description: Numeric schedule ID.
@@ -45951,6 +45957,8 @@ components:
       in: path
       name: triggerid
       required: true
+      style: simple
+      explode: false
       schema:
         type: integer
       description: Numeric trigger ID.
