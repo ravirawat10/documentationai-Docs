@@ -2592,7 +2592,7 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of file paths to purge. Omit this field entirely (send {}) to purge the whole zone.
+                  description: List of file paths to purge. Omit this field entirely (send an empty body) to purge the whole zone.
                   example: ["/videos/file.mp4", "/images/logo.png"]
       deprecated: false
       responses:
@@ -4526,7 +4526,7 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of file paths to purge. Omit this field entirely (send {}) to purge the whole zone.
+                  description: List of file paths to purge. Omit this field entirely (send an empty body) to purge the whole zone.
                   example: ["/videos/file.mp4", "/images/logo.png"]
       deprecated: false
       responses:
