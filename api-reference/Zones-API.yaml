@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: 5centsCDN - Zones
-  description: API for managing Zones in <a href="https://www.5centscdn.net" target="_blank">5centsCDN</a>
+  description: API for managing Zones in 5centsCDN (https://www.5centscdn.net)
   version: 2.0.0
   contact:
     email: help@5centscdn.com
@@ -536,7 +536,7 @@ paths:
                                             type: string
                                     baseQ:
                                       type: string
-                                      example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                      example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                     base:
                                       type: string
                                       example: https://iframes.5centscdn.com/5centscdn/auto/skin1/48nujrilg67fzljy/
@@ -1424,7 +1424,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: http://iframes.5centscdn.com/5centscdn/auto/skin1/5myum2ioen3s7gey/
@@ -2489,7 +2489,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/5myum2ioqx8i7dlw/
@@ -3595,7 +3595,7 @@ paths:
                                             type: string
                                     baseQ:
                                       type: string
-                                      example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                      example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                     base:
                                       type: string
                                       example: https://iframes.5centscdn.com/5centscdn/auto/skin1/4p6ud2tp9oes7ze9/
@@ -4417,7 +4417,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/4p6ud2tp9oes7ze9/
@@ -5705,7 +5705,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/z5myum2iyv1luy65/
@@ -6330,7 +6330,7 @@ paths:
                                             type: string
                                     baseQ:
                                       type: string
-                                      example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                      example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                     base:
                                       type: string
                                     hls:
@@ -7218,7 +7218,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/59vul2il9enuj0wm/
@@ -8014,7 +8014,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/466u63hqnp9co7yd/
@@ -9563,7 +9563,7 @@ paths:
                                             type: string
                                     baseQ:
                                       type: string
-                                      example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                      example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                     base:
                                       type: string
                                       example: https://iframes.5centscdn.com/5centscdn/auto/skin1/4dzuw1i8q3osovg0/
@@ -10355,7 +10355,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: https://iframes.5centscdn.com/5centscdn/auto/skin1/4dzuw1i8q3osovg0/
@@ -11227,7 +11227,7 @@ paths:
                                           type: string
                                   baseQ:
                                     type: string
-                                    example: "?showcv=true&title={ReplaceWithVideoTitle}"
+                                    example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                   base:
                                     type: string
                                     example: http://iframes.5centscdn.com/5centscdn/auto/skin1/5jlu93s6zrru3pmr/
@@ -12811,11 +12811,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N.<br>Set to Y if Geo Block should be enabled.<br> Set to N if Geo Block should not to be enabled.
+          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: Y
         list:
           type: array
@@ -12825,18 +12825,18 @@ components:
             example: AF
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
     zoneshttpsetting_geoblock:
       type: object
       properties:
         enabled:
           type: string
-          description: Values can be Y or N.<br>Set to Y if Geo Block should be enabled.<br> Set to N if Geo Block should not to be enabled.
+          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: N
         list:
           type: array
@@ -12846,7 +12846,7 @@ components:
             example: AF
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
         mode:
           type: string
@@ -12861,11 +12861,11 @@ components:
           description: Enable domain lock (omit to disable)
         policy:
           type: string
-          description: Values can be Y or N. <br>Set to Y if domainlock should be enabled.<br> Set to N if domainlock should be disabled.
+          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should be disabled.
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma .<br> Eg: www.domain-one.com, www.domain-two.com'
+          description: 'List of domains seperated by comma . Eg: www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com,www.domain-two.com
         type:
           type: string
@@ -12892,11 +12892,11 @@ components:
           description: Enable domain lock (omit to disable)
         policy:
           type: string
-          description: Values can be Y or N. <br>Set to Y if domainlock should be enabled.<br> Set to N if domainlock should be disabled.
+          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should be disabled.
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma .<br> Eg: www.domain-one.com, www.domain-two.com'
+          description: 'List of domains seperated by comma . Eg: www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com
         type:
           type: string
@@ -12915,7 +12915,7 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to N if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to N if Secure token should be disabled.
           example: Y
         list:
           type: string
@@ -12927,14 +12927,14 @@ components:
           example: 300
         keyip:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if keyip should be enabled<br> Set to N if keyip should be disabled.
+          description: Values Can be Y or N. Set to Y if keyip should be enabled Set to N if keyip should be disabled.
           example: N
     zoneshttpsetting_securetoken:
       type: object
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to Y if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
           example: Y
         list:
           type: string
@@ -12946,7 +12946,7 @@ components:
           example: 30
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
         mode:
           type: string
@@ -12972,7 +12972,7 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to Y if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
           example: Y
         rate:
           type: integer
@@ -12993,7 +12993,7 @@ components:
       properties:
         policy:
           type: string
-          description: Values can be Y or N. <br>Set to Y if secure token should be enabled.<br> Set to N if secure token should be disabled.
+          description: Values can be Y or N. Set to Y if secure token should be enabled. Set to N if secure token should be disabled.
           example: Y
         list:
           type: string
@@ -13004,7 +13004,7 @@ components:
           example: N
         ips:
           type: string
-          description: 'List of IPs to whitelist when secure token is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when secure token is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
         timeout:
           type: integer
@@ -13016,15 +13016,15 @@ components:
       properties:
         canonical:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if canonical header should be enabled<br> Set to N if canonical header should be disabled.
+          description: Values Can be Y or N. Set to Y if canonical header should be enabled Set to N if canonical header should be disabled.
           example: N
         robots:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if robots should be enabled<br> Set to N if robots should be disabled.
+          description: Values Can be Y or N. Set to Y if robots should be enabled Set to N if robots should be disabled.
           example: N
         robotstxt:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if robots.txt should be enabled<br> Set to N if robots.txt should be disabled.
+          description: Values Can be Y or N. Set to Y if robots.txt should be enabled Set to N if robots.txt should be disabled.
           example: N
         robotstxtcustom:
           type: string
@@ -13033,11 +13033,11 @@ components:
       properties:
         dnscheck:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if origin IP resolution should be enabled<br> Set to N if origin IP resolution should be disabled.
+          description: Values Can be Y or N. Set to Y if origin IP resolution should be enabled Set to N if origin IP resolution should be disabled.
           example: Y
         ip:
           type: string
-          description: 'When origin IP resolution is enabled.  <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'When origin IP resolution is enabled. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
         customhostheader:
           type: string
@@ -13071,7 +13071,7 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to Y if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
           example: Y
         list:
           type: string
@@ -13084,7 +13084,7 @@ components:
           example: 300
         keyip:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if Key ip should be enabled<br> Set to Y if key ip should be disabled.
+          description: Values Can be Y or N. Set to Y if Key ip should be enabled Set to Y if key ip should be disabled.
           example: Y
     postDomainLock:
       type: object
@@ -13095,19 +13095,19 @@ components:
           description: Enable domain lock (omit to disable)
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if domainlock should be enabled.<br> Set to N if domainlock should not to be enabled.
+          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should not to be enabled.
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma.<br>Eg: www.domain-one.com, www.domain-two.com'
+          description: 'List of domains seperated by comma. Eg: www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com
         ips:
           type: string
-          description: 'List of IPs to whitelist when domain lock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when domain lock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
         noreferer:
           type: string
-          description: Values can be Y or N.<br>Set to Y if noreferer should be enabled.<br> Set to N if noreferer should not to be enabled.
+          description: Values can be Y or N. Set to Y if noreferer should be enabled. Set to N if noreferer should not to be enabled.
           example: N
         type:
           type: string
@@ -13118,11 +13118,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N.<br>Set to Y if Geo Block should be enabled.<br> Set to N if Geo Block should not to be enabled.
+          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: N
         list:
           type: array
@@ -13130,7 +13130,7 @@ components:
             $ref: '#/components/schemas/ObjectSchemaDefinition'
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
     ObjectSchemaDefinition:
       type: string
@@ -13141,11 +13141,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: Y
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: Y
         list:
           type: array
@@ -13155,7 +13155,7 @@ components:
             example: AF
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
     postEac:
       type: object
@@ -13166,11 +13166,11 @@ components:
           description: Enable External Auth Control (omit to disable)
         policy:
           type: string
-          description: Values can be Y or N. <br>Set to Y if External auth control should be enabled<br> Set to N if  External auth control should be disabled.
+          description: Values can be Y or N. Set to Y if External auth control should be enabled Set to N if  External auth control should be disabled.
           example: Y
         authurl:
           type: string
-          description: 'Custom script that crosschecks the User/Viewer parameters and determines authorized users<br>Eg: http://example.com/auth.script'
+          description: 'Custom script that crosschecks the User/Viewer parameters and determines authorized users Eg: http://example.com/auth.script'
           example: http://example.com/auth.script
         ips:
           type: string
@@ -13252,23 +13252,23 @@ components:
       properties:
         http2:
           type: string
-          description: Values can be Y or N.<br> Set to Y for enabling HTTP/2.<br>Set to N for disabling HTTP/2.
+          description: Values can be Y or N. Set to Y for enabling HTTP/2. Set to N for disabling HTTP/2.
           example: Y
         redirect:
           type: string
-          description: Values can be Y or N.<br> Set to Y for enabling HTTPS Redirect.<br>Set to N for disabling HTTPS Redirect.
+          description: Values can be Y or N. Set to Y for enabling HTTPS Redirect. Set to N for disabling HTTPS Redirect.
           example: Y
         mode:
           type: string
-          description: Select SSL type. <br> The value can be N,S,L or C.<br> Set to N for None<br> Set to S for Shared.<br> Set to L for Let's Encrypt.<br>Set to C for Custom.
+          description: Select SSL type. The value can be N,S,L or C. Set to N for None Set to S for Shared. Set to L for Let's Encrypt. Set to C for Custom.
           example: N
         certidl:
           type: integer
-          description: SSL Certificate ID. It can be set if  ssl[mode] is L <br> The value will be already uploaded SSL Certificate ID
+          description: SSL Certificate ID. It can be set if  ssl[mode] is L The value will be already uploaded SSL Certificate ID
           format: int32
         certid:
           type: integer
-          description: SSL Certificate ID. It can be set if  ssl[mode] is C <br> The value will be already uploaded SSL Certificate ID
+          description: SSL Certificate ID. It can be set if  ssl[mode] is C The value will be already uploaded SSL Certificate ID
           format: int32
         name:
           type: string
@@ -13348,39 +13348,39 @@ components:
       properties:
         compression:
           type: string
-          description: The values can be Y or N.<br> Set to Y if edge compression should be enabled.<br> Set to N if edge compression should be disabled.
+          description: The values can be Y or N. Set to Y if edge compression should be enabled. Set to N if edge compression should be disabled.
           example: Y
         compressionlevel:
           type: string
-          description: Set the value of edge[compressionlevel] when edge[compression] is enabled. <br>The values can be 1, 2, 3, 4, 5, 6.
+          description: Set the value of edge[compressionlevel] when edge[compression] is enabled. The values can be 1, 2, 3, 4, 5, 6.
           example: 6
         dispositionenabled:
           type: string
-          description: The values can be Y or N.<br> Set to Y if content disposition should be enabled.<br> Set to N if content disposition should be disabled.
+          description: The values can be Y or N. Set to Y if content disposition should be enabled. Set to N if content disposition should be disabled.
           example: Y
         disposition:
           type: string
-          description: Set the value of edge[disposition] when edge[disposition] is enabled. <br>The values can be Y,D
+          description: Set the value of edge[disposition] when edge[disposition] is enabled. The values can be Y,D
           example: Y
         cors:
           type: string
-          description: The values can be Y or N.<br> Set to Y if add CORS header should be enabled.<br> Set to N if add CORS header should be disabled.
+          description: The values can be Y or N. Set to Y if add CORS header should be enabled. Set to N if add CORS header should be disabled.
           example: Y
         webp:
           type: string
-          description: The values can be Y or N.<br> Set to Y if  WebP should be enabled.<br> Set to N if WebP should be disabled.
+          description: The values can be Y or N. Set to Y if  WebP should be enabled. Set to N if WebP should be disabled.
           example: N
         lfo:
           type: string
-          description: The values can be Y or N.<br> Set to Y if  large file optimization should be enabled.<br> Set to N if large file optimization should be disabled.
+          description: The values can be Y or N. Set to Y if  large file optimization should be enabled. Set to N if large file optimization should be disabled.
           example: N
         prefresh:
           type: string
-          description: The values can be Y or N.<br> Set to Y if cache prefreshing should be enabled.<br> Set to N if cache prefreshing should be disabled.
+          description: The values can be Y or N. Set to Y if cache prefreshing should be enabled. Set to N if cache prefreshing should be disabled.
           example: N
         pseudostreaming:
           type: string
-          description: The values can be Y or N.<br> Set to Y if  pseudostreaming should be enabled.<br> Set to N if pseudostreaming should be disabled.
+          description: The values can be Y or N. Set to Y if  pseudostreaming should be enabled. Set to N if pseudostreaming should be disabled.
           example: N
     postZoneVodPull:
       type: object
@@ -13391,57 +13391,57 @@ components:
           example: https://example.com
         cname:
           type: string
-          description: 'Name that points to actual record. <br>Eg: docs.example.com'
+          description: 'Name that points to actual record. Eg: docs.example.com'
           example: docs.example.com
     postZoneEdge:
       type: object
       properties:
         compression:
           type: string
-          description: The values can be Y or N.<br> Set to Y if edge compression should be enabled.<br> Set to N if edge compression should be disabled.
+          description: The values can be Y or N. Set to Y if edge compression should be enabled. Set to N if edge compression should be disabled.
           example: Y
         compressionlevel:
           type: string
-          description: Set the value of edge[compressionlevel] when edge[compression] is enabled. <br>The values can be 1, 2, 3, 4, 5, 6.
+          description: Set the value of edge[compressionlevel] when edge[compression] is enabled. The values can be 1, 2, 3, 4, 5, 6.
           example: 6
         dispositionenabled:
           type: string
           example: Y
         disposition:
           type: string
-          description: Values can be Y or N<br> Set to Y to enable edge disposition. <br> Set to N  to disable edge disposition.
+          description: Values can be Y or N Set to Y to enable edge disposition. Set to N  to disable edge disposition.
           example: N
         stripcookie:
           type: string
-          description: Values can be Y or N<br> Set to Y to enable. <br> Set to N  to disable.
+          description: Values can be Y or N Set to Y to enable. Set to N  to disable.
           example: Y
         xff:
           type: string
-          description: Values can be Y or N<br> Set to Y to enable. <br> Set to N  to disable.
+          description: Values can be Y or N Set to Y to enable. Set to N  to disable.
           example: Y
         cors:
           type: string
-          description: Values can be Y or N<br> Set to Y to enable. <br> Set to N  to disable.
+          description: Values can be Y or N Set to Y to enable. Set to N  to disable.
           example: Y
         webp:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable WebP.<br> Set to N to disable WebP.
+          description: Values can be Y or N. Set to Y to enable WebP. Set to N to disable WebP.
           example: N
         lfo:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable Large File Optimization .<br> Set to N to disable Large File Optimization .
+          description: Values can be Y or N. Set to Y to enable Large File Optimization . Set to N to disable Large File Optimization .
           example: N
         prefresh:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable Cache Prefreshing  .<br> Set to N to disable Cache Prefreshing .
+          description: Values can be Y or N. Set to Y to enable Cache Prefreshing  . Set to N to disable Cache Prefreshing .
           example: N
         wp:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable WordPress Bypass Cache for Administration   .<br> Set to N to disable WordPress Bypass Cache for Administration  .
+          description: Values can be Y or N. Set to Y to enable WordPress Bypass Cache for Administration   . Set to N to disable WordPress Bypass Cache for Administration  .
           example: Y
         pseudostreaming:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable pseudo stream seeking.<br> Set to N to disable  pseudo stream seeking.
+          description: Values can be Y or N. Set to Y to enable pseudo stream seeking. Set to N to disable  pseudo stream seeking.
           example: Y
     postZone:
       type: object
@@ -13455,7 +13455,7 @@ components:
           items:
             type: integer
             format: int64
-            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. <br>Eg: 7549'
+            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. Eg: 7549'
             example: 1
         webhook:
           type: string
@@ -13474,21 +13474,21 @@ components:
           example: http
         cnames:
           type: string
-          description: 'Name that points to actual record. <br>Eg: docs.example.com'
+          description: 'Name that points to actual record. Eg: docs.example.com'
           example: docs.example.com
     postZoneVodPush:
       type: object
       properties:
         cnames:
           type: string
-          description: 'Name that points to actual record. <br>Eg: docs.example.com'
+          description: 'Name that points to actual record. Eg: docs.example.com'
           example: docs.example.com
         profiles:
           type: array
           items:
             type: integer
             format: int32
-            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. <br>Eg: 7549'
+            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. Eg: 7549'
             example: 7549
         webhook:
           type: string
@@ -13509,7 +13509,7 @@ components:
           example: https://mydomain.com
         cnames:
           type: string
-          description: 'Name that points to actual record. <br>Eg: docs.example.com'
+          description: 'Name that points to actual record. Eg: docs.example.com'
           example: docs.example.com
         cache[cache]:
           type: string
@@ -13521,19 +13521,19 @@ components:
           example: 1M
         cache[querystring]:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable querystring.<br> Set to N to disable querystring.
+          description: Values can be Y or N. Set to Y to enable querystring. Set to N to disable querystring.
           example: N
         cache[cachecontrol]:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable cachecontrol.<br> Set to N to disable cachecontrol.
+          description: Values can be Y or N. Set to Y to enable cachecontrol. Set to N to disable cachecontrol.
           example: Y
         cache[stale]:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable stale.<br> Set to N to disable stale.
+          description: Values can be Y or N. Set to Y to enable stale. Set to N to disable stale.
           example: Y
         cache[revalidate]:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable revalidate.<br> Set to N to disable revalidate.
+          description: Values can be Y or N. Set to Y to enable revalidate. Set to N to disable revalidate.
           example: N
         optimize:
           type: string
@@ -13576,7 +13576,7 @@ components:
           example: https://mydomain.com
         cnames:
           type: string
-          description: 'Name that points to actual record. <br>Eg: docs.example.com'
+          description: 'Name that points to actual record. Eg: docs.example.com'
           example: docs.example.com
         cache[cache]:
           type: string
@@ -13616,7 +13616,7 @@ components:
           items:
             type: integer
             format: int32
-            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. <br>Eg: 7549'
+            description: 'All file uploaded to /raw folder will be transcoded to selected profiles. Leave empty to disable auto file transcoding. Eg: 7549'
             example: 7549
         webhook:
           type: string
@@ -13641,11 +13641,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N.<br>Set to Y if Geo Block should be enabled.<br> Set to N if Geo Block should not to be enabled.
+          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N.<br>Set to Y if geoblock countries list should be allowed.<br> Set to N if geoblock countries list should be blocked
+          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
           example: Y
         list:
           type: array
@@ -13655,14 +13655,14 @@ components:
             example: AF
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
     zoneshttppullnew_securetoken:
       type: object
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to Y if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
           example: Y
         list:
           type: string
@@ -13686,7 +13686,7 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if secure token should be enabled<br> Set to Y if Secure token should be disabled.
+          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
           example: Y
         list:
           type: string
@@ -13699,11 +13699,11 @@ components:
           example: 300
         keyip:
           type: string
-          description: Values Can be Y or N. <br> Set to Y if Add Client IP in token generation for added security should be enabled<br> Set to N if Add Client IP in token generation for added security should be disabled.
+          description: Values Can be Y or N. Set to Y if Add Client IP in token generation for added security should be enabled Set to N if Add Client IP in token generation for added security should be disabled.
           example: N
         ips:
           type: string
-          description: 'IPs should be separated by comma. <br>Eg: 192.168.0.1, 192.168.0.2'
+          description: 'IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
           example: 117.251.60.184
     postPushZoneImport:
       type: object
@@ -13729,7 +13729,7 @@ components:
       properties:
         cache:
           type: string
-          description: This will be the default cache name.<br> The values can be 1d,7d,14d, 1M, 3M, 6M, or 1y
+          description: This will be the default cache name. The values can be 1d,7d,14d, 1M, 3M, 6M, or 1y
           example: 7d
         expiry:
           type: string
@@ -13769,7 +13769,7 @@ components:
       properties:
         pseudostreaming:
           type: string
-          description: Values can be Y or N.<br> Set to Y to enable pseudo stream seeking.<br> Set to N to disable  pseudo stream seeking.
+          description: Values can be Y or N. Set to Y to enable pseudo stream seeking. Set to N to disable  pseudo stream seeking.
           example: Y
     domainlockList:
       properties:
