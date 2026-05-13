@@ -69,6 +69,11 @@
             "group": "Live Stream",
             "pages": [],
             "openapi": "api-reference/Livestreams-Api.yaml"
+          },
+          {
+            "group": "VideoPlayer & Analytics",
+            "pages": [],
+            "openapi": "api-reference/VideoPlayer-API.yaml"
           }
         ]
       }
