@@ -74,6 +74,11 @@
             "group": "VideoPlayer & Analytics",
             "pages": [],
             "openapi": "api-reference/VideoPlayer-API.yaml"
+          },
+          {
+            "group": "Edge Rules",
+            "pages": [],
+            "openapi": "api-reference/Edge-Rules-API.yaml"
           }
         ]
       }
