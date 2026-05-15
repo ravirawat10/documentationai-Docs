@@ -66,6 +66,11 @@
             "openapi": "api-reference/Analytics-Api.yaml"
           },
           {
+            "group": "Edge Rules",
+            "pages": [],
+            "openapi": "api-reference/Edge-Rules-API.yaml"
+          },
+          {
             "group": "Sample Endpoints",
             "openapi": "openapi.yaml",
             "pages": [
@@ -74,11 +79,6 @@
                 "path": "live"
               }
             ]
-          },
-          {
-            "group": "Edge Rules",
-            "pages": [],
-            "openapi": "api-reference/Edge-Rules-API.yaml"
           }
         ]
       }
