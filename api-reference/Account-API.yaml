@@ -1,33 +1,35 @@
 openapi: 3.0.3
 info:
   title: 5centsCDN - Account Management API
-  description: 'Account management endpoints for the 5centsCDN platform. Includes
+  description: >
+    Account management endpoints for the 5centsCDN platform. Includes
     domain verification, SSL certificate management, bandwidth overage protection,
-    API key management, raw log configuration, and sub-account user management. API
-    v2 routes use header-based API key authentication.
-
-    '
+    API key management, raw log configuration, and sub-account user management.
+    API v2 routes use header-based API key authentication.
   version: 2.0.0
   contact:
     email: help@5centscdn.com
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
 servers:
-- url: /dashboard
-  description: Dashboard base path
+  - url: https://api.5centscdn.com/v2
+    description: 5centsCDN API Server - Production
+
 security:
-- ApiKeyAuth: []
+  - apikeyAuth: []
+
 tags:
-- name: Domain Verification
-  description: Endpoints related to domain ownership verification via DNS TXT record
-- name: SSL Certificates
-  description: Endpoints related to SSL certificate management (create, read, update,
-    delete)
-- name: Bandwidth Overage Protection
-  description: Bandwidth Overage Protection and Auto Recharge settings
-- name: API Keys
-  description: API key management (create, read, update, delete)
+  - name: Domain Verification
+    description: Endpoints related to domain ownership verification via DNS TXT record
+  - name: SSL Certificates
+    description: Endpoints related to SSL certificate management (create, read, update, delete)
+  - name: Bandwidth Overage Protection
+    description: Bandwidth Overage Protection and Auto Recharge settings
+  - name: API Keys
+    description: API key management (create, read, update, delete)
+
 paths:
   /account/dv:
     get:
@@ -697,10 +699,9 @@ paths:
                   example: Used by the mobile app
                 permission[]:
                   type: array
-                  description: 'Set of CRUD permissions granted to this key. At least
+                  description: >
+                    Set of CRUD permissions granted to this key. At least
                     one value is required. Multiple values allowed.
-
-                    '
                   items:
                     type: string
                     enum:
@@ -868,12 +869,14 @@ paths:
                     example: success
                   message:
                     type: string
+
 components:
   securitySchemes:
-    ApiKeyAuth:
+    apikeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
+
   parameters:
     domainIdParam:
       name: domainid
@@ -915,6 +918,7 @@ components:
       schema:
         type: integer
         example: 7
+
   schemas:
     DomainVerificationCreateRequest:
       type: object
@@ -923,11 +927,10 @@ components:
       properties:
         domain:
           type: string
-          description: 'Top-level domain to verify (e.g. example.com). Subdomains
+          description: >
+            Top-level domain to verify (e.g. example.com). Subdomains
             are not accepted. Unicode/IDN domains are accepted and converted to punycode
             internally.
-
-            '
           example: example.com
     DomainVerificationTxtRecord:
       type: object
@@ -959,8 +962,7 @@ components:
           example: example.com
         validated:
           type: string
-          description: '''Y'' if the domain has been successfully verified, ''N''
-            otherwise.'
+          description: '''Y'' if the domain has been successfully verified, ''N'' otherwise.'
           enum:
           - Y
           - N
