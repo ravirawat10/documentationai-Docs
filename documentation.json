@@ -36,7 +36,8 @@
           },
           {
             "group": "Zones",
-            "pages": []
+            "pages": [],
+            "openapi": "api-reference/5centsCDN-Zones-API.yaml"
           },
           {
             "group": "Analytics",
