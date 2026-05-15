@@ -15,16 +15,22 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: HTTP Push
+  x-displayName: Push
   description: Endpoints related to HTTP Push zones
 - name: HTTP Pull
+  x-displayName: Pull
   description: Endpoints related to HTTP Pull zones
 - name: HTTP Global Settings
+  x-displayName: Global Settings
   description: Global HTTP zone security settings
 - name: VOD Push
+  x-displayName: Push
   description: Endpoints related to VOD Push zones
 - name: VOD Pull
+  x-displayName: Pull
   description: Endpoints related to VOD Pull zones
 - name: VOD Global Settings
+  x-displayName: Global Settings
   description: Global VOD zone security settings
 x-tagGroups:
 - name: HTTP
