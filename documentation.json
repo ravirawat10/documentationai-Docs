@@ -30,6 +30,11 @@
             ]
           },
           {
+            "group": "Live Stream",
+            "pages": [],
+            "openapi": "api-reference/Livestreams-Api.yaml"
+          },
+          {
             "group": "Accounts",
             "pages": [],
             "openapi": "api-reference/Account-API.yaml"
@@ -64,11 +69,6 @@
             "group": "Video Encoding",
             "pages": [],
             "openapi": "api-reference/Transcoding-Api-.yaml"
-          },
-          {
-            "group": "Live Stream",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-Api.yaml"
           },
           {
             "group": "VideoPlayer & Analytics",
