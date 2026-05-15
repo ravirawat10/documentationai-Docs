@@ -36,7 +36,8 @@
           },
           {
             "group": "Zones",
-            "pages": []
+            "pages": [],
+            "openapi": "api-reference/Zones-Api.yaml"
           },
           {
             "group": "Analytics",
