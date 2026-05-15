@@ -217,6 +217,7 @@ paths:
                     example: success
                   message:
                     type: string
+                    example: Domain deleted
   /account/dv/{dvid}/validate:
     get:
       summary: Trigger domain DNS TXT record validation
@@ -517,7 +518,6 @@ paths:
                         type: string
                         format: date
                         example: '2023-12-11'
-  /account/ssl/{sslcertid}/delete:
     delete:
       summary: Delete an SSL certificate
       operationId: destroySSL
@@ -551,6 +551,8 @@ paths:
                     example: success
                   message:
                     type: string
+                    example: SSL Certificate - Test Deleted
+
   /account/bwop:
     get:
       summary: Show Bandwidth Overage Protection settings
@@ -595,6 +597,7 @@ paths:
                     example: success
                   message:
                     type: string
+                    example: Bandwidth Overage Protection Updated
   /account/recharge:
     post:
       summary: Update Bandwidth Auto Recharge settings
@@ -835,7 +838,6 @@ paths:
                   message:
                     type: string
                     example: API Key Updated
-  /account/api/{apikeyid}/delete:
     delete:
       summary: Delete an API key
       operationId: destroyAPI
@@ -869,6 +871,9 @@ paths:
                     example: success
                   message:
                     type: string
+                    example: API Key - t2 Deleted
+
+
 
 components:
   securitySchemes:
@@ -878,22 +883,6 @@ components:
       name: X-API-Key
 
   parameters:
-    domainIdParam:
-      name: domainid
-      in: path
-      required: true
-      description: Unique identifier of the domain verification record.
-      schema:
-        type: integer
-        example: 5
-    sslCertIdParam:
-      name: sslcertid
-      in: path
-      required: true
-      description: Unique identifier of the SSL certificate record.
-      schema:
-        type: integer
-        example: 3
     sslcertId:
       name: sslcertid
       in: path
