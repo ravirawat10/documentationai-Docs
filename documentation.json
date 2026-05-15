@@ -37,7 +37,7 @@
           {
             "group": "Zones",
             "pages": [],
-            "openapi": "api-reference/zones-api (1).yaml"
+            "openapi": "api-reference/Zones-Api.yaml"
           },
           {
             "group": "Video Encoding",
