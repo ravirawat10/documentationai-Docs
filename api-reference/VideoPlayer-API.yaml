@@ -575,7 +575,7 @@ paths:
                           properties:
                             file:
                               type: string
-                              description: 'Base64-encoded logo image. Format: data:image/png;base64,<data>'
+                              description: Base64-encoded logo image in data URI format (data:image/png;base64,...).
                               example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
                             position:
                               type: string
@@ -611,7 +611,7 @@ paths:
                               example: '0'
                         poster:
                           type: string
-                          description: 'Poster image shown before playback starts. Base64-encoded. Format: data:image/jpeg;base64,<data>'
+                          description: Poster image shown before playback starts, encoded as a data URI (data:image/jpeg;base64,...).
                           example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
                         contextUrl:
                           type: string
@@ -925,7 +925,7 @@ paths:
                   example: '#ffffff'
                 meta[logo][file]:
                   type: string
-                  description: 'Base64-encoded logo image. Format: data:image/png;base64,<data>'
+                  description: Base64-encoded logo image in data URI format (data:image/png;base64,...).
                   example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
                 meta[logo][url]:
                   type: string
@@ -969,7 +969,7 @@ paths:
                   example: '0'
                 meta[poster]:
                   type: string
-                  description: 'Poster image shown before playback starts. Base64-encoded. Format: data:image/png;base64,<data>'
+                  description: Poster image shown before playback starts, encoded as a data URI (data:image/png;base64,...).
                   example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
       parameters:
       - name: skinid
