@@ -29,7 +29,7 @@ paths:
     post:
       operationId: trafficResources
       summary: List available resources for filtering
-      description: Returns a map of resource-hash → resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in `resource_hashes` filter fields on all other analytics endpoints.
+      description: Returns a map of resource-hash to resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in `resource_hashes` filter fields on all other analytics endpoints.
       tags: [traffic-analytics]
       requestBody:
         required: true
@@ -39,7 +39,7 @@ paths:
               $ref: '#/components/schemas/TrafficResourcesRequest'
       responses:
         '200':
-          description: Returns a map of resource-hash → resource-ID for all CDN resources (streams, push zones, pull zones) on the account
+          description: Returns a map of resource-hash to resource-ID for all CDN resources on the account
           content:
             application/json:
               schema:
@@ -64,8 +64,8 @@ paths:
               properties:
                 r:
                   type: string
-                  description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-                  example: "2024-04-01 - 2024-04-22"
+                  description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+                  example: "2026-01-01 - 2026-01-31"
                 resource_type:
                   type: string
                   description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -78,7 +78,7 @@ paths:
                   description: |
                     Array of resource hashes to filter by (from /analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-                  example: ["exa8jekgpb63", "n4zpvl968j5o"]
+                  example: ["abc12hash", "def34hash"]
                 granularity:
                   type: string
                   description: Defines the time interval for data aggregation.
@@ -151,8 +151,8 @@ paths:
               properties:
                 r:
                   type: string
-                  description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-                  example: "2024-04-01 - 2024-04-22"
+                  description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+                  example: "2026-01-01 - 2026-01-31"
                 resource_type:
                   type: string
                   description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -165,7 +165,7 @@ paths:
                   description: |
                     Array of resource hashes to filter by (from /analytics/traffic/resources).
                     Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-                  example: ["exa8jekgpb63", "n4zpvl968j5o"]
+                  example: ["abc12hash", "def34hash"]
                 granularity:
                   type: string
                   description: Defines the time interval for data aggregation.
@@ -193,7 +193,7 @@ paths:
               $ref: '#/components/schemas/TrafficCacheLineRequest'
       responses:
         '200':
-          description: Returns per-time-bucket metrics for a specific cache status (HIT, MISS, etc
+          description: Returns per-time-bucket metrics for a specific cache status (HIT, MISS, etc.)
           content:
             application/json:
               schema:
@@ -393,7 +393,7 @@ paths:
               $ref: '#/components/schemas/TrafficFilterRequest'
       responses:
         '200':
-          description: Returns traffic metrics grouped by device category (e
+          description: Returns traffic metrics grouped by device category (e.g. Generic Smartphone, Desktop)
           content:
             application/json:
               schema:
@@ -433,7 +433,7 @@ paths:
               $ref: '#/components/schemas/TrafficFilterRequest'
       responses:
         '200':
-          description: Returns traffic metrics grouped by HTTP response code (200, 206, 301, 404, etc
+          description: Returns traffic metrics grouped by HTTP response code (200, 206, 301, 404, etc.)
           content:
             application/json:
               schema:
@@ -651,9 +651,9 @@ components:
         - filter_type: `0` (traffic) | `1` (HIT/MISS)
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
-        Example: `2/0/2024-01-01/2024-01-31`
+        Example: `2/0/2026-01-01/2026-01-31`
       type: string
-      example: "2/0/2024-01-01/2024-01-31"
+      example: "2/0/2026-01-01/2026-01-31"
 
     TopFilesFilterParam:
       description: |
@@ -662,9 +662,9 @@ components:
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
         - type: `dynamic` | `static` | `notfound`
-        Example: `2024-01-01/2024-01-31/dynamic`
+        Example: `2026-01-01/2026-01-31/dynamic`
       type: string
-      example: "2024-01-01/2024-01-31/dynamic"
+      example: "2026-01-01/2026-01-31/dynamic"
 
     DateRangeFilterParam:
       description: |
@@ -674,9 +674,9 @@ components:
         - frequency: `0` (minute) | `1` (hour) | `2` (day)
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
-        Example: `2/2024-01-01/2024-01-31`
+        Example: `2/2026-01-01/2026-01-31`
       type: string
-      example: "2/2024-01-01/2024-01-31"
+      example: "2/2026-01-01/2026-01-31"
 
     TopReferrersFilterParam:
       description: |
@@ -684,9 +684,9 @@ components:
         Format: `[start_date]/[end_date]`
         - start_date: `YYYY-MM-DD`
         - end_date: `YYYY-MM-DD`
-        Example: `2024-01-01/2024-01-31`
+        Example: `2026-01-01/2026-01-31`
       type: string
-      example: "2024-01-01/2024-01-31"
+      example: "2026-01-01/2026-01-31"
 
     # ------------------------------------------------------------------
     # Akamai range params
@@ -696,7 +696,7 @@ components:
         Date-time range for Akamai reports. Format: `YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss`
         Defaults to last 7 days ending yesterday.
       type: string
-      example: "2024-01-01 00:00:00 - 2024-01-08 00:00:00"
+      example: "2026-01-01 00:00:00 - 2026-01-08 00:00:00"
 
     # ------------------------------------------------------------------
     # Minutes / DVR range param
@@ -706,64 +706,64 @@ components:
         Date-time range for DVR/transcode stats. Format: `YYYY-MM-DD HH:00:00 - YYYY-MM-DD HH:00:00`
         Defaults to last 7 days.
       type: string
-      example: "2024-01-01 00:00:00 - 2024-01-08 00:00:00"
+      example: "2026-01-01 00:00:00 - 2026-01-08 00:00:00"
 
     # ------------------------------------------------------------------
-    # HTML page response (all dashboard pages return HTML)
+    # Shared value-object schemas
     # ------------------------------------------------------------------
     TrafficBytesValue:
       type: object
-      description: A bandwidth metric — raw bytes and human-readable string, with optional percentage of total.
+      description: A bandwidth metric consisting of raw bytes and a human-readable string, with an optional percentage of total.
       properties:
         bytes:
           type: integer
           format: int64
-          description: Raw byte count
+          description: Raw byte count for this traffic metric.
           example: 1262343731219
         formatted:
           type: string
-          description: Human-readable value (e.g. "1.26 TB")
+          description: Human-readable bandwidth value (e.g. "1.26 TB").
           example: "1.26 TB"
         percent:
           type: string
-          description: Share of the total for this dimension value (only present in breakdown/line data items)
+          description: Share of the response-level total for this dimension value. Only present in breakdown and line data items.
           example: "+35.67%"
 
     TrafficCountValue:
       type: object
-      description: A count metric — raw count and human-readable string, with optional percentage of total.
+      description: A count metric consisting of a raw integer count and a human-readable string, with an optional percentage of total.
       properties:
         count:
           type: integer
           format: int64
-          description: Raw count
+          description: Raw integer count for this metric.
           example: 1172166
         formatted:
           type: string
-          description: Human-readable value (e.g. "1.172M")
+          description: Human-readable count value (e.g. "1.172M").
           example: "1.172M"
         percent:
           type: string
-          description: Share of the total (only present in breakdown/line data items)
+          description: Share of the response-level total. Only present in breakdown and line data items.
           example: "+51.24%"
 
     TrafficEfficiencyValue:
       type: object
-      description: A cache-efficiency or traffic-efficiency ratio.
+      description: A cache-efficiency or traffic-efficiency ratio expressed as a decimal and a formatted percentage.
       properties:
         percent:
           type: number
           format: float
-          description: Efficiency ratio as a decimal (0–1)
+          description: Efficiency ratio as a decimal between 0 and 1.
           example: 0.71
         formatted:
           type: string
-          description: Human-readable formatted value (e.g. "+71%")
+          description: Human-readable formatted percentage value.
           example: "+71%"
 
     TrafficSummary:
       type: object
-      description: Aggregate traffic metrics for a period or resource.
+      description: Aggregate traffic metrics for a period or resource, including bandwidth, request counts, unique visitors, and efficiency ratios.
       properties:
         traffic:
           $ref: '#/components/schemas/TrafficBytesValue'
@@ -790,7 +790,7 @@ components:
         Each metric includes a `percent` field showing share of the response-level total.
       properties:
         key:
-          description: Dimension value or Unix timestamp (for /line endpoints)
+          description: Dimension value (country name, browser string, PoP ID, etc.) for breakdown endpoints, or Unix timestamp integer for /line time-series endpoints.
           oneOf:
           - type: string
           - type: integer
@@ -815,11 +815,11 @@ components:
       properties:
         granularity:
           type: string
-          description: Time bucket granularity used for the data array (e.g. "1m", "5m", "1h", "1d")
+          description: Time bucket granularity used for the data array (e.g. "1m", "5m", "1h", "1d").
           example: "1m"
         dateFormat:
           type: string
-          description: PHP date() format string for rendering timestamps
+          description: PHP date() format string for rendering Unix timestamps in the data array.
           example: "Y-m-d H:i:00"
 
     # ── REST Analytics – request schemas ─────────────────────────────────────
@@ -847,8 +847,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -861,7 +861,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -877,8 +877,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -891,7 +891,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -899,7 +899,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Identifies a specific edge location by its unique identifier. Typically follows a structured naming convention indicating region, country, city, and provider.
+          description: Unique identifier of the edge PoP location to filter by. Must match the `key` field returned in the breakdown response.
           example: edge-l1-us-dal-tp01
 
     TrafficCountryLineRequest:
@@ -911,8 +911,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -925,7 +925,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -933,7 +933,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Specifies the country or region for which analytics data is being filtered. Helps narrow down insights to a specific location.
+          description: Country name to filter by. Must match the `key` field returned in the breakdown response.
           example: India
 
     TrafficBrowserLineRequest:
@@ -945,8 +945,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -959,7 +959,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -967,7 +967,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Defines a search pattern or query used for filtering data. Commonly used for matching user-agent strings or other metadata.
+          description: Browser User-Agent string to filter by. Must match the `key` field returned in the breakdown response.
           example: '"Chrome/97.0"'
 
     TrafficOSLineRequest:
@@ -979,8 +979,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -993,7 +993,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1001,7 +1001,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Specifies the category or segment being analyzed. Represents grouping of data based on predefined criteria.
+          description: Operating system name to filter by. Must match the `key` field returned in the breakdown response.
           example: Other
 
     TrafficDeviceLineRequest:
@@ -1013,8 +1013,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1027,7 +1027,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1035,7 +1035,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents the device or category being analyzed. This could be a general device type or a specific model.
+          description: Device type or category to filter by. Must match the `key` field returned in the breakdown response.
           example: Generic Smartphone
 
     TrafficStatusCodeLineRequest:
@@ -1047,8 +1047,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1061,7 +1061,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1069,7 +1069,7 @@ components:
           example: "1h"
         match:
           type: integer
-          description: Represents an HTTP status code to filter analytics results. Typically used to track successful or failed requests.
+          description: HTTP status code to filter by. Must match the `key` field returned in the breakdown response.
           example: 200
 
     TrafficReferrerLineRequest:
@@ -1081,8 +1081,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1095,7 +1095,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1103,7 +1103,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents a filtering or grouping criterion for analytics data. Can be a specific keyword, identifier, or wildcard ('-') for general data.
+          description: Referrer domain or URL to filter by. Use "-" for direct or no-referrer traffic. Must match the `key` field returned in the breakdown response.
           example: "-"
 
     TrafficFileLineRequest:
@@ -1115,8 +1115,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1129,7 +1129,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1137,7 +1137,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: The specific file or resource being analyzed. Represents a file path or URL related to analytics tracking.
+          description: File path or URL to filter by. Must match the `key` field returned in the breakdown response.
           example: /assets/images/banner-ad.png
 
     TrafficVisitorLineRequest:
@@ -1149,8 +1149,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1163,7 +1163,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1171,8 +1171,8 @@ components:
           example: "1h"
         match:
           type: string
-          description: The IP address or identifier used to filter analytics data. Represents a specific user, device, or network.
-          example: 198.144.159.121
+          description: Visitor IP address to filter by. Must match the `key` field returned in the breakdown response.
+          example: 203.0.113.1
 
     TrafficASNLineRequest:
       type: object
@@ -1183,8 +1183,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1197,7 +1197,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1205,11 +1205,11 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents the ASN (Autonomous System Name) being analyzed. This value must match the `key` field from the API response data.
-          example: Megatel Networks Private Limited
+          description: Autonomous System Name (ASN) to filter by. Must match the `key` field returned in the breakdown response.
+          example: Sample ISP Network
           x-examples:
-          - Megatel Networks Private Limited
-          - TELUS Communications
+          - Sample ISP Network
+          - Sample Telecom Provider
 
     TrafficCacheLineRequest:
       type: object
@@ -1220,8 +1220,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1234,7 +1234,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1242,7 +1242,7 @@ components:
           example: "1h"
         match:
           type: string
-          description: Represents the cache status used to filter analytics data. This value must match the `key` field from the API response data.
+          description: Cache status to filter by. Must match the `key` field returned in the breakdown response.
           enum: [HIT, MISS, EXPIRED, BYPASS, STALE, UPDATING, "-"]
           example: MISS
           x-examples:
@@ -1258,8 +1258,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1272,7 +1272,7 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
           description: Defines the time interval for data aggregation.
@@ -1288,8 +1288,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range "YYYY-MM-DD - YYYY-MM-DD" (UTC)
-          example: "2024-04-01 - 2024-04-22"
+          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
+          example: "2026-01-01 - 2026-01-31"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1302,10 +1302,10 @@ components:
           description: |
             Array of resource hashes to filter by (from /analytics/traffic/resources).
             Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
-          example: ["exa8jekgpb63", "n4zpvl968j5o", "3dayaam7yvnl"]
+          example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
-          description: Comparison granularity for period-over-period card
+          description: Comparison granularity for the period-over-period card calculation.
           enum: [hour, day, month]
           example: day
 
@@ -1317,56 +1317,14 @@ components:
         Use these hashes in `resource_hashes` filter fields on all analytics endpoints.
         Push/pull zones use short alphanumeric hashes as keys. Livestream resources
         use path-style keys in the format `[stream_name]/[source_name]`.
-      properties:
-        n4zpvl968j5o:
-          type: integer
-          example: 5157
-        exa8jekgpb63:
-          type: integer
-          example: 5156
-        3dayaam7yvnl:
-          type: integer
-          example: 5155
-        4jmpmx2a82ld:
-          type: integer
-          example: 5154
-        em2y9a6z86gk:
-          type: integer
-          example: 5153
-        v74pl3g9pjmk:
-          type: integer
-          example: 5152
-        w5a8xma3p47x:
-          type: integer
-          example: 5151
-        kd6879j9yjoa:
-          type: integer
-          example: 5144
-        95lyze4byn42:
-          type: integer
-          example: 5121
-        2ojyko9a8zk3:
-          type: integer
-          example: 5063
-        em2y9a3l86gk:
-          type: integer
-          example: 5005
-        n4zpvle28j5o:
-          type: integer
-          example: 4981
+      additionalProperties:
+        type: integer
+        description: Unique integer ID of the CDN resource (push zone, pull zone, or livestream).
+        example: 10001
       example:
-        n4zpvl968j5o: 5157
-        exa8jekgpb63: 5156
-        3dayaam7yvnl: 5155
-        4jmpmx2a82ld: 5154
-        em2y9a6z86gk: 5153
-        v74pl3g9pjmk: 5152
-        w5a8xma3p47x: 5151
-        kd6879j9yjoa: 5144
-        95lyze4byn42: 5121
-        2ojyko9a8zk3: 5063
-        em2y9a3l86gk: 5005
-        n4zpvle28j5o: 4981
+        sample-hash-abc12: 10001
+        sample-hash-def34: 10002
+        sample-hash-ghi56: 10003
 
     TrafficSummaryResponse:
       type: object
@@ -1374,76 +1332,98 @@ components:
       properties:
         summary:
           type: object
+          description: Aggregated traffic totals for the requested period and resource set.
           properties:
             traffic:
               type: object
+              description: Total bytes transferred across all requests (cached and uncached).
               properties:
                 bytes:
                   type: integer
                   format: int64
+                  description: Raw byte count for total traffic.
                   example: 1262343731219
                 formatted:
                   type: string
+                  description: Human-readable total traffic value.
                   example: "1.26 TB"
             traffic_cached:
               type: object
+              description: Total bytes served from cache.
               properties:
                 bytes:
                   type: integer
                   format: int64
+                  description: Raw byte count for cache-served traffic.
                   example: 864713098005
                 formatted:
                   type: string
+                  description: Human-readable cached traffic value.
                   example: "864.71 GB"
             hits:
               type: object
+              description: Total cache hit request count for the period.
               properties:
                 count:
                   type: integer
                   format: int64
+                  description: Raw cache hit count.
                   example: 1172166
                 formatted:
                   type: string
+                  description: Human-readable cache hit count.
                   example: "1.172M"
             requests:
               type: object
+              description: Total request count including cache hits and misses.
               properties:
                 count:
                   type: integer
                   format: int64
+                  description: Raw total request count.
                   example: 1646341
                 formatted:
                   type: string
+                  description: Human-readable total request count.
                   example: "1.646M"
             unique_visitors:
               type: object
+              description: Count of distinct visitor IP addresses for the period.
               properties:
                 count:
                   type: integer
                   format: int64
+                  description: Raw unique visitor count.
                   example: 27056
                 formatted:
                   type: string
+                  description: Human-readable unique visitor count.
                   example: "27.06k"
             caching_efficiency:
               type: object
+              description: Ratio of cache hits to total requests.
               properties:
                 percent:
                   type: number
                   format: float
+                  description: Caching efficiency as a decimal between 0 and 1.
                   example: 0.71
                 formatted:
                   type: string
+                  description: Human-readable caching efficiency percentage.
                   example: "+71%"
             traffic_efficiency:
               type: object
+              description: Ratio of cached bytes to total traffic bytes.
               properties:
                 percent:
                   type: number
                   format: float
+                  description: Traffic efficiency as a decimal between 0 and 1.
                   example: 0.69
                 formatted:
                   type: string
+                  description: Human-readable traffic efficiency percentage.
                   example: "+69%"
 
     TrafficCacheResponse:
@@ -1452,59 +1432,73 @@ components:
       properties:
         summary:
           type: object
+          description: Aggregate totals across all cache statuses for the selected period.
           properties:
             traffic:
               type: object
+              description: Total bytes transferred across all cache statuses.
               properties:
                 bytes:
                   type: integer
                   format: int64
+                  description: Raw byte count for total traffic.
                   example: 1262343731219
                 formatted:
                   type: string
+                  description: Human-readable total traffic value.
                   example: "1.26 TB"
             traffic_cached:
               type: object
+              description: Total bytes served from cache (HIT status only).
               properties:
                 bytes:
                   type: integer
                   format: int64
+                  description: Raw byte count for cache-served traffic.
                   example: 864713098005
                 formatted:
                   type: string
+                  description: Human-readable cached traffic value.
                   example: "864.71 GB"
             hits:
               type: object
+              description: Total cache hit count across the selected period.
               properties:
                 count:
                   type: integer
                   format: int64
+                  description: Raw cache hit count.
                   example: 1172166
                 formatted:
                   type: string
+                  description: Human-readable cache hit count.
                   example: "1.172M"
         data:
           type: array
-          description: Per-cache-status breakdown rows.
+          description: Per-cache-status breakdown rows, one entry per distinct cache status observed.
           items:
             type: object
             properties:
               key:
                 type: string
-                description: Cache status label (e.g. HIT, MISS, BYPASS).
+                description: Cache status label for this row (e.g. HIT, MISS, BYPASS, EXPIRED).
                 example: HIT
               traffic:
                 type: object
+                description: Traffic bytes attributed to this cache status.
                 properties:
                   bytes:
                     type: integer
                     format: int64
+                    description: Raw byte count for this cache status.
                     example: 864713098005
                   formatted:
                     type: string
+                    description: Human-readable traffic value for this cache status.
                     example: "864.71 GB"
                   percent:
                     type: string
+                    description: Share of total traffic attributed to this cache status.
                     example: "+68.5%"
 
     TrafficBreakdownResponse:
@@ -1517,7 +1511,7 @@ components:
           $ref: '#/components/schemas/TrafficSummary'
         data:
           type: array
-          description: Per-dimension breakdown rows
+          description: Per-dimension breakdown rows sorted by total traffic descending.
           items:
             $ref: '#/components/schemas/TrafficDataItem'
 
@@ -1531,7 +1525,7 @@ components:
           $ref: '#/components/schemas/TrafficSummary'
         data:
           type: array
-          description: Time-series data points, one per granularity bucket. `key` is a Unix timestamp.
+          description: Time-series data points ordered chronologically, one entry per granularity bucket. The `key` field on each item is a Unix timestamp.
           items:
             $ref: '#/components/schemas/TrafficDataItem'
 
@@ -1552,41 +1546,47 @@ components:
 
     TrafficSummaryLineResponse:
       type: object
-      description: Period-over-period cache status comparison with date range metadata.
+      description: Per-cache-status period-over-period comparison with date range metadata.
       properties:
         period:
           type: object
-          description: Date ranges for the current and previous periods.
+          description: Date range boundaries for the current and previous comparison periods.
           properties:
             current:
               type: object
+              description: Start and end timestamps for the selected (current) period.
               properties:
                 from:
                   type: string
                   format: date-time
-                  example: "2026-04-01T00:00:00Z"
+                  description: Start timestamp of the current period (ISO 8601 UTC).
+                  example: "2026-01-01T00:00:00Z"
                 to:
                   type: string
                   format: date-time
-                  example: "2026-04-27T23:59:59Z"
+                  description: End timestamp of the current period (ISO 8601 UTC).
+                  example: "2026-01-31T23:59:59Z"
             previous:
               type: object
+              description: Start and end timestamps for the equivalent preceding period.
               properties:
                 from:
                   type: string
                   format: date-time
-                  example: "2026-03-05T00:00:01Z"
+                  description: Start timestamp of the previous period (ISO 8601 UTC).
+                  example: "2025-12-01T00:00:01Z"
                 to:
                   type: string
                   format: date-time
-                  example: "2026-04-01T00:00:00Z"
+                  description: End timestamp of the previous period (ISO 8601 UTC).
+                  example: "2026-01-01T00:00:00Z"
         current:
           $ref: '#/components/schemas/TrafficSummaryStatusMap'
         previous:
           $ref: '#/components/schemas/TrafficSummaryStatusMap'
         deviation:
           type: object
-          description: Per-status period-over-period deviation values.
+          description: Per-status period-over-period deviation values showing relative change for each cache status.
           properties:
             "-":
               $ref: '#/components/schemas/TrafficCacheDeviationValue'
@@ -1624,30 +1624,30 @@ components:
 
     TrafficCacheStatusValue:
       type: object
-      description: Request count for a single cache status code.
+      description: Request count for a single cache status.
       properties:
         count:
           type: integer
           format: int64
-          description: Raw request count
+          description: Raw request count for this cache status.
           example: 1172166
         formatted:
           type: string
-          description: Human-readable value
+          description: Human-readable request count for this cache status.
           example: "1.172M"
 
     TrafficCacheDeviationValue:
       type: object
-      description: Period-over-period change for a cache status.
+      description: Period-over-period change for a single cache status.
       properties:
         percent:
           type: number
           format: float
-          description: Relative change as a decimal (negative = decrease)
+          description: Relative change as a decimal. Negative values indicate a decrease, positive values indicate an increase.
           example: -0.08
         formatted:
           type: string
-          description: Human-readable change string (e.g. "-8%")
+          description: Human-readable change string showing the percentage shift (e.g. "-8%").
           example: "-8%"
 
     TrafficCacheStatusMap:
@@ -1678,7 +1678,7 @@ components:
           $ref: '#/components/schemas/TrafficCacheStatusMap'
         deviation:
           type: object
-          description: Per-status deviation values
+          description: Per-status period-over-period deviation values.
           properties:
             HIT:
               $ref: '#/components/schemas/TrafficCacheDeviationValue'
