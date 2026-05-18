@@ -329,6 +329,19 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Domain zone example.com was created successfully.
+                  dnsid:
+                    type: integer
+                    description: Unique identifier of the newly created DNS zone. Present on success only.
+                    example: 42
               examples:
                 example-0:
                   summary: Error
@@ -339,8 +352,8 @@ paths:
                   summary: Success
                   value:
                     status: Success
-                    statusDescription: Domain zone vivek.com was created successfully.
-                    dnsid: 93
+                    statusDescription: Domain zone example.com was created successfully.
+                    dnsid: 42
 
   /dns/{dnsId}/updated:
     get:
@@ -388,9 +401,18 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The zone was activated.
               example:
                 status: Success
-                statusDescription: The zone was activated!
+                statusDescription: The zone was activated.
 
   /dns/{dnsId}:
     post:
@@ -419,9 +441,18 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Domain zone example.com was disabled. Will be fully removed after usage billing.
               example:
                 status: Success
-                statusDescription: Domain zone vivek.com was disabled. Will be fully removed after usage billing.
+                statusDescription: Domain zone example.com was disabled. Will be fully removed after usage billing.
 
   /dns/{dnsId}/restore:
     get:
@@ -440,6 +471,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Zone Restored
               example:
                 status: Success
                 statusDescription: Zone Restored
@@ -461,16 +501,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '2022-04-20': 690
-                  '2022-04-21': 671
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2022', '2021']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of date keys (YYYY-MM-DD) to DNS query counts for that day.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      '2026-01-01': 12500
+                      '2026-01-02': 9800
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/statistics/last30:
     get:
@@ -489,16 +550,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '2022-04-20': 690
-                  '2022-04-21': 671
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2022', '2021']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of date keys (YYYY-MM-DD) to DNS query counts for the last 30 days.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      '2026-01-01': 12500
+                      '2026-01-02': 9800
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/statistics/monthly/{year}:
     get:
@@ -522,16 +604,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '03': 53854
-                  '04': 23017
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2022', '2021']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of two-digit month number keys to total DNS query counts for that month.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      '01': 45200
+                      '02': 38900
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/statistics/yearly:
     get:
@@ -550,15 +653,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '2022': '76871'
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2022', '2021']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of year string keys to total DNS query counts for that year.
+                    additionalProperties:
+                      type: string
+                    example:
+                      '2026': '520000'
+                      '2025': '487000'
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/statistics/daily/{year}/{month}:
     get:
@@ -587,16 +712,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '01': 70970
-                  '02': 75441
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2026', '2025']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of two-digit day-of-month keys to DNS query counts for that day.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      '01': 15200
+                      '02': 18400
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/statistics/hourly/{year}/{month}/{day}:
     get:
@@ -630,16 +776,37 @@ paths:
             application/json:
               schema:
                 type: object
-              example:
-                data:
-                  '10': 19
-                  '11': 19
-                options:
-                  months:
-                    '0': '-'
-                    '01': Jan
-                  years: ['2022', '2021']
-                message:
+                properties:
+                  data:
+                    type: object
+                    description: Map of two-digit hour-of-day keys (00-23) to DNS query counts for that hour.
+                    additionalProperties:
+                      type: integer
+                    example:
+                      '10': 420
+                      '11': 385
+                  options:
+                    type: object
+                    description: Navigation and filter options for the statistics view.
+                    properties:
+                      months:
+                        type: object
+                        description: Map of two-digit month number to abbreviated month name.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '01': Jan
+                          '02': Feb
+                      years:
+                        type: array
+                        description: Array of years for which statistics are available.
+                        items:
+                          type: string
+                        example: ['2026', '2025']
+                  message:
+                    type: string
+                    nullable: true
+                    description: Optional informational message accompanying the response.
 
   /dns/{dnsId}/dnssec:
     get:
@@ -741,6 +908,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The DNSSEC is activated for your zone. The keys will be generated soon.
               example:
                 status: Success
                 statusDescription: The DNSSEC is activated for your zone. The keys will be generated soon.
@@ -762,9 +938,42 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  data:
+                    type: object
+                    description: SOA (Start of Authority) record data for the zone.
+                    properties:
+                      serialNumber:
+                        type: string
+                        description: SOA serial number used for zone change tracking.
+                        example: '2026010100'
+                      primaryNS:
+                        type: string
+                        description: Primary nameserver hostname for the zone.
+                        example: ns1.example-dns.com
+                      adminMail:
+                        type: string
+                        description: Administrator email address for the DNS zone.
+                        example: admin@example.com
+                      refresh:
+                        type: string
+                        description: Zone refresh interval in seconds.
+                        example: '7200'
+                      retry:
+                        type: string
+                        description: Retry interval in seconds after a failed zone refresh.
+                        example: '1800'
+                      expire:
+                        type: string
+                        description: Expiry time in seconds for secondary zone data.
+                        example: '1209600'
+                      defaultTTL:
+                        type: string
+                        description: Default TTL in seconds for records without an explicit TTL.
+                        example: '3600'
               example:
                 data:
-                  serialNumber: '2022042309'
+                  serialNumber: '2026010100'
                   primaryNS: ns1.example-dns.com
                   adminMail: admin@example.com
                   refresh: '7200'
@@ -817,6 +1026,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The SOA record was modified successfully.
               example:
                 status: Success
                 statusDescription: The SOA record was modified successfully.
@@ -838,7 +1056,7 @@ paths:
             text/plain:
               schema:
                 type: string
-              example: "$ORIGIN example.com.\n@ 3600 IN SOA ns1.example-dns.com. support.5centscdn.com. 2026042001 7200 1800 1209600 3600\n"
+              example: "$ORIGIN example.com.\n@ 3600 IN SOA ns1.example-dns.com. admin.example.com. 2026010100 7200 1800 1209600 3600\n@ 3600 IN NS ns1.example-dns.com.\n@ 3600 IN NS ns2.example-dns.com.\n@ 3600 IN A 192.0.2.1\nwww 300 IN CNAME cdn.example.com.\n"
 
   /dns/{dnsId}/import:
     post:
@@ -880,6 +1098,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The records of example.com were added successfully.
               example:
                 status: Success
                 statusDescription: The records of example.com were added successfully.
@@ -967,11 +1194,28 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The mail forward has been added successfully.
+                  data:
+                    type: object
+                    description: Response data payload.
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier of the created mail forward rule.
+                        example: 12345
               example:
                 status: Success
                 statusDescription: The mail forward has been added successfully.
                 data:
-                  id: 337734
+                  id: 12345
     post:
       tags: [Mail Forwards]
       summary: Update Mail Forward
@@ -1014,6 +1258,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The mail forward has been edited successfully.
               example:
                 status: Success
                 statusDescription: The mail forward has been edited successfully.
@@ -1043,6 +1296,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The mail forward has been deleted successfully.
               example:
                 status: Success
                 statusDescription: The mail forward has been deleted successfully.
@@ -1348,6 +1610,23 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The record was added successfully.
+                  data:
+                    type: object
+                    description: Response data payload.
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier of the created DNS record.
+                        example: 12345
               example:
                 status: Success
                 statusDescription: The record was added successfully.
@@ -1595,9 +1874,26 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The record was updated successfully.
+                  data:
+                    type: object
+                    description: Response data payload.
+                    properties:
+                      id:
+                        type: integer
+                        description: Unique identifier of the updated DNS record.
+                        example: 12345
               example:
                 status: Success
-                statusDescription: The record was added successfully.
+                statusDescription: The record was updated successfully.
                 data:
                   id: 12345
     delete:
@@ -1621,6 +1917,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The record was deleted successfully.
               example:
                 status: Success
                 statusDescription: The record was deleted successfully.
@@ -1657,6 +1962,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Record deactivated
               example:
                 status: Success
                 statusDescription: Record deactivated
@@ -1749,9 +2063,18 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: CDN Proxy enabled successfully.
               example:
                 status: Success
-                statusDescription: CDN Proxy enabled.
+                statusDescription: CDN Proxy enabled successfully.
 
   /dns/{dnsId}/records/{recordid}/dynamicurl:
     get:
@@ -1775,6 +2098,23 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  host:
+                    type: string
+                    description: Hostname of the A or AAAA record for which the DynamicURL was activated.
+                    example: dynamic.example.com
+                  url:
+                    type: string
+                    description: Dynamic URL endpoint used to update the DNS record IP address.
+                    example: "https://api.example.com/dynamicURL/?q=sample-dynamic-token"
+                  status:
+                    type: string
+                    description: Operation outcome on error.
+                    example: Failed
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the error outcome.
+                    example: The DynamicURL is only for A and AAAA record types.
               examples:
                 example-0:
                   summary: Error
@@ -1817,6 +2157,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  status:
+                    type: string
+                    description: Operation outcome.
+                    example: Success
+                  statusDescription:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: The DynamicURL of dynamic.example.com was deactivated.
               example:
                 status: Success
                 statusDescription: The DynamicURL of dynamic.example.com was deactivated.
