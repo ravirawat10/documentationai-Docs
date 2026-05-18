@@ -55,9 +55,11 @@ components:
           type: string
           enum: [Success, Error]
           description: Outcome of the operation.
+          example: '1'
         statusDescription:
           type: string
           description: Human-readable description of the outcome.
+          example: Operation completed successfully.
       required: [status, statusDescription]
     RecordType:
       type: string
@@ -84,164 +86,223 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: API response status.
                     example: success
                   domains:
                     type: array
+                    description: Array of DNS zone objects configured for this service.
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
+                          description: Unique identifier.
                           example: 317
                         serviceid:
                           type: integer
+                          description: Service account identifier.
                           example: 103
                         domain:
                           type: string
-                          example: flussoniccdn.com
+                          description: Domain name configured in the DNS zone.
+                          example: example.com
                         meta:
                           type: object
+                          description: Metadata about the DNS zone from the provider.
                           properties:
                             name:
                               type: string
-                              example: flussoniccdn.com
+                              description: Domain name as stored in the DNS provider.
+                              example: example.com
                             id:
                               type: string
-                              example: '5035023'
+                              description: Unique identifier.
+                              example: '12345'
                             type:
                               type: string
+                              description: Zone type identifier.
                               example: master
                             group:
                               type: string
+                              description: Zone group assignment.
                               example: None
                             hasBulk:
                               type: boolean
+                              description: Whether bulk record operations are enabled for this zone.
                               example: false
                             is_cloud:
                               type: integer
+                              description: Whether the zone is a cloud-based zone (1 = yes, 0 = no).
                               example: 0
                             zone:
                               type: string
+                              description: Zone classification type.
                               example: domain
                             status:
                               type: string
+                              description: Current status of the zone or record.
                               example: '1'
                             serial:
                               type: string
-                              example: '2026042001'
+                              description: SOA serial number for zone change tracking.
+                              example: '2026010100'
                             isUpdated:
                               type: integer
+                              description: Whether the zone has been updated and propagated (1 = yes, 0 = no).
                               example: 1
                         soa:
                           type: object
+                          description: SOA (Start of Authority) record data for the DNS zone.
                           properties:
                             serialNumber:
                               type: string
-                              example: '2026042001'
+                              description: SOA serial number used for zone change tracking.
+                              example: '2026010100'
                             primaryNS:
                               type: string
-                              example: pns31.5centscdn.com
+                              description: Primary nameserver hostname for the zone.
+                              example: ns1.example-dns.com
                             adminMail:
                               type: string
-                              example: support@5centscdn.com
+                              description: Administrator email address for the DNS zone.
+                              example: admin@example.com
                             refresh:
                               type: string
+                              description: Zone refresh interval in seconds.
                               example: '7200'
                             retry:
                               type: string
+                              description: Retry interval in seconds after a failed zone refresh.
                               example: '1800'
                             expire:
                               type: string
+                              description: Expiry time in seconds for secondary zone data.
                               example: '1209600'
                             defaultTTL:
                               type: string
+                              description: Default TTL in seconds for records without an explicit TTL.
                               example: '3600'
                         dnssec:
                           type: object
+                          description: DNSSEC configuration and key data for the zone.
                           properties:
                             status:
                               type: string
+                              description: Current status of the zone or record.
                               example: '1'
                             ds:
                               type: array
+                              description: Array of DS record strings for DNSSEC delegation.
                               items:
                                 type: string
                             ds_records:
                               type: array
+                              description: Array of parsed DS record objects.
                               items:
                                 type: object
                                 properties:
                                   digest:
                                     type: string
+                                    description: DS record digest hash value.
+                                    example: a1b2c3d4e5f6789012345678abcdef12
                                   key_tag:
                                     type: string
+                                    description: Key tag value identifying the DNSSEC signing key.
+                                    example: '12345'
                                   algorithm:
                                     type: string
+                                    description: DNSSEC algorithm identifier.
+                                    example: '13'
                                   algorithm_name:
                                     type: string
+                                    description: Human-readable DNSSEC algorithm name.
+                                    example: ECDSA SHA-256
                                   digest_type:
                                     type: string
+                                    description: DS digest type identifier.
+                                    example: '2'
                                   digest_type_name:
                                     type: string
+                                    description: Human-readable DS digest type name.
+                                    example: SHA-256
                             dnskey:
                               type: array
+                              description: Array of DNSKEY record strings for the zone.
                               items:
                                 type: string
                             optout:
                               type: string
+                              description: DNSSEC opt-out flag (1 = enabled, 0 = disabled).
                               example: '1'
                             statusDescription:
                               type: string
+                              description: Human-readable description of the operation outcome.
                               example: The DNSSEC is not active.
                         preferredtype:
                           type: string
+                          description: Preferred DNS record type filter setting.
                           example: All
                         created_at:
                           type: string
+                          description: Timestamp when this record was created.
                           example: '2023-07-04 14:08:59'
                         updated_at:
                           type: string
+                          description: Timestamp when this record was last updated.
                           example: '2026-04-20 05:57:57'
                         synced_at:
                           type: string
+                          description: Timestamp when the zone was last synced with the provider.
                           example: '2026-04-20 05:57:57'
                         validated_at:
                           type: string
+                          description: Timestamp when the zone was last validated.
                           example: '2026-04-17 22:57:53'
                         deleted:
                           nullable: true
                           example:
                         proxied:
                           type: array
+                          description: Array of CDN-proxied record configurations for this zone.
                           items: {}
                         linkedZones:
                           type: object
+                          description: Map of linked CDN zones keyed by zone ID.
                           additionalProperties:
                             type: object
                             properties:
                               id:
                                 type: integer
+                                description: Unique identifier.
+                                example: 12345
                               mode:
                                 type: string
+                                description: Linked zone or proxy mode type.
+                                example: http
                         nameservers:
                           type: array
+                          description: Array of authoritative nameserver hostnames for the zone.
                           items:
                             type: string
-                          example: [pns31.5centscdn.com, pns32.5centscdn.com, pns33.5centscdn.com, pns34.5centscdn.com]
+                          example: [ns1.example-dns.com, ns2.example-dns.com, ns3.example-dns.com, ns4.example-dns.com]
                         stats:
                           type: object
+                          description: Query and record statistics for this zone.
                           properties:
                             queries:
                               type: integer
-                              example: 877245
+                              description: Total number of DNS queries received for this zone.
+                              example: 125000
                             records:
                               type: integer
+                              description: Total number of DNS records configured in this zone.
                               example: 16
                   nameservers:
                     type: array
+                    description: Array of authoritative nameserver hostnames for the zone.
                     items:
                       type: string
-                    example: [pns31.5centscdn.com, pns32.5centscdn.com, pns33.5centscdn.com, pns34.5centscdn.com]
+                    example: [ns1.example-dns.com, ns2.example-dns.com, ns3.example-dns.com, ns4.example-dns.com]
     post:
       tags: [DNS Zones]
       summary: Create Zone
@@ -600,47 +661,59 @@ paths:
                 properties:
                   data:
                     type: object
+                    description: Response data payload.
                     properties:
                       status:
                         type: string
+                        description: Current status of the zone or record.
                         example: '1'
                       ds:
                         type: array
+                        description: Array of DS record strings for DNSSEC delegation.
                         items:
                           type: string
                         example:
-                        - "flussoniccdn.com. 3600 IN DS 39651 13 2 8392D66D42CE8941E86ED0D8BBE51870926B12F40083BA0EF8310BB007F93AAC"
+                        - "example.com. 3600 IN DS 12345 13 2 a1b2c3d4e5f6789012345678abcdef1234567890abcdef1234567890abcdef12"
                       ds_records:
                         type: array
+                        description: Array of parsed DS record objects.
                         items:
                           type: object
                           properties:
                             digest:
                               type: string
-                              example: 8392D66D42CE8941E86ED0D8BBE51870926B12F40083BA0EF8310BB007F93AAC
+                              description: DS record digest hash value.
+                              example: a1b2c3d4e5f6789012345678abcdef1234567890abcdef1234567890abcdef12
                             key_tag:
                               type: string
-                              example: '39651'
+                              description: Key tag value identifying the DNSSEC signing key.
+                              example: '12345'
                             algorithm:
                               type: string
+                              description: DNSSEC algorithm identifier.
                               example: '13'
                             algorithm_name:
                               type: string
+                              description: Human-readable DNSSEC algorithm name.
                               example: ECDSA SHA-256
                             digest_type:
                               type: string
+                              description: DS digest type identifier.
                               example: '2'
                             digest_type_name:
                               type: string
+                              description: Human-readable DS digest type name.
                               example: SHA-256
                       dnskey:
                         type: array
+                        description: Array of DNSKEY record strings for the zone.
                         items:
                           type: string
                         example:
-                        - "flussoniccdn.com. 3600 IN DNSKEY 257 3 13 1v/ZI4Z9Fq2ilPhkRMktkaQPinzs+AIns81BrqGUatwJAOR+zGhOuF5ttBCKj+EH+zjhMU3mEWgJfjCuMLXvSQ=="
+                        - "example.com. 3600 IN DNSKEY 257 3 13 SampleKSKPublicKeyDataForDocumentationPurposesOnlyABC="
                       optout:
                         type: string
+                        description: DNSSEC opt-out flag (1 = enabled, 0 = disabled).
                         example: '1'
     post:
       tags: [DNS Security]
@@ -692,8 +765,8 @@ paths:
               example:
                 data:
                   serialNumber: '2022042309'
-                  primaryNS: pns31.5centscdn.net
-                  adminMail: support@5centscdn.net
+                  primaryNS: ns1.example-dns.com
+                  adminMail: admin@example.com
                   refresh: '7200'
                   retry: '1800'
                   expire: '1209600'
@@ -716,11 +789,11 @@ paths:
                 primaryNS:
                   type: string
                   description: Primary nameserver for the zone.
-                  example: pns31.5centscdn.com
+                  example: ns1.example-dns.com
                 adminMail:
                   type: string
                   description: Administrator email address for the zone.
-                  example: support@5centscdn.com
+                  example: admin@example.com
                 refresh:
                   type: string
                   description: How often secondary servers check for updates, in seconds.
@@ -765,7 +838,7 @@ paths:
             text/plain:
               schema:
                 type: string
-              example: "$ORIGIN example.com.\n@ 3600 IN SOA pns31.5centscdn.com. support.5centscdn.com. 2026042001 7200 1800 1209600 3600\n"
+              example: "$ORIGIN example.com.\n@ 3600 IN SOA ns1.example-dns.com. support.5centscdn.com. 2026042001 7200 1800 1209600 3600\n"
 
   /dns/{dnsId}/import:
     post:
@@ -809,7 +882,7 @@ paths:
                 type: object
               example:
                 status: Success
-                statusDescription: The records of 5centscdn.dev were added successfully.
+                statusDescription: The records of example.com were added successfully.
 
   /dns/{dnsId}/mail:
     get:
@@ -831,24 +904,30 @@ paths:
                 properties:
                   data:
                     type: object
+                    description: Response data payload.
                     properties:
                       '1233111':
                         type: object
                         properties:
                           id:
                             type: string
-                            example: '1233111'
+                            description: Unique identifier.
+                            example: '12345'
                           domain:
                             type: string
-                            example: eniobong.com
+                            description: Domain name configured in the DNS zone.
+                            example: example.com
                           source:
                             type: string
-                            example: oladokun.me@eniobong.com
+                            description: Source email address for this mail forward rule.
+                            example: info@example.com
                           destination:
                             type: string
-                            example: ola@gmail.com
+                            description: Destination email address that mail is forwarded to.
+                            example: user@example.com
                           status:
                             type: string
+                            description: Current status of the zone or record.
                             example: '1'
     put:
       tags: [Mail Forwards]
@@ -1006,21 +1085,29 @@ paths:
                 properties:
                   domain:
                     type: object
+                    description: Domain name configured in the DNS zone.
+                    example: example.com
                     properties:
                       id:
                         type: integer
+                        description: Unique identifier.
                         example: 558
                       serviceid:
                         type: integer
+                        description: Service account identifier.
                         example: 103
                       domain:
                         type: string
-                        example: eniobong.com
+                        description: Domain name configured in the DNS zone.
+                        example: example.com
                   pageMax:
                     type: array
+                    description: Total number of pages available for the records listing.
                     items: {}
                   records:
                     type: array
+                    description: Total number of DNS records configured in this zone.
+                    example: 16
                     items: {}
     post:
       tags: [DNS Records]
@@ -1265,7 +1352,7 @@ paths:
                 status: Success
                 statusDescription: The record was added successfully.
                 data:
-                  id: 258289692
+                  id: 12345
 
   /dns/{dnsId}/records/{recordid}:
     post:
@@ -1512,7 +1599,7 @@ paths:
                 status: Success
                 statusDescription: The record was added successfully.
                 data:
-                  id: 258289692
+                  id: 12345
     delete:
       tags: [DNS Records]
       summary: Delete Record
@@ -1697,8 +1784,8 @@ paths:
                 example-1:
                   summary: Success
                   value:
-                    host: ww3.5centscdn.dev
-                    url: https://ipv4.5centscdn.com/api/dynamicURL/?q=example
+                    host: dynamic.example.com
+                    url: "https://api.example.com/dynamicURL/?q=sample-dynamic-token"
     post:
       tags: [DNS Records]
       summary: Delete/Disable Record DynamicURL
@@ -1732,4 +1819,4 @@ paths:
                 type: object
               example:
                 status: Success
-                statusDescription: The DynamicURL of ww3.5centscdn.dev was deactivated.
+                statusDescription: The DynamicURL of dynamic.example.com was deactivated.
