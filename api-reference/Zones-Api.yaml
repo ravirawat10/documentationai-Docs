@@ -51,9 +51,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zones:
                     type: array
+                    description: Array of zone objects returned in this page of results.
                     items:
                       type: object
                       properties:
@@ -636,6 +638,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   servers:
                     type: array
@@ -904,6 +907,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -936,6 +940,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     type: object
@@ -1068,6 +1073,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -1505,7 +1511,8 @@ paths:
                         example: true
                   warnings:
                     nullable: true
-                    example:
+                    description: Array of non-fatal warning messages, or null if no warnings.
+                    example: null
     post:
       tags:
       - HTTP Push
@@ -1530,15 +1537,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePushResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
     delete:
       tags:
       - HTTP Push
@@ -1570,6 +1582,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1641,6 +1654,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1714,6 +1728,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1771,6 +1786,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1831,6 +1847,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1918,6 +1935,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -1995,6 +2013,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -2021,6 +2040,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -2143,6 +2163,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -2605,6 +2626,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -2658,6 +2680,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -2689,9 +2712,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/http/push/{zoneid}/filemanager/list:
     get:
       tags:
@@ -3050,9 +3076,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zones:
                     type: array
+                    description: Array of zone objects returned in this page of results.
                     items:
                       type: object
                       properties:
@@ -3190,8 +3218,11 @@ paths:
                                   example: cdn.example.com,ttt.5centscdndemo.ca
                                 baseDir:
                                   type: string
+                                  description: Base directory for ZeroSSL certificate files.
+                                  example: /etc/ssl/zerossl/cdn.example.com
                                 dbRow:
                                   type: object
+                                  description: Database record associated with this ZeroSSL certificate.
                             enabled:
                               type: string
                               example: "Y"
@@ -3897,9 +3928,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}:
@@ -3922,6 +3956,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     type: object
@@ -4067,6 +4102,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -4444,7 +4480,8 @@ paths:
                         example: true
                   warnings:
                     nullable: true
-                    example:
+                    description: Array of non-fatal warning messages, or null if no warnings.
+                    example: null
     post:
       tags:
       - HTTP Pull
@@ -4469,15 +4506,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
     delete:
       tags:
       - HTTP Pull
@@ -4497,6 +4539,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -4539,6 +4582,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -4608,15 +4652,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
   /zones/http/pull/{zoneid}/securetoken:
     post:
       tags:
@@ -4678,9 +4727,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/seo:
@@ -4728,9 +4780,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/originip:
@@ -4777,9 +4832,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/bwlimit:
@@ -4831,9 +4889,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/edge:
@@ -4917,9 +4978,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/shield:
@@ -4959,9 +5023,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/domainlock:
@@ -5018,9 +5085,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/geoblock:
@@ -5074,9 +5144,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/http/pull/{zoneid}/ipaccess:
@@ -5128,6 +5201,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -5188,6 +5262,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -5214,6 +5289,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -5362,6 +5438,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -5801,9 +5878,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zonePullResult'
   /zones/vod/push:
@@ -5830,9 +5910,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zones:
                     type: array
+                    description: Array of zone objects returned in this page of results.
                     items:
                       type: object
                       properties:
@@ -5919,17 +6001,25 @@ paths:
                             zerossl:
                               type: object
                               nullable: true
+                              description: ZeroSSL certificate provisioning details, or null if not provisioned.
                               properties:
                                 logDir:
                                   type: string
+                                  description: Path to the ZeroSSL log directory.
+                                  example: /var/logs/ssl/2024/sample
                                 cn:
                                   type: string
+                                  description: Common name (CN) of the SSL certificate.
+                                  example: cdn.example.com
                                 sans:
                                   type: array
                                   items:
                                     type: string
+                                  description: Subject Alternative Names (SANs) for the certificate.
+                                  example: ["cdn.example.com"]
                                 dbRow:
                                   type: object
+                                  description: Database record associated with this ZeroSSL certificate.
                             enabled:
                               type: string
                               example: "Y"
@@ -6305,15 +6395,23 @@ paths:
                                   properties:
                                     base:
                                       type: string
+                                      description: Base URL for the Flowplayer HLS player.
+                                      example: https://player.example.com/flowplayer/hls/
                                     hls:
                                       type: string
+                                      description: HLS stream URL for the Flowplayer player.
+                                      example: https://player.example.com/flowplayer/hls/
                                 videojs:
                                   type: object
                                   properties:
                                     base:
                                       type: string
+                                      description: Base URL for the Video.js HLS player.
+                                      example: https://player.example.com/videojs/hls/
                                     hls:
                                       type: string
+                                      description: HLS stream URL for the Video.js player.
+                                      example: https://player.example.com/videojs/hls/
                                 own:
                                   type: object
                                   properties:
@@ -6324,33 +6422,55 @@ paths:
                                         properties:
                                           hash:
                                             type: string
+                                            description: Hash identifier for this player instance.
+                                            example: abc123def456
                                           hls:
                                             type: string
+                                            description: HLS stream URL for this player instance.
+                                            example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                                           dash:
                                             type: string
+                                            description: DASH stream URL for this player instance.
+                                            example: https://player.example.com/5centscdn/dash/sampleplayer1/
                                     baseQ:
                                       type: string
                                       example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                     base:
                                       type: string
+                                      description: Base URL for the custom own player.
+                                      example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                                     hls:
                                       type: string
+                                      description: HLS stream URL for the custom own player.
+                                      example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                             tokenized:
                               type: object
                               nullable: true
                               properties:
                                 scheme:
                                   type: string
+                                  description: URL scheme for the tokenized playback URL.
+                                  example: https
                                 name:
                                   type: string
+                                  description: File path for the tokenized playback URL.
+                                  example: /path/to/filename.mp4
                                 url_prefix:
                                   type: string
+                                  description: Base URL prefix for tokenized delivery.
+                                  example: https://cdn.example.com
                                 http:
                                   type: string
+                                  description: Tokenized HTTP delivery URL.
+                                  example: https://cdn.example.com/path/to/filename.mp4?token=abc123
                                 hls:
                                   type: string
+                                  description: Tokenized HLS stream URL.
+                                  example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8?token=abc123
                                 dash:
                                   type: string
+                                  description: Tokenized DASH manifest URL.
+                                  example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd?token=abc123
                                 players:
                                   type: object
                         s3details:
@@ -6443,6 +6563,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   servers:
                     type: array
@@ -6705,15 +6826,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
   /zones/vod/push/{zoneid}:
     get:
       tags:
@@ -6734,6 +6860,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     type: object
@@ -6856,6 +6983,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -7212,10 +7340,16 @@ paths:
                                       properties:
                                         hash:
                                           type: string
+                                          description: Hash identifier for this player instance.
+                                          example: abc123def456
                                         hls:
                                           type: string
+                                          description: HLS stream URL for this player instance.
+                                          example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                                         dash:
                                           type: string
+                                          description: DASH stream URL for this player instance.
+                                          example: https://player.example.com/5centscdn/dash/sampleplayer1/
                                   baseQ:
                                     type: string
                                     example: "?showcv=true&title=[ReplaceWithVideoTitle]"
@@ -7230,42 +7364,57 @@ paths:
                             properties:
                               scheme:
                                 type: string
+                                description: URL scheme for the tokenized playback URL.
                                 example: https
                               name:
                                 type: string
+                                description: File path for the tokenized playback URL.
                                 example: /path/to/filename.mp4
                               url_prefix:
                                 type: string
+                                description: Base URL prefix for tokenized delivery.
                                 example: https://cdn.example.com
                               http:
                                 type: string
+                                description: Tokenized HTTP delivery URL.
                                 example: https://cdn.example.com/path/to/filename.mp4
                               hls:
                                 type: string
+                                description: Tokenized HLS stream URL.
                                 example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8
                               dash:
                                 type: string
+                                description: Tokenized DASH manifest URL.
                                 example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
                               players:
                                 type: object
                                 properties:
                                   hostname:
                                     type: string
+                                    description: Hostname of the player server.
                                     example: player.example.com
                                   flowplayer:
                                     type: object
                                     properties:
                                       base:
                                         type: string
+                                        description: Base URL for the Flowplayer HLS player.
+                                        example: https://player.example.com/flowplayer/hls/
                                       hls:
                                         type: string
+                                        description: HLS stream URL for the Flowplayer player.
+                                        example: https://player.example.com/flowplayer/hls/
                                   videojs:
                                     type: object
                                     properties:
                                       base:
                                         type: string
+                                        description: Base URL for the Video.js HLS player.
+                                        example: https://player.example.com/videojs/hls/
                                       hls:
                                         type: string
+                                        description: HLS stream URL for the Video.js player.
+                                        example: https://player.example.com/videojs/hls/
                                   own:
                                     type: object
                                     properties:
@@ -7276,16 +7425,28 @@ paths:
                                           properties:
                                             hash:
                                               type: string
+                                              description: Hash identifier for this player instance.
+                                              example: abc123def456
                                             hls:
                                               type: string
+                                              description: HLS stream URL for this player instance.
+                                              example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                                             dash:
                                               type: string
+                                              description: DASH stream URL for this player instance.
+                                              example: https://player.example.com/5centscdn/dash/sampleplayer1/
                                       baseQ:
                                         type: string
+                                        description: Query string appended to player URLs.
+                                        example: "?showcv=true&title=[ReplaceWithVideoTitle]"
                                       base:
                                         type: string
+                                        description: Base URL for the custom own player.
+                                        example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                                       hls:
                                         type: string
+                                        description: HLS stream URL for the custom own player.
+                                        example: https://player.example.com/5centscdn/auto/skin1/sampleplayer1/
                       s3details:
                         type: object
                         properties:
@@ -7360,7 +7521,8 @@ paths:
                         example: true
                   warnings:
                     nullable: true
-                    example:
+                    description: Array of non-fatal warning messages, or null if no warnings.
+                    example: null
     post:
       tags:
       - VOD Push
@@ -7385,13 +7547,16 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
     delete:
       tags:
       - VOD Push
@@ -7423,6 +7588,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -7499,15 +7665,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
   /zones/vod/push/{zoneid}/restore:
     get:
       tags:
@@ -7528,6 +7699,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -7652,6 +7824,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -8131,9 +8304,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/vod/push/{zoneid}/geoblock:
     post:
       tags:
@@ -8189,9 +8365,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/eac:
@@ -8219,6 +8398,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
@@ -8247,9 +8427,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/domainlock:
@@ -8310,9 +8493,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/securetoken:
@@ -8386,9 +8572,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/ipaccess:
@@ -8444,9 +8633,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/useragent:
@@ -8513,9 +8705,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/cache:
@@ -8586,9 +8781,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPushResult'
   /zones/vod/push/{zoneid}/prefetch:
@@ -8625,9 +8823,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/vod/push/{zoneid}/import:
     post:
       tags:
@@ -8653,9 +8854,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/vod/push/{zoneid}/filemanager/list:
     get:
       tags:
@@ -9011,9 +9215,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zones:
                     type: array
+                    description: Array of zone objects returned in this page of results.
                     items:
                       type: object
                       properties:
@@ -9129,41 +9335,70 @@ paths:
                             zerossl:
                               nullable: true
                               type: object
+                              description: ZeroSSL certificate provisioning details, or null if not provisioned.
                               properties:
                                 logDir:
                                   type: string
+                                  description: Path to the ZeroSSL log directory.
+                                  example: /var/logs/ssl/2024/sample
                                 messages:
                                   type: array
                                   items:
                                     type: string
+                                  description: Array of messages from ZeroSSL certificate provisioning.
+                                  example: ["Certificate provisioned successfully"]
                                 cn:
                                   type: string
+                                  description: Common name (CN) of the SSL certificate.
+                                  example: cdn.example.com
                                 sans:
                                   type: array
                                   items:
                                     type: string
+                                  description: Subject Alternative Names (SANs) for the certificate.
+                                  example: ["cdn.example.com", "www.example.com"]
                                 strSans:
                                   type: string
+                                  description: Comma-separated string of SANs.
+                                  example: cdn.example.com,www.example.com
                                 certDomains:
                                   type: string
+                                  description: Domains included in the certificate.
+                                  example: cdn.example.com
                                 baseDir:
                                   type: string
+                                  description: Base directory for ZeroSSL certificate files.
+                                  example: /etc/ssl/zerossl/cdn.example.com
                                 cnfFile:
                                   type: string
+                                  description: Path to the OpenSSL configuration file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/openssl.cnf
                                 csrFile:
                                   type: string
+                                  description: Path to the certificate signing request file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/cert.csr
                                 keyFile:
                                   type: string
+                                  description: Path to the private key file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/private.key
                                 crtFile:
                                   type: string
+                                  description: Path to the certificate file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/cert.crt
                                 chnFile:
                                   type: string
+                                  description: Path to the certificate chain file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/chain.crt
                                 fulFile:
                                   type: string
+                                  description: Path to the full certificate bundle file.
+                                  example: /etc/ssl/zerossl/cdn.example.com/fullchain.crt
                                 crtFileParsed:
                                   type: object
+                                  description: Parsed representation of the SSL certificate.
                                 dbRow:
                                   type: object
+                                  description: Database record associated with this ZeroSSL certificate.
                             enabled:
                               type: string
                               example: "Y"
@@ -9821,15 +10056,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
   /zones/vod/pull/{zoneid}:
     get:
       tags:
@@ -9850,6 +10090,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     type: object
@@ -9998,6 +10239,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -10382,7 +10624,8 @@ paths:
                         example: false
                   warnings:
                     nullable: true
-                    example:
+                    description: Array of non-fatal warning messages, or null if no warnings.
+                    example: null
     post:
       tags:
       - VOD Pull
@@ -10407,13 +10650,16 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
     delete:
       tags:
       - VOD Pull
@@ -10445,6 +10691,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -10521,15 +10768,20 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
                   warnings:
                     type: array
+                    description: Array of non-fatal warning messages from the operation.
                     items:
                       type: string
+                    example: []
   /zones/vod/pull/{zoneid}/restore:
     get:
       tags:
@@ -10550,6 +10802,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -10769,23 +11022,40 @@ paths:
                                       items: {}
                                   extensions:
                                     type: object
+                                    description: X.509 certificate extensions.
                                     properties:
                                       authorityKeyIdentifier:
                                         type: string
+                                        description: Authority Key Identifier extension value.
+                                        example: keyid:AB:CD:EF:01:23:45:67:89:AB:CD:EF:01:23:45:67:89
                                       subjectKeyIdentifier:
                                         type: string
+                                        description: Subject Key Identifier extension value.
+                                        example: AB:CD:EF:01:23:45:67:89:AB:CD:EF:01:23:45:67:89
                                       keyUsage:
                                         type: string
+                                        description: Key usage extension value.
+                                        example: Digital Signature, Key Encipherment
                                       basicConstraints:
                                         type: string
+                                        description: Basic constraints extension value.
+                                        example: CA:FALSE
                                       extendedKeyUsage:
                                         type: string
+                                        description: Extended key usage extension value.
+                                        example: TLS Web Server Authentication, TLS Web Client Authentication
                                       certificatePolicies:
                                         type: string
+                                        description: Certificate policies extension value.
+                                        example: Policy OID
                                       authorityInfoAccess:
                                         type: string
+                                        description: Authority Information Access extension value.
+                                        example: OCSP - URI:http://ocsp.zerossl.com
                                       ct_precert_scts:
                                         type: string
+                                        description: Certificate Transparency pre-certificate SCTs.
+                                        example: Signed Certificate Timestamps
                                       subjectAltName:
                                         type: string
                                         example: "DNS:cdn.example.com, DNS:vod.wmncdn.com"
@@ -10812,23 +11082,30 @@ paths:
                                     example: draft
                                   create_meta:
                                     type: object
+                                    description: Metadata from the ZeroSSL certificate creation request.
                                   validate_meta:
                                     type: object
+                                    description: Metadata from the ZeroSSL certificate validation process.
                                     properties:
                                       success:
                                         type: boolean
+                                        description: Whether domain validation succeeded.
                                         example: false
                                       error:
                                         type: object
+                                        description: Error details if validation failed.
                                         properties:
                                           code:
                                             type: integer
+                                            description: Numeric error code.
                                             example: 0
                                           type:
                                             type: string
+                                            description: Error type identifier.
                                             example: domain_control_validation_failed
                                           details:
                                             type: object
+                                            description: Additional error details keyed by domain.
                                             additionalProperties:
                                               type: object
                           enabled:
@@ -10870,6 +11147,7 @@ paths:
                                 example: gcore
                               rule:
                                 type: object
+                                description: Edge rule configuration object for this behavior.
                       edgeRules:
                         type: array
                         items: {}
@@ -11290,9 +11568,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/vod/pull/{zoneid}/geoblock:
     post:
       tags:
@@ -11348,9 +11629,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/shield:
@@ -11390,9 +11674,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/eac:
@@ -11420,6 +11707,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
@@ -11448,9 +11736,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/domainlock:
@@ -11511,9 +11802,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/securetoken:
@@ -11587,9 +11881,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/ipaccess:
@@ -11645,9 +11942,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/useragent:
@@ -11714,9 +12014,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/cache:
@@ -11787,9 +12090,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/vod/pull/{zoneid}/prefetch:
@@ -11826,9 +12132,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
   /zones/vod/pull/{zoneid}/status:
     post:
       tags:
@@ -11862,9 +12171,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
+                    description: Human-readable status message describing the outcome.
+                    example: Zone updated successfully
                   zone:
                     $ref: '#/components/schemas/zoneVodPullResult'
   /zones/http/settings/security/domainlock:
@@ -11922,6 +12234,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -11979,6 +12292,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12052,6 +12366,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12102,6 +12417,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12157,6 +12473,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12223,6 +12540,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12283,6 +12601,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12340,6 +12659,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12413,6 +12733,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12468,6 +12789,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -12534,6 +12856,7 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Status of the API response.
                     example: success
                   message:
                     type: string
@@ -13291,18 +13614,24 @@ components:
       type: object
       properties:
         bandwidth:
+          description: Bandwidth delivery data over the reporting period.
           $ref: '#/components/schemas/bandwidthList'
         caching:
+          description: Cache hit and miss counts over the reporting period.
           $ref: '#/components/schemas/hitsList'
         requests:
+          description: Total request counts over the reporting period.
           $ref: '#/components/schemas/requestsList'
         summary:
+          description: Aggregated summary totals for the reporting period.
           $ref: '#/components/schemas/summaryList'
     bandwidthList:
       type: object
       properties:
         delivered:
           type: array
+          description: Time-series data points of delivered bandwidth.
+          example: []
           items:
             $ref: '#/components/schemas/deliveredList'
     requestsList:
@@ -13311,6 +13640,7 @@ components:
         total:
           type: array
           description: Total number of requests including all cache statuses.
+          example: []
           items:
             $ref: '#/components/schemas/deliveredList'
     hitsList:
@@ -13318,10 +13648,14 @@ components:
       properties:
         hits:
           type: array
+          description: Time-series data points of cache hit counts.
+          example: []
           items:
             $ref: '#/components/schemas/deliveredList'
         misses:
           type: array
+          description: Time-series data points of cache miss counts.
+          example: []
           items:
             $ref: '#/components/schemas/deliveredList'
     summaryList:
@@ -13329,25 +13663,39 @@ components:
       properties:
         bandwidth:
           type: object
+          description: Summary of bandwidth delivered over the reporting period.
+          example: {"delivered": 107374182400}
           properties:
             delivered:
               type: integer
               format: int32
+              description: Total bytes delivered over the reporting period.
+              example: 107374182400
         requests:
           type: object
+          description: Summary of total requests over the reporting period.
+          example: {"total": 50000}
           properties:
             total:
               type: integer
               format: int32
+              description: Total number of requests including all cache statuses.
+              example: 50000
         caching:
           type: object
+          description: Summary of cache hit and miss counts over the reporting period.
+          example: {"hits": 45000, "misses": 5000}
           properties:
             hits:
               type: integer
               format: int32
+              description: Total cache hit count over the reporting period.
+              example: 45000
             misses:
               type: integer
               format: int32
+              description: Total cache miss count over the reporting period.
+              example: 5000
     zoneshttppushnew_edge:
       type: object
       properties:
@@ -13785,144 +14133,217 @@ components:
       properties:
         policy:
           type: string
+          description: Access policy. Y means allow listed domains only, N means block listed domains.
+          example: "N"
         list:
           type: string
+          description: Comma-separated list of allowed or blocked domain names.
+          example: example.com,cdn.example.com
         ips:
           type: string
+          description: Comma-separated IP addresses excluded from domain lock restrictions.
+          example: 203.0.113.10
         noreferer:
           type: string
+          description: Whether requests with no referrer header are blocked. Y means block, N means allow.
+          example: "N"
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: push
         enabled:
           type: string
+          description: Whether domain lock is enabled. Y means enabled, N means disabled.
+          example: "N"
         active:
           type: string
+          description: Whether domain lock is currently active. Y means active, N means inactive.
+          example: "N"
     geoblockList:
       properties:
         policy:
           type: string
+          description: Access policy. Y means allow listed countries only, N means block listed countries.
+          example: "N"
         list:
           type: array
           items:
             type: string
+          description: Array of ISO-3166 country codes to allow or block.
+          example: ["US", "GB"]
         ips:
           type: string
+          description: Comma-separated IP addresses excluded from geo-blocking restrictions.
+          example: 203.0.113.10
         enabled:
           type: string
+          description: Whether geo-blocking is enabled. Y means enabled, N means disabled.
+          example: "N"
         active:
           type: string
+          description: Whether geo-blocking is currently active. Y means active, N means inactive.
+          example: "N"
     securetokenList:
       properties:
         policy:
           type: string
+          description: Secure token mode. Q means query string mode, F means full path mode.
+          example: "F"
         keyip:
           type: string
+          description: Whether client IP is included in token generation. Y means enabled, N means disabled.
+          example: "N"
         list:
           type: string
+          description: 16-character hexadecimal secret key used for token generation.
+          example: ab12cd34ef56gh78
         timeout:
           type: integer
           format: int32
+          description: Token expiry time in seconds. Minimum 5, maximum 25200.
+          example: 3600
         session:
           type: string
+          description: Session mode. 0 means fixed expiry, S means session-based.
+          example: "0"
         ips:
           type: string
+          description: Comma-separated IP addresses excluded from secure token validation.
+          example: ""
         dirs:
           type: string
+          description: Optional directory restriction path for secure token enforcement.
+          example: ""
         enabled:
           type: string
+          description: Whether secure token is enabled. Y means enabled, N means disabled.
+          example: "N"
         active:
           type: string
+          description: Whether secure token is currently active. Y means active, N means inactive.
+          example: "N"
     eacList:
       properties:
         policy:
           type: string
+          description: Access policy. Y means allow authenticated requests, N means deny.
+          example: "N"
         list:
           type: string
+          description: Authentication URL for the external access control endpoint.
+          example: http://example.com/auth.script
         ips:
           type: string
+          description: Comma-separated IP addresses excluded from external access control.
+          example: 203.0.113.10
         enabled:
           type: string
+          description: Whether external access control is enabled. Y means enabled, N means disabled.
+          example: "N"
         active:
           type: string
+          description: Whether external access control is currently active. Y means active, N means inactive.
+          example: "N"
     serversResult:
       properties:
         code:
           type: integer
           description: Numeric server location code.
           format: int32
+          example: 206
         name:
           type: string
           description: Auto-generated system name for the zone.
+          example: Singapore
         country:
           type: string
           description: Geographic region or country of the server.
+          example: SouthEast Asia
     zonePushResult:
       properties:
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: push
         id:
           type: integer
           description: Unique numeric identifier for the zone.
           format: int32
+          example: 12345
         serviceid:
           type: integer
           description: Numeric identifier of the parent CDN service account.
           format: int32
+          example: 67890
         alias:
           type: string
           description: User-defined label or alias for the zone.
+          example: my-cdn-zone
         hashid:
           type: string
           description: Short alphanumeric hash identifier for the zone.
+          example: abc123def456
         mode:
           type: string
           description: Delivery protocol mode for the zone, e.g. http.
+          example: http
         optimizer:
           type: string
           description: Optimizer flag. 1 means enabled, 0 means disabled.
+          example: "0"
         cnames:
           type: string
           description: Comma-separated list of custom CNAME hostnames mapped to this zone.
           nullable: true
+          example: ""
         edgeruleids:
           type: integer
           description: Count of active edge rules assigned to this zone.
           format: int32
+          example: 0
         rclone:
           type: integer
           description: Indicates whether rclone sync is enabled. 1 means enabled, 0 means disabled.
           format: int32
+          example: 0
         disabled:
           type: string
           description: Indicates whether the zone is disabled. 1 means disabled, 0 means active.
+          example: "0"
         created_at:
           type: string
           description: Timestamp when the zone was created (UTC).
+          example: "2024-01-15T10:30:00Z"
         updated_at:
           type: string
           description: Timestamp of the most recent zone update (UTC).
+          example: "2024-06-01T08:00:00Z"
         deleted:
           type: string
           description: Timestamp when the zone was deleted, or null if not deleted.
           nullable: true
+          example: null
         router:
           type: string
           description: Internal routing identifier for the zone edge network.
+          example: mycdn
         remaining:
           type: integer
           description: Remaining quota or resource balance for the zone.
           format: int32
+          example: 0
         status:
           type: string
           description: Human-readable zone status, e.g. Enabled or Disabled.
+          example: active
         name:
           type: string
           description: Auto-generated system name for the zone.
+          example: my-cdn-zone
         fqdn:
           type: string
           description: Fully qualified domain name assigned to the zone by the CDN.
+          example: cdn.example.com
         ssl:
           $ref: '#/components/schemas/sslList'
         cnamesArr:
@@ -13930,11 +14351,13 @@ components:
           description: Array of custom CNAME hostnames for this zone.
           items:
             type: string
+          example: ["cdn.example.com"]
         cnamesArrFqdn:
           type: array
           description: Array of fully qualified domain names including zone FQDN and any CNAMEs.
           items:
             type: string
+          example: ["cdn.example.com"]
         waf:
           $ref: '#/components/schemas/wafList'
         defaultBehaviors:
@@ -13944,11 +14367,13 @@ components:
             type: array
             items:
               type: object
+          example: {}
         edgeRules:
           type: array
           description: Array of edge rule objects configured for this zone.
           items:
             type: object
+          example: []
         cache:
           $ref: '#/components/schemas/cacheList'
         edge:
@@ -13971,31 +14396,40 @@ components:
           type: integer
           description: Identifier of the active default behavior configuration for this zone.
           format: int32
+          example: 11111
         linkedVideoManager:
           type: string
           description: ID of the linked Video Manager instance, or null if none linked.
           nullable: true
+          example: null
         hostHeader:
           type: string
           description: Host header value sent to the origin server for push zones.
+          example: cdn.example.com
         storageHost:
           type: string
           description: Primary storage backend hostname for push zone file uploads.
+          example: storage.example.com
         storageHostBackup:
           type: string
           description: Backup storage backend hostname used when primary is unavailable.
+          example: storage-eu.example.com
         osAuthUrl:
           type: string
           description: OpenStack authentication endpoint URL for the storage backend.
+          example: https://storage.example.com/v3/
         horizonUrl:
           type: string
           description: OpenStack Horizon dashboard URL for the storage backend.
+          example: https://storage.example.com/horizon/
         cdnservice:
           $ref: '#/components/schemas/cdnserviceList'
         ftpdetails:
           $ref: '#/components/schemas/ftpdetailsList'
         playbackurls:
           type: object
+          description: Playback URL set for the zone including HTTP, HLS, and player URLs.
+          example: {}
         s3details:
           $ref: '#/components/schemas/s3detailsList'
         transcodefile:
@@ -14005,44 +14439,56 @@ components:
         hasEdgeRules:
           type: boolean
           description: Indicates whether any edge rules are configured for this zone.
+          example: false
     zoneVodPushResult:
       properties:
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: push
         id:
           type: integer
           description: Unique numeric identifier for the zone.
           format: int32
+          example: 12345
         serviceid:
           type: integer
           description: Numeric identifier of the parent CDN service account.
           format: int32
+          example: 67890
         mode:
           type: string
           description: Delivery protocol mode for the zone, e.g. http.
+          example: http
         cnames:
           type: string
           description: Comma-separated list of custom CNAME hostnames mapped to this zone.
+          example: ""
         edgeruleids:
           type: integer
           description: Count of active edge rules assigned to this zone.
           format: int32
+          example: 0
         deleted:
           type: string
           description: Timestamp when the zone was deleted, or null if not deleted.
+          example: null
         name:
           type: string
           description: Auto-generated system name for the zone.
+          example: my-cdn-zone
         hashid:
           type: string
           description: Short alphanumeric hash identifier for the zone.
+          example: abc123def456
         fqdn:
           type: string
           description: Fully qualified domain name assigned to the zone by the CDN.
+          example: cdn.example.com
         fqdnVoD:
           type: string
           description: Fully qualified VoD domain name assigned to the zone by the CDN.
+          example: vod.example.com
         edgerules:
           $ref: '#/components/schemas/edgerules'
         domainlock:
@@ -14068,41 +14514,52 @@ components:
         ssl_enabled:
           type: string
           description: Indicates whether SSL is enabled for this zone.
+          example: "Y"
     zonePullResult:
       properties:
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: pull
         id:
           type: integer
           description: Unique numeric identifier for the zone.
           format: int32
+          example: 12345
         serviceid:
           type: integer
           description: Numeric identifier of the parent CDN service account.
           format: int32
+          example: 67890
         mode:
           type: string
           description: Delivery protocol mode for the zone, e.g. http.
+          example: http
         cnames:
           type: string
           description: Comma-separated list of custom CNAME hostnames mapped to this zone.
+          example: ""
         edgeruleids:
           type: integer
           description: Count of active edge rules assigned to this zone.
           format: int32
+          example: 0
         deleted:
           type: string
           description: Timestamp when the zone was deleted, or null if not deleted.
+          example: null
         name:
           type: string
           description: Auto-generated system name for the zone.
+          example: my-cdn-zone
         hashid:
           type: string
           description: Short alphanumeric hash identifier for the zone.
+          example: abc123def456
         fqdn:
           type: string
           description: Fully qualified domain name assigned to the zone by the CDN.
+          example: cdn.example.com
         edgerules:
           $ref: '#/components/schemas/edgerules'
         domainlock:
@@ -14130,44 +14587,56 @@ components:
         ssl_enabled:
           type: string
           description: Indicates whether SSL is enabled for this zone.
+          example: "Y"
     zoneVodPullResult:
       properties:
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: pull
         id:
           type: integer
           description: Unique numeric identifier for the zone.
           format: int32
+          example: 12345
         serviceid:
           type: integer
           description: Numeric identifier of the parent CDN service account.
           format: int32
+          example: 67890
         mode:
           type: string
           description: Delivery protocol mode for the zone, e.g. http.
+          example: http
         cnames:
           type: string
           description: Comma-separated list of custom CNAME hostnames mapped to this zone.
+          example: ""
         edgeruleids:
           type: integer
           description: Count of active edge rules assigned to this zone.
           format: int32
+          example: 0
         deleted:
           type: string
           description: Timestamp when the zone was deleted, or null if not deleted.
+          example: null
         name:
           type: string
           description: Auto-generated system name for the zone.
+          example: my-cdn-zone
         hashid:
           type: string
           description: Short alphanumeric hash identifier for the zone.
+          example: abc123def456
         fqdn:
           type: string
           description: Fully qualified domain name assigned to the zone by the CDN.
+          example: cdn.example.com
         fqdnVoD:
           type: string
           description: Fully qualified VoD domain name assigned to the zone by the CDN.
+          example: vod.example.com
         edgerules:
           $ref: '#/components/schemas/edgerules'
         domainlock:
@@ -14195,6 +14664,7 @@ components:
         ssl_enabled:
           type: string
           description: Indicates whether SSL is enabled for this zone.
+          example: "Y"
     transcodefileList:
       properties:
         profiles:
@@ -14202,49 +14672,61 @@ components:
           description: Array of transcoding profile IDs to apply automatically.
           items:
             type: string
+          example: ["1", "2"]
         emails:
           type: array
           description: Array of email addresses to notify on transcoding completion.
           items:
             type: string
+          example: ["admin@example.com"]
         webhooks:
           type: array
           description: Array of webhook URLs to call on transcoding completion.
           items:
             type: string
+          example: ["https://hooks.example.com/webhook"]
     sslList:
       properties:
         http:
           type: string
           description: Whether HTTP delivery is enabled alongside HTTPS. Y means enabled.
+          example: "N"
         http2:
           type: string
           description: Whether HTTP/2 protocol is enabled. Y means enabled, N means disabled.
+          example: "Y"
         redirect:
           type: string
           description: Whether HTTP traffic is automatically redirected to HTTPS.
+          example: "Y"
         mode:
           type: string
           description: SSL mode. S = shared/SNI, L = Lets Encrypt, C = custom certificate.
+          example: S
         certid:
           type: string
           description: Identifier of the custom SSL certificate assigned to this zone, or null if none.
           nullable: true
+          example: null
         zerossl:
           type: object
           description: ZeroSSL certificate provisioning details, or null if not provisioned.
           nullable: true
+          example: null
         enabled:
           type: string
           description: Whether SSL is enabled for this zone. Y means enabled, N means disabled.
+          example: "Y"
         warning:
           nullable: true
           description: SSL configuration warning message, or false if no warnings exist.
+          example: false
     wafList:
       properties:
         enabled:
           type: string
           description: Whether WAF is enabled for this zone. Y means enabled, N means disabled.
+          example: "N"
     shieldList:
       properties:
         shields:
@@ -14252,15 +14734,21 @@ components:
           description: Array of ISO country codes where edge shield nodes are active.
           items:
             type: string
+            description: ISO 3166-1 alpha-2 country code of an edge shield node.
             example: CA
+          example: ["CA", "FR"]
     visitorsList:
       properties:
         visitor_table:
           type: array
+          description: Tabular visitor analytics data sorted by IP address.
+          example: []
           items:
             $ref: '#/components/schemas/visitor_tableList'
         visitor_line_chart:
           type: array
+          description: Time-series visitor analytics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/visitor_line_chartList'
     visitor_line_chartList:
@@ -14269,56 +14757,73 @@ components:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         ip:
           type: string
           description: Client IP address recorded in the analytics entry.
+          example: 203.0.113.10
         useragent:
           type: string
           description: Browser or client user-agent string.
+          example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
         city:
           type: string
           description: City name derived from the client IP address.
+          example: Singapore
         country:
           type: string
           description: Geographic region or country of the server.
+          example: Singapore
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     visitor_tableList:
       properties:
         ip:
           type: string
           description: Client IP address recorded in the analytics entry.
+          example: 203.0.113.10
         useragent:
           type: string
           description: Browser or client user-agent string.
+          example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
         city:
           type: string
           description: City name derived from the client IP address.
+          example: Singapore
         country:
           type: string
           description: Geographic region or country of the server.
+          example: Singapore
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     osList:
       properties:
         os_table:
           type: array
+          description: Tabular OS analytics data sorted by operating system.
+          example: []
           items:
             $ref: '#/components/schemas/os_tableList'
         os_line_chart:
           type: array
+          description: Time-series OS analytics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/os_line_chartList'
     os_line_chartList:
@@ -14327,60 +14832,79 @@ components:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         os:
           type: string
           description: Operating system name derived from the user-agent string.
+          example: Windows
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     os_tableList:
       properties:
         os:
           type: string
           description: Operating system name derived from the user-agent string.
+          example: Windows
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     cache_statistic_List:
       properties:
         cache_statistic_table:
           type: array
+          description: Tabular cache statistics data sorted by edge location.
+          example: []
           items:
             $ref: '#/components/schemas/cache_statistic_tableList'
         cache_statistic_line_chart:
           type: array
+          description: Time-series cache statistics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/cache_statistic_line_chartList'
     top_filesList:
       properties:
         top_fifty_files_table:
           type: array
+          description: Top 50 most-requested files sorted by request count.
+          example: []
           items:
             $ref: '#/components/schemas/top_fifty_files_tableList'
     top_referrersList:
       properties:
         top_fifty_referers_table:
           type: array
+          description: Top 50 referring sites sorted by request count.
+          example: []
           items:
             $ref: '#/components/schemas/top_fifty_referers_tableList'
     browsersList:
       properties:
         browser_table:
           type: array
+          description: Tabular browser analytics data sorted by browser name.
+          example: []
           items:
             $ref: '#/components/schemas/browser_tableList'
         browser_line_chart:
           type: array
+          description: Time-series browser analytics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/browser_line_chartList'
     browser_line_chartList:
@@ -14389,38 +14913,49 @@ components:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         browser:
           type: string
           description: Browser name derived from the user-agent string.
+          example: Chrome
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     browser_tableList:
       properties:
         browser:
           type: string
           description: Browser name derived from the user-agent string.
+          example: Chrome
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     countriesList:
       properties:
         country_table:
           type: array
+          description: Tabular country analytics data sorted by country name.
+          example: []
           items:
             $ref: '#/components/schemas/country_tableList'
         country_line_chart:
           type: array
+          description: Time-series country analytics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/country_line_chartList'
     country_line_chartList:
@@ -14429,38 +14964,49 @@ components:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         country:
           type: string
           description: Geographic region or country of the server.
+          example: Singapore
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     country_tableList:
       properties:
         country:
           type: string
           description: Geographic region or country of the server.
+          example: Singapore
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     statusCodesList:
       properties:
         status_code_table:
           type: array
+          description: Tabular HTTP status code analytics data.
+          example: []
           items:
             $ref: '#/components/schemas/status_code_tableList'
         status_code_line_chart:
           type: array
+          description: Time-series HTTP status code analytics data for line chart visualization.
+          example: []
           items:
             $ref: '#/components/schemas/status_code_line_chartList'
     status_code_tableList:
@@ -14469,239 +15015,304 @@ components:
           type: integer
           description: HTTP status code returned for the request, e.g. 200, 404, 500.
           format: int32
+          example: 200
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this status code.
           format: int32
+          example: 50000
     status_code_line_chartList:
       properties:
         code:
           type: integer
           description: HTTP status code returned for the request, e.g. 200, 404, 500.
           format: int32
+          example: 200
         date:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     top_fifty_referers_tableList:
       properties:
         site:
           type: string
           description: Referring site domain or URL.
+          example: example.com
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     top_fifty_files_tableList:
       properties:
         method:
           type: string
           description: HTTP method used for the request, e.g. GET or POST.
+          example: GET
         url:
           type: string
           description: URL path of the requested file.
           format: url
+          example: /path/to/video.mp4
         bytes:
           type: integer
           description: Total bytes transferred for this entry.
           format: int32
+          example: 1048576
         request:
           type: string
+          description: Number of requests recorded for this file.
+          example: "50000"
     cache_statistic_line_chartList:
       properties:
         time:
           type: string
           description: Timestamp of the analytics data point.
           format: date
+          example: "2024-06-01T00:00:00Z"
         hit:
           type: integer
           description: Number of cache hit requests.
           format: int32
+          example: 45000
         miss:
           type: integer
           description: Number of cache miss requests.
           format: int32
+          example: 5000
         bypass:
           type: integer
           description: Number of requests that bypassed the cache.
           format: int32
+          example: 100
         others:
           type: string
           description: Number of requests with other cache statuses.
+          example: "0"
         total:
           type: integer
           description: Total number of requests including all cache statuses.
           format: int32
+          example: 50000
     cache_statistic_tableList:
       properties:
         locationid:
           type: integer
           description: Numeric identifier of the CDN edge location.
           format: int32
+          example: 206
         gb:
           type: integer
           description: Total gigabytes of data delivered from this location.
           format: int32
+          example: 100
         request:
           type: integer
           description: Number of requests recorded for this entry.
           format: int32
+          example: 50000
     deliveredList:
       properties:
         date:
           type: string
           description: Date of the analytics data point in YYYY-MM-DD format.
           format: date
+          example: "2024-06-01"
         value:
           type: string
           description: Delivered bandwidth or data value for this period.
+          example: "107374182400"
     seoList:
       properties:
         id:
           type: integer
           description: Unique numeric identifier for the zone.
           format: int32
+          example: 12345
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: pull
         canonical:
           type: string
           description: Canonical URL setting for SEO optimization.
+          example: "N"
         mode:
           type: string
           description: SEO mode setting for this zone.
+          example: default
         robots:
           type: string
           description: Robots meta tag value, e.g. index or noindex.
+          example: "N"
         robotstxt:
           type: string
           description: Robots.txt mode setting.
+          example: "N"
         robotstxtcustom:
           type: string
           description: Custom robots.txt content when mode is set to custom.
+          example: ""
     cacheList:
       properties:
         smart:
           type: string
           description: Smart cache flag. 1 means enabled, 0 means disabled.
+          example: "0"
         cache:
           type: string
           description: Edge cache TTL duration code, e.g. 4h or 1d.
+          example: 4h
         expiry:
           type: string
           description: Browser cache TTL duration code, e.g. 1M. Empty string disables it.
+          example: 1M
         querystring:
           type: string
           description: Whether query strings are included in cache keys. Y means included.
+          example: "N"
         cachecontrol:
           type: string
           description: Whether Cache-Control headers from origin are respected.
+          example: "Y"
         usestale:
           type: string
           description: Whether stale cached content is served when origin is unavailable.
+          example: "Y"
         revalidate:
           type: string
           description: Whether conditional revalidation is performed before serving cached content.
+          example: "Y"
         cacheInSecs:
           type: integer
           description: Edge cache TTL in seconds.
           format: int64
+          example: 14400
         cacheInMins:
           type: integer
           description: Edge cache TTL in minutes.
           format: int32
+          example: 240
         expiryInSecs:
           type: integer
           description: Browser cache TTL in seconds.
           format: int64
+          example: 2592000
         expiryInMins:
           type: integer
           description: Browser cache TTL in minutes.
           format: int32
+          example: 43200
     edgeList:
       properties:
         compression:
           type: string
           description: Whether Gzip/Brotli compression is enabled. Y means enabled.
+          example: "N"
         compressionlevel:
           type: integer
           description: Compression level from 1 (fastest) to 9 (best compression).
+          example: 5
         disposition:
           type: string
           description: Whether Content-Disposition header is sent to force file download.
+          example: "N"
         stripcookie:
           type: string
           description: Whether cookies are stripped from requests to the CDN edge.
+          example: "N"
         xff:
           type: string
           description: Whether the X-Forwarded-For header is forwarded to the origin.
+          example: "N"
         cors:
           type: string
           description: Whether CORS headers are added to responses. Y means enabled.
+          example: "Y"
         webp:
           type: string
           description: Whether automatic WebP image conversion is enabled.
+          example: "N"
         pseudostreaming:
           type: string
           description: Whether pseudo-streaming for progressive media files is enabled.
+          example: "N"
         wp:
           type: string
           description: Whether WordPress optimizations are enabled.
+          example: "N"
         lfo:
           type: string
           description: Whether large file optimization is enabled.
+          example: "Y"
         prefresh:
           type: string
           description: Whether prefresh (background cache refresh) is enabled.
+          example: "N"
     edgerules:
       properties:
         enabled:
           type: string
+          description: Whether edge rules are enabled for this zone. Y means enabled, N means disabled.
+          example: "N"
     ftpdetailsList:
       properties:
         username:
           type: string
           description: FTP username for authenticating to the push zone storage.
+          example: user_67890_push_12345
         password:
           type: string
           description: FTP password for authenticating to the push zone storage.
+          example: "••••••••"
     serverList:
       properties:
         code:
           type: string
           description: Numeric server location code.
+          example: "206"
         name:
           type: string
           description: Human-readable name of the server location.
+          example: Singapore
         country:
           type: string
           description: Geographic region or country of the server.
+          example: SouthEast Asia
         meta:
           type: object
           description: Additional server metadata including upload endpoint details.
+          example: {"uploadPort": "21", "uploadHost": "upload.example.com"}
           properties:
             uploadPort:
               type: string
               description: FTP port number for uploading files to this server.
+              example: "21"
             uploadHost:
               type: string
               description: Hostname of the FTP upload server for this zone.
+              example: upload.example.com
       type: object
     OriginAuth:
       type: object
@@ -14735,18 +15346,24 @@ components:
           type: string
           enum: [Y]
           description: Enable IP access control (omit to disable)
+          example: "Y"
         policy:
           type: string
           enum: [Y, N]
           description: "Y = Block listed IPs, N = Allow only listed IPs"
+          example: "N"
         list:
           type: string
           description: Comma-separated IP addresses or CIDR ranges to block or allow
+          example: 203.0.113.10,10.0.0.0/8
         ips:
           type: string
           description: Comma-separated IPs excluded from IP access restrictions
+          example: ""
         active:
           type: string
+          description: Whether IP access control is currently active. Y means active, N means inactive.
+          example: "N"
     UserAgentSettings:
       type: object
       description: User-Agent string access control settings
@@ -14755,28 +15372,37 @@ components:
           type: string
           enum: [Y]
           description: Enable user agent control (omit to disable)
+          example: "Y"
         policy:
           type: string
           enum: [Y, N]
           description: "Y = Block listed user agents, N = Allow only listed user agents"
+          example: "N"
         list:
           type: string
           description: |
             Semicolon-separated (;;;) user agent strings.
             Use *wildcard* pattern for partial matching. Example: *Chrome*
+          example: "*Chrome*;;;*Firefox*"
         casesensitive:
           type: string
           enum: [Y]
           description: Enable case-sensitive matching
+          example: "N"
         ips:
           type: string
           description: Comma-separated IPs excluded from user agent restrictions
+          example: ""
         active:
           type: string
+          description: Whether user agent control is currently active. Y means active, N means inactive.
+          example: "N"
         listArr:
           type: array
           items:
             type: string
+          description: Array form of the user agent list entries.
+          example: ["*Chrome*", "*Firefox*"]
     cdnserviceList:
       type: object
       properties:
@@ -14785,39 +15411,51 @@ components:
           description: Array of relative API paths for purging zone cache.
           items:
             type: string
+          example: ["/dashboard/67890/zones/http/push/12345/purge"]
         purgeurl:
           type: string
           description: JSON-encoded array of purge URL paths.
+          example: "[\"\\/dashboard\\/67890\\/zones\\/http\\/push\\/12345\\/purge\"]"
         authtoken:
           type: string
           description: Base64-encoded authentication token for CDN service API calls.
+          example: c2FtcGxlLWF1dGh0b2tlbi1oZXJl
         infourl:
           type: string
           description: Endpoint URL to retrieve zone service metadata.
+          example: https://cdn-service.example.com/service.php/info/5/push/12345
         listurl:
           type: string
           description: Endpoint URL to list files in the zone.
+          example: https://cdn-service.example.com/service.php/list/5/push/12345
         rawlisturl:
           type: string
           description: Endpoint URL to retrieve raw file listing.
+          example: https://cdn-service.example.com/service.php/raw/list/5/push/12345
         transcodelisturl:
           type: string
           description: Endpoint URL to list transcoded files.
+          example: https://cdn-service.example.com/service.php/transcode/list/5/push/12345
         addurl:
           type: string
           description: Endpoint URL to add files to the zone.
+          example: https://cdn-service.example.com/service.php/add/5/push/12345
         editurl:
           type: string
           description: Endpoint URL to edit file metadata.
+          example: https://cdn-service.example.com/service.php/edit/5/push/12345
         deleteurl:
           type: string
           description: Endpoint URL to delete files from the zone.
+          example: https://cdn-service.example.com/service.php/delete/5/push/12345
         uploadurl:
           type: string
           description: Endpoint URL for direct file uploads.
+          example: https://cdn-service.example.com/upload.php
         playlisturl:
           type: string
           description: Endpoint URL to retrieve video playlists.
+          example: https://cdn-service.example.com/service.php/playlist
     s3detailsList:
       type: object
       properties:
@@ -14825,25 +15463,36 @@ components:
           type: integer
           description: Numeric zone ID this S3 credential set belongs to.
           format: int32
+          example: 12345
         type:
           type: string
           description: Zone type identifier, e.g. push or pull.
+          example: push
         projectid:
           type: string
           description: Primary S3 project identifier.
+          example: abc123def456789012345678abcdef12
         token:
           type: string
           description: Primary S3 authentication token.
+          example: sample-access-token
         projectid2:
           type: string
           description: Secondary S3 project identifier for backup storage.
+          example: def456abc789012345678901abcdef34
         token2:
           type: string
           description: Secondary S3 authentication token for backup storage.
+          example: sample-access-token
         active:
           type: string
+          description: Whether S3 integration is active. 1 means active, 0 means inactive.
+          example: "1"
         updated_at:
           type: string
           description: Timestamp of the most recent zone update (UTC).
+          example: "2024-06-01T08:00:00Z"
         last_modified:
           type: string
+          description: Timestamp of the last file modification in the S3 bucket.
+          example: ""
