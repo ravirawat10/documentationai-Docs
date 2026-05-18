@@ -47,39 +47,49 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   domains:
                     type: array
+                    description: List of domain verification records for this service account.
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          example: 2150
+                          description: Unique identifier of the domain verification record.
+                          example: 12345
                         serviceid:
                           type: integer
-                          example: 103
+                          description: Service account identifier that owns this record.
+                          example: 10001
                         domain:
                           type: string
-                          example: 5centscdndemo.ca
+                          description: Domain name registered for verification.
+                          example: example.com
                         validated:
                           type: string
+                          description: Y if the domain has been successfully verified via DNS TXT record, N otherwise.
                           enum:
                           - Y
                           - N
                           example: Y
                         txtrecord:
                           type: object
+                          description: DNS TXT record details required for domain ownership verification.
                           properties:
                             host:
                               type: string
-                              example: j78dpam2ndq5
+                              description: TXT record host/name prefix to use when creating the DNS TXT record.
+                              example: abc123def456
                             ttl:
                               type: integer
+                              description: Recommended TTL in seconds for the DNS TXT record.
                               example: 3600
                             value:
                               type: string
-                              example: g2qd3wjxay7a
+                              description: TXT record value to set in DNS for domain ownership proof.
+                              example: xyz789uvw012
     post:
       summary: Add a domain for verification
       operationId: storeDomainVerification
@@ -101,40 +111,51 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Domain added. Please add TXT DNS record for verification
                   domain:
                     type: object
+                    description: Newly created domain verification record with TXT record details.
                     properties:
                       id:
                         type: integer
-                        example: 3847
+                        description: Unique identifier of the domain verification record.
+                        example: 12345
                       serviceid:
                         type: integer
-                        example: 103
+                        description: Service account identifier that owns this record.
+                        example: 10001
                       domain:
                         type: string
-                        example: ravi.com
+                        description: Domain name registered for verification.
+                        example: example.com
                       validated:
                         type: string
+                        description: Y if the domain has been successfully verified, N if verification is pending.
                         enum:
                         - Y
                         - N
                         example: N
                       txtrecord:
                         type: object
+                        description: DNS TXT record details required for domain ownership verification.
                         properties:
                           host:
                             type: string
-                            example: zkpyw4ggalbe
+                            description: TXT record host/name prefix to use when creating the DNS TXT record.
+                            example: abc123def456
                           ttl:
                             type: integer
+                            description: Recommended TTL in seconds for the DNS TXT record.
                             example: 3600
                           value:
                             type: string
-                            example: 932y4jqqeyjv
+                            description: TXT record value to set in DNS for domain ownership proof.
+                            example: xyz789uvw012
   /account/dv/{dvid}:
     get:
       summary: Show domain verification details
@@ -153,37 +174,47 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   domain:
                     type: object
+                    description: Domain verification record with current validation status and TXT record details.
                     properties:
                       id:
                         type: integer
-                        example: 2150
+                        description: Unique identifier of the domain verification record.
+                        example: 12345
                       serviceid:
                         type: integer
-                        example: 103
+                        description: Service account identifier that owns this record.
+                        example: 10001
                       domain:
                         type: string
-                        example: 5centscdndemo.ca
+                        description: Domain name registered for verification.
+                        example: example.com
                       validated:
                         type: string
+                        description: Y if the domain has been successfully verified via DNS TXT record, N otherwise.
                         enum:
                         - Y
                         - N
                         example: Y
                       txtrecord:
                         type: object
+                        description: DNS TXT record details required for domain ownership verification.
                         properties:
                           host:
                             type: string
-                            example: j78dpam2ndq5
+                            description: TXT record host/name prefix to use when creating the DNS TXT record.
+                            example: abc123def456
                           ttl:
                             type: integer
+                            description: Recommended TTL in seconds for the DNS TXT record.
                             example: 3600
                           value:
                             type: string
-                            example: g2qd3wjxay7a
+                            description: TXT record value to set in DNS for domain ownership proof.
+                            example: xyz789uvw012
     post:
       summary: Delete a domain verification record
       operationId: destroyDomainVerification
@@ -214,9 +245,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Domain deleted
   /account/dv/{dvid}/validate:
     get:
@@ -236,9 +269,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome. Returns success if the TXT record was found, error otherwise.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the validation outcome. Present when result is error.
+                    example: Domain verified successfully.
   /account/ssl:
     get:
       summary: List SSL certificates
@@ -255,23 +291,26 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   certs:
                     type: array
+                    description: List of SSL certificates uploaded to this service account.
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          example: 374
+                          description: Unique identifier of the SSL certificate.
+                          example: 12345
                         name:
                           type: string
-                          example: Arti
+                          description: Friendly name assigned to the SSL certificate.
+                          example: sample-ssl-certificate
                         crt:
                           type: string
                           description: PEM-encoded X.509 certificate.
-                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END\
-                            \ CERTIFICATE-----"
+                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END CERTIFICATE-----"
                         key:
                           type: string
                           description: Always returned as redacted for security.
@@ -279,32 +318,37 @@ paths:
                         cabundle:
                           type: string
                           description: PEM-encoded CA bundle.
-                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END\
-                            \ CERTIFICATE-----"
+                          example: "-----BEGIN CERTIFICATE-----\r\n...\r\n-----END CERTIFICATE-----"
                         domain:
                           type: string
-                          example: wmncdn.com
+                          description: Common Name (CN) extracted from the certificate.
+                          example: example.com
                         sans:
                           type: array
+                          description: Subject Alternative Names extracted from the certificate.
                           items:
                             type: string
                           example:
-                          - wmncdn.com
-                          - www.wmncdn.com
+                          - example.com
+                          - www.example.com
                         expiry:
                           type: string
                           format: date
-                          example: '2024-02-21'
+                          description: Certificate expiration date.
+                          example: '2027-01-01'
                         installs:
                           type: integer
+                          description: Number of CDN zones or streams currently using this certificate.
                           example: 0
                         expired:
                           type: boolean
-                          example: true
+                          description: True when the certificate expiration date is in the past.
+                          example: false
                         validFrom:
                           type: string
                           format: date
-                          example: '2023-11-23'
+                          description: Certificate valid-from date.
+                          example: '2026-01-01'
   /account/ssl/new:
     post:
       summary: Upload a new SSL certificate
@@ -327,24 +371,28 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Operation completed successfully
                   cert:
                     type: object
+                    description: The newly uploaded SSL certificate record.
                     properties:
                       id:
                         type: integer
-                        example: 222
+                        description: Unique identifier of the SSL certificate.
+                        example: 12345
                       name:
                         type: string
-                        example: sss
+                        description: Friendly name assigned to the SSL certificate.
+                        example: sample-ssl-certificate
                       crt:
                         type: string
                         description: PEM-encoded X.509 certificate.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       key:
                         type: string
                         description: Always returned as redacted for security.
@@ -352,32 +400,37 @@ paths:
                       cabundle:
                         type: string
                         description: PEM-encoded CA bundle.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       domain:
                         type: string
-                        example: mydomain.com
+                        description: Common Name (CN) extracted from the certificate.
+                        example: example.com
                       sans:
                         type: array
+                        description: Subject Alternative Names extracted from the certificate.
                         items:
                           type: string
                         example:
-                        - mydomain.com
-                        - www.mydomain.com
+                        - example.com
+                        - www.example.com
                       expiry:
                         type: string
                         format: date
-                        example: '2024-03-12'
+                        description: Certificate expiration date.
+                        example: '2027-01-01'
                       installs:
                         type: integer
+                        description: Number of CDN zones or streams currently using this certificate.
                         example: 1
                       expired:
                         type: boolean
-                        example: true
+                        description: True when the certificate expiration date is in the past.
+                        example: false
                       validFrom:
                         type: string
                         format: date
-                        example: '2023-12-11'
+                        description: Certificate valid-from date.
+                        example: '2026-01-01'
   /account/ssl/{sslcertid}:
     get:
       summary: Show SSL certificate details
@@ -396,21 +449,24 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   cert:
                     type: object
+                    description: SSL certificate record with full metadata.
                     properties:
                       id:
                         type: integer
-                        example: 222
+                        description: Unique identifier of the SSL certificate.
+                        example: 12345
                       name:
                         type: string
-                        example: sss
+                        description: Friendly name assigned to the SSL certificate.
+                        example: sample-ssl-certificate
                       crt:
                         type: string
                         description: PEM-encoded X.509 certificate.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       key:
                         type: string
                         description: Always returned as redacted for security.
@@ -418,32 +474,37 @@ paths:
                       cabundle:
                         type: string
                         description: PEM-encoded CA bundle.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       domain:
                         type: string
-                        example: mydomain.com
+                        description: Common Name (CN) extracted from the certificate.
+                        example: example.com
                       sans:
                         type: array
+                        description: Subject Alternative Names extracted from the certificate.
                         items:
                           type: string
                         example:
-                        - mydomain.com
-                        - www.mydomain.com
+                        - example.com
+                        - www.example.com
                       expiry:
                         type: string
                         format: date
-                        example: '2024-03-12'
+                        description: Certificate expiration date.
+                        example: '2027-01-01'
                       installs:
                         type: integer
+                        description: Number of CDN zones or streams currently using this certificate.
                         example: 1
                       expired:
                         type: boolean
-                        example: true
+                        description: True when the certificate expiration date is in the past.
+                        example: false
                       validFrom:
                         type: string
                         format: date
-                        example: '2023-12-11'
+                        description: Certificate valid-from date.
+                        example: '2026-01-01'
     post:
       summary: Update an SSL certificate
       operationId: updateSSL
@@ -467,24 +528,28 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Update successful
                   cert:
                     type: object
+                    description: Updated SSL certificate record with full metadata.
                     properties:
                       id:
                         type: integer
-                        example: 222
+                        description: Unique identifier of the SSL certificate.
+                        example: 12345
                       name:
                         type: string
-                        example: sss
+                        description: Friendly name assigned to the SSL certificate.
+                        example: sample-ssl-certificate
                       crt:
                         type: string
                         description: PEM-encoded X.509 certificate.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       key:
                         type: string
                         description: Always returned as redacted for security.
@@ -492,32 +557,37 @@ paths:
                       cabundle:
                         type: string
                         description: PEM-encoded CA bundle.
-                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END\
-                          \ CERTIFICATE-----"
+                        example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
                       domain:
                         type: string
-                        example: mydomain.com
+                        description: Common Name (CN) extracted from the certificate.
+                        example: example.com
                       sans:
                         type: array
+                        description: Subject Alternative Names extracted from the certificate.
                         items:
                           type: string
                         example:
-                        - mydomain.com
-                        - www.mydomain.com
+                        - example.com
+                        - www.example.com
                       expiry:
                         type: string
                         format: date
-                        example: '2024-03-12'
+                        description: Certificate expiration date.
+                        example: '2027-01-01'
                       installs:
                         type: integer
+                        description: Number of CDN zones or streams currently using this certificate.
                         example: 1
                       expired:
                         type: boolean
-                        example: true
+                        description: True when the certificate expiration date is in the past.
+                        example: false
                       validFrom:
                         type: string
                         format: date
-                        example: '2023-12-11'
+                        description: Certificate valid-from date.
+                        example: '2026-01-01'
     delete:
       summary: Delete an SSL certificate
       operationId: destroySSL
@@ -548,10 +618,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
-                    example: SSL Certificate - Test Deleted
+                    description: Human-readable description of the operation outcome.
+                    example: SSL Certificate Deleted.
 
   /account/bwop:
     get:
@@ -569,9 +641,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   bwop:
                     type: string
+                    description: Current monthly bandwidth overage protection limit as a percentage of the plan's included bandwidth. Returns 0 if disabled.
                     example: '110'
     post:
       summary: Update Bandwidth Overage Protection limit
@@ -594,9 +668,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Bandwidth Overage Protection Updated
   /account/recharge:
     post:
@@ -620,9 +696,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: Bandwidth Auto Recharge Updated
   /account/api:
     get:
@@ -640,26 +718,33 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   apikeys:
                     type: array
+                    description: List of API keys for this service account.
                     items:
                       type: object
                       properties:
                         id:
                           type: integer
-                          example: 897
+                          description: Unique identifier of the API key.
+                          example: 12345
                         serviceid:
                           type: integer
-                          example: 103
+                          description: Service account identifier that owns this key.
+                          example: 10001
                         name:
                           type: string
-                          example: test
+                          description: Human-readable label for the API key.
+                          example: sample-api-key
                         description:
                           type: string
-                          example: testttt
+                          description: Optional description of the key's purpose.
+                          example: Used by the mobile app
                         permission:
                           type: array
+                          description: Set of CRUD permissions granted to this key.
                           items:
                             type: string
                             enum:
@@ -673,7 +758,8 @@ paths:
                           - delete
                         hash:
                           type: string
-                          example: b8786ced9a366895405fa28f66ae192c
+                          description: The actual API key token. Use as the X-API-Key header value in API v2 requests.
+                          example: sample-api-key-hash-value
   /account/api/new:
     post:
       summary: Create a new API key
@@ -729,13 +815,16 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: API Key Created
                   id:
                     type: integer
-                    example: 1143
+                    description: Unique identifier of the newly created API key.
+                    example: 12345
   /account/api/{apikeyid}:
     get:
       summary: Show API key details
@@ -754,24 +843,31 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   apikey:
                     type: object
+                    description: API key record with permissions and token details.
                     properties:
                       id:
                         type: integer
-                        example: 1143
+                        description: Unique identifier of the API key.
+                        example: 12345
                       serviceid:
                         type: integer
-                        example: 103
+                        description: Service account identifier that owns this key.
+                        example: 10001
                       name:
                         type: string
-                        example: Testing123
+                        description: Human-readable label for the API key.
+                        example: sample-api-key
                       description:
                         type: string
-                        example: Testtttt
+                        description: Optional description of the key's purpose.
+                        example: Used by the mobile app
                       permission:
                         type: array
+                        description: Set of CRUD permissions granted to this key.
                         items:
                           type: string
                           enum:
@@ -784,7 +880,8 @@ paths:
                         - create
                       hash:
                         type: string
-                        example: 34ae4bf346e1915bd38a1dee9103145a
+                        description: The actual API key token. Use as the X-API-Key header value in API v2 requests.
+                        example: sample-api-key-hash-value
     post:
       summary: Update an API key
       operationId: updateAPI
@@ -834,9 +931,11 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
+                    description: Human-readable description of the operation outcome.
                     example: API Key Updated
     delete:
       summary: Delete an API key
@@ -868,12 +967,12 @@ paths:
                 properties:
                   result:
                     type: string
+                    description: Operation outcome.
                     example: success
                   message:
                     type: string
-                    example: API Key - t2 Deleted
-
-
+                    description: Human-readable description of the operation outcome.
+                    example: API Key Deleted.
 
 components:
   securitySchemes:
@@ -887,18 +986,18 @@ components:
       name: sslcertid
       in: path
       required: true
-      description: Unique identifier of the SSL certificate record (dashboard).
+      description: Unique identifier of the SSL certificate record.
       schema:
         type: integer
-        example: 3
+        example: 12345
     dvId:
       name: dvid
       in: path
       required: true
-      description: Unique identifier of the domain verification record (dashboard).
+      description: Unique identifier of the domain verification record.
       schema:
         type: integer
-        example: 5
+        example: 12345
     apikeyId:
       name: apikeyid
       in: path
@@ -906,7 +1005,7 @@ components:
       description: Unique identifier of the API key record.
       schema:
         type: integer
-        example: 7
+        example: 12345
 
   schemas:
     DomainVerificationCreateRequest:
@@ -927,31 +1026,34 @@ components:
       properties:
         host:
           type: string
-          description: TXT record host / name (a 12-character hashid prefix).
-          example: a3b9f1c82d4e
+          description: TXT record host/name prefix to use when creating the DNS TXT record.
+          example: abc123def456
         ttl:
           type: integer
-          description: Recommended TTL in seconds.
+          description: Recommended TTL in seconds for the DNS TXT record.
           example: 3600
         value:
           type: string
-          description: TXT record value to set.
-          example: z1x2w3v4u5t6
+          description: TXT record value to set in DNS for domain ownership proof.
+          example: xyz789uvw012
     DomainVerificationResponse:
       type: object
       properties:
         id:
           type: integer
-          example: 5
+          description: Unique identifier of the domain verification record.
+          example: 12345
         serviceid:
           type: integer
-          example: 1234
+          description: Service account identifier that owns this record.
+          example: 10001
         domain:
           type: string
+          description: Domain name registered for verification.
           example: example.com
         validated:
           type: string
-          description: '''Y'' if the domain has been successfully verified, ''N'' otherwise.'
+          description: Y if the domain has been successfully verified via DNS TXT record, N otherwise.
           enum:
           - Y
           - N
@@ -963,13 +1065,14 @@ components:
       properties:
         result:
           type: string
+          description: Operation outcome. Returns success if the TXT record was found, error otherwise.
           enum:
           - success
           - error
           example: success
         msg:
           type: string
-          description: Human-readable error message (only present when result is error).
+          description: Human-readable error message. Only present when result is error.
           example: Record not found
     SSLCertCreateRequest:
       type: object
@@ -984,9 +1087,8 @@ components:
           example: PUT
         name:
           type: string
-          description: Friendly name for the certificate. If omitted, auto-generated
-            using the certificate CN, expiry date, and a timestamp.
-          example: my-wildcard-cert
+          description: Friendly name for the certificate. If omitted, auto-generated using the certificate CN, expiry date, and a timestamp.
+          example: sample-ssl-certificate
         crt:
           type: string
           description: PEM-encoded X.509 certificate. Required.
@@ -1005,16 +1107,14 @@ components:
         name:
           type: string
           description: Friendly name for the certificate.
-          example: my-wildcard-cert
+          example: sample-ssl-certificate
         crt:
           type: string
-          description: PEM-encoded X.509 certificate. Provide crt + key to replace
-            certificate material. Omitting both updates only the name.
+          description: PEM-encoded X.509 certificate. Provide crt and key together to replace certificate material. Omitting both updates only the name.
           example: YOUR_PEM_CERTIFICATE
         key:
           type: string
-          description: PEM-encoded private key. Required when replacing certificate
-            material.
+          description: PEM-encoded private key. Required when replacing certificate material.
           example: YOUR_PEM_PRIVATE_KEY
         cabundle:
           type: string
@@ -1025,20 +1125,24 @@ components:
       properties:
         id:
           type: integer
-          example: 3
+          description: Unique identifier of the SSL certificate.
+          example: 12345
         serviceid:
           type: integer
-          example: 1234
+          description: Service account identifier that owns this certificate.
+          example: 10001
         name:
           type: string
-          example: my-wildcard-cert
+          description: Friendly name assigned to the SSL certificate.
+          example: sample-ssl-certificate
         domain:
           type: string
           description: Common Name (CN) extracted from the certificate.
           example: '*.example.com'
         crt:
           type: string
-          description: PEM-encoded certificate.
+          description: PEM-encoded X.509 certificate.
+          example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
         key:
           type: string
           description: Always returned as redacted for security.
@@ -1046,18 +1150,19 @@ components:
         cabundle:
           type: string
           description: PEM-encoded CA bundle.
+          example: "-----BEGIN CERTIFICATE-----\r\nstring\r\n-----END CERTIFICATE-----"
         expiry:
           type: string
           format: date
           description: Certificate expiration date derived from the cert itself.
-          example: '2026-06-01'
+          example: '2027-01-01'
         expired:
           type: boolean
           description: True when the expiry date is in the past.
           example: false
         installs:
           type: integer
-          description: Number of CDN zones / streams currently using this cert.
+          description: Number of CDN zones or streams currently using this certificate.
           example: 2
         sans:
           type: array
@@ -1071,7 +1176,7 @@ components:
           type: string
           format: date
           description: Certificate valid-from date.
-          example: '2025-06-01'
+          example: '2026-01-01'
     BWOPRequest:
       type: object
       required:
@@ -1079,8 +1184,7 @@ components:
       properties:
         bwop:
           type: integer
-          description: Monthly bandwidth limit as a percentage of the plan's included
-            bandwidth. Valid values between 90 and 120 (inclusive). Use 0 to disable.
+          description: Monthly bandwidth limit as a percentage of the plan's included bandwidth. Valid values between 90 and 120 (inclusive). Use 0 to disable.
           minimum: 90
           maximum: 120
           multipleOf: 5
@@ -1092,8 +1196,7 @@ components:
       properties:
         autorecharge_at:
           type: integer
-          description: Percentage of monthly bandwidth at which an addon package is
-            auto-purchased. Set to 0 to disable auto recharge.
+          description: Percentage of monthly bandwidth at which an addon package is auto-purchased. Set to 0 to disable auto recharge.
           enum:
           - 0
           - 75
@@ -1102,8 +1205,7 @@ components:
           example: 85
         autorecharge_id:
           type: integer
-          description: WHMCS addon service ID for the bandwidth package to purchase.
-            Required when autorecharge_at is non-zero.
+          description: Addon service ID for the bandwidth package to auto-purchase. Required when autorecharge_at is non-zero.
           example: 42
     APIKeyCreateRequest:
       type: object
@@ -1121,8 +1223,7 @@ components:
           example: Used by the mobile app
         permission:
           type: array
-          description: Set of CRUD permissions granted to this key. At least one value
-            is required.
+          description: Set of CRUD permissions granted to this key. At least one value is required.
           items:
             type: string
             enum:
@@ -1165,16 +1266,19 @@ components:
       properties:
         id:
           type: integer
-          description: Auto-incremented primary key.
-          example: 7
+          description: Unique identifier of the API key.
+          example: 12345
         name:
           type: string
+          description: Human-readable label for the API key.
           example: My Application
         description:
           type: string
+          description: Optional description of the key's purpose.
           example: Used by the mobile app
         permission:
           type: array
+          description: Set of CRUD permissions granted to this key.
           items:
             type: string
             enum:
@@ -1187,10 +1291,9 @@ components:
           - update
         hash:
           type: string
-          description: The actual API key token (MD5 hash). Used as the Bearer token
-            in API v2 requests.
-          example: d41d8cd98f00b204e9800998ecf8427e
+          description: The actual API key token. Use as the X-API-Key header value in API v2 requests.
+          example: sample-api-key-hash-value
         serviceid:
           type: integer
-          description: WHMCS service ID that owns this key.
-          example: 1234
+          description: Service account identifier that owns this key.
+          example: 10001
