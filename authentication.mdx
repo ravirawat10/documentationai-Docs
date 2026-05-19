@@ -2,54 +2,159 @@
 title: Authentication (Sample)
 description: Sample guidance for authentication and OpenAPI usage.
 ---
+# Authentication
+
+The 5centsCDN API uses API key authentication. Every request must include your API key in the request header. No OAuth, no tokens, no sessions — just one header on every call.
+
 ## Overview
 
-This is sample content. Replace tokens, URLs, headers, and flows with your real authentication requirements.
+<Tabs>
+  <Tab title="How it works">
+    ```json
+    GET https://api.5centscdn.com/v2/zones
+    X-API-KEY: YOUR_API_KEY
+    ```
+  </Tab>
+
+  <Tab title="Get your API key">
+    <Steps>
+      <Step title="Step 1: Log in to your dashboard" title-type="p">
+        Go to <a href="http://app.5centscdn.com" target="_blank" rel="noopener noreferrer">app.5centscdn.com</a> and sign in to your account.
+      </Step>
+
+      <Step title="Step 2: Open API Keys" title-type="p">
+        Navigate to Settings → API Keys from the left sidebar.
+      </Step>
+
+      <Step title="Step 3: Copy or generate your key" title-type="p">
+        Copy your existing key or click Generate New Key. Store it safely — it will not be shown again.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Security rules">
+    <Callout kind="alert" collapsed="false">
+      Keep your key private. Your API key grants full access to your account. Never expose it&#x20;
+
+      in client-side code, public repositories, or browser requests.
+    </Callout>
+
+    - Include it on every request — there are no public endpoints
+
+    - Never commit it to Git — use environment variables instead
+
+    - Rotate immediately if you suspect it has been compromised
+
+    - One key = full account access — generate separate keys per environment
+  </Tab>
+</Tabs>
+
+## Making an authenticated request
+
+<Tabs>
+  <Tab title="cURL">
+    ```typescript
+    curl -X GET https://api.5centscdn.com/v2/zones \
+      -H "X-API-KEY: YOUR_API_KEY"
+    ```
+  </Tab>
+
+  <Tab title="JavaScript">
+    ```typescript
+    const response = await fetch('https://api.5centscdn.com/v2/zones', {
+      method: 'GET',
+      headers: {
+        'X-API-KEY': process.env.CDN_API_KEY
+      }
+    });
+    const data = await response.json();
+    ```
+  </Tab>
+
+  <Tab title="Python">
+    ```typescript
+    import requests
+
+    response = requests.get(
+        "https://api.5centscdn.com/v2/zones",
+        headers={"X-API-KEY": "YOUR_API_KEY"}
+    )
+    data = response.json()
+    ```
+  </Tab>
+
+  <Tab title="PHP">
+    ```typescript
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL            => 'https://api.5centscdn.com/v2/zones',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER     => ['X-API-KEY: YOUR_API_KEY']
+    ]);
+    $data = json_decode(curl_exec($ch), true);
+    curl_close($ch);
+    ```
+  </Tab>
+</Tabs>
+
+
+
+## Authentication errors
+
+<Tabs>
+  <Tab title="Missing key">
+    ```typescript
+    {
+      "status": "error",
+      "errors": [
+        {
+          "code": 401,
+          "message": "API key is required. Include X-API-KEY in your request header."
+        }
+      ]
+    }
+    ```
+  </Tab>
+
+  <Tab title="Invalid key">
+    ```typescript
+    {
+      "status": "error",
+      "errors": [
+        {
+          "code": 401,
+          "message": "Invalid API key. Check your key or generate a new one."
+        }
+      ]
+    }
+    ```
+  </Tab>
+</Tabs>
+
+| Code | Meaning                     | Fix                                                  |
+| ---- | --------------------------- | ---------------------------------------------------- |
+| 401  | Missing or invalid API key  | Check header name is X-API-KEY and value is correct  |
+| 403  | Valid key but no permission | Contact support — your account may have restrictions |
+
+
+
+## Best practices&#x20;
 
 <Callout kind="info" collapsed="false">
-  This site ships with placeholder content for authentication. Update this page and `openapi.yaml` to match your real API before sharing with users.
+  Use environment variables
 </Callout>
 
-This API uses OpenAPI to describe endpoints, parameters, and responses. The reference is generated from `openapi.yaml`, so keep that file up to date as your API evolves.
+```typescript
+Never hardcode your API key. Store it as an environment variable.
 
-## Authentication
-
-```bash
-curl https://api.example.com/v1/example \
-  -H "Authorization: Bearer YOUR_TOKEN"
+CDN_API_KEY=your_actual_key_here
 ```
 
-<ParamField header="Authorization" param-type="string" required="true" deprecated="false" show-location="true">
-  `Bearer YOUR_TOKEN`
-</ParamField>
+- Separate keys per environment — dev, staging, and production
 
-## Keep OpenAPI in sync
+- Rotate regularly — regenerate after any team member leaves
 
-Define your authentication and base settings in `openapi.yaml` so the API Reference stays accurate and consistent.
+- Monitor usage — check dashboard for unexpected API activity
 
-At a minimum, you should:
-
-- Define one or more security schemes that describe how clients authenticate (for example, bearer token, API key in a header, or other scheme).
-
-- Reference those security schemes on operations that require authentication so they are clearly marked as secured.
-
-- Set the correct base URL and any required global headers (for example, versioning or tenant headers) so example requests are copy-pasteable.
-
-When your real authentication flow changes (for example, new header names, token formats, or additional requirements), update `openapi.yaml`. The generated API Reference will then reflect your current auth model without needing to edit each endpoint page by hand.
-
-## Using the API reference
-
-Use the API Reference to explore endpoints, required parameters, and example responses. When you change authentication headers or base URLs, update `openapi.yaml` so the generated reference matches what your clients should use.
-
-## Common mistakes
-
-<Expandable title="Why am I getting a 401?" default-open="false">
-  Verify that:
-
-  - The token is valid and not expired.
-
-  - The token is sent in the `Authorization` header.
-
-  - The header value includes the `Bearer` prefix and a space before the token.
-</Expandable>
+- Least privilege — use sub-accounts to limit key scope if available
 
