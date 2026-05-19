@@ -20,12 +20,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": [
-              {
-                "title": "Introduction",
-                "path": "introduction"
-              }
-            ]
+            "pages": []
           },
           {
             "group": "Live Stream",
