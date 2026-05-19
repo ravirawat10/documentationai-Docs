@@ -28,18 +28,16 @@ https://api.5centscdn.com/v2
 
 ## API modules
 
-| Module         | Description                          | Base Path                   |
-| -------------- | ------------------------------------ | --------------------------- |
-| Zones          | HTTP and VOD delivery zones          | `/zones`                    |
-| Live Streams   | Push and pull live stream management | `/streams`                  |
-| Edge Rules     | Path-based routing and caching rules | `/zones/{zoneId}/edgerules` |
-| Video Encoding | Encoding jobs and presets            | `/encoding`                 |
-| SimpleDNS      | DNS zone and record management       | `/dns`                      |
-| Cloud Storage  | File upload, list, and delete        | `/storage`                  |
-| Analytics      | Traffic and bandwidth reports        | `/analytics`                |
-| Video Player   | Player config and embed              | `/player`                   |
-| Accounts       | Settings, sub-users, and billing     | `/account`                  |
-
+| Module | Description | Base Path |
+|--------|-------------|-----------|
+| Live Streams | Push and pull live stream management | `/streams` |
+| Zones | HTTP and VOD delivery zones | `/zones` |
+| Video Encoding | Encoding jobs and presets | `/transcoding` |
+| SimpleDNS | DNS zone and record management | `/dns` |
+| VideoPlayer & Analytics | Player config, embed, and analytics | `/players/5centscdn/analytics` |
+| Accounts | Settings, sub-users, and billing | `/account` |
+| Analytics | Traffic and bandwidth reports | `/analytics/traffic` |
+| Edge Rules | Path-based routing and caching rules | `/zones/http/pull/{zoneId}/rules` |
 ---
 
 ## Response format
