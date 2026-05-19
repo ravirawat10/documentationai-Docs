@@ -21,13 +21,8 @@
           {
             "group": "Overview",
             "icon": "file-text",
-            "pages": [
-              {
-                "title": "Authentication",
-                "path": "authentication",
-                "icon": "lock"
-              }
-            ]
+            "pages": [],
+            "openapi": "api-reference/5centscdn-api-overview.yaml"
           },
           {
             "group": "Live Stream",
