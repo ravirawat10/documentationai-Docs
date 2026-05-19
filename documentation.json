@@ -22,6 +22,14 @@
             "group": "Overview",
             "pages": [
               {
+                "title": "Introduction",
+                "path": "introduction"
+              },
+              {
+                "title": "Quickstart",
+                "path": "quickstart"
+              },
+              {
                 "title": "Authentication",
                 "path": "authentication"
               }

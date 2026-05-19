@@ -1,10 +1,103 @@
-
-
+---
+title: Introduction
+description: >-
+  Welcome to the 5centsCDN API — a complete RESTful interface for managing your
+  CDN infrastructure.
+---
 # Introduction
 
-/
+5centsCDN gives you a powerful, simple API to programmatically manage your entire CDN infrastructure — delivery zones, live streams, video encoding, storage, DNS, and analytics — all from one place.
 
+---
 
+## What you can do
 
-#
+---
+
+## Base URL
+
+All API requests go to a single base URL. The version prefix `/v2` is required on every request.
+
+```
+https://api.5centscdn.com/v2
+```
+
+<Callout kind="note" collapsed="false">
+  All requests must be made over HTTPS. HTTP requests are rejected automatically.
+</Callout>
+
+---
+
+## API modules
+
+| Module         | Description                          | Base Path                   |
+| -------------- | ------------------------------------ | --------------------------- |
+| Zones          | HTTP and VOD delivery zones          | `/zones`                    |
+| Live Streams   | Push and pull live stream management | `/streams`                  |
+| Edge Rules     | Path-based routing and caching rules | `/zones/{zoneId}/edgerules` |
+| Video Encoding | Encoding jobs and presets            | `/encoding`                 |
+| SimpleDNS      | DNS zone and record management       | `/dns`                      |
+| Cloud Storage  | File upload, list, and delete        | `/storage`                  |
+| Analytics      | Traffic and bandwidth reports        | `/analytics`                |
+| Video Player   | Player config and embed              | `/player`                   |
+| Accounts       | Settings, sub-users, and billing     | `/account`                  |
+
+---
+
+## Response format
+
+Every response is JSON with a consistent envelope.
+
+<Tabs>
+  <Tab title="Success">
+    ```json
+    {
+      "status": "success",
+      "data": {
+        "id": 12345,
+        "name": "my-zone",
+        "status": "active"
+      }
+    }
+    ```
+  </Tab>
+
+  <Tab title="Error">
+    ```json
+    {
+      "status": "error",
+      "errors": [
+        {
+          "code": 401,
+          "message": "Invalid or missing API key."
+        }
+      ]
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## HTTP status codes
+
+| Code  | Status            | Meaning                               |
+| ----- | ----------------- | ------------------------------------- |
+| `200` | OK                | Request succeeded                     |
+| `201` | Created           | Resource created successfully         |
+| `400` | Bad Request       | Invalid input — check your parameters |
+| `401` | Unauthorized      | API key missing or invalid            |
+| `403` | Forbidden         | Insufficient account permissions      |
+| `404` | Not Found         | Resource does not exist               |
+| `429` | Too Many Requests | Rate limit exceeded — slow down       |
+| `500` | Server Error      | Unexpected error — contact support    |
+
+---
+
+## Rate limiting
+
+<Callout kind="note" collapsed="false">
+  Each API key is limited to **120 requests per minute**. Exceeding this returns HTTP `429`.
+  Implement exponential backoff in automated scripts to handle this gracefully.
+</Callout>
 

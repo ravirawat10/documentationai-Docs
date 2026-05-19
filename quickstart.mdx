@@ -1,58 +1,129 @@
 ---
 title: Quickstart
-description: Minimal steps to customize this sample starter kit.
+description: Make your first 5centsCDN API call in under 5 minutes.
 ---
-## Overview
+# Quickstart
 
-<Callout kind="alert" collapsed="false">
-  This site ships with placeholder content. Use this quickstart to replace it with your real product docs.
-</Callout>
+Get up and running with the 5centsCDN API in minutes. By the end of this guide you will have made your first authenticated API call and listed your CDN zones.
 
-## 1. Update a page
+---
+
+## Before you begin
+
+You need two things:
+
+---
+
+## Step-by-step
 
 <Steps>
-  <Step title="Edit introduction" icon="edit" title-type="p">
-    Replace the sample introduction with a concise overview of your product and the key actions you want new users to take first.
+  <Step title="Get your API key" title-type="p">
+    Log in to your dashboard → **Settings** → **API Keys** → copy your key.
+
+    <Callout kind="note" collapsed="false">
+      Never paste your API key into public code, browser consoles, or Git repositories.
+    </Callout>
   </Step>
 
-  <Step title="Preview your change" icon="monitor" title-type="p">
-    Use your dashboard board editor to confirm the updated introduction looks and reads as expected.
+  <Step title="Verify your key works" title-type="p">
+    Make a test call to the account endpoint. A `200` response means your key is valid.
+
+    <Tabs>
+      <Tab title="cURL">
+        ```bash
+        curl -X GET https://api.5centscdn.com/v2/account \
+          -H "X-API-KEY: YOUR_API_KEY"
+        ```
+      </Tab>
+
+      <Tab title="JavaScript">
+        ```javascript
+        const res = await fetch('https://api.5centscdn.com/v2/account', {
+          headers: { 'X-API-KEY': 'YOUR_API_KEY' }
+        });
+        const data = await res.json();
+        console.log(data);
+        ```
+      </Tab>
+
+      <Tab title="Python">
+        ```python
+        import requests
+
+        r = requests.get(
+          'https://api.5centscdn.com/v2/account',
+          headers={'X-API-KEY': 'YOUR_API_KEY'}
+        )
+        print(r.json())
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="List your zones" title-type="p">
+    Fetch all CDN zones on your account.
+
+    <Tabs>
+      <Tab title="cURL">
+        ```bash
+        curl -X GET https://api.5centscdn.com/v2/zones \
+          -H "X-API-KEY: YOUR_API_KEY"
+        ```
+      </Tab>
+
+      <Tab title="JavaScript">
+        ```javascript
+        const res = await fetch('https://api.5centscdn.com/v2/zones', {
+          headers: { 'X-API-KEY': 'YOUR_API_KEY' }
+        });
+        const data = await res.json();
+        console.log(data);
+        ```
+      </Tab>
+
+      <Tab title="Python">
+        ```python
+        import requests
+
+        r = requests.get(
+          'https://api.5centscdn.com/v2/zones',
+          headers={'X-API-KEY': 'YOUR_API_KEY'}
+        )
+        print(r.json())
+        ```
+      </Tab>
+    </Tabs>
+
+    **Expected response:**
+
+    ```json
+    {
+      "status": "success",
+      "data": [
+        {
+          "id": 12345,
+          "name": "my-zone",
+          "type": "HTTP",
+          "status": "active"
+        }
+      ]
+    }
+    ```
+  </Step>
+
+  <Step title="Explore the API reference" title-type="p">
+    You are ready. Browse the full reference in the sidebar — every endpoint includes request/response schemas and a live playground to test calls directly.
   </Step>
 </Steps>
 
-## 2. Add a new page
+---
 
-<Steps>
-  <Step title="Add a page" icon="file-text" title-type="p">
-    Create a new `page` by clicking on the + button from the left navigation bar of dashboard. If you are using git, create the .mdx file and add to navigation bar using documentation.json
-  </Step>
-</Steps>
+## What's next
 
-## Example onboarding flow (replace with yours)
-
-1. Sign up for an account and verify your email.
-
-2. Create your first workspace, project, or environment.
-
-3. Add one integration or data source to connect your existing tools.
-
-4. Complete a guided action (for example, run your first job or publish your first resource).
-
-5. Invite a teammate and assign a basic role or permission.
-
-## 3. Connect API Reference (optional)
-
-If you have an API, replace `openapi.yaml` with your real OpenAPI file. If you do not need an API reference, remove that tab either from dashboard or  `documentation.json`.
-
-## Next steps
-
-<Columns cols="2">
-  <Card title="Core Concepts" href="/concepts" icon="layers" horizontal="false">
-    Keep the mental model simple and easy to scan.
-  </Card>
-
-  <Card title="Authentication" href="/authentication" icon="lock" horizontal="false">
-    Add your real auth flows and security notes.
-  </Card>
-</Columns>
+| Guide                                       | Description                                 |
+| ------------------------------------------- | ------------------------------------------- |
+| [Authentication](/authentication)           | How API key auth works and best practices   |
+| [Zones](/api-reference/zones)               | Create and configure delivery zones         |
+| [Live Streams](/api-reference/live-streams) | Set up live stream ingest and playback      |
+| [Edge Rules](/api-reference/edge-rules)     | Define path-based routing and caching rules |
 
