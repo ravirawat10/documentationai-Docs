@@ -20,7 +20,16 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": []
+            "pages": [
+              {
+                "title": "Introduction",
+                "path": "introduction"
+              },
+              {
+                "title": "Authentication",
+                "path": "authentication"
+              }
+            ]
           },
           {
             "group": "Live Stream",
@@ -62,25 +71,15 @@
             "group": "Edge Rules",
             "pages": [],
             "openapi": "api-reference/Edge-Rules-API.yaml"
-          },
-          {
-            "group": "Sample Endpoints",
-            "openapi": "openapi.yaml",
-            "pages": [
-              {
-                "title": "Live",
-                "path": "live"
-              }
-            ]
           }
         ]
       }
     ]
   },
+  "initialRoute": "introduction",
   "logo-dark": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
   "logo-light": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
   "favicon": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875329738-h20psk07n97-favicon.png?q=85&fm=auto&auto=compress%2Cformat",
-  "initialRoute": "authentication",
   "navbar": {
     "actions": {
       "primary": {
