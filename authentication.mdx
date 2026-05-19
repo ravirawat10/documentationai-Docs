@@ -2,9 +2,6 @@
 title: Authentication
 description: Authenticate every 5centsCDN API request using your API key.
 ---
-
-# Authentication
-
 The 5centsCDN API uses **API key authentication**. Include your key in every request header — no OAuth, no tokens, no sessions.
 
 ---
@@ -23,13 +20,15 @@ X-API-KEY: YOUR_API_KEY
 ## Get your API key
 
 <Steps>
-  <Step title="Log in to your dashboard">
+  <Step title="Log in to your dashboard" title-type="p">
     Go to [app.5centscdn.com](https://app.5centscdn.com) and sign in.
   </Step>
-  <Step title="Open API Keys">
+
+  <Step title="Open API Keys" title-type="p">
     Navigate to **Settings → API Keys** from the left sidebar.
   </Step>
-  <Step title="Copy or generate your key">
+
+  <Step title="Copy or generate your key" title-type="p">
     Copy your existing key or click **Generate New Key**. Store it safely — it will not be shown again after creation.
   </Step>
 </Steps>
@@ -45,6 +44,7 @@ X-API-KEY: YOUR_API_KEY
       -H "X-API-KEY: YOUR_API_KEY"
     ```
   </Tab>
+
   <Tab title="JavaScript">
     ```javascript
     const response = await fetch('https://api.5centscdn.com/v2/zones', {
@@ -57,6 +57,7 @@ X-API-KEY: YOUR_API_KEY
     const data = await response.json();
     ```
   </Tab>
+
   <Tab title="Python">
     ```python
     import requests
@@ -69,6 +70,7 @@ X-API-KEY: YOUR_API_KEY
     data = response.json()
     ```
   </Tab>
+
   <Tab title="PHP">
     ```php
     $ch = curl_init();
@@ -101,6 +103,7 @@ X-API-KEY: YOUR_API_KEY
     }
     ```
   </Tab>
+
   <Tab title="Invalid key — 401">
     ```json
     {
@@ -114,6 +117,7 @@ X-API-KEY: YOUR_API_KEY
     }
     ```
   </Tab>
+
   <Tab title="No permission — 403">
     ```json
     {
@@ -129,20 +133,20 @@ X-API-KEY: YOUR_API_KEY
   </Tab>
 </Tabs>
 
-| Code | Meaning | Fix |
-|------|---------|-----|
-| `401` | Missing or invalid API key | Check that the header name is `X-API-KEY` and the value is correct |
-| `403` | Valid key, insufficient permissions | Contact support — your account may have restrictions |
+| Code  | Meaning                             | Fix                                                                |
+| ----- | ----------------------------------- | ------------------------------------------------------------------ |
+| `401` | Missing or invalid API key          | Check that the header name is `X-API-KEY` and the value is correct |
+| `403` | Valid key, insufficient permissions | Contact support — your account may have restrictions               |
 
 ---
 
 ## Security best practices
 
-<Callout type="warning" title="Never expose your API key">
+<Callout kind="note" collapsed="false">
   Your key grants full access to your account. Keep it out of client-side code, public repos, and browser requests.
 </Callout>
 
-<Callout type="info" title="Use environment variables">
+<Callout kind="note" collapsed="false">
   Store your key as an environment variable and reference it in code — never hardcode it.
 
   ```bash
@@ -152,6 +156,10 @@ X-API-KEY: YOUR_API_KEY
 </Callout>
 
 - **Separate keys per environment** — use different keys for dev, staging, and production
+
 - **Rotate regularly** — regenerate after any team member with access leaves
+
 - **Monitor usage** — check your dashboard for unexpected API activity
+
 - **Rotate immediately** if you suspect your key has been compromised
+
