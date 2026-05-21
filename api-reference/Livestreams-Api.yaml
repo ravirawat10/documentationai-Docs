@@ -71,7 +71,7 @@ paths:
     get:
       tags:
       - Push Streams
-      summary: Stream
+      summary: List Streams
       description: push list
       operationId: streamsPushList
       parameters:
@@ -1343,7 +1343,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -1474,9 +1474,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: false
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -2033,7 +2036,7 @@ paths:
       tags:
       - Push Streams
       summary: Update Source
-      description: Update the source of a Push stream
+      description: Change the ingest source region for a Push stream. Use the server field to specify one or more source region server IDs. Multiple server IDs can be provided as comma-separated values.
       operationId: updatesourceStreamsPush
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
@@ -3550,7 +3553,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: N
                 list:
                   type: array
@@ -4291,11 +4294,11 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
                   example: D
                 list:
                   type: string
-                  description: Comma-separated list of allowed or blocked entries.
+                  description: The generated secure token used to sign and validate protected URLs.
                   example: 9fd379c72062e891
                 timeout:
                   type: integer
@@ -4303,11 +4306,11 @@ paths:
                   example: 3600
                 session:
                   type: string
-                  description: Session limit. 0 means unlimited concurrent sessions.
+                  description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
                   example: '0'
                 keyip:
                   type: boolean
-                  description: Bind the secure token to the requester IP address. N means disabled.
+                  description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
                   example: false
                 ips:
                   type: string
@@ -8736,7 +8739,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -8759,7 +8762,7 @@ paths:
     get:
       tags:
       - Push Streams
-      summary: Update platform
+      summary: Restart Platform
       description: Restart the platform of a push stream
       operationId: restartplatformStreamsPush
       parameters:
@@ -8786,7 +8789,7 @@ paths:
     post:
       tags:
       - Push Streams
-      summary: Update platform
+      summary: Update Platform Status
       description: Status the platform of a push stream
       operationId: platformstatusStreamsPush
       parameters:
@@ -8800,7 +8803,10 @@ paths:
               properties:
                 disabled:
                   type: integer
-                  description: Set to true to disable the stream, false to enable it.
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the platform, 0 to enable it.
                   example: 0
       responses:
         '200':
@@ -8817,13 +8823,13 @@ paths:
                   message:
                     type: string
                     description: Human-readable message describing the result.
-                    example: Platform enabled
+                    example: Platform disabled
       deprecated: false
   /streams/restream:
     get:
       tags:
       - Pull Streams
-      summary: Stream
+      summary: List Streams
       description: pull streams list
       operationId: ListPullStreams
       parameters:
@@ -9655,7 +9661,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 name:
                   type: string
@@ -12108,7 +12114,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -13158,7 +13164,7 @@ paths:
                   example: N
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: N
                 list:
                   type: string
@@ -13977,11 +13983,11 @@ paths:
                   example: false
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
                   example: D
                 list:
                   type: string
-                  description: Comma-separated list of allowed or blocked entries.
+                  description: The generated secure token used to sign and validate protected URLs.
                   example: e4c2c4ed2d921dbe
                 timeout:
                   type: integer
@@ -13989,11 +13995,11 @@ paths:
                   example: 7113
                 session:
                   type: string
-                  description: Session limit. 0 means unlimited concurrent sessions.
+                  description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
                   example: '0'
                 keyip:
                   type: boolean
-                  description: Bind the secure token to the requester IP address. N means disabled.
+                  description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
                   example: true
                 ips:
                   type: string
@@ -14807,7 +14813,7 @@ paths:
                   example: N
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: N
                 list:
                   type: array
@@ -17191,6 +17197,607 @@ paths:
                         description: Ad insertion configuration for the stream, or null if not configured.
                         example:
       deprecated: false
+  /streams/restream/{streamid}/status:
+    post:
+      tags:
+      - Pull Streams
+      summary: Update status of stream
+      description: Update status of stream
+      operationId: statusStreamsRestream
+      parameters:
+      - $ref: '#/components/parameters/streamIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                disabled:
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Updated
+                  stream:
+                    type: object
+                    description: Stream object containing configuration and status details.
+                    properties:
+                      monitoring_id:
+                        nullable: true
+                        description: Unique monitoring identifier for the stream.
+                        example:
+                      type:
+                        type: string
+                        description: Type identifier for this stream or object.
+                        example: restream
+                      id:
+                        type: integer
+                        description: Unique numeric identifier.
+                        example: 51689
+                      serviceid:
+                        type: integer
+                        description: Unique identifier of the service this stream belongs to.
+                        example: 103
+                      name:
+                        type: string
+                        description: Name of the stream.
+                        example: dnscjl/dsmlkask
+                      codec:
+                        type: string
+                        description: Video codec used for the stream.
+                        example: h264
+                      ingests:
+                        type: array
+                        description: List of active ingest connection details for each server.
+                        items:
+                          type: array
+                          items:
+                            type: string
+                        example:
+                        - - RTMP
+                        - - RTMP
+                      protocols:
+                        type: array
+                        description: Supported streaming protocols for each server.
+                        items:
+                          type: array
+                          items:
+                            type: string
+                        example:
+                        - - HLS
+                          - RTMP
+                          - RTSP
+                        - - HLS
+                          - RTMP
+                          - RTSP
+                      parentid:
+                        nullable: true
+                        description: Identifier of the parent stream, if this is a child stream.
+                        example:
+                      server:
+                        type: string
+                        description: Server ID or identifier assigned to the stream.
+                        example: '2'
+                      backup:
+                        type: string
+                        description: Backup server ID for failover.
+                        example: ''
+                      dedicatedLTC:
+                        type: string
+                        description: Whether a dedicated live transcoding server is allocated for this stream.
+                        example: '0'
+                      hasAdvancedFeatures:
+                        type: string
+                        description: Whether advanced features are enabled for this stream.
+                        example: '0'
+                      monitoring_triggers:
+                        nullable: true
+                        description: Monitoring alert trigger configuration for the stream.
+                        example:
+                      draft:
+                        type: string
+                        description: Draft status flag. 0 means published; 1 means unpublished draft.
+                        example: '0'
+                      disabled:
+                        type: string
+                        description: Disabled flag. 0 means active; 1 means disabled.
+                        example: '1'
+                      created_at:
+                        type: string
+                        description: Timestamp when the stream was created.
+                        example: '2026-01-01 00:00:00'
+                      updated_at:
+                        type: string
+                        description: Timestamp when the stream was last updated.
+                        example: '2026-01-01 00:00:00'
+                      lastseen_at:
+                        type: boolean
+                        description: Timestamp when the stream was last detected as active.
+                        example: false
+                      deleted:
+                        nullable: true
+                        description: Deletion timestamp, or null if the stream is not deleted.
+                        example:
+                      ingestsLock:
+                        type: integer
+                        description: Whether the ingest endpoint list is locked from editing.
+                        example: 0
+                      protocolsLock:
+                        type: integer
+                        description: Whether the supported protocol list is locked from editing.
+                        example: 0
+                      status:
+                        type: string
+                        description: Current deployment or operational status of the stream.
+                        example: Deleted
+                      has:
+                        type: object
+                        description: Flags indicating which streaming protocols are active.
+                        properties:
+                          rtmp:
+                            type: integer
+                            description: Whether RTMP streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 1
+                          rtsp:
+                            type: integer
+                            description: Whether RTSP streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 1
+                          hls:
+                            type: integer
+                            description: Whether HLS streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 1
+                          dash:
+                            type: integer
+                            description: Whether DASH streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 0
+                          rtmpauth:
+                            type: boolean
+                            description: Whether RTMP publish authentication is required.
+                            example: true
+                      parts:
+                        type: object
+                        description: Stream name components.
+                        properties:
+                          pp:
+                            type: string
+                            description: Stream name prefix (part 1, before the slash).
+                            example: dnscjl
+                          sn:
+                            type: string
+                            description: Stream name suffix (part 2, after the slash).
+                            example: dsmlkask
+                          full:
+                            type: string
+                            description: Combined full stream name without the slash separator.
+                            example: dnscjldsmlkask
+                      restream:
+                        type: object
+                        description: Restream platform configuration object.
+                        properties:
+                          type:
+                            type: string
+                            description: Type identifier for this stream or object.
+                            example: mediaserver
+                          mode:
+                            type: string
+                            description: Operating mode for the configuration.
+                            example: http
+                          urls:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - https://www.5centscdn.net/dashboard/103/streams/pull/51838
+                            - https://www.5centscdn.net/dashboard/103/streams/pull/51838ttt
+                          staticip:
+                            type: string
+                            description: Static IP address associated with this server.
+                            example: N
+                          audiofix:
+                            type: string
+                            example: N
+                          server:
+                            type: object
+                            description: Server ID or identifier assigned to the stream.
+                            properties:
+                              country:
+                                type: string
+                                description: Geographic region of the ingest server.
+                                example: Europe
+                      playbackurls:
+                        type: object
+                        description: Playback URL set for all supported protocols and player types.
+                        properties:
+                          scheme:
+                            type: string
+                            description: URL scheme used for playback.
+                            example: https
+                          url_prefix:
+                            type: string
+                            description: Base CDN hostname URL used as a prefix for playback URLs.
+                            example: https://stream-abc12-hls-live.stream.example.com
+                          rtmp:
+                            type: string
+                            description: RTMP playback or destination URL.
+                            example: rtmp://rtmp.stream.example.com:1935/dnscjl/dsmlkask
+                          rtsp:
+                            type: string
+                            description: RTSP playback URL.
+                            example: rtsp://rtsp.stream.example.com:554/dnscjl/dsmlkask
+                          hlsManifest:
+                            type: string
+                            description: HLS manifest filename.
+                            example: playlist.m3u8
+                          dashManifest:
+                            type: string
+                            description: DASH manifest filename.
+                            example: manifest.mpd
+                          hls:
+                            type: string
+                            description: HLS playback or player iframe URL.
+                            example: https://stream-abc12-hls-live.stream.example.com/dnscjl/dsmlkask.stream/playlist.m3u8
+                          dash:
+                            type: string
+                            description: DASH playback or player iframe URL.
+                            example: https://stream-abc12-hls-live.stream.example.com/dnscjl/dsmlkask.stream/manifest.mpd
+                          players:
+                            type: object
+                            description: Embedded player iframe URL set for supported player types.
+                            properties:
+                              flowplayer:
+                                type: object
+                                description: Flowplayer iframe URL information.
+                                properties:
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ''
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/flowplayer/hls/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/flowplayer/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                              videojs:
+                                type: object
+                                description: Video.js player iframe URL information.
+                                properties:
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ''
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/videojs/hls/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/videojs/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                              own:
+                                type: object
+                                description: Native stream player iframe URL information.
+                                properties:
+                                  hashes:
+                                    type: object
+                                    description: Map of CDN hostname to stream hashes and playback URLs.
+                                    properties:
+                                      stream-abc12-hls-live.stream.example.com:
+                                        type: object
+                                        properties:
+                                          hash:
+                                            type: string
+                                            description: Short hash or slug used in stream URLs.
+                                            example: ky9u2xuondwa7gq9
+                                          hls:
+                                            type: string
+                                            description: HLS playback or player iframe URL.
+                                            example: https://stream-abc12-hls-live.stream.example.com/dnscjl/dsmlkask.stream/playlist.m3u8
+                                          base64:
+                                            type: string
+                                            description: Base64-encoded HLS playback URL for use with iframe players.
+                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                                          dash:
+                                            type: string
+                                            description: DASH playback or player iframe URL.
+                                            example: https://stream-abc12-hls-live.stream.example.com/dnscjl/dsmlkask.stream/manifest.mpd
+                                          base64dash:
+                                            type: string
+                                            description: Base64-encoded DASH playback URL for use with iframe players.
+                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ?showcv=true&title=dnscjl/dsmlkask
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/player/hls/skin1/ky9u2xuondwa7gq9/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/player/hls/skin1/ky9u2xuondwa7gq9/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=dnscjl/dsmlkask
+                                  dash:
+                                    type: string
+                                    description: DASH playback or player iframe URL.
+                                    example: https://cdn.example.com/player/dash/skin1/ky9u2xuondwa7gq9/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=dnscjl/dsmlkask
+                          tokenized:
+                            nullable: true
+                            description: Tokenized playback URL configuration, or null if disabled.
+                            example:
+                      platformsCount:
+                        type: integer
+                        description: Number of external restreaming platforms configured.
+                        example: 0
+                      ssl_enabled:
+                        type: boolean
+                        description: Whether HTTPS/SSL is enabled for playback.
+                        example: true
+                      hash:
+                        type: string
+                        description: Short hash or slug used in stream URLs.
+                        example: dsmlkask.stream
+                      ndvr:
+                        type: object
+                        description: Network DVR (nDVR) rewind configuration for the stream.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          retention:
+                            type: string
+                            description: Retention period in days (record) or minutes (nDVR).
+                            example: '5'
+                      securetoken:
+                        type: object
+                        description: Secure token URL signing configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: D
+                          keyip:
+                            type: string
+                            description: Whether the token is bound to the viewer IP address.
+                            example: N
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          timeout:
+                            type: integer
+                            description: Token expiry time in seconds.
+                            example: 3600
+                          session:
+                            type: string
+                            description: Session-based token mode flag.
+                            example: '0'
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          dirs:
+                            nullable: true
+                            description: URL directory paths restricted by this policy.
+                            example:
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      record:
+                        type: object
+                        description: Recording (DVR) configuration for the stream.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          retention:
+                            type: string
+                            description: Retention period in days (record) or minutes (nDVR).
+                            example: '3'
+                          stream:
+                            type: object
+                            description: Stream object containing configuration and status details.
+                            properties:
+                              id:
+                                type: integer
+                                description: Unique numeric identifier.
+                                example: 51690
+                              type:
+                                type: string
+                                description: Type identifier for this stream or object.
+                                example: record
+                      domainlock:
+                        type: object
+                        description: Domain lock (hotlink protection) configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: Y
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: example.com,docs.example.com
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          noreferer:
+                            type: string
+                            description: Whether to allow playback requests with no Referer header.
+                            example: N
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      geoblock:
+                        type: object
+                        description: Geoblocking access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: N
+                          list:
+                            type: array
+                            description: Comma-separated list of allowed or blocked values.
+                            items:
+                              type: string
+                            example:
+                            - ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      ipaccess:
+                        type: object
+                        description: IP address access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: N
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      useragent:
+                        type: object
+                        description: User-agent based access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: Y
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          casesensitive:
+                            type: string
+                            description: Whether user-agent pattern matching is case-sensitive.
+                            example: N
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                          listArr:
+                            type: array
+                            description: User-agent filter list as a parsed array.
+                            items:
+                              type: string
+                            example:
+                            - ''
+                      rtmpauth:
+                        type: object
+                        description: Whether RTMP publish authentication is required.
+                        properties:
+                          password:
+                            type: string
+                            description: Password for RTMP publish authentication.
+                            example: ''
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      transcode:
+                        type: object
+                        description: Live transcoding configuration for the stream.
+                        properties:
+                          ltc:
+                            type: integer
+                            description: Live transcoding server ID assigned to this stream.
+                            example: 0
+                          type:
+                            type: string
+                            description: Type identifier for this stream or object.
+                            example: mixed
+                          enabled:
+                            type: boolean
+                            description: Enable or disable this feature.
+                            example: false
+                          isEditable:
+                            type: boolean
+                            description: Whether the transcoding configuration can be edited.
+                            example: true
+                      platforms:
+                        type: array
+                        description: List of configured external restreaming platform entries.
+                        items: {}
+                        example: []
+                      messages:
+                        type: object
+                        description: Informational messages related to the stream state.
+                        properties:
+                          warning:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - 'Stream is disabled.<a href=''#enableModal'' class=''modal-trigger'' style=''margin-left: 25px;''>Click here to Enable Stream</a>'
+                      adInsertion:
+                        nullable: true
+                        description: Ad insertion configuration for the stream, or null if not configured.
+                        example:
+      deprecated: false
   /streams/restream/{streamid}/transcode:
     post:
       tags:
@@ -18900,7 +19507,7 @@ paths:
     get:
       tags:
       - Pull Streams
-      summary: Update platform
+      summary: Restart Platform
       description: Restart the platform of a pull stream
       operationId: restartplatformStreamsPull
       parameters:
@@ -18927,7 +19534,7 @@ paths:
     post:
       tags:
       - Pull Streams
-      summary: Update platform
+      summary: Update Platform Status
       description: Status the platform of a pull stream
       operationId: platformstatusStreamsPull
       parameters:
@@ -19694,7 +20301,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 name:
                   type: string
@@ -19719,10 +20326,6 @@ paths:
                   type: integer
                   description: Identifier of the parent resource in the hierarchical structure.
                   example: 3
-                draft:
-                  type: integer
-                  description: Set to 0 to publish the stream, or 1 to save it as a draft.
-                  example: 0
                 platformtype:
                   type: string
                   description: Platform type identifier. Specifies the type of platform associated with the stream.
@@ -22048,7 +22651,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -22083,9 +22686,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: false
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -22702,7 +23308,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 list:
                   type: string
@@ -23441,7 +24047,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 list:
                   type: array
@@ -27203,7 +27809,7 @@ paths:
     get:
       tags:
       - DVR Streams
-      summary: DvrStream
+      summary: List DvrStream
       description: List DVR streams
       operationId: dvrStreamlist
       parameters:
@@ -28601,7 +29207,7 @@ paths:
     post:
       tags:
       - DVR Streams
-      summary: DvrStream
+      summary: Update DvrStream
       description: Update information of a record stream.
       operationId: updateInfoDvrStream
       parameters:
@@ -29344,7 +29950,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -29410,9 +30016,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: false
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -29979,7 +30588,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 noreferer:
                   type: string
@@ -30690,11 +31299,11 @@ paths:
                   example: true
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
                   example: D
                 list:
                   type: string
-                  description: Comma-separated list of allowed or blocked entries.
+                  description: The generated secure token used to sign and validate protected URLs.
                   example: 136f096b5deb7105
                 timeout:
                   type: integer
@@ -30702,11 +31311,11 @@ paths:
                   example: 7392
                 session:
                   type: string
-                  description: Session limit. 0 means unlimited concurrent sessions.
+                  description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
                   example: '0'
                 keyip:
                   type: boolean
-                  description: Bind the secure token to the requester IP address. N means disabled.
+                  description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
                   example: false
                 ips:
                   type: string
@@ -31413,7 +32022,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 list:
                   type: array
@@ -32145,7 +32754,7 @@ paths:
                   example: '0'
                 period:
                   type: string
-                  description: The time interval in minutes between auto export events.
+                  description: "Specifies the period of time (in minutes) between auto export events. This determines how often the export occurs. For example, '30' means auto export occurs every 30 minutes, and '60' means auto export occurs every hour."
                   example: '30'
                 zoneid:
                   type: string
@@ -33565,7 +34174,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 name:
                   type: string
@@ -36151,7 +36760,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -36214,9 +36823,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: true
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -36871,11 +37483,11 @@ paths:
                   example: true
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
                   example: D
                 list:
                   type: string
-                  description: Comma-separated list of allowed or blocked entries.
+                  description: The generated secure token used to sign and validate protected URLs.
                   example: aaa0efb4415b78b4
                 timeout:
                   type: integer
@@ -36883,11 +37495,11 @@ paths:
                   example: 3600
                 session:
                   type: string
-                  description: Session limit. 0 means unlimited concurrent sessions.
+                  description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
                   example: '0'
                 keyip:
                   type: boolean
-                  description: Bind the secure token to the requester IP address. N means disabled.
+                  description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
                   example: false
                 ips:
                   type: string
@@ -37552,7 +38164,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 list:
                   type: array
@@ -38274,7 +38886,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 noreferer:
                   type: string
@@ -39710,7 +40322,7 @@ paths:
     post:
       tags:
       - Delayed Streams
-      summary: Update platform
+      summary: Restart Platform
       description: Restart the platform of a delayed stream
       operationId: restartplatformtimeshift
       parameters:
@@ -39728,7 +40340,7 @@ paths:
     post:
       tags:
       - Delayed Streams
-      summary: Update platform
+      summary: Update Platform Status
       description: Status the platform of a delayed stream
       operationId: platformstatustimeshift
       parameters:
@@ -39745,7 +40357,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Platform disabled
       deprecated: false
   /streams/timeshift/parents:
     get:
@@ -41035,7 +41656,7 @@ paths:
                   example: ''
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
       responses:
         '200':
@@ -43699,7 +44320,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -43943,11 +44564,11 @@ paths:
                   example: false
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
                   example: D
                 list:
                   type: string
-                  description: Comma-separated list of allowed or blocked entries.
+                  description: The generated secure token used to sign and validate protected URLs.
                   example: 49ed6e0dd99f5ca6
                 timeout:
                   type: integer
@@ -43955,11 +44576,11 @@ paths:
                   example: 3600
                 session:
                   type: string
-                  description: Session limit. 0 means unlimited concurrent sessions.
+                  description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
                   example: '0'
                 keyip:
                   type: boolean
-                  description: Bind the secure token to the requester IP address. N means disabled.
+                  description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
                   example: false
                 ips:
                   type: string
@@ -45753,7 +46374,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: N
                 list:
                   type: array
@@ -46657,7 +47278,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
                   example: Y
                 noreferer:
                   type: string
@@ -49364,6 +49985,900 @@ paths:
                     description: Human-readable message describing the result.
                     example: Stream Restarted
       deprecated: false
+  /streams/scheduledplaylist/{streamid}/status:
+    post:
+      tags:
+      - Scheduled Playlist Streams
+      summary: Update status of stream
+      description: Update status of stream
+      operationId: statusScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                disabled:
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Updated
+                  stream:
+                    type: object
+                    description: Stream object containing configuration and status details.
+                    properties:
+                      monitoring_id:
+                        nullable: true
+                        description: Unique monitoring identifier for the stream.
+                        example:
+                      type:
+                        type: string
+                        description: Type identifier for this stream or object.
+                        example: scheduledplaylist
+                      id:
+                        type: integer
+                        description: Unique numeric identifier.
+                        example: 71979
+                      serviceid:
+                        type: integer
+                        description: Unique identifier of the service this stream belongs to.
+                        example: 103
+                      name:
+                        type: string
+                        description: Name of the stream.
+                        example: 103_push_6643_001/one
+                      codec:
+                        type: string
+                        description: Video codec used for the stream.
+                        example: h264
+                      ingests:
+                        type: array
+                        description: List of active ingest connection details for each server.
+                        items:
+                          nullable: true
+                          type: array
+                          items:
+                            type: string
+                        example:
+                        - []
+                        - 
+                      protocols:
+                        type: array
+                        description: Supported streaming protocols for each server.
+                        items:
+                          type: array
+                          items:
+                            type: string
+                        example:
+                        - - HLS
+                        - - HLS
+                      parentid:
+                        type: integer
+                        description: Identifier of the parent stream, if this is a child stream.
+                        example: 6643
+                      server:
+                        type: string
+                        description: Server ID or identifier assigned to the stream.
+                        example: N
+                      backup:
+                        type: string
+                        description: Backup server ID for failover.
+                        example: ''
+                      dedicatedLTC:
+                        type: string
+                        description: Whether a dedicated live transcoding server is allocated for this stream.
+                        example: '1'
+                      hasAdvancedFeatures:
+                        type: string
+                        description: Whether advanced features are enabled for this stream.
+                        example: '1'
+                      monitoring_triggers:
+                        nullable: true
+                        description: Monitoring alert trigger configuration for the stream.
+                        example:
+                      draft:
+                        type: string
+                        description: Draft status flag. 0 means published; 1 means unpublished draft.
+                        example: '0'
+                      disabled:
+                        type: string
+                        description: Disabled flag. 0 means active; 1 means disabled.
+                        example: '0'
+                      created_at:
+                        type: string
+                        description: Timestamp when the stream was created.
+                        example: '2026-04-26 18:44:03'
+                      updated_at:
+                        type: string
+                        description: Timestamp when the stream was last updated.
+                        example: '2026-05-05 17:08:39'
+                      lastseen_at:
+                        description: Timestamp of last seen activity, or false if never seen.
+                        example: '2026-05-06 04:47:12'
+                      deleted:
+                        nullable: true
+                        description: Deletion timestamp, or null if the stream is not deleted.
+                        example:
+                      ingestsLock:
+                        type: integer
+                        description: Whether the ingest endpoint list is locked from editing.
+                        example: 0
+                      protocolsLock:
+                        type: integer
+                        description: Whether the supported protocol list is locked from editing.
+                        example: 0
+                      status:
+                        type: string
+                        description: Current deployment or operational status of the stream.
+                        example: Enabled
+                      has:
+                        type: object
+                        description: Flags indicating which streaming protocols are active.
+                        properties:
+                          rtmp:
+                            type: integer
+                            description: Whether RTMP streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 0
+                          rtsp:
+                            type: integer
+                            description: Whether RTSP streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 0
+                          hls:
+                            type: integer
+                            description: Whether HLS streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 1
+                          dash:
+                            type: integer
+                            description: Whether DASH streaming is enabled. 1 = enabled, 0 = disabled.
+                            example: 0
+                          rtmpauth:
+                            type: string
+                            description: Whether RTMP publish authentication is required.
+                            example: Y
+                      fms:
+                        type: object
+                        description: Flash Media Server ingest configuration for the stream.
+                        properties:
+                          server:
+                            type: object
+                            description: Server ID or identifier assigned to the stream.
+                            properties:
+                              country:
+                                type: string
+                                description: Geographic region of the ingest server.
+                                example: SouthEast Asia
+                              meta:
+                                type: object
+                                description: Metadata object for the server.
+                                properties:
+                                  fmsUrl:
+                                    type: string
+                                    description: RTMP ingest URL for the assigned FMS server.
+                                    example: rtmp://ply-01-01.5centscdn.com
+                      parts:
+                        type: object
+                        description: Stream name components.
+                        properties:
+                          pp:
+                            type: string
+                            description: Stream name prefix (part 1, before the slash).
+                            example: 103_push_6643_001
+                          sn:
+                            type: string
+                            description: Stream name suffix (part 2, after the slash).
+                            example: one
+                          full:
+                            type: string
+                            description: Combined full stream name without the slash separator.
+                            example: 103_push_6643_001one
+                      restream:
+                        type: object
+                        description: Restream platform configuration object.
+                      playbackurls:
+                        type: object
+                        description: Playback URL set for all supported protocols and player types.
+                        properties:
+                          scheme:
+                            type: string
+                            description: URL scheme used for playback.
+                            example: https
+                          url_prefix:
+                            type: string
+                            description: Base CDN hostname URL used as a prefix for playback URLs.
+                            example: https://stream-abc12-hls-live.stream.example.com
+                          rtmp:
+                            type: string
+                            description: RTMP playback or destination URL.
+                            example: rtmp://rtmp.stream.example.com:1935/103_push_6643_001/one
+                          rtsp:
+                            type: string
+                            description: RTSP playback URL.
+                            example: rtsp://rtsp.stream.example.com:554/103_push_6643_001/one
+                          hlsManifest:
+                            type: string
+                            description: HLS manifest filename.
+                            example: playlist.m3u8
+                          dashManifest:
+                            type: string
+                            description: DASH manifest filename.
+                            example: manifest.mpd
+                          hls:
+                            type: string
+                            description: HLS playback or player iframe URL.
+                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/fb9a2ddb20c20ddee56f8ad668a70485.sdp/playlist.m3u8
+                          dash:
+                            type: string
+                            description: DASH playback or player iframe URL.
+                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/fb9a2ddb20c20ddee56f8ad668a70485.sdp/manifest.mpd
+                          players:
+                            type: object
+                            description: Embedded player iframe URL set for supported player types.
+                            properties:
+                              flowplayer:
+                                type: object
+                                description: Flowplayer iframe URL information.
+                                properties:
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ''
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/flowplayer/hls/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/flowplayer/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                              videojs:
+                                type: object
+                                description: Video.js player iframe URL information.
+                                properties:
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ''
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/videojs/hls/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/videojs/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                              own:
+                                type: object
+                                description: Native stream player iframe URL information.
+                                properties:
+                                  hashes:
+                                    type: object
+                                    description: Map of CDN hostname to stream hashes and playback URLs.
+                                    properties:
+                                      stream-abc12-hls-live.stream.example.com:
+                                        type: object
+                                        properties:
+                                          hash:
+                                            type: string
+                                            description: Short hash or slug used in stream URLs.
+                                            example: 5jlu93s1z7ma6021
+                                          hls:
+                                            type: string
+                                            description: HLS playback or player iframe URL.
+                                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/fb9a2ddb20c20ddee56f8ad668a70485.sdp/playlist.m3u8
+                                          base64:
+                                            type: string
+                                            description: Base64-encoded HLS playback URL for use with iframe players.
+                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                                          dash:
+                                            type: string
+                                            description: DASH playback or player iframe URL.
+                                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/fb9a2ddb20c20ddee56f8ad668a70485.sdp/manifest.mpd
+                                          base64dash:
+                                            type: string
+                                            description: Base64-encoded DASH playback URL for use with iframe players.
+                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
+                                  baseQ:
+                                    type: string
+                                    description: Query string appended to the player iframe URL.
+                                    example: ?showcv=true&title=103_push_6643_001/one
+                                  base:
+                                    type: string
+                                    description: Base player iframe URL without the stream path.
+                                    example: https://cdn.example.com/player/hls/skin1/5jlu93s1z7ma6021/
+                                  hls:
+                                    type: string
+                                    description: HLS playback or player iframe URL.
+                                    example: https://cdn.example.com/player/hls/skin1/5jlu93s1z7ma6021/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_6643_001/one
+                                  dash:
+                                    type: string
+                                    description: DASH playback or player iframe URL.
+                                    example: https://cdn.example.com/player/dash/skin1/5jlu93s1z7ma6021/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_6643_001/one
+                          tokenized:
+                            nullable: true
+                            description: Tokenized playback URL configuration, or null if disabled.
+                            example:
+                      platformsCount:
+                        type: integer
+                        description: Number of external restreaming platforms configured.
+                        example: 0
+                      ssl_enabled:
+                        type: boolean
+                        description: Whether HTTPS/SSL is enabled for playback.
+                        example: true
+                      hash:
+                        type: string
+                        description: Short hash or slug used in stream URLs.
+                        example: fb9a2ddb20c20ddee56f8ad668a70485.sdp
+                      securetoken:
+                        type: object
+                        description: Secure token URL signing configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: D
+                          keyip:
+                            type: string
+                            description: Whether the token is bound to the viewer IP address.
+                            example: N
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: 49ed6e0dd99f5ca6
+                          timeout:
+                            type: integer
+                            description: Token expiry time in seconds.
+                            example: 3600
+                          session:
+                            type: string
+                            description: Session-based token mode flag.
+                            example: '0'
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          dirs:
+                            nullable: true
+                            description: URL directory paths restricted by this policy.
+                            example:
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      preroll:
+                        type: string
+                        example: N
+                      loop:
+                        type: string
+                        description: Whether the playlist loops continuously.
+                        example: N
+                      zone:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique numeric identifier.
+                            example: 6643
+                          type:
+                            type: string
+                            description: Type identifier for this stream or object.
+                            example: push
+                          mode:
+                            type: string
+                            description: Operating mode for the configuration.
+                            example: http
+                          name:
+                            type: string
+                            description: Name of the stream.
+                            example: push-6643
+                          ftpdetails:
+                            type: object
+                            properties:
+                              username:
+                                type: string
+                                description: Username for RTMP authentication.
+                                example: vineeth_103_push_6643
+                      hasInstantSchedule:
+                        type: boolean
+                        example: true
+                      playlistCount:
+                        type: integer
+                        description: Total number of playlists configured for this stream.
+                        example: 3
+                      playlists:
+                        type: array
+                        description: List of playlists configured for this stream.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Unique numeric identifier.
+                              example: 9257
+                            streamid:
+                              type: integer
+                              description: Unique identifier of the stream.
+                              example: 71979
+                            name:
+                              type: string
+                              description: Name of the stream.
+                              example: default
+                            schedule:
+                              type: string
+                              description: Schedule type. Values include instant, scheduleontime, scheduleondatetime.
+                              example: instant
+                            scheduletime:
+                              description: Scheduled time. 0 for instant, or a datetime string for timed schedules.
+                              example: 0
+                            type:
+                              type: string
+                              description: Type identifier for this stream or object.
+                              example: file
+                            repeatfor:
+                              type: integer
+                              example: 0
+                            repeatintervaldays:
+                              type: integer
+                              description: Number of days between recurring schedule repetitions.
+                              example: 0
+                            loop:
+                              type: string
+                              description: Whether the playlist loops continuously.
+                              example: '0'
+                            length:
+                              nullable: true
+                              description: Maximum stream length in hh:mm:ss format.
+                              example: 00:00:00
+                            autorestart:
+                              type: string
+                              example: '1'
+                            videos:
+                              nullable: true
+                              description: List of video items in the playlist.
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  src:
+                                    type: string
+                                    description: Source URL of the video or media asset.
+                                    example: /mp4/cureforme_720p.mp4
+                                  start:
+                                    type: string
+                                    description: Start position or timestamp.
+                                    example: '0'
+                                  duration:
+                                    type: string
+                                    description: Duration of the item in seconds.
+                                    example: '0'
+                                  ad_breaks:
+                                    type: array
+                                    description: List of ad break slots configured for this schedule.
+                                    items:
+                                      type: object
+                                      properties:
+                                        start:
+                                          example: 50
+                                        duration:
+                                          example: 30
+                            serviceid:
+                              type: integer
+                              description: Unique identifier of the service this stream belongs to.
+                              example: 103
+                            files:
+                              nullable: true
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - /mp4/cureforme_720p.mp4
+                            durations:
+                              nullable: true
+                              description: Total duration values for playlist segments.
+                              type: array
+                              items:
+                                type: array
+                                items: {}
+                              example:
+                              - - '0'
+                                - '0'
+                            ad_breaks:
+                              nullable: true
+                              description: List of ad break slots configured for this schedule.
+                              type: array
+                              items:
+                                type: array
+                                items: {}
+                              example:
+                              - - - 50
+                                  - 30
+                                - - 101
+                                  - 30
+                                - - 151
+                                  - 30
+                      domainlock:
+                        type: object
+                        description: Domain lock (hotlink protection) configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: Y
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          noreferer:
+                            type: string
+                            description: Whether to allow playback requests with no Referer header.
+                            example: Y
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      geoblock:
+                        type: object
+                        description: Geoblocking access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: N
+                          list:
+                            type: array
+                            description: Comma-separated list of allowed or blocked values.
+                            items:
+                              type: string
+                            example:
+                            - AF
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      ipaccess:
+                        type: object
+                        description: IP address access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: N
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                      useragent:
+                        type: object
+                        description: User-agent based access control configuration.
+                        properties:
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: N
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: N
+                          list:
+                            type: string
+                            description: Comma-separated list of allowed or blocked values.
+                            example: ''
+                          ips:
+                            type: string
+                            description: IP addresses associated with the access control policy.
+                            example: ''
+                          casesensitive:
+                            type: string
+                            description: Whether user-agent pattern matching is case-sensitive.
+                            example: N
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: N
+                          listArr:
+                            type: array
+                            description: User-agent filter list as a parsed array.
+                            items:
+                              type: string
+                            example:
+                            - ''
+                      transcode:
+                        type: object
+                        description: Live transcoding configuration for the stream.
+                        properties:
+                          ltc:
+                            type: integer
+                            description: Live transcoding server ID assigned to this stream.
+                            example: 5
+                          type:
+                            type: string
+                            description: Type identifier for this stream or object.
+                            example: mixed
+                          enabled:
+                            type: boolean
+                            description: Enable or disable this feature.
+                            example: true
+                          isEditable:
+                            type: boolean
+                            description: Whether the transcoding configuration can be edited.
+                            example: true
+                          id:
+                            type: integer
+                            description: Unique numeric identifier.
+                            example: 71979
+                          autostop:
+                            type: integer
+                            description: Whether the stream auto-stops when no input is received.
+                            example: 0
+                          vprofiles:
+                            type: array
+                            description: List of video transcoding profile IDs applied to this stream.
+                            items:
+                              type: string
+                            example:
+                            - '12345'
+                            - '12345'
+                            - '12345'
+                            - '12345'
+                            - '12345'
+                          aprofiles:
+                            type: array
+                            description: List of audio transcoding profile IDs applied to this stream.
+                            items:
+                              type: string
+                            example:
+                            - '12345'
+                          filters:
+                            type: array
+                            description: List of transcoding filter IDs applied to this stream.
+                            items: {}
+                            example: []
+                          disabled:
+                            type: string
+                            description: Disabled flag. 0 means active; 1 means disabled.
+                            example: '0'
+                          count:
+                            type: integer
+                            description: Number of active transcoding profiles.
+                            example: 5
+                          countRaw:
+                            type: integer
+                            description: Total number of transcoding profiles including inactive.
+                            example: 5
+                          codec:
+                            type: string
+                            description: Video codec used for the stream.
+                            example: h264
+                          isRunning:
+                            type: boolean
+                            description: Whether live transcoding is currently active on this stream.
+                            example: false
+                          profiles:
+                            type: object
+                            description: Transcoding profile count summary.
+                            properties:
+                              count:
+                                type: object
+                                description: Number of active transcoding profiles.
+                                properties:
+                                  total:
+                                    type: integer
+                                    description: Total number of transcoding profiles.
+                                    example: 5
+                                  sd:
+                                    type: integer
+                                    example: 5
+                      platforms:
+                        type: array
+                        description: List of configured external restreaming platform entries.
+                        items: {}
+                        example: []
+                      messages:
+                        type: object
+                        description: Informational messages related to the stream state.
+                      adInsertion:
+                        type: object
+                        description: Ad insertion configuration for the stream, or null if not configured.
+                        nullable: true
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique numeric identifier.
+                            example: 11
+                          relid:
+                            type: integer
+                            example: 71979
+                          type:
+                            type: string
+                            description: Type identifier for this stream or object.
+                            example: stream
+                          enabled:
+                            type: string
+                            description: Enable or disable this feature.
+                            example: Y
+                          policy:
+                            type: string
+                            description: Policy mode controlling allow/deny behavior.
+                            example: '1'
+                          provider:
+                            type: string
+                            example: Google Ad Manager
+                          meta:
+                            type: object
+                            description: Metadata object for the server.
+                            properties:
+                              adserver:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                    description: URL for this configuration.
+                                    example: https://adserver.example.com/vast.php
+                                  queryParameters:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                          description: Name of the stream.
+                                          example: src_url
+                                        type:
+                                          type: string
+                                          description: Type identifier for this stream or object.
+                                          example: from-variable
+                                        value:
+                                          type: string
+                                          description: Numeric value for this data point.
+                                          example: SOURCE_URL
+                                  adOrigin:
+                                    type: object
+                                  name:
+                                    type: string
+                                    description: Name of the stream.
+                                    example: 5-103-71979-adserver
+                                  template:
+                                    type: string
+                                    example: custom
+                                  id:
+                                    type: integer
+                                    description: Unique numeric identifier.
+                                    example: 209822
+                              adreplacement:
+                                type: object
+                                description: Ad replacement configuration object.
+                                properties:
+                                  token:
+                                    type: string
+                                    example: 4b004a3dd6a7128abb31e13b5289ca8528a0f6e7
+                                  enabled:
+                                    type: string
+                                    description: Enable or disable this feature.
+                                    example: Y
+                                  scte35:
+                                    type: object
+                                    description: SCTE-35 signalling configuration.
+                                    properties:
+                                      adBreakTriggers:
+                                        type: array
+                                        description: SCTE-35 splice command types that trigger an ad break.
+                                        items:
+                                          type: string
+                                        example:
+                                        - '0x22'
+                                        - '0x30'
+                                        - '0x32'
+                                        - '0x34'
+                                        - '0x36'
+                                        - '0x38'
+                                        - '0x3a'
+                                        - splice_insert
+                                      markersToRemove:
+                                        type: array
+                                        description: SCTE-35 marker types to strip from the outgoing manifest.
+                                        items:
+                                          type: string
+                                        example:
+                                        - ALL
+                                  gapFiller:
+                                    type: string
+                                    description: URL of a gap-filler asset shown when no ad is available.
+                                    example: ''
+                                  maxAdDurationExcess:
+                                    type: string
+                                    description: Maximum seconds an ad is allowed to exceed the scheduled break duration.
+                                    example: '0'
+                                  pastAdBreakReplacement:
+                                    type: string
+                                    description: Late-join replacement mode for viewers who miss an ad break.
+                                    example: '0'
+                                  pastAdBreakReplacementValue:
+                                    type: string
+                                    description: Look-back window in seconds for late-join ad replacement.
+                                    example: ''
+                                  onStartWithinAdBreak:
+                                    type: string
+                                    description: Behaviour when a viewer joins during an active ad break.
+                                    example: replace
+                              adpreroll:
+                                type: object
+                                description: Pre-roll ad configuration object.
+                                properties:
+                                  maxDuration:
+                                    type: integer
+                                    description: Maximum duration in seconds.
+                                    example: 30
+                                  offset:
+                                    type: integer
+                                    example: 0
+                          defaultDuration:
+                            type: integer
+                            example: 30
+                          created_at:
+                            type: string
+                            description: Timestamp when the stream was created.
+                            example: '2026-05-04 16:20:56'
+                          schedules:
+                            type: array
+                            items: {}
+                            example: []
+                          active:
+                            type: string
+                            description: Whether this policy is currently enforced.
+                            example: Y
+      deprecated: false
   /streams/scheduledplaylist/{streamid}/playlists/events:
     get:
       tags:
@@ -49443,7 +50958,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 name:
                   type: string
@@ -50568,7 +52083,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -52461,7 +53976,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -52484,7 +53999,7 @@ paths:
     post:
       tags:
       - Scheduled Playlist Streams
-      summary: Update platform
+      summary: Restart Platform
       description: Restart the platform of a Scheduled stream
       operationId: restartplatformRestream
       parameters:
@@ -52511,7 +54026,7 @@ paths:
     post:
       tags:
       - Scheduled Playlist Streams
-      summary: Update platform
+      summary: Update Platform Status
       description: Status the platform of a Scheduled stream
       operationId: platformstatusRestream
       parameters:
@@ -52524,9 +54039,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: true
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the platform, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -52542,857 +54060,7 @@ paths:
                   message:
                     type: string
                     description: Human-readable message describing the result.
-                    example: Stream Updated
-                  stream:
-                    type: object
-                    description: Stream object containing configuration and status details.
-                    properties:
-                      monitoring_id:
-                        nullable: true
-                        description: Unique monitoring identifier for the stream.
-                        example:
-                      type:
-                        type: string
-                        description: Type identifier for this stream or object.
-                        example: scheduledplaylist
-                      id:
-                        type: integer
-                        description: Unique numeric identifier.
-                        example: 72274
-                      serviceid:
-                        type: integer
-                        description: Unique identifier of the service this stream belongs to.
-                        example: 103
-                      name:
-                        type: string
-                        description: Name of the stream.
-                        example: 103_push_2314_001/testing
-                      codec:
-                        type: string
-                        description: Video codec used for the stream.
-                        example: h264
-                      ingests:
-                        type: array
-                        description: List of active ingest connection details for each server.
-                        items:
-                          nullable: true
-                          type: array
-                          items:
-                            type: string
-                        example:
-                        - []
-                        - 
-                      protocols:
-                        type: array
-                        description: Supported streaming protocols for each server.
-                        items:
-                          type: array
-                          items:
-                            type: string
-                        example:
-                        - - HLS
-                        - - HLS
-                      parentid:
-                        type: integer
-                        description: Identifier of the parent stream, if this is a child stream.
-                        example: 2314
-                      server:
-                        type: string
-                        description: Server ID or identifier assigned to the stream.
-                        example: N
-                      backup:
-                        type: string
-                        description: Backup server ID for failover.
-                        example: N
-                      dedicatedLTC:
-                        type: string
-                        description: Whether a dedicated live transcoding server is allocated for this stream.
-                        example: '0'
-                      hasAdvancedFeatures:
-                        type: string
-                        description: Whether advanced features are enabled for this stream.
-                        example: '0'
-                      monitoring_triggers:
-                        nullable: true
-                        description: Monitoring alert trigger configuration for the stream.
-                        example:
-                      draft:
-                        type: string
-                        description: Draft status flag. 0 means published; 1 means unpublished draft.
-                        example: '0'
-                      disabled:
-                        type: string
-                        description: Disabled flag. 0 means active; 1 means disabled.
-                        example: '0'
-                      created_at:
-                        type: string
-                        description: Timestamp when the stream was created.
-                        example: '2026-05-01 13:18:21'
-                      updated_at:
-                        type: string
-                        description: Timestamp when the stream was last updated.
-                        example: '2026-05-01 13:18:21'
-                      lastseen_at:
-                        description: Timestamp of last seen activity, or false if never seen.
-                        example: false
-                      deleted:
-                        nullable: true
-                        description: Deletion timestamp, or null if the stream is not deleted.
-                        example:
-                      ingestsLock:
-                        type: integer
-                        description: Whether the ingest endpoint list is locked from editing.
-                        example: 0
-                      protocolsLock:
-                        type: integer
-                        description: Whether the supported protocol list is locked from editing.
-                        example: 0
-                      status:
-                        type: string
-                        description: Current deployment or operational status of the stream.
-                        example: Enabled
-                      has:
-                        type: object
-                        description: Flags indicating which streaming protocols are active.
-                        properties:
-                          rtmp:
-                            type: integer
-                            description: Whether RTMP streaming is enabled. 1 = enabled, 0 = disabled.
-                            example: 0
-                          rtsp:
-                            type: integer
-                            description: Whether RTSP streaming is enabled. 1 = enabled, 0 = disabled.
-                            example: 0
-                          hls:
-                            type: integer
-                            description: Whether HLS streaming is enabled. 1 = enabled, 0 = disabled.
-                            example: 1
-                          dash:
-                            type: integer
-                            description: Whether DASH streaming is enabled. 1 = enabled, 0 = disabled.
-                            example: 0
-                          rtmpauth:
-                            type: string
-                            description: Whether RTMP publish authentication is required.
-                            example: Y
-                      fms:
-                        type: object
-                        description: Flash Media Server ingest configuration for the stream.
-                        properties:
-                          server:
-                            type: object
-                            description: Server ID or identifier assigned to the stream.
-                            properties:
-                              country:
-                                type: string
-                                description: Geographic region of the ingest server.
-                                example: SouthEast Asia
-                              meta:
-                                type: object
-                                description: Metadata object for the server.
-                                properties:
-                                  fmsUrl:
-                                    type: string
-                                    description: RTMP ingest URL for the assigned FMS server.
-                                    example: rtmp://ply-01-01.5centscdn.com
-                      parts:
-                        type: object
-                        description: Stream name components.
-                        properties:
-                          pp:
-                            type: string
-                            description: Stream name prefix (part 1, before the slash).
-                            example: 103_push_2314_001
-                          sn:
-                            type: string
-                            description: Stream name suffix (part 2, after the slash).
-                            example: testing
-                          full:
-                            type: string
-                            description: Combined full stream name without the slash separator.
-                            example: 103_push_2314_001testing
-                      restream:
-                        type: object
-                        description: Restream platform configuration object.
-                      playbackurls:
-                        type: object
-                        description: Playback URL set for all supported protocols and player types.
-                        properties:
-                          scheme:
-                            type: string
-                            description: URL scheme used for playback.
-                            example: https
-                          url_prefix:
-                            type: string
-                            description: Base CDN hostname URL used as a prefix for playback URLs.
-                            example: https://stream-abc12-hls-live.stream.example.com
-                          rtmp:
-                            type: string
-                            description: RTMP playback or destination URL.
-                            example: rtmp://rtmp.stream.example.com:1935/103_push_2314_001/testing
-                          rtsp:
-                            type: string
-                            description: RTSP playback URL.
-                            example: rtsp://rtsp.stream.example.com:554/103_push_2314_001/testing
-                          hlsManifest:
-                            type: string
-                            description: HLS manifest filename.
-                            example: playlist_dvr.m3u8
-                          dashManifest:
-                            type: string
-                            description: DASH manifest filename.
-                            example: manifest_dvr.mpd
-                          hls:
-                            type: string
-                            description: HLS playback or player iframe URL.
-                            example: https://stream-abc12-hls-live.stream.example.com/103_push_2314_001/testing/playlist_dvr.m3u8
-                          dash:
-                            type: string
-                            description: DASH playback or player iframe URL.
-                            example: https://stream-abc12-hls-live.stream.example.com/103_push_2314_001/testing/manifest_dvr.mpd
-                          players:
-                            type: object
-                            description: Embedded player iframe URL set for supported player types.
-                            properties:
-                              flowplayer:
-                                type: object
-                                description: Flowplayer iframe URL information.
-                                properties:
-                                  baseQ:
-                                    type: string
-                                    description: Query string appended to the player iframe URL.
-                                    example: ''
-                                  base:
-                                    type: string
-                                    description: Base player iframe URL without the stream path.
-                                    example: https://cdn.example.com/flowplayer/hls/
-                                  hls:
-                                    type: string
-                                    description: HLS playback or player iframe URL.
-                                    example: https://cdn.example.com/flowplayer/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                              videojs:
-                                type: object
-                                description: Video.js player iframe URL information.
-                                properties:
-                                  baseQ:
-                                    type: string
-                                    description: Query string appended to the player iframe URL.
-                                    example: ''
-                                  base:
-                                    type: string
-                                    description: Base player iframe URL without the stream path.
-                                    example: https://cdn.example.com/videojs/hls/
-                                  hls:
-                                    type: string
-                                    description: HLS playback or player iframe URL.
-                                    example: https://cdn.example.com/videojs/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                              own:
-                                type: object
-                                description: Native stream player iframe URL information.
-                                properties:
-                                  hashes:
-                                    type: object
-                                    description: Map of CDN hostname to stream hashes and playback URLs.
-                                    properties:
-                                      stream-abc12-hls-live.stream.example.com:
-                                        type: object
-                                        properties:
-                                          hash:
-                                            type: string
-                                            description: Short hash or slug used in stream URLs.
-                                            example: 5jlu93s1z7ma6021
-                                          hls:
-                                            type: string
-                                            description: HLS playback or player iframe URL.
-                                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/one/playlist.m3u8
-                                          base64:
-                                            type: string
-                                            description: Base64-encoded HLS playback URL for use with iframe players.
-                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                          dash:
-                                            type: string
-                                            description: DASH playback or player iframe URL.
-                                            example: https://stream-abc12-hls-live.stream.example.com/103_push_6643_001/one/manifest.mpd
-                                          base64dash:
-                                            type: string
-                                            description: Base64-encoded DASH playback URL for use with iframe players.
-                                            example: aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                  baseQ:
-                                    type: string
-                                    description: Query string appended to the player iframe URL.
-                                    example: ?showcv=true&title=103_push_2314_001/testing
-                                  base:
-                                    type: string
-                                    description: Base player iframe URL without the stream path.
-                                    example: https://cdn.example.com/player/hls/skin1//
-                                  hls:
-                                    type: string
-                                    description: HLS playback or player iframe URL.
-                                    example: https://cdn.example.com/player/hls/skin1//aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_2314_001/testing
-                                  dash:
-                                    type: string
-                                    description: DASH playback or player iframe URL.
-                                    example: https://cdn.example.com/player/dash/skin1//aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_2314_001/testing
-                          tokenized:
-                            type: object
-                            description: Tokenized playback URL configuration, or null if disabled.
-                            nullable: true
-                            properties:
-                              scheme:
-                                type: string
-                                description: URL scheme used for playback.
-                                example: https
-                              url_prefix:
-                                type: string
-                                description: Base CDN hostname URL used as a prefix for playback URLs.
-                                example: https://stream-abc12-hls-live.stream.example.com
-                              rtmp:
-                                type: string
-                                description: RTMP playback or destination URL.
-                                example: rtmp://rtmp.stream.example.com:1935/103_push_2314_001/testing
-                              rtsp:
-                                type: string
-                                description: RTSP playback URL.
-                                example: rtsp://rtsp.stream.example.com:554/103_push_2314_001/testing
-                              hlsManifest:
-                                type: string
-                                description: HLS manifest filename.
-                                example: playlist_dvr.m3u8
-                              dashManifest:
-                                type: string
-                                description: DASH manifest filename.
-                                example: manifest_dvr.mpd
-                              hls:
-                                type: string
-                                description: HLS playback or player iframe URL.
-                                example: https://stream-abc12-hls-live.stream.example.com/md5=DiaLMfOCM6yiSPCUmXxORA&path=%2F103_push_2314_001%2Ftesting&expires=1777980554/103_push_2314_001/testing/playlist_dvr.m3u8
-                              dash:
-                                type: string
-                                description: DASH playback or player iframe URL.
-                                example: https://stream-abc12-hls-live.stream.example.com/103_push_2314_001/testing/manifest_dvr.mpd
-                              players:
-                                type: object
-                                description: Embedded player iframe URL set for supported player types.
-                                properties:
-                                  hostname:
-                                    type: string
-                                    description: CDN hostname used for playback.
-                                    example: cdn.example.com
-                                  flowplayer:
-                                    type: object
-                                    description: Flowplayer iframe URL information.
-                                    properties:
-                                      baseQ:
-                                        type: string
-                                        description: Query string appended to the player iframe URL.
-                                        example: ''
-                                      base:
-                                        type: string
-                                        description: Base player iframe URL without the stream path.
-                                        example: https://cdn.example.com/flowplayer/hls/
-                                      hls:
-                                        type: string
-                                        description: HLS playback or player iframe URL.
-                                        example: https://cdn.example.com/flowplayer/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                      dash:
-                                        type: string
-                                        description: DASH playback or player iframe URL.
-                                        example: https://cdn.example.com/flowplayer/dash/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                  videojs:
-                                    type: object
-                                    description: Video.js player iframe URL information.
-                                    properties:
-                                      baseQ:
-                                        type: string
-                                        description: Query string appended to the player iframe URL.
-                                        example: ''
-                                      base:
-                                        type: string
-                                        description: Base player iframe URL without the stream path.
-                                        example: https://cdn.example.com/videojs/hls/
-                                      hls:
-                                        type: string
-                                        description: HLS playback or player iframe URL.
-                                        example: https://cdn.example.com/videojs/hls/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                      dash:
-                                        type: string
-                                        description: DASH playback or player iframe URL.
-                                        example: https://cdn.example.com/videojs/dash/aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4
-                                  own:
-                                    type: object
-                                    description: Native stream player iframe URL information.
-                                    properties:
-                                      baseQ:
-                                        type: string
-                                        description: Query string appended to the player iframe URL.
-                                        example: ?showcv=true&title=103_push_2314_001/testing
-                                      base:
-                                        type: string
-                                        description: Base player iframe URL without the stream path.
-                                        example: https://cdn.example.com/player/hls/skin1//
-                                      hls:
-                                        type: string
-                                        description: HLS playback or player iframe URL.
-                                        example: https://cdn.example.com/player/hls/skin1//aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_2314_001/testing
-                                      dash:
-                                        type: string
-                                        description: DASH playback or player iframe URL.
-                                        example: https://cdn.example.com/player/dash/skin1//aHR0cHM6Ly9zdHJlYW0uZXhhbXBsZS5jb20vc2FtcGxlL3N0cmVhbS9wbGF5bGlzdC5tM3U4?showcv=true&title=103_push_2314_001/testing
-                              path:
-                                type: object
-                                properties:
-                                  hls:
-                                    type: string
-                                    description: HLS playback or player iframe URL.
-                                    example: /103_push_2314_001/testing/playlist_dvr.m3u8
-                                  dash:
-                                    type: string
-                                    description: DASH playback or player iframe URL.
-                                    example: /103_push_2314_001/testing/manifest_dvr.mpd
-                              token:
-                                type: object
-                                properties:
-                                  hls:
-                                    type: string
-                                    description: HLS playback or player iframe URL.
-                                    example: md5=DiaLMfOCM6yiSPCUmXxORA&path=%2F103_push_2314_001%2Ftesting&expires=1777980554
-                                  dash:
-                                    type: string
-                                    description: DASH playback or player iframe URL.
-                                    example: md5=DiaLMfOCM6yiSPCUmXxORA&path=%2F103_push_2314_001%2Ftesting&expires=1777980554
-                      platformsCount:
-                        type: integer
-                        description: Number of external restreaming platforms configured.
-                        example: 0
-                      ssl_enabled:
-                        type: boolean
-                        description: Whether HTTPS/SSL is enabled for playback.
-                        example: true
-                      hash:
-                        type: string
-                        description: Short hash or slug used in stream URLs.
-                        example: testing
-                      securetoken:
-                        type: object
-                        description: Secure token URL signing configuration.
-                        properties:
-                          enabled:
-                            type: string
-                            description: Enable or disable this feature.
-                            example: Y
-                          policy:
-                            type: string
-                            description: Policy mode controlling allow/deny behavior.
-                            example: D
-                          keyip:
-                            type: string
-                            description: Whether the token is bound to the viewer IP address.
-                            example: N
-                          list:
-                            type: string
-                            description: Comma-separated list of allowed or blocked values.
-                            example: 32862cdb6276e19a
-                          timeout:
-                            type: integer
-                            description: Token expiry time in seconds.
-                            example: 3600
-                          session:
-                            type: string
-                            description: Session-based token mode flag.
-                            example: '0'
-                          ips:
-                            type: string
-                            description: IP addresses associated with the access control policy.
-                            example: ''
-                          dirs:
-                            nullable: true
-                            description: URL directory paths restricted by this policy.
-                            example:
-                          active:
-                            type: string
-                            description: Whether this policy is currently enforced.
-                            example: Y
-                      preroll:
-                        type: string
-                        example: N
-                      loop:
-                        type: string
-                        description: Whether the playlist loops continuously.
-                        example: N
-                      zone:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            description: Unique numeric identifier.
-                            example: 2314
-                          type:
-                            type: string
-                            description: Type identifier for this stream or object.
-                            example: push
-                          mode:
-                            type: string
-                            description: Operating mode for the configuration.
-                            example: http
-                          name:
-                            type: string
-                            description: Name of the stream.
-                            example: push-2314
-                          ftpdetails:
-                            type: object
-                            properties:
-                              username:
-                                type: string
-                                description: Username for RTMP authentication.
-                                example: vineeth_103_push_2314
-                      hasInstantSchedule:
-                        type: boolean
-                        example: true
-                      playlistCount:
-                        type: integer
-                        description: Total number of playlists configured for this stream.
-                        example: 1
-                      playlists:
-                        type: array
-                        description: List of playlists configured for this stream.
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              description: Unique numeric identifier.
-                              example: 9265
-                            streamid:
-                              type: integer
-                              description: Unique identifier of the stream.
-                              example: 72274
-                            name:
-                              type: string
-                              description: Name of the stream.
-                              example: default
-                            schedule:
-                              type: string
-                              description: Schedule type. Values include instant, scheduleontime, scheduleondatetime.
-                              example: instant
-                            scheduletime:
-                              description: Scheduled time. 0 for instant, or a datetime string for timed schedules.
-                              example: 0
-                            type:
-                              type: string
-                              description: Type identifier for this stream or object.
-                              example: file
-                            repeatfor:
-                              type: integer
-                              example: 0
-                            repeatintervaldays:
-                              type: integer
-                              description: Number of days between recurring schedule repetitions.
-                              example: 0
-                            loop:
-                              type: string
-                              description: Whether the playlist loops continuously.
-                              example: '1'
-                            length:
-                              nullable: true
-                              description: Maximum stream length in hh:mm:ss format.
-                              example: 00:00:00
-                            autorestart:
-                              type: string
-                              example: '0'
-                            videos:
-                              nullable: true
-                              description: List of video items in the playlist.
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  src:
-                                    type: string
-                                    description: Source URL of the video or media asset.
-                                    example: /2.mp4
-                                  start:
-                                    type: string
-                                    description: Start position or timestamp.
-                                    example: '0'
-                                  duration:
-                                    type: string
-                                    description: Duration of the item in seconds.
-                                    example: '0'
-                                  ad_breaks:
-                                    type: array
-                                    description: List of ad break slots configured for this schedule.
-                                    items:
-                                      type: object
-                                      properties:
-                                        start:
-                                          example: 67
-                                        duration:
-                                          example: 30
-                            serviceid:
-                              type: integer
-                              description: Unique identifier of the service this stream belongs to.
-                              example: 103
-                            files:
-                              nullable: true
-                              type: array
-                              items:
-                                type: string
-                              example:
-                              - /2.mp4
-                            durations:
-                              nullable: true
-                              description: Total duration values for playlist segments.
-                              type: array
-                              items:
-                                type: array
-                                items: {}
-                              example:
-                              - - 0
-                                - 0
-                            ad_breaks:
-                              nullable: true
-                              description: List of ad break slots configured for this schedule.
-                              type: array
-                              items:
-                                type: array
-                                items: {}
-                              example:
-                              - []
-                      domainlock:
-                        type: object
-                        description: Domain lock (hotlink protection) configuration.
-                        properties:
-                          enabled:
-                            type: string
-                            description: Enable or disable this feature.
-                            example: Y
-                          policy:
-                            type: string
-                            description: Policy mode controlling allow/deny behavior.
-                            example: Y
-                          list:
-                            type: string
-                            description: Comma-separated list of allowed or blocked values.
-                            example: example.com,docs.example.com
-                          ips:
-                            type: string
-                            description: IP addresses associated with the access control policy.
-                            example: ''
-                          noreferer:
-                            type: string
-                            description: Whether to allow playback requests with no Referer header.
-                            example: N
-                          active:
-                            type: string
-                            description: Whether this policy is currently enforced.
-                            example: Y
-                      geoblock:
-                        type: object
-                        description: Geoblocking access control configuration.
-                        properties:
-                          enabled:
-                            type: string
-                            description: Enable or disable this feature.
-                            example: Y
-                          policy:
-                            type: string
-                            description: Policy mode controlling allow/deny behavior.
-                            example: Y
-                          list:
-                            type: array
-                            description: Comma-separated list of allowed or blocked values.
-                            items:
-                              type: string
-                            example:
-                            - ''
-                          ips:
-                            type: string
-                            description: IP addresses associated with the access control policy.
-                            example: ''
-                          active:
-                            type: string
-                            description: Whether this policy is currently enforced.
-                            example: Y
-                      ipaccess:
-                        type: object
-                        description: IP address access control configuration.
-                        properties:
-                          enabled:
-                            type: string
-                            description: Enable or disable this feature.
-                            example: Y
-                          policy:
-                            type: string
-                            description: Policy mode controlling allow/deny behavior.
-                            example: N
-                          list:
-                            type: string
-                            description: Comma-separated list of allowed or blocked values.
-                            example: ''
-                          ips:
-                            type: string
-                            description: IP addresses associated with the access control policy.
-                            example: ''
-                          active:
-                            type: string
-                            description: Whether this policy is currently enforced.
-                            example: N
-                      useragent:
-                        type: object
-                        description: User-agent based access control configuration.
-                        properties:
-                          enabled:
-                            type: string
-                            description: Enable or disable this feature.
-                            example: Y
-                          policy:
-                            type: string
-                            description: Policy mode controlling allow/deny behavior.
-                            example: Y
-                          list:
-                            type: string
-                            description: Comma-separated list of allowed or blocked values.
-                            example: ''
-                          ips:
-                            type: string
-                            description: IP addresses associated with the access control policy.
-                            example: ''
-                          casesensitive:
-                            type: string
-                            description: Whether user-agent pattern matching is case-sensitive.
-                            example: N
-                          active:
-                            type: string
-                            description: Whether this policy is currently enforced.
-                            example: N
-                          listArr:
-                            type: array
-                            description: User-agent filter list as a parsed array.
-                            items:
-                              type: string
-                            example:
-                            - ''
-                      transcode:
-                        type: object
-                        description: Live transcoding configuration for the stream.
-                        properties:
-                          ltc:
-                            type: integer
-                            description: Live transcoding server ID assigned to this stream.
-                            example: 0
-                          type:
-                            type: string
-                            description: Type identifier for this stream or object.
-                            example: mixed
-                          enabled:
-                            type: boolean
-                            description: Enable or disable this feature.
-                            example: false
-                          isEditable:
-                            type: boolean
-                            description: Whether the transcoding configuration can be edited.
-                            example: true
-                      platforms:
-                        type: array
-                        description: List of configured external restreaming platform entries.
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              description: Unique numeric identifier.
-                              example: 43459
-                            rtmp:
-                              nullable: true
-                              description: RTMP playback or destination URL.
-                              example: rtmp://live.example.com/app/stream12345
-                            auth:
-                              type: string
-                              description: Whether RTMP publish authentication is enabled.
-                              example: Y
-                            username:
-                              nullable: true
-                              description: Username for RTMP authentication.
-                              example: admin
-                            password:
-                              nullable: true
-                              description: Password for RTMP publish authentication.
-                              example: password
-                            isSRT:
-                              type: boolean
-                              example: false
-                            key:
-                              type: string
-                              description: RTMP stream key for the restream platform.
-                              example: password
-                            schedule:
-                              type: string
-                              description: Publishing schedule type.
-                              example: scheduleontime
-                            scheduletime:
-                              nullable: true
-                              example: 06:12
-                            codec:
-                              nullable: true
-                              description: Video codec used for the stream.
-                              example:
-                            length:
-                              type: string
-                              description: Maximum stream length in hh:mm:ss format.
-                              example: '19:14'
-                            relid:
-                              type: integer
-                              example: 57197
-                            dedicatedLTC:
-                              type: string
-                              description: Whether a dedicated live transcoding server is allocated for this stream.
-                              example: '0'
-                            transcode:
-                              type: object
-                              description: Live transcoding configuration for the stream.
-                              properties:
-                                ltc:
-                                  type: integer
-                                  description: Live transcoding server ID assigned to this stream.
-                                  example: 0
-                                type:
-                                  type: string
-                                  description: Type identifier for this stream or object.
-                                  example: mixed
-                                enabled:
-                                  type: boolean
-                                  description: Enable or disable this feature.
-                                  example: false
-                                isEditable:
-                                  type: boolean
-                                  description: Whether the transcoding configuration can be edited.
-                                  example: true
-                            disabled:
-                              type: string
-                              description: Disabled flag. 0 means active; 1 means disabled.
-                              example: '0'
-                            name:
-                              type: string
-                              description: Name of the stream.
-                              example: Custom RTMP
-                            platform_id:
-                              type: integer
-                              example: 1
-                            provider_id:
-                              type: integer
-                              description: Unique identifier of the ad insertion provider record.
-                              example: 0
-                            video_id:
-                              type: string
-                              example: ''
-                      messages:
-                        type: object
-                        description: Informational messages related to the stream state.
-                      adInsertion:
-                        nullable: true
-                        description: Ad insertion configuration for the stream, or null if not configured.
-                        example:
-      deprecated: false
+                    example: Platform disabled
   /streams/publish:
     get:
       tags:
@@ -53436,7 +54104,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Required for delete and update operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 name:
                   type: string
@@ -53474,7 +54142,7 @@ paths:
                   - rtmp://source.example.com/live/streamkey
                 audiofix:
                   type: string
-                  description: Fix audio sync issues in pull streams. Y means enabled, N means disabled.
+                  description: Applicable for pull type streams only. Fixes audio sync issues in the pulled source. Y means enabled, N means disabled.
                   example: N
                 domainlock[enabled]:
                   type: string
@@ -54076,9 +54744,12 @@ paths:
               type: object
               properties:
                 disabled:
-                  type: boolean
-                  description: Set to true to disable the stream, false to enable it.
-                  example: true
+                  type: integer
+                  enum:
+                  - 0
+                  - 1
+                  description: Set to 1 to disable the stream, 0 to enable it.
+                  example: 0
       responses:
         '200':
           description: success
@@ -55546,7 +56217,7 @@ paths:
     post:
       tags:
       - Multistream Streams
-      summary: Update platform
+      summary: Restart Platform
       description: Restart the platform of a publish stream
       operationId: restartplatformscheduledplaylist
       parameters:
@@ -55564,7 +56235,7 @@ paths:
     post:
       tags:
       - Multistream Streams
-      summary: Update platform
+      summary: Update Platform Status
       description: Status the platform of a publish stream
       operationId: platformstatusscheduledplaylist
       parameters:
@@ -55581,7 +56252,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Platform disabled
       deprecated: false
   /streams/reports/mins/stats:
     post:
@@ -55619,7 +56299,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/security/geoblock:
     post:
@@ -55639,7 +56328,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/security/securetoken:
     post:
@@ -55659,7 +56357,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/security/rtmpauth:
     post:
@@ -55679,7 +56386,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/record:
     post:
@@ -55699,7 +56415,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/record/ndvr:
     post:
@@ -55719,7 +56444,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/cname:
     post:
@@ -55739,7 +56473,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/hash:
     post:
@@ -55759,7 +56502,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Stream Settings Updated. Please wait till the deployment completes.
       deprecated: false
   /streams/settings/profiles:
     get:
@@ -56312,7 +57064,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Must be PUT for schedule creation.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 type:
                   type: integer
@@ -56411,7 +57163,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override. Must be PUT for schedule creation.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
                   example: PUT
                 type:
                   type: integer
@@ -56562,7 +57314,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override required for delete operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
                 mode:
                   type: string
@@ -56669,7 +57421,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override required for delete operations.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
                 mode:
                   type: string
@@ -56778,7 +57530,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override used to signal a delete operation.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -56804,7 +57556,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override used to signal a delete operation.
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
                   example: DELETE
       responses:
         '200':
@@ -57061,7 +57813,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Specifies the HTTP method for the request.
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -57073,7 +57825,7 @@ components:
           example: 11,211
         codec:
           type: string
-          description: The video codec used for encoding. Examples include h264, vp8, and hevc.
+          description: Video codec for the stream. Use h264 or h265.
           example: h264
         protocols:
           type: array
@@ -57343,7 +58095,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -57475,8 +58227,10 @@ components:
       properties:
         disabled:
           type: integer
-          format: int32
-          description: Values can be 0 or 1. Set to 1 if status should be enabled. Set to 0 if status should be disabled.
+          enum:
+          - 0
+          - 1
+          description: Set to 1 to disable the platform, 0 to enable it.
           example: 0
     streamsetting_geoblock:
       type: object
@@ -57491,33 +58245,41 @@ components:
           example: N
         list:
           type: array
-          description: Comma-separated list of allowed or blocked values.
+          description: List of ISO 3166-1 alpha-2 country codes to allow or block based on the policy. Each entry must be a valid two-letter country code (e.g. US for United States, GB for United Kingdom, IN for India).
           items:
             type: string
-            description: Geoblock countries list values can be AF, DZ, AW, CA etc
-            example: AF
+            description: A two-letter ISO 3166-1 alpha-2 country code.
+            example: US
+          example:
+          - US
+          - GB
+          - IN
         ips:
           type: string
           description: List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma.
           example: 192.168.0.1
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_rtmpauth:
       type: object
       properties:
-        policy:
+        enabled:
           type: string
-          description: Values can be Y or N. Set to Y if policy should be enabled. Set to N if policy should not be enabled.
+          description: Enable or disable RTMP authentication. Y means enabled, N means disabled.
           example: Y
+        username:
+          type: string
+          description: Username required to authenticate RTMP publish connections.
+          example: streamuser
         password:
           type: string
-          description: enter password
-          example: mypassword
+          description: Password required to authenticate RTMP publish connections. Used together with the username.
+          example: Str0ngP@ssw0rd
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_cname:
       type: object
@@ -57535,7 +58297,7 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if hash stream should be enabled. Set to N if hash should not be enabled.
+          description: Enable or disable hash stream. Y means enabled, N means disabled.
           example: Y
         hashrestream:
           type: string
@@ -57554,32 +58316,32 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if record should be enabled. Set to N if record should be disabled.
+          description: Enable or disable recording. Y means enabled, N means disabled.
           example: Y
         retention:
           type: integer
           format: int32
-          description: To specify the Retention period. A digit, min 1 max 14.
+          description: Number of days to retain recordings. Min 1 max 90.
           example: 7
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_ndvr:
       type: object
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if nDVR should be enabled. Set to N if nDVR should be disabled.
+          description: Enable or disable nDVR. Y means enabled, N means disabled.
           example: Y
         retention:
           type: integer
           format: int32
-          description: To specify the Rewind Period in mins. Min 5 max 180.
+          description: Rewind period in minutes. Min 5 max 180.
           example: 5
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     transcodingResult:
       type: object
@@ -57696,93 +58458,122 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
-          description: Enter profile new name
-          example: 720p
+          description: Name of the transcoding profile.
+          example: My 720p Profile
         filemode:
           type: string
-          description: filemode should be sd, hd or uhd
-          example: sd
+          description: "Stream quality tier. Allowed values: sd, hd, uhd."
+          example: hd
         f:
           type: string
-          description: Container Format should be mp4
+          description: "Container format for the output stream. Allowed value: mp4."
           example: mp4
         cv:
           type: string
-          description: Video codec should be libx264 or libx265
+          description: "Video codec for encoding. libx264 means H.264, libx265 means H.265. Allowed values: libx264, libx265."
           example: libx264
         sv:
           type: string
-          description: Resolution quality should be 2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p or 144p
+          description: "Output resolution preset. Use as_defined to specify a custom resolution via svvalue. Allowed values: 2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, as_defined."
           example: 720p
         svvalue:
           type: string
-          description: Resolution quality format is set 1 define widthXheight
-          example: ''
+          description: Custom resolution in WIDTHxHEIGHT format. Required when sv is set to as_defined. Width range is 256–7680, height range is 144–4320, both values must be divisible by 2.
+          example: 1280x720
         deinterlace:
           type: string
-          description: Values can be 1 or 0. Set to 1 if deinterlace should be enabled. Set to 0 if deinterlace should be disabled.
+          description: Enable or disable deinterlacing. 1 means enabled, 0 means disabled.
           example: '0'
         bvvalue:
           type: integer
           format: int32
-          description: To specify the Bitrate. Min 128 max 4096.
-          example: 800
+          description: Video bitrate in kbps.
+          example: 2500
         fps:
           type: integer
           format: int32
-          description: To specify the frame per second. Values can be 24, 30, 48, 50 or 60.
+          description: "Frames per second for the output stream. 0 means As Source. Allowed values: 0, 24, 25, 30, 48, 50, 60."
           example: 30
+        preset:
+          type: string
+          description: "Encoding speed preset. Faster presets reduce CPU usage but may lower quality. Allowed values: superfast, veryfast, faster, fast."
+          example: veryfast
         vprofile:
           type: string
-          description: Values can be disabled, baseline, main or high
+          description: "Video encoding profile. libx264 supports baseline, main, high. libx265 supports main only. Allowed values: baseline, main, high."
           example: main
         vlevel:
           type: string
-          description: Video profile level. Baseline 3.0 or 3.1. Main 3.1 or 4.0. High 4.0, 4.1 or 4.2.
+          description: "H.264/H.265 encoding level. Allowed values: 3.0, 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2."
           example: '4.0'
+        bframe:
+          type: string
+          description: Number of consecutive B-frames used in encoding. Higher values improve compression but increase latency.
+          example: '3'
+        gop:
+          type: integer
+          format: int32
+          description: "Group of Pictures (keyframe) interval in seconds. Allowed values: 2, 4, 6, 8, 10, 12."
+          example: 2
+        tune:
+          type: string
+          description: "Encoding tune to optimize for a specific use case. zerolatency reduces encoding delay, fastdecode optimizes for fast decoding, disabled applies no tuning. libx264 supports disabled, zerolatency, fastdecode. libx265 supports disabled, fastdecode. Allowed values: disabled, zerolatency, fastdecode."
+          example: disabled
         ca:
           type: string
-          description: audio codec should be aac
+          description: "Audio codec for encoding. Allowed value: aac."
           example: aac
         aca:
           type: integer
           format: int32
-          description: To specify the audio channels. 0 for As Source. 2 for Stereo. 1 for Mono.
+          description: Audio channel configuration. 0 means As Source, 1 means Mono, 2 means Stereo.
           example: 2
         bavalue:
           type: string
-          description: To specify the audio Bitrate. Min 48 max 196.
+          description: Audio bitrate in kbps. Min 32 max 320.
           example: '128'
         ara:
           type: string
-          description: To specify the Sample Rate. Values should be 16000, 22050, 32000, 44100 or 48000.
+          description: "Audio sample rate in Hz. Allowed values: 16000, 22050, 32000, 44100, 48000."
           example: '44100'
     streamsetting_securetoken:
       type: object
       properties:
+        enabled:
+          type: string
+          description: Enable or disable secure token. Y means enabled, N means disabled.
+          example: N
         policy:
           type: string
-          description: Values Can be Y or N. Set to Y if secure token should be enabled. Set to N if Secure token should be disabled.
-          example: N
+          description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
+          example: D
         list:
           type: string
-          description: The value should be random alpha numeric string
+          description: The generated secure token used to sign and validate protected URLs.
           example: abc123xyz
         timeout:
           type: string
           description: Secure token link expiration time in seconds. Min 5 max 25200.
           example: '300'
+        session:
+          type: string
+          description: Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration).
+          example: '0'
+        keyip:
+          type: boolean
+          description: Bind the secure token to the requester IP address. true means enabled, false means disabled.
+          example: false
         ips:
           type: string
           description: List of IPs to whitelist when secure token is enabled. IPs should be separated by comma.
           example: 192.168.0.1
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     streamstimeshiftnew_geoblock:
       type: object
@@ -57953,9 +58744,9 @@ components:
     PostDomainLock:
       type: object
       properties:
-        policy:
+        enabled:
           type: string
-          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should not be enabled.
+          description: Enable or disable domain lock. Y means enabled, N means disabled.
           example: N
         list:
           type: string
@@ -57965,10 +58756,14 @@ components:
           type: string
           description: List of IPs to whitelist when domain lock is enabled. IPs should be separated by comma.
           example: 192.168.0.1
-        type:
+        policy:
           type: string
-          description: The values can be whitelist or blacklist
-          example: whitelist
+          description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+          example: Y
+        noreferer:
+          type: string
+          description: Block requests with no referrer header. Y means blocked, N means allowed.
+          example: Y
     PostExport:
       type: object
       properties:
@@ -58135,7 +58930,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58202,7 +58997,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58290,7 +59085,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58438,7 +59233,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58482,7 +59277,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58551,7 +59346,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: request method PUT
+          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
           example: PUT
         name:
           type: string
@@ -58613,25 +59408,29 @@ components:
     streamsetting_domainlock:
       type: object
       properties:
-        policy:
+        enabled:
           type: string
-          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should be disabled.
+          description: Enable or disable domain lock. Y means enabled, N means disabled.
           example: N
         list:
           type: string
           description: List of domains separated by comma.
           example: www.domain-two.com
-        type:
+        policy:
           type: string
-          description: The values can be whitelist or blacklist.
-          example: whitelist
+          description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+          example: Y
         ips:
           type: string
           description: IPs listed are excluded from any restrictions
           example: 117.251.60.184
+        noreferer:
+          type: string
+          description: Block requests with no referrer header. Y means blocked, N means allowed.
+          example: N
         mode:
           type: string
-          description: The values can be save, append, overwrite
+          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
           example: save
     streamsrestreamnew_geoblock:
       type: object
