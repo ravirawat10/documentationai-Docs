@@ -26,6 +26,74 @@ https://api.5centscdn.com/v2
 
 ---
 
+## HTTP methods
+
+The 5centsCDN API accepts only two real HTTP methods: **GET** and **POST**.
+
+For operations that modify or delete a resource, you use **POST** with a `_METHOD` field in the request body to declare the intended operation.
+
+| HTTP Method | `_METHOD` in body | Operation |
+|-------------|-------------------|-----------|
+| `GET`  | _(not required)_ | Read / list a resource |
+| `POST` | _(not required)_ | Create a new resource |
+| `POST` | `"_METHOD": "PUT"` | Update an existing resource |
+| `POST` | `"_METHOD": "DELETE"` | Delete a resource |
+
+<Callout kind="warning" collapsed="false">
+  **Update operation** — Send a `POST` request and include `"_METHOD": "PUT"` in the JSON body. The endpoint URL stays the same as the create endpoint.
+</Callout>
+
+<Callout kind="danger" collapsed="false">
+  **Delete operation** — Send a `POST` request and include `"_METHOD": "DELETE"` in the JSON body. Omitting `_METHOD` on a delete endpoint will create a resource instead of deleting it.
+</Callout>
+
+### Examples
+
+<Tabs>
+  <Tab title="Update (PUT override)">
+    ```bash
+    curl -X POST https://api.5centscdn.com/v2/streams/push/settings \
+      -H "X-API-KEY: YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "_METHOD": "PUT",
+        "name": "updated-stream-name"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Delete (DELETE override)">
+    ```bash
+    curl -X POST https://api.5centscdn.com/v2/streams/push/12345 \
+      -H "X-API-KEY: YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "_METHOD": "DELETE"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Create (POST)">
+    ```bash
+    curl -X POST https://api.5centscdn.com/v2/streams/push \
+      -H "X-API-KEY: YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "my-new-stream"
+      }'
+    ```
+  </Tab>
+
+  <Tab title="Read (GET)">
+    ```bash
+    curl -X GET https://api.5centscdn.com/v2/streams/push/12345 \
+      -H "X-API-KEY: YOUR_API_KEY"
+    ```
+  </Tab>
+</Tabs>
+
+---
+
 ## API modules
 
 | Module | Description | Base Path |
