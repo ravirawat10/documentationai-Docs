@@ -30,28 +30,10 @@ tags:
   description: endpoints related to Scheduled Playlist streams & Playlist
 - name: Multistream Streams
   description: endpoints related to Multistream Streams
-- name: Reports - Recording Minutes
-  description: Reports for Recording Minutes
 - name: Global Settings
   description: Global Stream Settings
 - name: Live Transcoding Profiles/Filters
   description: Live stream transcoding profile and filter management
-- name: Ad Insertion
-  description: Enable, configure and control SCTE-35 ad insertion on a live stream
-- name: Ad Server
-  description: Configure the upstream ad server (VAST/VMAP URL and query parameters)
-- name: Ad Pre-Roll
-  description: Configure pre-roll ad settings
-- name: Ad Replacement
-  description: Configure live ad replacement settings
-- name: Schedules
-  description: Manage recurring or one-time ad break schedules
-- name: Triggers
-  description: View and delete queued ad break triggers
-- name: Cue Signals
-  description: Manually trigger cue-out / cue-in signals on the stream encoder
-- name: Consumption
-  description: Query ad insertion consumption and billing data
 paths:
   /streams:
     get:
@@ -56263,24 +56245,6 @@ paths:
                     description: Human-readable message describing the result.
                     example: Platform disabled
       deprecated: false
-  /streams/reports/mins/stats:
-    post:
-      tags:
-      - Reports - Recording Minutes
-      summary: Reports by stream reports live mins stats
-      description: Get reports of stream live mins stats
-      operationId: reports-by-stream-live-mins-stats
-      parameters:
-      - $ref: '#/components/parameters/rParam'
-      - $ref: '#/components/parameters/fileParam'
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_200_35'
-      deprecated: false
   /streams/settings/security/domainlock:
     post:
       tags:
@@ -56553,7 +56517,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Transcoding Settings, New Profile Created
+                  profileid:
+                    type: integer
+                    description: The ID of the newly created transcoding profile.
+                    example: 129699
       deprecated: false
   /streams/settings/profiles/{profileid}:
     post:
@@ -56568,14 +56545,171 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/streamsetting_profile'
+              required:
+              - _METHOD
+              - name
+              type: object
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be set to PUT to perform an update operation.
+                  example: PUT
+                name:
+                  type: string
+                  description: Name of the transcoding profile.
+                  example: My 720p Profile
+                filemode:
+                  type: string
+                  description: "Profile mode. single encodes the file to one output; combined bundles multiple sub-profiles. Allowed values: single, combined."
+                  example: single
+                outdir:
+                  type: string
+                  description: Output directory path where encoded files are stored.
+                  example: /output/videos
+                sourceaudio:
+                  type: string
+                  description: Source audio stream identifier used during encoding.
+                  example: ''
+                sourcevideo:
+                  type: string
+                  description: Source video stream identifier used during encoding.
+                  example: ''
+                f:
+                  type: string
+                  description: "Container format for the output file. Allowed values: mp4, webm, hls, hlsaes. webm requires VP9 or AV1 codec. hls and hlsaes convert to HLS segments and manifest."
+                  example: mp4
+                hlsUnifiedSegments:
+                  type: boolean
+                  description: "Applicable only when f is hls or hlsaes. When true, audio and video are embedded in the same HLS segments. Enable if compatibility issues occur or when the source has multiple audio tracks (only the first audio track will be encoded)."
+                  example: false
+                hlsfMP4Segments:
+                  type: boolean
+                  description: "Applicable only when f is hls or hlsaes. When true, fMP4 (fragmented MP4) segments are used instead of the default MPEG-TS segments."
+                  example: false
+                cv:
+                  type: string
+                  description: "Video codec. libx264 = H.264, libx265 = H.265, libvpx-vp9 = VP9 (webm only), libaom-av1 = AV1 (advanced feature). Allowed values: libx264, libx265, libvpx-vp9, libaom-av1."
+                  example: libx264
+                sv:
+                  type: string
+                  description: "Output resolution preset. Use as_defined to specify a custom resolution via svvalue. 0 means As Source. Allowed values: 2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, 0, as_defined."
+                  example: 720p
+                svvalue:
+                  type: string
+                  description: "Custom resolution in WIDTHxHEIGHT format. Required when sv is as_defined. Width range 256–7680, height range 144–4320, both values must be divisible by 2."
+                  example: 1280x720
+                crfv:
+                  type: string
+                  description: "Constrained Quality factor controlling quality vs file size. 18 = High quality, 24 = Medium quality, 28 = Low quality. Allowed values: 18, 24, 28."
+                  example: '24'
+                kar:
+                  type: string
+                  description: "Keep Aspect Ratio. When set to 1, only height is fixed and width adjusts automatically to preserve the source aspect ratio. Allowed values: 0, 1."
+                  example: '0'
+                ol:
+                  type: string
+                  description: "Orientation Lock. When set to 1, the landscape or portrait orientation of the source video is preserved. Allowed values: 0, 1."
+                  example: '0'
+                bv:
+                  type: string
+                  description: "Video bitrate mode. 0 = As Source (copy source bitrate), 1 = As Defined (use custom bvvalue). Allowed values: 0, 1."
+                  example: '1'
+                bvvalue:
+                  type: string
+                  description: Custom video bitrate in kbps. Required when bv is 1.
+                  example: '2500'
+                vpass:
+                  type: string
+                  description: "Number of encoding passes. 1 = One Pass, 2 = Two Pass. Disabled when bv is 0. Allowed values: 1, 2."
+                  example: '1'
+                vprofile:
+                  type: string
+                  description: "Video encoding profile. H.264 (libx264) supports baseline, main, high. H.265 (libx265) supports main, main10. VP9 (libvpx-vp9) supports profile0, profile2. AV1 (libaom-av1) supports main. Allowed values: baseline, main, high, main10, profile0, profile2."
+                  example: main
+                vlevel:
+                  type: string
+                  description: "Encoding level defining resolution and bitrate constraints. Available levels depend on codec and profile selection. Allowed values: 3.0, 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 6.1, 6.2."
+                  example: '4.0'
+                fps:
+                  type: string
+                  description: "Frames per second. 0 means As Source. Allowed values: 0, 24, 25, 30, 48, 50, 60."
+                  example: '30'
+                gop:
+                  type: string
+                  description: "Group of Pictures (keyframe) interval in seconds. Left empty when fps is 0. Allowed values: 2, 4, 6, 8, 10, 12."
+                  example: '6'
+                preset:
+                  type: string
+                  description: "Encoding speed preset controlling compression efficiency and CPU usage. Faster presets use less CPU but may reduce quality. Allowed values: superfast, veryfast, faster, fast, medium, slow."
+                  example: veryfast
+                tune:
+                  type: string
+                  description: "Encoding tune to optimise for specific content or use case. H.264 supports disabled, film, animation, grain, stillimage, fastdecode. H.265 supports disabled, fastdecode. VP9 and AV1 support disabled only. Allowed values: disabled, film, animation, grain, stillimage, fastdecode."
+                  example: disabled
+                bframe:
+                  type: string
+                  description: "Number of consecutive B-frames used in encoding. Higher values improve compression efficiency but increase encoding latency. Allowed values: 0, 1, 2, 3, 4."
+                  example: '1'
+                upscale:
+                  type: string
+                  description: "Video upscaling. Y = Allow upscaling when source resolution is lower than the target. N = Disallow upscaling. Allowed values: Y, N."
+                  example: Y
+                ca:
+                  type: string
+                  description: "Audio codec. copy = As Source (pass-through). aac and libmp3lame are for mp4, hls, hlsaes containers. libopus is for webm only. Allowed values: copy, aac, libmp3lame, libopus."
+                  example: aac
+                aca:
+                  type: string
+                  description: "Audio channel configuration. 0 = As Source, 1 = Mono, 2 = Stereo. Allowed values: 0, 1, 2."
+                  example: '2'
+                ba:
+                  type: string
+                  description: "Audio bitrate mode. 0 = As Source, 1 = As Defined (use custom bavalue). As Source is not available for webm. Allowed values: 0, 1."
+                  example: '1'
+                bavalue:
+                  type: string
+                  description: Audio bitrate in kbps. Required when ba is 1.
+                  example: '128'
+                ara:
+                  type: string
+                  description: "Audio sample rate. 0 = As Source. Allowed values: 0, 44100, 48000."
+                  example: '44100'
+                tm:
+                  type: string
+                  description: "Thumbnail generation mode. disabled = no thumbnails, fixed = capture once at time tv, interval = capture repeatedly at tv interval, sprite = generate sprite sheet. Allowed values: disabled, fixed, interval, sprite."
+                  example: disabled
+                tv:
+                  type: string
+                  description: "Time value for thumbnail capture in HH:MM:SS format. Required when tm is fixed or interval."
+                  example: 00:00:05
+                filters:
+                  type: array
+                  description: Array of filter names to apply to the encoding output.
+                  items:
+                    type: string
+                  example: []
+                profiles:
+                  type: array
+                  description: "Array of sub-profile configurations. Applicable when filemode is combined."
+                  items:
+                    type: string
+                  example: []
       responses:
         '200':
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Transcoding Settings Updated
       deprecated: false
     delete:
       tags:
@@ -56585,13 +56719,34 @@ paths:
       operationId: deletestreamprofile
       parameters:
       - $ref: '#/components/parameters/profileIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - _METHOD
+              type: object
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be set to DELETE to perform a delete operation.
+                  example: DELETE
       responses:
         '200':
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Transcoding Settings Updated
       deprecated: false
   /streams/settings/filters:
     get:
@@ -56613,7 +56768,98 @@ paths:
                     description: Status of the API response.
                     example: success
                   filters:
-                    $ref: '#/components/schemas/filtersList'
+                    type: object
+                    description: Map of filter objects keyed by the numeric filter ID as a string.
+                    additionalProperties:
+                      type: object
+                      description: A single filter entry.
+                      properties:
+                        id:
+                          type: integer
+                          description: Unique filter ID.
+                          example: 3
+                        serviceid:
+                          type: integer
+                          description: ID of the service that owns this filter. 0 indicates a global shared filter available to all accounts.
+                          example: 0
+                        type:
+                          type: string
+                          description: Filter scope type.
+                          example: live
+                        name:
+                          type: string
+                          description: Display name of the filter.
+                          example: Horizontal Flip
+                        settings:
+                          type: object
+                          description: Filter configuration containing the filter type identifier and its arguments.
+                          properties:
+                            filter:
+                              type: string
+                              description: "Filter type identifier. Allowed values: hflip, vflip, c90, c180, cc90, cc180, overlay, img2video, videoloop, drawtext."
+                              example: hflip
+                            args:
+                              description: Filter-specific arguments. Empty array for simple transform filters. Object with filter-specific fields for complex filters. Null when not yet configured.
+                              nullable: true
+                              oneOf:
+                                - type: array
+                                  items: {}
+                                  description: Empty array used by simple transform filters such as hflip, vflip, and rotate variants.
+                                  example: []
+                                - type: object
+                                  description: Configuration object for complex filters such as overlay, img2video, videoloop, and drawtext.
+                                  properties:
+                                    url:
+                                      type: string
+                                      description: URL of the image or video asset. Used by overlay, img2video, and videoloop filters.
+                                      example: "https://cdn.example.com/logo.png"
+                                    scale:
+                                      type: string
+                                      description: Scale percentage for the asset as a numeric string. Used by overlay and img2video filters.
+                                      example: '50'
+                                    position:
+                                      type: string
+                                      description: "Position of the overlay or text on the video frame. Allowed values: Top Left, Top Center, Top Right, Center, Bottom Left, Bottom Center, Bottom Right."
+                                      example: Top Right
+                                    blink:
+                                      type: string
+                                      description: Blink animation for overlay in on/off seconds format such as 5/5. Empty string disables blinking.
+                                      example: ''
+                                    text:
+                                      type: string
+                                      description: Text to render on the video frame. Used by the drawtext filter.
+                                      example: www.5centscdn.com
+                                    fontsize:
+                                      type: string
+                                      description: Font size in pixels for the drawtext filter.
+                                      example: '20'
+                                    fontcolor:
+                                      type: string
+                                      description: Font color as a hex code for the drawtext filter.
+                                      example: '#22dd2f'
+                example:
+                  result: success
+                  filters:
+                    '3':
+                      id: 3
+                      serviceid: 0
+                      type: live
+                      name: Horizontal Flip
+                      settings:
+                        filter: hflip
+                        args: []
+                    '427':
+                      id: 427
+                      serviceid: 103
+                      type: live
+                      name: jamestest
+                      settings:
+                        filter: overlay
+                        args:
+                          url: "https://cdn.example.com/logo.png"
+                          scale: '50'
+                          position: Top Right
+                          blink: ''
   /streams/settings/filters/new:
     post:
       tags:
@@ -56625,7 +56871,108 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/createFileTranscodingFilter'
+              required:
+              - name
+              - filter
+              - args
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Display name for the new filter.
+                  example: My Logo Watermark
+                filter:
+                  type: string
+                  description: "Filter type identifier. overlay = image watermark. drawtext = text watermark. img2video = use a static image as the video source. videoloop = loop a video file as the video source. Allowed values: overlay, drawtext, img2video, videoloop."
+                  example: overlay
+                args:
+                  type: object
+                  description: Filter-specific arguments. The key must match the filter type value and contains the settings object for that filter type.
+                  oneOf:
+                    - title: overlay
+                      description: Arguments for the overlay (image watermark) filter.
+                      required:
+                      - overlay
+                      properties:
+                        overlay:
+                          type: object
+                          required:
+                          - url
+                          properties:
+                            url:
+                              type: string
+                              description: URL of the logo image. Supported extensions are .png, .jpg, and .jpeg.
+                              example: "https://cdn.example.com/logo.png"
+                            scale:
+                              type: string
+                              description: Scale percentage of the logo relative to the video frame. Min 5, max 150.
+                              example: '5'
+                            position:
+                              type: string
+                              description: "Position of the logo on the video frame. Allowed values: Top Left, Top Center, Top Right, Center Left, Center, Center Right, Bottom Left, Bottom Center, Bottom Right."
+                              example: Center
+                            blink:
+                              type: string
+                              description: "Blink animation in on/off seconds format. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Omit this field to disable blinking."
+                              example: 5/5
+                    - title: drawtext
+                      description: Arguments for the drawtext (text watermark) filter.
+                      required:
+                      - drawtext
+                      properties:
+                        drawtext:
+                          type: object
+                          required:
+                          - text
+                          properties:
+                            text:
+                              type: string
+                              description: Text string to render on the video frame.
+                              example: www.5centscdn.com
+                            fontsize:
+                              type: string
+                              description: Font size in pixels. Min 5, max 150.
+                              example: '15'
+                            fontcolor:
+                              type: string
+                              description: Font color as a hex code.
+                              example: '#FF9507'
+                            position:
+                              type: string
+                              description: "Position of the text on the video frame. Allowed values: Top Left, Top Center, Top Right, Center Left, Center, Center Right, Bottom Left, Bottom Center, Bottom Right."
+                              example: Center
+                            blink:
+                              type: string
+                              description: "Blink animation in on/off seconds format. Example: 3/7 means 3 seconds visible then 7 seconds hidden. Omit this field to disable blinking."
+                              example: 3/7
+                    - title: img2video
+                      description: Arguments for the img2video (static image as video source) filter.
+                      required:
+                      - img2video
+                      properties:
+                        img2video:
+                          type: object
+                          required:
+                          - url
+                          properties:
+                            url:
+                              type: string
+                              description: URL of the image to use as the video source.
+                              example: "https://cdn.example.com/image.jpg"
+                    - title: videoloop
+                      description: Arguments for the videoloop (looping video as source) filter.
+                      required:
+                      - videoloop
+                      properties:
+                        videoloop:
+                          type: object
+                          required:
+                          - url
+                          properties:
+                            url:
+                              type: string
+                              description: URL of the video file to loop as the video source.
+                              example: "https://cdn.example.com/video.mp4"
       responses:
         '200':
           description: success
@@ -56642,6 +56989,10 @@ paths:
                     type: string
                     description: Human-readable message describing the result.
                     example: Transcoding Settings, New Filter Created
+                  filterid:
+                    type: integer
+                    description: The ID of the newly created filter.
+                    example: 430
   /streams/settings/filters/{filterid}:
     post:
       tags:
@@ -56655,7 +57006,53 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/editFileTranscodingFilter'
+              required:
+              - name
+              - args
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Display name of the filter. This is read from the existing filter and cannot be changed via this endpoint.
+                  example: My Logo Watermark
+                args:
+                  type: object
+                  description: "Flat filter configuration object. The filter field inside args identifies the type and determines which other fields apply. Allowed filter values: overlay, drawtext, img2video, videoloop."
+                  required:
+                  - filter
+                  properties:
+                    filter:
+                      type: string
+                      description: "Filter type identifier. Allowed values: overlay, drawtext, img2video, videoloop."
+                      example: overlay
+                    url:
+                      type: string
+                      description: URL of the image or video asset. Required for overlay, img2video, and videoloop filters. Supported extensions for overlay and img2video are .png, .jpg, and .jpeg.
+                      example: "https://cdn.example.com/logo.png"
+                    scale:
+                      type: string
+                      description: Scale percentage of the asset relative to the video frame. Applicable to overlay and img2video filters. Min 5, max 150.
+                      example: '5'
+                    position:
+                      type: string
+                      description: "Position of the overlay or text on the video frame. Applicable to overlay and drawtext filters. Allowed values: Top Left, Top Center, Top Right, Center Left, Center, Center Right, Bottom Left, Bottom Center, Bottom Right."
+                      example: Center
+                    blink:
+                      type: string
+                      description: "Blink animation in on/off seconds format. Applicable to overlay and drawtext filters. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Omit this field to disable blinking."
+                      example: 5/5
+                    text:
+                      type: string
+                      description: Text string to render on the video frame. Required for the drawtext filter.
+                      example: www.5centscdn.com
+                    fontsize:
+                      type: string
+                      description: Font size in pixels for the drawtext filter. Min 5, max 150.
+                      example: '15'
+                    fontcolor:
+                      type: string
+                      description: Font color as a hex code for the drawtext filter.
+                      example: '#FF9507'
       deprecated: false
       responses:
         '200':
@@ -56681,6 +57078,18 @@ paths:
       operationId: deleteTranscodingProfileFilter
       parameters:
       - $ref: '#/components/parameters/filterIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - _METHOD
+              type: object
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be set to DELETE to perform a delete operation.
+                  example: DELETE
       deprecated: false
       responses:
         '200':
@@ -63013,13 +63422,6 @@ components:
           example: success
         stream:
           $ref: '#/components/schemas/RestreamResult'
-    inline_response_200_35:
-      type: object
-      properties:
-        result:
-          type: string
-          description: Status of the API response.
-          example: success
     Postplatform_inner:
       type: object
       properties:
