@@ -26,7 +26,7 @@ tags:
   description: Email forwarding rules for DNS zones
 components:
   securitySchemes:
-    ApiKeyAuth:
+    apikeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
@@ -70,7 +70,7 @@ components:
       description: TTL value in seconds.
       enum: [60, 300, 600, 900, 1800, 3600, 21600, 43200, 86400, 172800, 259200, 604800, 1209600, 2592000]
 security:
-- ApiKeyAuth: []
+- apikeyAuth: []
 paths:
   /dns:
     get:
