@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: 5centsCDN - VideoPlayer & Analytics
   description: API for VideoPlayers & Analytics in 5centsCDN
@@ -13,12 +13,12 @@ servers:
   description: 5centsCDN API Server - Production
 components:
   securitySchemes:
-    apikeyAuth:
+    ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
 security:
-- apikeyAuth: []
+- ApiKeyAuth: []
 tags:
 - name: 5centsCDN
 paths:

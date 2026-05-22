@@ -18,7 +18,7 @@ servers:
     description: 5centsCDN API Server - Production
 
 security:
-  - apikeyAuth: []
+  - ApiKeyAuth: []
 
 tags:
   - name: Domain Verification
@@ -976,7 +976,7 @@ paths:
 
 components:
   securitySchemes:
-    apikeyAuth:
+    ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
