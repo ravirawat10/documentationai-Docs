@@ -865,7 +865,8 @@ paths:
                       example: N
                     mode:
                       type: string
-                      description: SSL mode string.
+                      enum: [N, S, L, C]
+                      description: "SSL certificate mode. N = None (no SSL). S = Shared wildcard SSL certificate (default CDN certificate). L = Free SSL via ZeroSSL/Let's Encrypt. C = Custom SSL certificate (requires certid)."
                       example: S
                   description: SSL certificate settings for HTTPS delivery.
                 cache:
@@ -900,7 +901,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                     list:
                       type: string
                       description: Comma-separated domain names.
@@ -913,6 +914,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   description: Domain lock / referrer restriction settings.
                 geoblock:
                   type: object
@@ -926,7 +928,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                     list:
                       type: array
                       items:
@@ -947,16 +949,17 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: ["0", "1"]
+                      example: "0"
+                      description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                     rate:
                       type: number
                       example: 0
-                      description: Rate limit value.
+                      description: Throttle rate in KB/s applied after rateafter threshold is reached.
                     rateafter:
                       type: number
                       example: 0
+                      description: Amount of data in KB served before the throttle rate kicks in.
                   description: Bandwidth limit settings for the zone.
                 ipaccess:
                   type: object
@@ -970,7 +973,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "IP access filtering mode. Y = Blacklist mode (block listed IPs). N = Whitelist mode (allow only listed IPs, block all others)."
                     list:
                       type: string
                       example: ""
@@ -989,13 +992,13 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Q, F]
+                      enum: [Q, F, D]
                       example: Q
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                     keyip:
                       type: string
                       enum: [Y, N]
-                      description: "Whether IP is included in the secure token key (Y/N)"
+                      description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                       example: N
                     list:
                       type: string
@@ -1006,11 +1009,11 @@ paths:
                       minimum: 5
                       maximum: 25200
                       example: 5
-                      description: Timeout duration in seconds.
+                      description: Token expiry time in seconds. Minimum 5, maximum 25200.
                     session:
                       type: string
-                      enum: ["0", S]
-                      description: "Whether session-based tokens are used (Y/N)"
+                      enum: ["0", "1"]
+                      description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time regardless of activity). \"1\" = Rolling/Moving expiry (token timeout resets with each request, suitable for active sessions)."
                       example: "0"
                     ips:
                       type: string
@@ -1028,7 +1031,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "User agent filtering mode. Y = Block mode (block requests from listed user agents). N = Allow mode (allow only requests from listed user agents, block all others)."
                     list:
                       type: string
                       example: ""
@@ -1041,6 +1044,7 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "User agent string matching precision. Y = case-sensitive matching. N = case-insensitive matching."
                   description: User-agent filter settings to restrict access by browser/client.
       deprecated: false
       responses:
@@ -1989,13 +1993,13 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  enum: [Q, F]
-                  description: Q = Query string mode, F = Full path mode.
+                  enum: [Q, F, D]
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                   example: Q
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation for added security.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
@@ -2006,12 +2010,12 @@ paths:
                   type: number
                   minimum: 5
                   maximum: 25200
-                  description: Token expiry time in seconds. Min 5, max 25200.
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: ["0", S]
-                  description: '"0" = fixed expiry, "S" = session-based.'
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
                   example: "0"
                 ips:
                   type: string
@@ -2059,13 +2063,13 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed countries), N = Blacklist (block listed countries).
+                  description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                   example: N
                 list:
                   type: array
                   items:
                     type: string
-                  description: Array of ISO-3166 country codes to whitelist or blacklist.
+                  description: Array of ISO-3166 country codes to block (Y) or allow (N).
                   example: [IN]
                 ips:
                   type: string
@@ -2074,7 +2078,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Optional update mode - save replaces, append adds to, overwrite replaces entirely.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -2118,25 +2122,25 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed domains), N = Blacklist (block listed domains).
+                  description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                   example: Y
                 list:
                   type: string
-                  description: Comma-separated domain names to whitelist or blacklist.
+                  description: Comma-separated domain names to block (Y) or allow (N).
                   example: example.com,b.com
                 ips:
                   type: string
-                  description: Comma-separated IP addresses that are whitelisted regardless of domain lock.
+                  description: Comma-separated IP addresses excluded from domain lock restrictions regardless of the policy.
                   example: 192.168.1.1
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y = allow requests with no Referer header, N = block them.
+                  description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   example: Y
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode - save replaces, append adds to, overwrite replaces entirely.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -3101,9 +3105,9 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  enum: [Y, N]
-                  description: Bandwidth limit policy flag.
-                  example: Y
+                  enum: ["0", "1"]
+                  description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
+                  example: "0"
                 rate:
                   type: number
                   description: Throttle rate in KB/s applied after rateafter threshold is reached.
@@ -3115,7 +3119,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode - save replaces, append adds to, overwrite replaces entirely.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -4387,8 +4391,8 @@ paths:
                   example: https://origin.com
                 optimize:
                   type: string
-                  enum: [http, https]
-                  description: Origin protocol optimisation mode.
+                  enum: [http, live, vod]
+                  description: "Content delivery optimization mode. http = Standard web content optimization. live = HLS/DASH live streaming optimization. vod = HLS/DASH Video on Demand optimization."
                   example: http
                 ssl:
                   type: object
@@ -4396,16 +4400,17 @@ paths:
                     http2:
                       type: string
                       enum: [Y, N]
-                      description: "Whether HTTP/2 is enabled (Y/N)"
+                      description: "Enable HTTP/2 multiplexing. Y = HTTP/2 enabled. N = HTTP/1.1 only."
                       example: Y
                     redirect:
                       type: string
                       enum: [Y, N]
-                      description: HTTP to HTTPS redirect.
+                      description: "Enforce HTTPS via 301 redirect. Y = redirect HTTP to HTTPS. N = allow both HTTP and HTTPS."
                       example: N
                     mode:
                       type: string
-                      description: SSL mode string.
+                      enum: [N, S, L, C]
+                      description: "SSL certificate mode. N = None (no SSL). S = Shared wildcard SSL certificate (default CDN certificate). L = Free SSL via ZeroSSL/Let's Encrypt. C = Custom SSL certificate (requires certid)."
                       example: S
                   description: SSL certificate settings for HTTPS delivery.
                 cache:
@@ -4426,13 +4431,13 @@ paths:
                   example: cdn.example.com
                 origin_auth:
                   type: object
-                  description: Optional S3 AWS authentication for private origins.
+                  description: Optional AWS S3 authentication for private origins.
                   properties:
                     type:
                       type: string
                       enum: [none, awsSignatureV4]
                       example: none
-                      description: Zone type identifier.
+                      description: "Origin authentication method. none = No authentication required for origin access. awsSignatureV4 = AWS Signature Version 4 signing for private S3 bucket origins (requires s3_access_key_id and s3_access_key_secret)."
                     s3_access_key_id:
                       type: string
                       description: AWS Access Key ID. Required when type is awsSignatureV4.
@@ -4457,19 +4462,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                     list:
                       type: string
-                      description: Comma-separated domain names.
+                      description: Comma-separated domain names to block (Y) or allow (N).
                       example: ""
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from domain lock restrictions.
                     noreferer:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   description: Domain lock / referrer restriction settings.
                 geoblock:
                   type: object
@@ -4483,12 +4489,12 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                     list:
                       type: array
                       items:
                         type: string
-                      description: ISO-3166 country codes.
+                      description: Array of ISO-3166 country codes to block (Y) or allow (N).
                       example: []
                     ips:
                       type: string
@@ -4504,16 +4510,17 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: ["0", "1"]
+                      example: "0"
+                      description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                     rate:
                       type: number
                       example: 0
-                      description: Rate limit value.
+                      description: Throttle rate in KB/s applied after rateafter threshold is reached.
                     rateafter:
                       type: number
                       example: 0
+                      description: Amount of data in KB served before the throttle rate kicks in.
                   description: Bandwidth limit settings for the zone.
                 ipaccess:
                   type: object
@@ -4527,11 +4534,11 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "IP access filtering mode. Y = Blacklist mode (block listed IPs). N = Whitelist mode (allow only listed IPs, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated IP addresses to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
@@ -4546,13 +4553,13 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Q, F]
+                      enum: [Q, F, D]
                       example: Q
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                     keyip:
                       type: string
                       enum: [Y, N]
-                      description: "Whether IP is included in the secure token key (Y/N)"
+                      description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                       example: N
                     list:
                       type: string
@@ -4563,11 +4570,11 @@ paths:
                       minimum: 5
                       maximum: 25200
                       example: 5
-                      description: Timeout duration in seconds.
+                      description: Token expiry time in seconds. Minimum 5, maximum 25200.
                     session:
                       type: string
-                      enum: ["0", S]
-                      description: "Whether session-based tokens are used (Y/N)"
+                      enum: ["0", "1"]
+                      description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time regardless of activity). \"1\" = Rolling/Moving expiry (token timeout resets with each request, suitable for active sessions)."
                       example: "0"
                     ips:
                       type: string
@@ -4585,19 +4592,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "User agent filtering mode. Y = Block mode (block requests from listed user agents). N = Allow mode (allow only requests from listed user agents, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated user agent strings to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from user agent control.
                     casesensitive:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "User agent string matching precision. Y = case-sensitive matching. N = case-insensitive matching."
                   description: User-agent filter settings to restrict access by browser/client.
       deprecated: false
       responses:
@@ -5505,13 +5513,13 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  enum: [Q, F]
-                  description: Q = Query string mode, F = Full path mode.
+                  enum: [Q, F, D]
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                   example: Q
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
@@ -5522,12 +5530,12 @@ paths:
                   type: number
                   minimum: 5
                   maximum: 25200
-                  description: Token expiry time in seconds. Min 5, max 25200.
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: ["0", S]
-                  description: '"0" = fixed expiry, "S" = session-based.'
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
                   example: "0"
                 ips:
                   type: string
@@ -5679,9 +5687,9 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  enum: [Y, N]
-                  description: Bandwidth limit policy flag.
-                  example: Y
+                  enum: ["0", "1"]
+                  description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
+                  example: "0"
                 rate:
                   type: number
                   description: Throttle rate in KB/s applied after rateafter threshold.
@@ -5693,7 +5701,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -5871,25 +5879,25 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed domains), N = Blacklist (block listed domains).
+                  description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                   example: Y
                 list:
                   type: string
-                  description: Comma-separated domain names to whitelist or blacklist.
+                  description: Comma-separated domain names to block (Y) or allow (N).
                   example: example.com,b.com
                 ips:
                   type: string
-                  description: Comma-separated IP addresses whitelisted regardless of domain lock.
+                  description: Comma-separated IP addresses excluded from domain lock restrictions regardless of the policy.
                   example: 192.168.1.1
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y = allow requests with no Referer header, N = block them.
+                  description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   example: Y
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -5933,13 +5941,13 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed countries), N = Blacklist (block listed countries).
+                  description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                   example: Y
                 list:
                   type: array
                   items:
                     type: string
-                  description: Array of ISO-3166 country codes to whitelist or blacklist.
+                  description: Array of ISO-3166 country codes to block (Y) or allow (N).
                   example: [US, IN, GB]
                 ips:
                   type: string
@@ -5948,7 +5956,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -5992,20 +6000,20 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed IPs), N = Blacklist (block listed IPs).
+                  description: "IP access filtering mode. Y = Blacklist mode (block listed IPs). N = Whitelist mode (allow only listed IPs, block all others)."
                   example: Y
                 list:
                   type: string
-                  description: Comma-separated IP addresses to whitelist or blacklist.
+                  description: Comma-separated IP addresses or CIDR ranges to block (Y) or allow (N).
                   example: 1.2.3.4,5.6.7.8
                 ips:
                   type: string
-                  description: Comma-separated IP addresses excluded from access control.
+                  description: Comma-separated IP addresses excluded from access control restrictions.
                   example: 192.168.1.1
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -6049,11 +6057,11 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y = Whitelist (allow listed agents), N = Blacklist (block listed agents).
+                  description: "User agent filtering mode. Y = Block mode (block requests from listed user agents). N = Allow mode (allow only requests from listed user agents, block all others)."
                   example: Y
                 list:
                   type: string
-                  description: Comma-separated user agent strings to whitelist or blacklist.
+                  description: Comma-separated user agent strings to block (Y) or allow (N).
                   example: Googlebot,curl
                 ips:
                   type: string
@@ -6062,12 +6070,12 @@ paths:
                 casesensitive:
                   type: string
                   enum: [Y, N]
-                  description: Enable or disable case-sensitive matching.
+                  description: "User agent string matching precision. Y = case-sensitive matching. N = case-insensitive matching."
                   example: Y
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: Update mode.
+                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
                   example: save
       deprecated: false
       responses:
@@ -7765,19 +7773,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated domain names to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from domain lock restrictions.
                     noreferer:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   description: Domain lock / referrer restriction settings.
                 geoblock:
                   type: object
@@ -7791,12 +7800,12 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                     list:
                       type: array
                       items:
                         type: string
-                      description: Array of ISO-3166 country codes.
+                      description: Array of ISO-3166 country codes to block (Y) or allow (N).
                       example: []
                     ips:
                       type: string
@@ -7812,16 +7821,17 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: ["0", "1"]
+                      example: "0"
+                      description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                     rate:
                       type: number
                       example: 0
-                      description: Rate limit value.
+                      description: Throttle rate in KB/s applied after rateafter threshold is reached.
                     rateafter:
                       type: number
                       example: 0
+                      description: Amount of data in KB served before the throttle rate kicks in.
                   description: Bandwidth limit settings for the zone.
                 ipaccess:
                   type: object
@@ -7835,11 +7845,11 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "IP access filtering mode. Y = Blacklist mode (block listed IPs). N = Whitelist mode (allow only listed IPs, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated IP addresses or CIDR ranges to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
@@ -7854,27 +7864,29 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: [Q, F, D]
+                      example: Q
+                      description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                     keyip:
                       type: string
                       enum: [Y, N]
-                      description: "Whether IP is included in the secure token key (Y/N)"
+                      description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                       example: N
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: 16-character hex secret key.
                     timeout:
                       type: number
+                      minimum: 5
+                      maximum: 25200
                       example: 5
-                      description: Timeout duration in seconds.
+                      description: Token expiry time in seconds. Minimum 5, maximum 25200.
                     session:
                       type: string
-                      enum: [Y, N]
-                      description: "Whether session-based tokens are used (Y/N)"
-                      example: N
+                      enum: ["0", "1"]
+                      description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                      example: "0"
                     ips:
                       type: string
                       example: ""
@@ -7891,19 +7903,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "User agent filtering mode. Y = Block mode (block requests from listed user agents). N = Allow mode (allow only requests from listed user agents, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated user agent strings to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from user agent control.
                     casesensitive:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "User agent string matching precision. Y = case-sensitive matching. N = case-insensitive matching."
                   description: User-agent filter settings to restrict access by browser/client.
       deprecated: false
       responses:
@@ -9913,30 +9926,33 @@ paths:
                   type: string
                   enum: [Y, N]
                   example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Enable or disable secure token. Y means enabled, N means disabled.
                 policy:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  enum: [Q, F, D]
+                  example: Q
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
-                  description: Comma-separated secret keys.
-                  example: key1,key2
+                  pattern: '^[a-fA-F0-9]{16}$'
+                  description: 16-character hexadecimal secret key used for token generation.
+                  example: ab12cd34ef56gh78
                 timeout:
                   type: number
-                  description: Token expiry in seconds.
+                  minimum: 5
+                  maximum: 25200
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: [Y, N]
-                  description: "Whether session-based tokens are used (Y/N)"
-                  example: N
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                  example: "0"
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from token check.
@@ -11479,8 +11495,8 @@ paths:
                   example: https://origin.example.com
                 optimize:
                   type: string
-                  enum: [http, https]
-                  description: Origin fetch protocol.
+                  enum: [http, live, vod]
+                  description: "Content delivery optimization mode. http = Standard web content optimization. live = HLS/DASH live streaming optimization. vod = HLS/DASH Video on Demand optimization."
                   example: http
                 ssl:
                   type: object
@@ -11488,15 +11504,17 @@ paths:
                     http2:
                       type: string
                       enum: [Y, N]
-                      description: "Whether HTTP/2 is enabled (Y/N)"
+                      description: "Enable HTTP/2 multiplexing. Y = HTTP/2 enabled. N = HTTP/1.1 only."
                       example: Y
                     redirect:
                       type: string
                       enum: [Y, N]
                       example: N
-                      description: Redirect configuration.
+                      description: "Enforce HTTPS via 301 redirect. Y = redirect HTTP to HTTPS. N = allow both HTTP and HTTPS."
                     mode:
                       type: string
+                      enum: [N, S, L, C]
+                      description: "SSL certificate mode. N = None (no SSL). S = Shared wildcard SSL certificate. L = Free SSL via ZeroSSL/Let's Encrypt. C = Custom SSL certificate."
                       example: S
                   description: SSL certificate settings for HTTPS delivery.
                 cache:
@@ -11527,19 +11545,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated domain names to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from domain lock restrictions.
                     noreferer:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   description: Domain lock / referrer restriction settings.
                 geoblock:
                   type: object
@@ -11553,12 +11572,12 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
                     list:
                       type: array
                       items:
                         type: string
-                      description: Array of ISO-3166 country codes.
+                      description: Array of ISO-3166 country codes to block (Y) or allow (N).
                       example: []
                     ips:
                       type: string
@@ -11574,16 +11593,17 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: ["0", "1"]
+                      example: "0"
+                      description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                     rate:
                       type: number
                       example: 0
-                      description: Rate limit value.
+                      description: Throttle rate in KB/s applied after rateafter threshold is reached.
                     rateafter:
                       type: number
                       example: 0
+                      description: Amount of data in KB served before the throttle rate kicks in.
                   description: Bandwidth limit settings for the zone.
                 ipaccess:
                   type: object
@@ -11597,11 +11617,11 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "IP access filtering mode. Y = Blacklist mode (block listed IPs). N = Whitelist mode (allow only listed IPs, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated IP addresses or CIDR ranges to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
@@ -11616,27 +11636,29 @@ paths:
                       description: Enable or disable this feature. Y means enabled, N means disabled.
                     policy:
                       type: string
-                      enum: [Y, N]
-                      example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      enum: [Q, F, D]
+                      example: Q
+                      description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                     keyip:
                       type: string
                       enum: [Y, N]
-                      description: "Whether IP is included in the secure token key (Y/N)"
+                      description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                       example: N
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: 16-character hex secret key.
                     timeout:
                       type: number
+                      minimum: 5
+                      maximum: 25200
                       example: 5
-                      description: Timeout duration in seconds.
+                      description: Token expiry time in seconds. Minimum 5, maximum 25200.
                     session:
                       type: string
-                      enum: [Y, N]
-                      description: "Whether session-based tokens are used (Y/N)"
-                      example: N
+                      enum: ["0", "1"]
+                      description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                      example: "0"
                     ips:
                       type: string
                       example: ""
@@ -11653,19 +11675,20 @@ paths:
                       type: string
                       enum: [Y, N]
                       example: Y
-                      description: Access policy. Y means allow listed entries only, N means allow all.
+                      description: "User agent filtering mode. Y = Block mode (block requests from listed user agents). N = Allow mode (allow only requests from listed user agents, block all others)."
                     list:
                       type: string
                       example: ""
-                      description: Comma-separated list of allowed or blocked entries.
+                      description: Comma-separated user agent strings to block (Y) or allow (N).
                     ips:
                       type: string
                       example: ""
-                      description: Comma-separated IP addresses or CIDR ranges.
+                      description: Comma-separated IP addresses excluded from user agent control.
                     casesensitive:
                       type: string
                       enum: [Y, N]
                       example: N
+                      description: "User agent string matching precision. Y = case-sensitive matching. N = case-insensitive matching."
                   description: User-agent filter settings to restrict access by browser/client.
       deprecated: false
       responses:
@@ -13752,7 +13775,7 @@ paths:
       tags:
       - VOD Pull
       summary: Update Securetoken
-      description: Update securetoken of VoD push zone
+      description: Update securetoken of VoD pull zone
       operationId: updateSecuretokenZoneVodPull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
@@ -13766,30 +13789,33 @@ paths:
                   type: string
                   enum: [Y, N]
                   example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Enable or disable secure token. Y means enabled, N means disabled.
                 policy:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  enum: [Q, F, D]
+                  example: Q
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
-                  description: Comma-separated secret keys.
-                  example: key1,key2
+                  pattern: '^[a-fA-F0-9]{16}$'
+                  description: 16-character hexadecimal secret key used for token generation.
+                  example: ab12cd34ef56gh78
                 timeout:
                   type: number
-                  description: Token expiry in seconds.
+                  minimum: 5
+                  maximum: 25200
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: [Y, N]
-                  description: "Whether session-based tokens are used (Y/N)"
-                  example: N
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                  example: "0"
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from token check.
@@ -14258,30 +14284,33 @@ paths:
                   type: string
                   enum: [Y, N]
                   example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Enable or disable secure token globally for HTTP zones. Y means enabled, N means disabled.
                 policy:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  enum: [Q, F, D]
+                  example: Q
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
-                  description: Comma-separated secret keys.
-                  example: key1,key2
+                  pattern: '^[a-fA-F0-9]{16}$'
+                  description: 16-character hexadecimal secret key used for token generation.
+                  example: ab12cd34ef56gh78
                 timeout:
                   type: number
-                  description: Token expiry in seconds.
+                  minimum: 5
+                  maximum: 25200
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: [Y, N]
-                  description: "Whether session-based tokens are used (Y/N)"
-                  example: N
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                  example: "0"
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from token check.
@@ -14334,12 +14363,12 @@ paths:
                   type: string
                   enum: [Y, N]
                   example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Enable or disable bandwidth limiting globally for HTTP zones. Y means enabled, N means disabled.
                 policy:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  enum: ["0", "1"]
+                  example: "0"
+                  description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                 rate:
                   type: number
                   description: KB/s rate limit.
@@ -14632,30 +14661,33 @@ paths:
                   type: string
                   enum: [Y, N]
                   example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Enable or disable secure token globally for VOD zones. Y means enabled, N means disabled.
                 policy:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Access policy. Y means allow listed entries only, N means allow all.
+                  enum: [Q, F, D]
+                  example: Q
+                  description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
                 keyip:
                   type: string
                   enum: [Y, N]
-                  description: Include client IP in token generation.
+                  description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
                   example: N
                 list:
                   type: string
-                  description: Comma-separated secret keys.
-                  example: key1,key2
+                  pattern: '^[a-fA-F0-9]{16}$'
+                  description: 16-character hexadecimal secret key used for token generation.
+                  example: ab12cd34ef56gh78
                 timeout:
                   type: number
-                  description: Token expiry in seconds.
+                  minimum: 5
+                  maximum: 25200
+                  description: Token expiry time in seconds. Minimum 5, maximum 25200.
                   example: 3600
                 session:
                   type: string
-                  enum: [Y, N]
-                  description: "Whether session-based tokens are used (Y/N)"
-                  example: N
+                  enum: ["0", "1"]
+                  description: "Defines the token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
+                  example: "0"
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from token check.
@@ -15130,32 +15162,32 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
+          description: Enable or disable geo-blocking. Y means enabled, N means disabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: Y
         list:
           type: array
           items:
             type: string
-            description: Geoblock countries list values can be AF,DZ,AW,CA etc
+            description: ISO-3166 country code. e.g. AF, DZ, AW, CA
             example: AF
         ips:
           type: string
-          description: 'List of IPs to whitelist when geoblock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
+          description: 'Comma-separated IP addresses excluded from geo-blocking restrictions. e.g. 192.168.0.1, 192.168.0.2'
           example: 192.168.0.1
     zoneshttpsetting_geoblock:
       type: object
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
+          description: Enable or disable geo-blocking. Y means enabled, N means disabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: N
         list:
           type: array
@@ -15177,14 +15209,15 @@ components:
         enabled:
           type: string
           enum: [Y]
-          description: Enable domain lock (omit to disable)
+          description: Enable domain lock (omit to disable).
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should be disabled.
+          enum: [Y, N]
+          description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma . Eg: www.domain-one.com, www.domain-two.com'
+          description: 'Comma-separated domain names to block (Y) or allow (N). e.g. www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com,www.domain-two.com
         type:
           type: string
@@ -15193,10 +15226,10 @@ components:
         noreferer:
           type: string
           enum: [Y]
-          description: Block requests with empty/missing Referer header
+          description: "Controls requests with no Referer header. Y = block requests that have no Referer header."
         ips:
           type: string
-          description: IP's listed is excluded from any restrictions
+          description: 'Comma-separated IP addresses excluded from domain lock restrictions.'
           example: 117.251.60.184
         mode:
           type: string
@@ -15208,14 +15241,15 @@ components:
         enabled:
           type: string
           enum: [Y]
-          description: Enable domain lock (omit to disable)
+          description: Enable domain lock (omit to disable).
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should be disabled.
+          enum: [Y, N]
+          description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma . Eg: www.domain-one.com, www.domain-two.com'
+          description: 'Comma-separated domain names to block (Y) or allow (N). e.g. www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com
         type:
           type: string
@@ -15223,30 +15257,33 @@ components:
           example: whitelist
         noreferer:
           type: string
-          description: Block requests with empty referer
+          enum: [Y, N]
+          description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
           example: N
         ips:
           type: string
-          description: IP's listed is excluded from any restrictions
+          description: 'Comma-separated IP addresses excluded from domain lock restrictions.'
           example: 117.251.60.184
     zoneshttppushnew_securetoken:
       type: object
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to N if Secure token should be disabled.
-          example: Y
+          enum: [Q, F, D]
+          description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
+          example: Q
         list:
           type: string
-          description: The value should be random alpha numeric string, [A-Za-z0-9]
+          description: 16-character hexadecimal secret key used for token generation.
           example: e49c6d01156bd7c8
         timeout:
           type: string
-          description: "Secure token link expiration time in seconds \tmin: 5, max: 25200"
+          description: "Token expiry time in seconds. Minimum 5, maximum 25200."
           example: 300
         keyip:
           type: string
-          description: Values Can be Y or N. Set to Y if keyip should be enabled Set to N if keyip should be disabled.
+          enum: [Y, N]
+          description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
           example: N
     zoneshttpsetting_securetoken:
       type: object
@@ -15291,8 +15328,9 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
-          example: Y
+          enum: ["0", "1"]
+          description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
+          example: "0"
         rate:
           type: integer
           format: int32
@@ -15370,22 +15408,21 @@ components:
         enabled:
           type: string
           enum: [Y]
-          description: Enable bandwidth limiter (omit to disable)
+          description: Enable bandwidth limiter (omit to disable).
         policy:
           type: integer
           enum: [0, 1]
-          description: |
-            Limiter mode: 0 = Static (fixed rate/rateafter), 1 = Dynamic (rate via query params ?speed=&buffer=)
+          description: "Rate limiting mode. 0 = Static mode (fixed rate applied from the start of the transfer). 1 = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
           example: 0
         rate:
           type: integer
           format: int64
-          description: The value should be numeric.
+          description: Throttle rate in KB/s applied after rateafter threshold is reached.
           example: 0
         rateafter:
           type: integer
           format: int64
-          description: The value should be numeric.
+          description: Amount of data in KB served before the throttle rate kicks in.
           example: 0
     postZoneSecureToken:
       type: object
@@ -15413,37 +15450,39 @@ components:
         enabled:
           type: string
           enum: [Y]
-          description: Enable domain lock (omit to disable)
+          description: Enable domain lock (omit to disable).
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if domainlock should be enabled. Set to N if domainlock should not to be enabled.
+          enum: [Y, N]
+          description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
           example: Y
         list:
           type: string
-          description: 'List of domains seperated by comma. Eg: www.domain-one.com, www.domain-two.com'
+          description: 'Comma-separated domain names to block (Y) or allow (N). e.g. www.domain-one.com, www.domain-two.com'
           example: www.domain-one.com
         ips:
           type: string
-          description: 'List of IPs to whitelist when domain lock is enabled. IPs should be separated by comma. Eg: 192.168.0.1, 192.168.0.2'
+          description: 'Comma-separated IP addresses excluded from domain lock restrictions regardless of the policy.'
           example: 192.168.0.1
         noreferer:
           type: string
-          description: Values can be Y or N. Set to Y if noreferer should be enabled. Set to N if noreferer should not to be enabled.
+          enum: [Y, N]
+          description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
           example: N
         type:
           type: string
-          description: The values can be whitelist or blacklist
+          description: The values can be whitelist or blacklist.
           example: blacklist
     PostGeoBlock:
       type: object
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
+          description: Enable or disable geo-blocking. Y means enabled, N means disabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: N
         list:
           type: array
@@ -15462,11 +15501,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: Enable or disable geo-blocking. Y means enabled, N means disabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: Y
         list:
           type: array
@@ -15581,7 +15620,8 @@ components:
           example: Y
         mode:
           type: string
-          description: Select SSL type. The value can be N,S,L or C. Set to N for None Set to S for Shared. Set to L for Let's Encrypt. Set to C for Custom.
+          enum: [N, S, L, C]
+          description: "SSL certificate mode. N = None (no SSL). S = Shared wildcard SSL certificate (default CDN certificate). L = Free SSL via ZeroSSL/Let's Encrypt. C = Custom SSL certificate (requires certid)."
           example: N
         certidl:
           type: integer
@@ -15819,7 +15859,8 @@ components:
           example: https://mydomain.com
         optimize:
           type: string
-          description: Values can be http,live or vod
+          enum: [http, live, vod]
+          description: "Content delivery optimization mode. http = Standard web content optimization. live = HLS/DASH live streaming optimization. vod = HLS/DASH Video on Demand optimization."
           example: http
         cnames:
           type: string
@@ -15887,7 +15928,8 @@ components:
           example: N
         optimize:
           type: string
-          description: Values can be http,live or vod
+          enum: [http, live, vod]
+          description: "Content delivery optimization mode. http = Standard web content optimization. live = HLS/DASH live streaming optimization. vod = HLS/DASH Video on Demand optimization."
           example: http
         shields:
           type: array
@@ -15994,11 +16036,11 @@ components:
       properties:
         enabled:
           type: string
-          description: Values can be Y or N. Set to Y if Geo Block should be enabled. Set to N if Geo Block should not to be enabled.
+          description: Enable or disable geo-blocking. Y means enabled, N means disabled.
           example: Y
         policy:
           type: string
-          description: Values can be Y or N. Set to Y if geoblock countries list should be allowed. Set to N if geoblock countries list should be blocked
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: Y
         list:
           type: array
@@ -16015,24 +16057,26 @@ components:
       properties:
         policy:
           type: string
-          description: Values Can be Y or N. Set to Y if secure token should be enabled Set to Y if Secure token should be disabled.
-          example: Y
+          enum: [Q, F, D]
+          description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
+          example: Q
         list:
           type: string
-          description: The value should be random alpha numeric string, [A-Za-z0-9]
+          description: 16-character hexadecimal secret key used for token generation.
           example: 5f1283ceb939b05c
         timeout:
           type: integer
-          description: "Secure token link expiration time in seconds \tmin: 5, max: 25200"
+          description: "Token expiry time in seconds. Minimum 5, maximum 25200."
           format: int32
           example: 300
         keyip:
           type: string
-          description: Add Client IP in token generation for added security
+          enum: [Y, N]
+          description: "Bind token validation to the originating client IP address. Y = token is only valid from the IP that generated it, preventing sharing or theft. N = IP binding is disabled."
           example: N
         ips:
           type: string
-          description: IP's listed is excluded from any restrictions
+          description: 'Comma-separated IP addresses excluded from secure token validation.'
           example: 117.251.60.184
     postPushZoneSecuretoken:
       type: object
@@ -16128,19 +16172,19 @@ components:
       properties:
         policy:
           type: string
-          description: Access policy. Y means allow listed domains only, N means block listed domains.
+          description: "Referrer filtering mode. Y = Blacklist mode (block requests with listed referring domains). N = Whitelist mode (allow only requests from listed referring domains, block all others)."
           example: "N"
         list:
           type: string
-          description: Comma-separated list of allowed or blocked domain names.
+          description: Comma-separated domain names to block (Y) or allow (N).
           example: example.com,cdn.example.com
         ips:
           type: string
-          description: Comma-separated IP addresses excluded from domain lock restrictions.
+          description: Comma-separated IP addresses excluded from domain lock restrictions regardless of the policy.
           example: 203.0.113.10
         noreferer:
           type: string
-          description: Whether requests with no referrer header are blocked. Y means block, N means allow.
+          description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
           example: "N"
         type:
           type: string
@@ -16158,7 +16202,7 @@ components:
       properties:
         policy:
           type: string
-          description: Access policy. Y means allow listed countries only, N means block listed countries.
+          description: "Country filtering mode. Y = Blacklist mode (block requests from listed countries). N = Whitelist mode (allow only requests from listed countries, block all others)."
           example: "N"
         list:
           type: array
@@ -16182,11 +16226,11 @@ components:
       properties:
         policy:
           type: string
-          description: Secure token mode. Q means query string mode, F means full path mode.
+          description: "Defines how the token is computed. Q = Query string mode (token applied per query string parameter). F = Full path mode (token covers the full URL path). D = Directory/path-embedded mode (token is embedded within the URL path)."
           example: "F"
         keyip:
           type: string
-          description: Whether client IP is included in token generation. Y means enabled, N means disabled.
+          description: "Whether client IP is bound to the token. Y = token is only valid from the originating client IP. N = IP binding is disabled."
           example: "N"
         list:
           type: string
@@ -16199,7 +16243,7 @@ components:
           example: 3600
         session:
           type: string
-          description: Session mode. 0 means fixed expiry, S means session-based.
+          description: "Token expiry behavior. \"0\" = Fixed expiry (token expires at a set time). \"1\" = Rolling/Moving expiry (token timeout resets with each request for active sessions)."
           example: "0"
         ips:
           type: string
