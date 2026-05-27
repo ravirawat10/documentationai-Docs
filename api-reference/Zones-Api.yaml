@@ -9957,16 +9957,6 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4,5.6.7.8
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -10022,12 +10012,7 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -10089,11 +10074,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -13820,16 +13800,6 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4,5.6.7.8
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -13885,12 +13855,7 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -13952,11 +13917,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14167,7 +14127,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14180,17 +14140,12 @@ paths:
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y=allow no-referer requests, N=block them.
+                  description: "Y=block requests with empty referer header; N=allow them"
                   example: Y
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14229,7 +14184,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "N = Allow listed countries, Y = Block listed countries"
                   example: Y
                 list:
                   type: array
@@ -14241,15 +14196,10 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14315,20 +14265,10 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14371,7 +14311,7 @@ paths:
                   description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                 rate:
                   type: number
-                  description: KB/s rate limit.
+                  description: Rate limit in Kbps.
                   example: 1024
                 rateafter:
                   type: number
@@ -14379,8 +14319,8 @@ paths:
                   example: 10240
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14419,7 +14359,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed IP addresses, N = Allow only listed IP addresses"
                   example: Y
                 list:
                   type: string
@@ -14428,16 +14368,11 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14476,7 +14411,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed user agents, N = Allow listed user agents"
                   example: Y
                 list:
                   type: string
@@ -14491,11 +14426,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14504,8 +14434,8 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14544,7 +14474,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14557,17 +14487,12 @@ paths:
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y=allow no-referer requests, N=block them.
+                  description: "Y=block requests with empty referer header; N=allow them"
                   example: Y
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14606,7 +14531,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "N = Allow listed countries, Y = Block listed countries"
                   example: Y
                 list:
                   type: array
@@ -14618,15 +14543,10 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14692,20 +14612,10 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14744,7 +14654,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed IP addresses, N = Allow only listed IP addresses"
                   example: Y
                 list:
                   type: string
@@ -14753,16 +14663,11 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14801,7 +14706,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed user agents, N = Allow listed user agents"
                   example: Y
                 list:
                   type: string
@@ -14816,11 +14721,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14829,8 +14729,8 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
