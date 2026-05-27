@@ -16,7 +16,7 @@ servers:
     description: 5centsCDN API Server - Production
 
 security:
-  - apikeyAuth: []
+  - ApiKeyAuth: []
 
 tags:
   - name: HTTP Pull
@@ -5121,7 +5121,7 @@ components:
 
   # ─── Security Schemes ────────────────────────────────────────
   securitySchemes:
-    apikeyAuth:
+    ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
