@@ -68,7 +68,7 @@ components:
     TtlValue:
       type: integer
       description: TTL value in seconds.
-      enum: [60, 300, 600, 900, 1800, 3600, 21600, 43200, 86400, 172800, 259200, 604800, 1209600, 2592000]
+      enum: [60, 300, 900, 1800, 3600, 21600, 43200, 86400, 172800, 259200, 604800, 1209600, 2592000]
 security:
 - apikeyAuth: []
 paths:
@@ -432,8 +432,8 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: casting post -> delete
-                  example: delete
+                  description: HTTP method override to perform DELETE via POST. Must be uppercase.
+                  example: DELETE
       responses:
         '200':
           description: OK
@@ -1070,7 +1070,7 @@ paths:
         required: true
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -1081,16 +1081,17 @@ paths:
                 file:
                   type: string
                   format: binary
-                  description: Zone file content to import.
-                  example: zone file content
+                  description: "Zone file to import. Must be a plain-text file with .txt extension."
+                  example: zone.txt
                 delete-existing-records:
-                  type: integer
-                  description: Delete all existing records before import. 1 means yes, 0 means no.
-                  example: 0
-                record-types[]:
                   type: string
-                  description: DNS record types to import. Leave empty to import all types.
-                  example: AAAA
+                  description: "Whether to delete all existing DNS records before importing. '0' = keep existing records. '1' = delete all records before import."
+                  enum: ['0', '1']
+                  example: '1'
+                record-types:
+                  type: string
+                  description: "DNS record types to import as a comma-separated lowercase string. Leave empty to import all types."
+                  example: "a,aaaa,mx,cname,txt"
       responses:
         '200':
           description: OK
@@ -1247,10 +1248,6 @@ paths:
                   type: string
                   description: ID of the mail forward record to update.
                   example: '42'
-                _METHOD:
-                  type: string
-                  description: Method override to trigger mail forward update.
-                  example: PUT
       responses:
         '200':
           description: OK
@@ -1284,11 +1281,19 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - _METHOD
+              - mail-forward-id
               properties:
                 _METHOD:
                   type: string
-                  description: Method override to trigger mail forward deletion.
+                  description: HTTP method override. Must be DELETE.
+                  enum: [DELETE]
                   example: DELETE
+                mail-forward-id:
+                  type: string
+                  description: ID of the mail forward record to delete.
+                  example: '123'
       responses:
         '200':
           description: OK
@@ -1457,8 +1462,8 @@ paths:
                   example: v=spf1 include:example.com ~all
                 algorithm:
                   type: string
-                  description: Algorithm identifier. Used for SSHFP, DS, and CERT records.
-                  example: '2'
+                  description: "Algorithm identifier. For SSHFP records: 1=RSA, 2=DSA, 3=ECDSA, 4=Ed25519. For DS/CERT records: 2=DH, 3=DSA/SHA1, 4=ECC, 5=RSASHA1, 6=DSA-NSEC3-SHA1, 7=RSASHA1-NSEC3-SHA1, 8=RSASHA256, 10=RSASHA512, 13=ECDSAP256SHA256, 14=ECDSAP384SHA384, 15=Ed25519, 16=Ed448, 252=INDIRECT, 253=PRIVATEDNS, 254=PRIVATEOID."
+                  example: '13'
                 fptype:
                   type: string
                   description: Fingerprint hash type for SSHFP records. 1 means SHA-1, 2 means SHA-256.
@@ -1469,7 +1474,8 @@ paths:
                   example: '1'
                 caa_flag:
                   type: string
-                  description: CAA record flag. 0 means non-critical, 128 means critical.
+                  description: "CAA record flag controlling certificate authority enforcement. 0 = Non-critical. 28 = Critical."
+                  enum: ['0', '28']
                   example: '0'
                 caa_type:
                   type: string
@@ -1497,7 +1503,8 @@ paths:
                   example: '12345'
                 digest_type:
                   type: string
-                  description: Digest algorithm for DS records. 1 means SHA-1, 2 means SHA-256.
+                  description: "DS record digest algorithm. 1 = SHA-1. 2 = SHA-256. 3 = GOST R 34.11-94. 4 = SHA-384."
+                  enum: ['1', '2', '3', '4']
                   example: '2'
                 order:
                   type: string
@@ -1509,8 +1516,9 @@ paths:
                   example: '10'
                 flag:
                   type: string
-                  description: Flag for NAPTR records. Empty, U, S, A, or P.
-                  example: S
+                  description: "Flag for NAPTR records. 'Empty Flag' = no replacement (pass to next rule). U = terminal URI. S = terminal SRV lookup. A = terminal A/AAAA lookup. P = provider-specific."
+                  enum: ['Empty Flag', U, S, A, P]
+                  example: U
                 params:
                   type: string
                   description: Service parameters for NAPTR records.
@@ -1525,7 +1533,7 @@ paths:
                   example: _sip._udp.example.com
                 cert_type:
                   type: string
-                  description: Certificate type for CERT records. 1=PKIX, 2=SPKI, 3=PGP.
+                  description: "CERT record certificate type. 1=PKIX, 2=SPKI, 3=PGP, 4=IPKIX, 5=ISPKI, 6=IPGP, 7=ACPKIX, 8=IACPKIX, 253=URI, 254=OID."
                   example: '1'
                 cert_key_tag:
                   type: string
@@ -1533,8 +1541,8 @@ paths:
                   example: '0'
                 cert_algorithm:
                   type: string
-                  description: Algorithm identifier for CERT records.
-                  example: '5'
+                  description: "CERT record cryptographic algorithm. 2=DH, 3=DSA/SHA1, 4=ECC, 5=RSASHA1, 6=DSA-NSEC3-SHA1, 7=RSASHA1-NSEC3-SHA1, 8=RSASHA256, 10=RSASHA512, 13=ECDSAP256SHA256, 14=ECDSAP384SHA384, 15=Ed25519, 16=Ed448, 252=INDIRECT, 253=PRIVATEDNS, 254=PRIVATEOID."
+                  example: '13'
                 cpu:
                   type: string
                   description: CPU type identifier for HINFO records.
@@ -1721,8 +1729,8 @@ paths:
                   example: v=spf1 include:example.com ~all
                 algorithm:
                   type: string
-                  description: Algorithm identifier. Used for SSHFP, DS, and CERT records.
-                  example: '2'
+                  description: "Algorithm identifier. For SSHFP records: 1=RSA, 2=DSA, 3=ECDSA, 4=Ed25519. For DS/CERT records: 2=DH, 3=DSA/SHA1, 4=ECC, 5=RSASHA1, 6=DSA-NSEC3-SHA1, 7=RSASHA1-NSEC3-SHA1, 8=RSASHA256, 10=RSASHA512, 13=ECDSAP256SHA256, 14=ECDSAP384SHA384, 15=Ed25519, 16=Ed448, 252=INDIRECT, 253=PRIVATEDNS, 254=PRIVATEOID."
+                  example: '13'
                 fptype:
                   type: string
                   description: Fingerprint hash type for SSHFP records. 1 means SHA-1, 2 means SHA-256.
@@ -1733,7 +1741,8 @@ paths:
                   example: '1'
                 caa_flag:
                   type: string
-                  description: CAA record flag. 0 means non-critical, 128 means critical.
+                  description: "CAA record flag controlling certificate authority enforcement. 0 = Non-critical. 28 = Critical."
+                  enum: ['0', '28']
                   example: '0'
                 caa_type:
                   type: string
@@ -1761,7 +1770,8 @@ paths:
                   example: '12345'
                 digest_type:
                   type: string
-                  description: Digest algorithm for DS records. 1 means SHA-1, 2 means SHA-256.
+                  description: "DS record digest algorithm. 1 = SHA-1. 2 = SHA-256. 3 = GOST R 34.11-94. 4 = SHA-384."
+                  enum: ['1', '2', '3', '4']
                   example: '2'
                 order:
                   type: string
@@ -1773,8 +1783,9 @@ paths:
                   example: '10'
                 flag:
                   type: string
-                  description: Flag for NAPTR records. Empty, U, S, A, or P.
-                  example: S
+                  description: "Flag for NAPTR records. 'Empty Flag' = no replacement (pass to next rule). U = terminal URI. S = terminal SRV lookup. A = terminal A/AAAA lookup. P = provider-specific."
+                  enum: ['Empty Flag', U, S, A, P]
+                  example: U
                 params:
                   type: string
                   description: Service parameters for NAPTR records.
@@ -1789,7 +1800,7 @@ paths:
                   example: _sip._udp.example.com
                 cert_type:
                   type: string
-                  description: Certificate type for CERT records. 1=PKIX, 2=SPKI, 3=PGP.
+                  description: "CERT record certificate type. 1=PKIX, 2=SPKI, 3=PGP, 4=IPKIX, 5=ISPKI, 6=IPGP, 7=ACPKIX, 8=IACPKIX, 253=URI, 254=OID."
                   example: '1'
                 cert_key_tag:
                   type: string
@@ -1797,8 +1808,8 @@ paths:
                   example: '0'
                 cert_algorithm:
                   type: string
-                  description: Algorithm identifier for CERT records.
-                  example: '5'
+                  description: "CERT record cryptographic algorithm. 2=DH, 3=DSA/SHA1, 4=ECC, 5=RSASHA1, 6=DSA-NSEC3-SHA1, 7=RSASHA1-NSEC3-SHA1, 8=RSASHA256, 10=RSASHA512, 13=ECDSAP256SHA256, 14=ECDSAP384SHA384, 15=Ed25519, 16=Ed448, 252=INDIRECT, 253=PRIVATEDNS, 254=PRIVATEOID."
+                  example: '13'
                 cpu:
                   type: string
                   description: CPU type identifier for HINFO records.
@@ -1867,6 +1878,10 @@ paths:
                   type: string
                   description: S/MIME matching type. 0 means full data, 1 means SHA-256, 2 means SHA-512.
                   example: '1'
+                note:
+                  type: string
+                  description: Optional free-text note or comment attached to this DNS record.
+                  example: My primary web server A record
       responses:
         '200':
           description: OK
@@ -2006,15 +2021,17 @@ paths:
                   example: http
                 ssl:
                   type: string
-                  description: SSL handling mode. S means strict HTTPS.
-                  example: S
+                  description: "SSL termination mode for CDN proxy to origin. N = HTTP (no SSL). S = HTTPS strict. F = Full SSL strict."
+                  enum: [N, S, F]
+                  example: N
                 cache:
                   type: string
                   description: Cache duration for proxied responses.
                   example: 1d
                 expiry:
                   type: string
-                  description: Cache expiry duration.
+                  description: "Cache expiry/max-age duration for CDN content. N = no caching."
+                  enum: [N, 1h, 2h, 4h, 8h, 12h, 1d, 2d, 3d, 4d, 5d, 6d, 7d]
                   example: 1d
                 cachecontrol:
                   type: string
@@ -2028,14 +2045,19 @@ paths:
                   type: string
                   description: Revalidate cached content with the origin server. Y means enabled.
                   example: 'Y'
+                querystring:
+                  type: string
+                  description: "Controls whether query string parameters are forwarded to the origin. Y = pass through. N = strip at edge."
+                  enum: [Y, N]
+                  example: N
                 scheme:
                   type: string
                   description: Protocol to use when connecting to the origin server. http or https.
                   example: http
                 port:
-                  type: integer
-                  description: Port to connect to on the origin server.
-                  example: 80
+                  type: string
+                  description: Origin server port number for CDN proxy.
+                  example: '80'
                 status:
                   type: integer
                   description: Enable or disable the proxy. 1 means enabled, 0 means disabled.

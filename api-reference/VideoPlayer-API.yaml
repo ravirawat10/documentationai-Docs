@@ -41,18 +41,18 @@ paths:
                   type: string
                   description: 'Time granularity for data aggregation. One of: 1m, 5m, 15m, 1h, 1d, 1M.'
                   example: 1h
-                assests:
+                assets:
                   type: string
                   description: Comma-separated asset IDs filter. Retrieve available IDs from POST /players/5centscdn/analytics/search/assets.
-                  example: '12345,67890'
-                titles:
+                  example: '1,234,567,890'
+                title:
                   type: string
                   description: Comma-separated title IDs filter. Retrieve available values from POST /players/5centscdn/analytics/search/titles.
                   example: sample-video.mp4/playlist.m3u8
-                tags:
+                tag:
                   type: string
                   description: Comma-separated tag IDs filter. Retrieve available values from POST /players/5centscdn/analytics/search/tags.
-                  example: live,highlights
+                  example: live
       responses:
         '200':
           description: OK
@@ -264,18 +264,6 @@ paths:
                   - device
                   - title
                   example: country
-                assests[]:
-                  type: string
-                  description: Asset ID filter. Retrieve IDs from POST /players/5centscdn/analytics/search/assets.
-                  example: '12345'
-                titles[]:
-                  type: string
-                  description: Title filter. Retrieve values from POST /players/5centscdn/analytics/search/titles.
-                  example: sample-video.mp4/playlist.m3u8
-                tags[]:
-                  type: string
-                  description: Tag filter. Retrieve values from POST /players/5centscdn/analytics/search/tags.
-                  example: live
       responses:
         '200':
           description: OK
@@ -347,7 +335,7 @@ paths:
                       properties:
                         id:
                           type: string
-                          description: Unique identifier of the asset. Use this value in the assests[] filter field.
+                          description: Unique identifier of the asset. Use this value in the assets filter field.
                           example: '12345'
                         text:
                           type: string
@@ -436,10 +424,10 @@ paths:
                   description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Used to scope tag results.'
                   example: '2026-01-01 00:00:00 - 2026-01-31 23:59:59'
                 assets:
-                  type: integer
+                  type: string
                   description: Comma-separated list of asset IDs to scope the tag search.
-                  example: '12345'
-                titles:
+                  example: '1,234,567,890'
+                title:
                   type: string
                   description: Comma-separated list of title IDs to scope the tag search. At least one title is required.
                   example: sample-video.mp4/playlist.m3u8
@@ -750,7 +738,7 @@ paths:
       summary: Create Player Skin
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -839,9 +827,9 @@ paths:
                             description: 'Position of the logo overlay. One of: top-left, top-right, bottom-left, bottom-right'
                             example: bottom-right
                           width:
-                            type: integer
-                            description: Logo width in pixels.
-                            example: 70
+                            type: string
+                            description: Logo width in pixels, returned as string.
+                            example: '70'
                           height:
                             type: integer
                             description: Logo height in pixels.
@@ -871,7 +859,7 @@ paths:
                 meta:
                   logo:
                     position: bottom-right
-                    width: 70
+                    width: '70'
                     height: 50
                     offsetH: 6
                     offsetV: 46
@@ -883,7 +871,7 @@ paths:
       summary: Update Player Skin
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -892,8 +880,8 @@ paths:
                   description: Updated display name for the player skin.
                   example: My Updated Skin
                 meta[showskinoninit]:
-                  type: integer
-                  description: Show skin controls when the player initialises. 1=yes, 0=no
+                  type: string
+                  description: Show skin controls when the player initialises. '1'=yes, '0'=no
                   example: '1'
                 meta[showpip]:
                   type: integer
@@ -912,8 +900,8 @@ paths:
                   description: Show concurrent viewers count overlay. 1=yes, 0=no
                   example: '0'
                 base:
-                  type: integer
-                  description: 'Base skin template to use. Valid values: 1, 2, 3, 4, or 5'
+                  type: string
+                  description: "Base skin template to use. Valid values: '1', '2', '3', '4', or '5'"
                   example: '2'
                 meta[primaryColor]:
                   type: string
@@ -936,32 +924,32 @@ paths:
                   description: 'Position of the logo overlay. One of: top-left, top-right, bottom-left, bottom-right'
                   example: top-right
                 meta[logo][width]:
-                  type: integer
-                  description: Logo width in pixels.
+                  type: string
+                  description: Logo width in pixels, sent as string.
                   example: '32'
                 meta[logo][height]:
-                  type: integer
-                  description: Logo height in pixels.
+                  type: string
+                  description: Logo height in pixels, sent as string.
                   example: '32'
                 meta[logo][offsetH]:
-                  type: integer
-                  description: Horizontal offset from the anchor position in pixels.
+                  type: string
+                  description: Horizontal offset from the anchor position in pixels, sent as string.
                   example: '10'
                 meta[logo][offsetV]:
-                  type: integer
-                  description: Vertical offset from the anchor position in pixels.
+                  type: string
+                  description: Vertical offset from the anchor position in pixels, sent as string.
                   example: '10'
                 meta[logo][padding]:
-                  type: integer
-                  description: Inner padding around the logo in pixels.
+                  type: string
+                  description: Inner padding around the logo in pixels, sent as string.
                   example: '5'
                 meta[logo][opacity]:
-                  type: number
-                  description: Logo opacity. Value between 0 (fully transparent) and 1 (fully opaque).
+                  type: string
+                  description: Logo opacity as string. Value between '0' (fully transparent) and '1' (fully opaque).
                   example: '0.9'
                 meta[logo][fadeDelay]:
-                  type: integer
-                  description: Time in milliseconds before the logo fades out. Use 0 to keep it always visible.
+                  type: string
+                  description: Time in milliseconds before the logo fades out, sent as string. Use '0' to keep it always visible.
                   example: '5000'
                 meta[logo][hideOnReady]:
                   type: integer
@@ -970,6 +958,74 @@ paths:
                 meta[poster]:
                   type: string
                   description: Poster image shown before playback starts, encoded as a data URI (data:image/png;base64,...).
+                  example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                meta[endAction]:
+                  type: string
+                  description: "Action to perform when playback ends. Empty string = default behaviour. 'related' = show related videos panel."
+                  example: ''
+                meta[videoInfo]:
+                  type: string
+                  description: Show video info overlay. '1' = show, '0' = hide.
+                  example: '0'
+                meta[zoomMenu]:
+                  type: string
+                  description: Show zoom menu controls. '1' = show, '0' = hide.
+                  example: '0'
+                meta[rewindforwardButton]:
+                  type: string
+                  description: Show rewind and forward skip buttons. '1' = show, '0' = hide.
+                  example: '0'
+                meta[contextMenu]:
+                  type: string
+                  description: Show the player context (right-click) menu. '1' = show, '0' = hide.
+                  example: '0'
+                meta[offline][offlineImage]:
+                  type: string
+                  description: Base64-encoded image shown when the stream is offline, as a data URI (data:image/...;base64,...).
+                  example: ''
+                meta[offline][offlineTimeout]:
+                  type: string
+                  description: 'Duration to wait before showing the offline image. Format: HH:MM:SS'
+                  example: '00:00:00'
+                meta[offline][offlineCountdown]:
+                  type: string
+                  description: Show countdown timer on the offline screen. '1' = show, '0' = hide.
+                  example: '0'
+                meta[offline][label]:
+                  type: string
+                  description: Text label shown in the overlay when the stream is offline.
+                  example: ''
+                meta[vastAd]:
+                  type: string
+                  description: "Enable VAST ad insertion. '1' = enabled, '0' = disabled. Mutually exclusive with meta[imaAd]."
+                  example: '0'
+                meta[imaAd]:
+                  type: string
+                  description: "Enable Google IMA ad insertion. '1' = enabled, '0' = disabled. Mutually exclusive with meta[vastAd]."
+                  example: '0'
+                meta[imaAdOption][adTagUrl]:
+                  type: string
+                  description: VAST/VMAP ad tag URL for IMA ad insertion. Empty string disables IMA ads.
+                  example: ''
+                meta[vastAdOption][tagURL][]:
+                  type: string
+                  description: "VAST ad tag URL. Send up to three instances via repeated FormData.append() calls to fill each slot."
+                  example: ''
+                meta[relatedVideos][{id}][url]:
+                  type: string
+                  description: "Playback URL for a related video entry. {id} is a unique timestamp-based key per entry."
+                  example: 'https://cdn.example.com/videos/sample-video.mp4'
+                meta[relatedVideos][{id}][title]:
+                  type: string
+                  description: "Display title for a related video entry. {id} is a unique timestamp-based key per entry."
+                  example: Sample Related Video
+                meta[relatedVideos][{id}][duration]:
+                  type: string
+                  description: "Duration of the related video in seconds. {id} is a unique timestamp-based key per entry."
+                  example: '120'
+                meta[relatedVideos][{id}][thumb]:
+                  type: string
+                  description: "Base64-encoded thumbnail for a related video entry in data URI format. {id} is a unique timestamp-based key per entry."
                   example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
       parameters:
       - name: skinid

@@ -64,8 +64,8 @@ paths:
               properties:
                 r:
                   type: string
-                  description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-                  example: "2026-01-01 - 2026-01-31"
+                  description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+                  example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
                 resource_type:
                   type: string
                   description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -151,8 +151,8 @@ paths:
               properties:
                 r:
                   type: string
-                  description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-                  example: "2026-01-01 - 2026-01-31"
+                  description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+                  example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
                 resource_type:
                   type: string
                   description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -847,8 +847,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -877,8 +877,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -911,8 +911,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -945,8 +945,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -979,8 +979,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1013,8 +1013,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1047,8 +1047,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1081,8 +1081,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1115,8 +1115,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1149,8 +1149,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1183,8 +1183,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1220,8 +1220,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1243,7 +1243,7 @@ components:
         match:
           type: string
           description: Cache status to filter by. Must match the `key` field returned in the breakdown response.
-          enum: [HIT, MISS, EXPIRED, BYPASS, STALE, UPDATING, "-"]
+          enum: [HIT, MISS, EXPIRED, BYPASS, STALE, REVALIDATED, "-"]
           example: MISS
           x-examples:
           - MISS
@@ -1258,8 +1258,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1288,8 +1288,8 @@ components:
       properties:
         r:
           type: string
-          description: Date range in "YYYY-MM-DD - YYYY-MM-DD" format (UTC).
-          example: "2026-01-01 - 2026-01-31"
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
         resource_type:
           type: string
           description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
@@ -1305,9 +1305,9 @@ components:
           example: ["abc12hash", "def34hash", "ghi56hash"]
         granularity:
           type: string
-          description: Comparison granularity for the period-over-period card calculation.
-          enum: [hour, day, month]
-          example: day
+          description: Defines the time interval for data aggregation. Defaults to "24h".
+          enum: ["1m", "5m", "15m", "30m", "1h", "3h", "6h", "12h", "24h"]
+          example: "24h"
 
     # ── REST Analytics – response schemas ─────────────────────────────────────
     TrafficResourcesResponse:
@@ -1653,7 +1653,7 @@ components:
     TrafficCacheStatusMap:
       type: object
       description: |
-        Request counts keyed by cache status. Known statuses: HIT, MISS, EXPIRED, BYPASS, "-".
+        Request counts keyed by cache status. Known statuses: HIT, MISS, EXPIRED, BYPASS, STALE, REVALIDATED, "-".
       properties:
         HIT:
           $ref: '#/components/schemas/TrafficCacheStatusValue'
@@ -1662,6 +1662,10 @@ components:
         EXPIRED:
           $ref: '#/components/schemas/TrafficCacheStatusValue'
         BYPASS:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        STALE:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        REVALIDATED:
           $ref: '#/components/schemas/TrafficCacheStatusValue'
         "-":
           $ref: '#/components/schemas/TrafficCacheStatusValue'
@@ -1687,6 +1691,10 @@ components:
             EXPIRED:
               $ref: '#/components/schemas/TrafficCacheDeviationValue'
             BYPASS:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            STALE:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            REVALIDATED:
               $ref: '#/components/schemas/TrafficCacheDeviationValue'
             "-":
               $ref: '#/components/schemas/TrafficCacheDeviationValue'
