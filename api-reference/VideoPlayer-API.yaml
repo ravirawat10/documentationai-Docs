@@ -1011,21 +1011,21 @@ paths:
                   type: string
                   description: "VAST ad tag URL. Send up to three instances via repeated FormData.append() calls to fill each slot."
                   example: ''
-                meta[relatedVideos][{id}][url]:
+                meta[relatedVideos][:id][url]:
                   type: string
-                  description: "Playback URL for a related video entry. {id} is a unique timestamp-based key per entry."
+                  description: "Playback URL for a related video entry. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
                   example: 'https://cdn.example.com/videos/sample-video.mp4'
-                meta[relatedVideos][{id}][title]:
+                meta[relatedVideos][:id][title]:
                   type: string
-                  description: "Display title for a related video entry. {id} is a unique timestamp-based key per entry."
+                  description: "Display title for a related video entry. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
                   example: Sample Related Video
-                meta[relatedVideos][{id}][duration]:
+                meta[relatedVideos][:id][duration]:
                   type: string
-                  description: "Duration of the related video in seconds. {id} is a unique timestamp-based key per entry."
+                  description: "Duration of the related video in seconds. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
                   example: '120'
-                meta[relatedVideos][{id}][thumb]:
+                meta[relatedVideos][:id][thumb]:
                   type: string
-                  description: "Base64-encoded thumbnail for a related video entry in data URI format. {id} is a unique timestamp-based key per entry."
+                  description: "Base64-encoded thumbnail for a related video entry in data URI format. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
                   example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
       parameters:
       - name: skinid
