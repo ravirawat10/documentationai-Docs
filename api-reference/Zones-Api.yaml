@@ -14144,6 +14144,7 @@ paths:
                   example: Y
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14198,6 +14199,7 @@ paths:
                   example: 1.2.3.4
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14267,6 +14269,7 @@ paths:
                   example: 1.2.3.4
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14319,6 +14322,7 @@ paths:
                   example: 10240
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14371,6 +14375,7 @@ paths:
                   example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14434,6 +14439,7 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14491,6 +14497,7 @@ paths:
                   example: Y
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14545,6 +14552,7 @@ paths:
                   example: 1.2.3.4
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14614,6 +14622,7 @@ paths:
                   example: 1.2.3.4
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14666,6 +14675,7 @@ paths:
                   example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
@@ -14729,6 +14739,7 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
+                  enum: [save, append, overwrite]
                   description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
