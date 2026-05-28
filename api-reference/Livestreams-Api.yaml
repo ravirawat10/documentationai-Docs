@@ -8813,7 +8813,7 @@ paths:
       - Pull Streams
       summary: List Streams
       description: pull streams list
-      operationId: ListPullStreams
+      operationId: listPullStreams
       parameters:
       - in: query
         name: page
@@ -32699,7 +32699,7 @@ paths:
       - DVR Streams
       summary: Update DVR Export
       description: Update DVR Export of record stream
-      operationId: updateDVRExportStreamsRecord
+      operationId: updateDvrExportStreamsRecord
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
       requestBody:
@@ -32721,7 +32721,7 @@ paths:
       - DVR Streams
       summary: Update DVR Auto Export
       description: Update DVR Auto Export of record stream
-      operationId: updateDVRAutoExportStreamsRecord
+      operationId: updateDvrAutoExportStreamsRecord
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
       requestBody:
@@ -34973,7 +34973,7 @@ paths:
       - Delayed Streams
       summary: Delayedstreams
       description: List Delayed streams
-      operationId: DelayedstreamsList
+      operationId: delayedStreamsList
       parameters:
       - in: query
         name: page
@@ -54049,7 +54049,7 @@ paths:
       - Multistream Streams
       summary: Restream List.
       description: Restream list
-      operationId: RestreamList
+      operationId: restreamList
       parameters:
       - in: query
         name: page

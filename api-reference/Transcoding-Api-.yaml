@@ -1703,7 +1703,7 @@ paths:
       - Video Encoding Profiles
       summary: List File Transcoding Profiles
       description: List all file transcoding profiles for the service.
-      operationId: ProfilesList
+      operationId: profilesList
       responses:
         '200':
           description: success
