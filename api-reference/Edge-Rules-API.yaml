@@ -5174,7 +5174,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: Method override. Use PUT to create or update this resource.
+                description: HTTP method override. Always "PUT" for create.
                 example: PUT
               name:
                 type: string
@@ -6264,7 +6264,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: Method override. Use PUT to create or update this resource.
+                description: HTTP method override. Always "PUT" for create.
                 example: PUT
               name:
                 type: string
@@ -7083,7 +7083,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: Method override. Use PUT to create or update this resource.
+                description: HTTP method override. Always "PUT" for create.
                 example: PUT
               name:
                 type: string
@@ -7877,7 +7877,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: Method override. Use PUT to create or update this resource.
+                description: HTTP method override. Always "PUT" for create.
                 example: PUT
               name:
                 type: string
@@ -14512,7 +14512,7 @@ components:
         _METHOD:
           type: string
           enum: [DELETE]
-          description: Method override. Use DELETE to remove this resource.
+          description: HTTP method override that instructs the API to delete the resource
 
     RuleOptions:
       type: object

@@ -832,7 +832,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use PUT to create or update this resource.
+                  description: Must always be PUT.
                   example: PUT
                 alias:
                   type: string
@@ -1870,7 +1870,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: HTTP method override header value (e.g. DELETE)
                   example: DELETE
       deprecated: false
       responses:
@@ -4379,7 +4379,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use PUT to create or update this resource.
+                  description: Must always be PUT.
                   example: PUT
                 alias:
                   type: string
@@ -7708,7 +7708,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use PUT to create or update this resource.
+                  description: Must always be PUT.
                   example: PUT
                 alias:
                   type: string
@@ -8827,7 +8827,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: HTTP method override header value (e.g. DELETE)
                   enum: [DELETE]
                   example: DELETE
       deprecated: false
@@ -11463,7 +11463,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use PUT to create or update this resource.
+                  description: Must always be PUT.
                   example: PUT
                 alias:
                   type: string
@@ -12440,7 +12440,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: HTTP method override header value (e.g. DELETE)
                   enum: [DELETE]
                   example: DELETE
       deprecated: false
@@ -14847,7 +14847,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use PUT to create or update this resource.
+          description: To cast request method PUT
           example: PUT
         alias:
           type: string
@@ -15803,7 +15803,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use PUT to create or update this resource.
+          description: To cast request method POST to PUT
           example: PUT
         origin:
           type: string
@@ -15872,7 +15872,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use PUT to create or update this resource.
+          description: To cast request method POST to PUT
           example: PUT
         origin:
           type: string
@@ -15910,7 +15910,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use PUT to create or update this resource.
+          description: To cast request method POST to PUT
           example: PUT
         server:
           type: string
@@ -16064,7 +16064,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use DELETE to remove this resource.
+          description: To cast request method to DELETE
           example: DELETE
         files:
           type: array

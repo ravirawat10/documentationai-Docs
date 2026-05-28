@@ -233,7 +233,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: Must be set to DELETE to trigger domain deletion.
                   example: DELETE
       responses:
         '200':
@@ -606,7 +606,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: Must be set to DELETE to trigger certificate deletion.
                   example: DELETE
       responses:
         '200':
@@ -803,7 +803,7 @@ paths:
                   - update
                 _METHOD:
                   type: string
-                  description: Method override. Use PUT to create or update this resource.
+                  description: Must be set to PUT to trigger API key creation.
                   example: PUT
       responses:
         '200':
@@ -955,7 +955,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Method override. Use DELETE to remove this resource.
+                  description: Must be set to DELETE to trigger API key deletion.
                   example: DELETE
       responses:
         '200':
@@ -1083,7 +1083,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: Method override. Use PUT to create or update this resource.
+          description: Must be set to PUT to trigger SSL certificate creation.
           example: PUT
         name:
           type: string
