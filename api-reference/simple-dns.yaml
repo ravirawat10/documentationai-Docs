@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: 5centsCDN - SimpleDNS
   description: >
@@ -26,7 +26,7 @@ tags:
   description: Email forwarding rules for DNS zones
 components:
   securitySchemes:
-    apikeyAuth:
+    ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
@@ -70,7 +70,7 @@ components:
       description: TTL value in seconds.
       enum: [60, 300, 900, 1800, 3600, 21600, 43200, 86400, 172800, 259200, 604800, 1209600, 2592000]
 security:
-- apikeyAuth: []
+- ApiKeyAuth: []
 paths:
   /dns:
     get:
@@ -259,6 +259,7 @@ paths:
                           description: Timestamp when the zone was last validated.
                           example: '2026-04-17 22:57:53'
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         proxied:

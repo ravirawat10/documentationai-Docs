@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: 5centsCDN - Transcoding API
   description: >
@@ -32,14 +32,14 @@ tags:
 paths:
 
   # ---------------------------------------------------------------------------
-  # Transcoding Dashboard — list / filter by date range
+  # Transcoding Dashboard â€” list / filter by date range
   # ---------------------------------------------------------------------------
   /transcoding:
     get:
       tags:
       - Video Encoding Jobs
       summary: List All Encoding Jobs (current)
-      description: List all encoding jobs for the service. No date filter — returns all.
+      description: List all encoding jobs for the service. No date filter â€” returns all.
       operationId: listEncodingJobs
       responses:
         '200':
@@ -1008,6 +1008,7 @@ paths:
                                   description: Comma-separated custom CNAME hostnames for the zone.
                                   example: ""
                                 zoneids:
+                                  type: string
                                   nullable: true
                                   example:
                                 edgeruleids:
@@ -1015,6 +1016,7 @@ paths:
                                   description: Edge rule set identifier applied to this zone.
                                   example: 0
                                 profile:
+                                  type: string
                                   nullable: true
                                   example:
                                 rclone:
@@ -1038,6 +1040,7 @@ paths:
                                   description: Timestamp when this record was last updated.
                                   example: "2026-04-26 17:50:21"
                                 deleted:
+                                  type: string
                                   nullable: true
                                   example:
                             jobid:
@@ -2336,7 +2339,7 @@ paths:
                   example: "30"
                 gop:
                   type: string
-                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24–300."
+                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24â€“300."
                   example: "60"
                 preset:
                   type: string
@@ -2391,7 +2394,7 @@ paths:
                   example: "1920x800"
                 crfv:
                   type: string
-                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0–51; typical H.264 range is 18–28."
+                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0â€“51; typical H.264 range is 18â€“28."
                   example: "24"
                 ara:
                   type: string
@@ -2525,7 +2528,7 @@ paths:
                   example: "30"
                 gop:
                   type: string
-                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24–300."
+                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24â€“300."
                   example: "60"
                 preset:
                   type: string
@@ -2580,7 +2583,7 @@ paths:
                   example: "1920x800"
                 crfv:
                   type: string
-                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0–51; typical H.264 range is 18–28."
+                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0â€“51; typical H.264 range is 18â€“28."
                   example: "24"
                 ara:
                   type: string
@@ -3330,6 +3333,7 @@ paths:
                                 description: FFmpeg filter name to apply.
                                 example: drawtext
                               args:
+                                type: string
                                 nullable: true
                                 example:
 
@@ -3376,7 +3380,7 @@ paths:
                 args[drawtext][text]:
                   type: string
                   description: "Text string to render as overlay on video. Required when filter=drawtext."
-                  example: "© 2024 My Brand"
+                  example: "Â© 2024 My Brand"
                 args[drawtext][fontsize]:
                   type: integer
                   description: "Font size of text overlay in pixels. Required when filter=drawtext."
@@ -3457,7 +3461,7 @@ paths:
                 args[text]:
                   type: string
                   description: "Text string to render as overlay on video. Required when filter=drawtext."
-                  example: "© 2024 My Brand"
+                  example: "Â© 2024 My Brand"
                 args[fontsize]:
                   type: integer
                   description: "Font size of text overlay in pixels. Required when filter=drawtext."

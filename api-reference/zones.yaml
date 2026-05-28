@@ -114,6 +114,7 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2023-01-20 12:00:00"
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         router:
@@ -514,6 +515,7 @@ paths:
                           description: "Numeric identifier of the default behavior set"
                           example: 11111
                         linkedVideoManager:
+                          type: string
                           nullable: true
                           example:
                         hostHeader:
@@ -1151,6 +1153,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2023-01-20 12:00:00"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -1401,6 +1404,7 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 11111
                       linkedVideoManager:
+                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -1810,6 +1814,7 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
+                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -2412,6 +2417,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2025-03-23 05:49:30"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -2454,6 +2460,7 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
+                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -2513,6 +2520,7 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 11111
                       linkedVideoManager:
+                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -3676,6 +3684,7 @@ paths:
                           description: Whether live streaming is active for this zone
                           example: "N"
                         wafid:
+                          type: string
                           nullable: true
                           example:
                         edgeruleids:
@@ -3717,6 +3726,7 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-14 12:29:23"
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         router:
@@ -4700,6 +4710,7 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
+                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -4711,6 +4722,7 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
+                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -4738,6 +4750,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-14 12:29:23"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -4780,6 +4793,7 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
+                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -5302,6 +5316,7 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
+                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -6174,6 +6189,7 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
+                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -6185,6 +6201,7 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
+                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -6196,6 +6213,7 @@ paths:
                         description: Whether WordPress integration mode is enabled (Y/N)
                         example: "0"
                       awsSignatureV4:
+                        type: string
                         nullable: true
                         example:
                       disabled:
@@ -6211,6 +6229,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2024-03-08 15:13:40"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -6253,6 +6272,7 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
+                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -6545,6 +6565,7 @@ paths:
                             description: "Comma-separated IP addresses or CIDR ranges"
                             example: ""
                           dirs:
+                            type: string
                             nullable: true
                             example:
                           active:
@@ -6928,6 +6949,7 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-08 06:06:49"
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         router:
@@ -7264,6 +7286,7 @@ paths:
                           description: "Numeric identifier of the default behavior set"
                           example: 6785
                         linkedVideoManager:
+                          type: string
                           nullable: true
                           example:
                         hostHeader:
@@ -8021,6 +8044,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-08 06:06:49"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -8334,6 +8358,7 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 6785
                       linkedVideoManager:
+                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -8772,6 +8797,7 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
+                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -9018,6 +9044,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-01 11:34:46"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -9064,6 +9091,7 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
+                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -9391,6 +9419,7 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 8282
                       linkedVideoManager:
+                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -9957,16 +9986,6 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4,5.6.7.8
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -10022,12 +10041,7 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -10089,11 +10103,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -10775,6 +10784,7 @@ paths:
                           description: Whether live streaming is active for this zone
                           example: "N"
                         wafid:
+                          type: string
                           nullable: true
                           example:
                         edgeruleids:
@@ -10816,6 +10826,7 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-08 12:24:08"
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         router:
@@ -11789,6 +11800,7 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
+                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -11800,6 +11812,7 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
+                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -11827,6 +11840,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-08 12:24:08"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -11873,6 +11887,7 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
+                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -12405,6 +12420,7 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: false
                   warnings:
+                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -12647,6 +12663,7 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
+                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -12658,6 +12675,7 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
+                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -12669,6 +12687,7 @@ paths:
                         description: Whether WordPress integration mode is enabled (Y/N)
                         example: "0"
                       awsSignatureV4:
+                        type: string
                         nullable: true
                         example:
                       disabled:
@@ -12684,6 +12703,7 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-03-04 09:36:36"
                       deleted:
+                        type: string
                         nullable: true
                         example:
                       router:
@@ -13820,16 +13840,6 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4,5.6.7.8
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -13885,12 +13895,7 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
                   description: S=shared (zone-level)
@@ -13952,11 +13957,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14151,6 +14151,7 @@ paths:
     post:
       tags:
       - HTTP Global Settings
+      summary: update zone http domain setting
       description: update zone http domain setting
       operationId: settingsZoneHTTPDomain
       requestBody:
@@ -14167,7 +14168,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14180,17 +14181,13 @@ paths:
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y=allow no-referer requests, N=block them.
+                  description: "Y=block requests with empty referer header; N=allow them"
                   example: Y
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14229,7 +14226,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "N = Allow listed countries, Y = Block listed countries"
                   example: Y
                 list:
                   type: array
@@ -14241,15 +14238,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14315,20 +14308,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14371,7 +14355,7 @@ paths:
                   description: "Rate limiting mode. \"0\" = Static mode (fixed rate applied from the start of the transfer). \"1\" = Dynamic mode (rate limiting activates only after rateafter bytes have been served)."
                 rate:
                   type: number
-                  description: KB/s rate limit.
+                  description: Rate limit in Kbps.
                   example: 1024
                 rateafter:
                   type: number
@@ -14379,8 +14363,9 @@ paths:
                   example: 10240
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14419,7 +14404,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed IP addresses, N = Allow only listed IP addresses"
                   example: Y
                 list:
                   type: string
@@ -14428,16 +14413,12 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14476,7 +14457,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed user agents, N = Allow listed user agents"
                   example: Y
                 list:
                   type: string
@@ -14491,11 +14472,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14504,8 +14480,9 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14544,7 +14521,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14557,17 +14534,13 @@ paths:
                 noreferer:
                   type: string
                   enum: [Y, N]
-                  description: Y=allow no-referer requests, N=block them.
+                  description: "Y=block requests with empty referer header; N=allow them"
                   example: Y
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14606,7 +14579,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "N = Allow listed countries, Y = Block listed countries"
                   example: Y
                 list:
                   type: array
@@ -14618,15 +14591,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14692,20 +14661,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from token check.
                   example: 1.2.3.4
-                dirs:
-                  type: string
-                  nullable: true
-                  description: Optional directory restriction.
-                  example:
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14744,7 +14704,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed IP addresses, N = Allow only listed IP addresses"
                   example: Y
                 list:
                   type: string
@@ -14753,16 +14713,12 @@ paths:
                 ips:
                   type: string
                   description: Comma-separated IPs excluded from access control.
-                  example: 1.2.3.4
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
+                  example: 1.1.1.1,192.168.1.10/30
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -14801,7 +14757,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Y = Block listed user agents, N = Allow listed user agents"
                   example: Y
                 list:
                   type: string
@@ -14816,11 +14772,6 @@ paths:
                   enum: [Y, N]
                   example: N
                   description: Whether matching is case-sensitive. Y means enabled, N means disabled.
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 listArr:
                   type: array
                   items:
@@ -14829,8 +14780,9 @@ paths:
                   example: [Mozilla, Googlebot]
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -16757,6 +16709,7 @@ components:
           description: Whether SSL is enabled for this zone. Y means enabled, N means disabled.
           example: "Y"
         warning:
+          type: boolean
           nullable: true
           description: SSL configuration warning message, or false if no warnings exist.
           example: false
@@ -17323,7 +17276,7 @@ components:
         password:
           type: string
           description: FTP password for authenticating to the push zone storage.
-          example: "••••••••"
+          example: "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
     serverList:
       properties:
         code:
