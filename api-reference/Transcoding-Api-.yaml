@@ -2717,7 +2717,7 @@ paths:
       - Video Encoding Profiles
       summary: List File Transcoding Filters
       description: List all file transcoding filters for the service.
-      operationId: transcodingFileFilter
+      operationId: listVideoTranscodingFilters
       responses:
         '200':
           description: success
@@ -3339,7 +3339,7 @@ paths:
       - Video Encoding Profiles
       summary: Create File Transcoding Filter
       description: Create a new file transcoding filter.
-      operationId: createFileTranscodingFilter
+      operationId: createVideoTranscodingFilter
       requestBody:
         required: true
         content:
@@ -3422,7 +3422,7 @@ paths:
       - Video Encoding Profiles
       summary: Edit Transcoding Profile Filter
       description: Edit an existing transcoding profile filter.
-      operationId: editTranscodingProfileFilter
+      operationId: editVideoTranscodingFilter
       parameters:
       - $ref: '#/components/parameters/filterIdParam'
       requestBody:
@@ -3495,7 +3495,7 @@ paths:
       description: >
         Delete the information of a transcoding profile filter. To cast request
         method POST, include parameter _METHOD = DELETE.
-      operationId: deleteTranscodingProfileFilter
+      operationId: deleteVideoTranscodingFilter
       parameters:
       - $ref: '#/components/parameters/filterIdParam'
       requestBody:

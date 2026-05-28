@@ -33432,7 +33432,7 @@ paths:
       - DVR Streams
       summary: Restore
       description: Restore record stream
-      operationId: restore-8
+      operationId: restoreDvrStream
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
       responses:
