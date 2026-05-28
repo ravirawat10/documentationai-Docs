@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.0
 info:
   title: 5centsCDN - Livestreams
   description: API for managing Live Streams in 5centsCDN (https://www.5centscdn.net)
@@ -56596,7 +56596,7 @@ paths:
                   example: 720p
                 svvalue:
                   type: string
-                  description: "Custom resolution in WIDTHxHEIGHT format. Required when sv is as_defined. Width range 256–7680, height range 144–4320, both values must be divisible by 2."
+                  description: "Custom resolution in WIDTHxHEIGHT format. Required when sv is as_defined. Width range 256â€“7680, height range 144â€“4320, both values must be divisible by 2."
                   example: 1280x720
                 crfv:
                   type: string
@@ -58669,7 +58669,7 @@ components:
           example: 192.168.0.1
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. append â€” appends the values to existing streams data and updates. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_rtmpauth:
       type: object
@@ -58688,7 +58688,7 @@ components:
           example: Str0ngP@ssw0rd
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_cname:
       type: object
@@ -58734,7 +58734,7 @@ components:
           example: 7
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. append â€” appends the values to existing streams data and updates. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     streamsetting_ndvr:
       type: object
@@ -58750,7 +58750,7 @@ components:
           example: 5
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. append â€” appends the values to existing streams data and updates. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     transcodingResult:
       type: object
@@ -58891,7 +58891,7 @@ components:
           example: 720p
         svvalue:
           type: string
-          description: Custom resolution in WIDTHxHEIGHT format. Required when sv is set to as_defined. Width range is 256–7680, height range is 144–4320, both values must be divisible by 2.
+          description: Custom resolution in WIDTHxHEIGHT format. Required when sv is set to as_defined. Width range is 256â€“7680, height range is 144â€“4320, both values must be divisible by 2.
           example: 1280x720
         deinterlace:
           type: string
@@ -58982,7 +58982,7 @@ components:
           example: 192.168.0.1
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. append â€” appends the values to existing streams data and updates. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     streamstimeshiftnew_geoblock:
       type: object
@@ -59839,7 +59839,7 @@ components:
           example: N
         mode:
           type: string
-          description: "Controls how the settings are applied to streams. save — only saves the settings, no changes will be made to existing stream settings. append — appends the values to existing streams data and updates. overwrite — overwrites the existing streams values, replacing them and updates."
+          description: "Controls how the settings are applied to streams. save â€” only saves the settings, no changes will be made to existing stream settings. append â€” appends the values to existing streams data and updates. overwrite â€” overwrites the existing streams values, replacing them and updates."
           example: save
     streamsrestreamnew_geoblock:
       type: object

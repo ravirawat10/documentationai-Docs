@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.0
 info:
   title: 5centsCDN - Analytics & Reports
   description: |
@@ -629,7 +629,7 @@ components:
       name: X-API-Key
 
   schemas:
-# ── Schemas from Dashboard Reports API (Claude) ───────────────────────────────
+# â”€â”€ Schemas from Dashboard Reports API (Claude) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     # ------------------------------------------------------------------
     # MyCDN / ON filter schemas
     # ------------------------------------------------------------------
@@ -822,7 +822,7 @@ components:
           description: PHP date() format string for rendering Unix timestamps in the data array.
           example: "Y-m-d H:i:00"
 
-    # ── REST Analytics – request schemas ─────────────────────────────────────
+    # â”€â”€ REST Analytics â€“ request schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     TrafficResourcesRequest:
       type: object
       properties:
@@ -1309,7 +1309,7 @@ components:
           enum: ["1m", "5m", "15m", "30m", "1h", "3h", "6h", "12h", "24h"]
           example: "24h"
 
-    # ── REST Analytics – response schemas ─────────────────────────────────────
+    # â”€â”€ REST Analytics â€“ response schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     TrafficResourcesResponse:
       type: object
       description: |

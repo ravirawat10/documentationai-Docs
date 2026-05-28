@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.0
 info:
   title: 5centsCDN - Zones
   description: API for managing Zones in 5centsCDN (https://www.5centscdn.net)
@@ -14127,7 +14127,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
+                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14145,7 +14145,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14200,7 +14200,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14270,7 +14270,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14323,7 +14323,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14376,7 +14376,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14440,7 +14440,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14480,7 +14480,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
+                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14498,7 +14498,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14553,7 +14553,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14623,7 +14623,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14676,7 +14676,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14740,7 +14740,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -17234,7 +17234,7 @@ components:
         password:
           type: string
           description: FTP password for authenticating to the push zone storage.
-          example: "••••••••"
+          example: "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
     serverList:
       properties:
         code:

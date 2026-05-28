@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.0
 info:
   title: 5centsCDN Edge Rules API
   version: "1.0.0"
@@ -34,9 +34,9 @@ tags:
 
 paths:
 
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   # HTTP PULL
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   /zones/http/pull/{zoneId}/rules:
     get:
@@ -1351,10 +1351,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_httpPull
       summary: Update or delete a specific edge rule in an HTTP Pull zone
       description: >
-        **Update** — omit `_METHOD` or do not send it; the full rule options
+        **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -1402,7 +1402,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored — only `options`
+        `name` and `rule` fields are effectively ignored â€” only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -1435,9 +1435,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   # HTTP PUSH
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   /zones/http/push/{zoneId}/rules:
     get:
@@ -2729,10 +2729,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_httpPush
       summary: Update or delete a specific edge rule in an HTTP Push zone
       description: >
-        **Update** — omit `_METHOD` or do not send it; the full rule options
+        **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -2780,7 +2780,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored — only `options`
+        `name` and `rule` fields are effectively ignored â€” only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -2813,9 +2813,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   # VOD PULL
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   /zones/vod/pull/{zoneId}/rules:
     get:
@@ -3826,10 +3826,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_vodPull
       summary: Update or delete a specific edge rule in a VOD Pull zone
       description: >
-        **Update** — omit `_METHOD` or do not send it; the full rule options
+        **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -3877,7 +3877,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored — only `options`
+        `name` and `rule` fields are effectively ignored â€” only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -3910,9 +3910,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   # VOD PUSH
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   /zones/vod/push/{zoneId}/rules:
     get:
@@ -4985,10 +4985,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_vodPush
       summary: Update or delete a specific edge rule in a VOD Push zone
       description: >
-        **Update** — omit `_METHOD` or do not send it; the full rule options
+        **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -5036,7 +5036,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored — only `options`
+        `name` and `rule` fields are effectively ignored â€” only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -5069,9 +5069,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   # VALIDATION
-  # ═══════════════════════════════════════════════════════════════
+  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   /validate/rule:
     post:
@@ -5114,19 +5114,19 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-# ═══════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # Components
-# ═══════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 components:
 
-  # ─── Security Schemes ────────────────────────────────────────
+  # â”€â”€â”€ Security Schemes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
 
-  # ─── Parameters ─────────────────────────────────────────────
+  # â”€â”€â”€ Parameters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   parameters:
     zoneId:
       name: zoneId
@@ -5155,7 +5155,7 @@ components:
         type: integer
         example: 1
 
-  # ─── Request Bodies ──────────────────────────────────────────
+  # â”€â”€â”€ Request Bodies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   requestBodies:
     CreateRuleBody_httpPull:
       required: true
@@ -5163,7 +5163,7 @@ components:
         Request body for creating an edge rule on an HTTP Pull zone.
         Must include `"_METHOD": "PUT"`. Only tls_versions is excluded
         (Default Behaviors view only). Query string options (ignoreQueryString,
-        query_params_blacklist, query_params_whitelist) are mutually exclusive —
+        query_params_blacklist, query_params_whitelist) are mutually exclusive â€”
         only one should have enabled = true at a time.
       content:
         application/json:
@@ -6043,7 +6043,7 @@ components:
                     type: object
                     description: >
                       Controls the Host header sent to origin. Pull only.
-                      The system uses hostHeader for the setting; forward_host_header is a legacy alias — both must be sent.
+                      The system uses hostHeader for the setting; forward_host_header is a legacy alias â€” both must be sent.
                     properties:
                       enabled:
                         type: boolean
@@ -7072,7 +7072,7 @@ components:
         gzipOn, fetch_compressed, brotli_compression, slice, disposition,
         allowedHttpMethods, image_stack, asset_stack, cms, honor_vary, tls_versions.
         Query string options (ignoreQueryString, query_params_blacklist,
-        query_params_whitelist) are mutually exclusive — only one should have
+        query_params_whitelist) are mutually exclusive â€” only one should have
         enabled = true at a time.
       content:
         application/json:
@@ -8457,7 +8457,7 @@ components:
     UpdateOrDeleteRuleBody_httpPull:
       required: true
       description: >
-        Update an edge rule in an HTTP Pull zone. No _METHOD field required — direct POST.
+        Update an edge rule in an HTTP Pull zone. No _METHOD field required â€” direct POST.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -9241,7 +9241,7 @@ components:
     UpdateOrDeleteRuleBody_httpPush:
       required: true
       description: >
-        Update an edge rule in an HTTP Push zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, allowedHttpMethods, follow_origin_redirect, xff, sni, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
+        Update an edge rule in an HTTP Push zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, allowedHttpMethods, follow_origin_redirect, xff, sni, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -9822,7 +9822,7 @@ components:
     UpdateOrDeleteRuleBody_vodPull:
       required: true
       description: >
-        Update an edge rule in a VOD Pull zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, image_stack, asset_stack, cms, honor_vary.
+        Update an edge rule in a VOD Pull zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, image_stack, asset_stack, cms, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -10403,7 +10403,7 @@ components:
     UpdateOrDeleteRuleBody_vodPush:
       required: true
       description: >
-        Update an edge rule in a VOD Push zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, follow_origin_redirect, xff, sni, image_stack, asset_stack, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
+        Update an edge rule in a VOD Push zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, follow_origin_redirect, xff, sni, image_stack, asset_stack, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -10835,7 +10835,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a HTTPPULL zone.
-        No _METHOD override required — direct POST. tls_versions is available here
+        No _METHOD override required â€” direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -11737,7 +11737,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a HTTPPUSH zone.
-        No _METHOD override required — direct POST. tls_versions is available here
+        No _METHOD override required â€” direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -12613,7 +12613,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a VODPULL zone.
-        No _METHOD override required — direct POST. tls_versions is available here
+        No _METHOD override required â€” direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -13489,7 +13489,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a VODPUSH zone.
-        No _METHOD override required — direct POST. tls_versions is available here
+        No _METHOD override required â€” direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -14362,7 +14362,7 @@ components:
               honor_vary: { enabled: null }
               cors: { enabled: null, control: "*", always: false, value: "*", custom: "" }
 
-  # ─── Responses ──────────────────────────────────────────────
+  # â”€â”€â”€ Responses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   responses:
     MutationSuccessResponse:
       description: Operation completed successfully
@@ -14408,7 +14408,7 @@ components:
                 type: string
                 example: "Unauthorized"
 
-  # ─── Schemas ────────────────────────────────────────────────
+  # â”€â”€â”€ Schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   schemas:
 
     EdgeRulesListResponse:
@@ -15192,8 +15192,8 @@ components:
           type: string
           enum: [hide, show]
           description: >
-            `hide` — remove the headers listed in `expected.hide`;
-            `show` — remove everything except the headers listed in `expected.show`.
+            `hide` â€” remove the headers listed in `expected.hide`;
+            `show` â€” remove everything except the headers listed in `expected.show`.
           example: "hide"
         expected:
           type: object
@@ -15238,7 +15238,7 @@ components:
       description: >
         Controls whether the query string is included in the cache key.
         Mutually exclusive with `query_params_blacklist` /
-        `query_params_whitelist` — only one should be enabled at a time.
+        `query_params_whitelist` â€” only one should be enabled at a time.
       properties:
         enabled:
           type: boolean
