@@ -1703,7 +1703,7 @@ paths:
       - Video Encoding Profiles
       summary: List File Transcoding Profiles
       description: List all file transcoding profiles for the service.
-      operationId: ProfilesList
+      operationId: profilesList
       responses:
         '200':
           description: success
@@ -2303,7 +2303,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: To cast request method POST to PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   example: PUT
                 name:
                   type: string
@@ -2647,7 +2647,7 @@ paths:
                   example: []
                 _METHOD:
                   type: string
-                  description: Signal DELETE to the backend when deleting.
+                  description: Method override. Use DELETE to remove this resource.
                   example: DELETE
       deprecated: false
       responses:
@@ -2687,7 +2687,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Signals DELETE to the backend.
+                  description: Method override. Use DELETE to remove this resource.
                   enum: [DELETE]
                   example: DELETE
       deprecated: false
@@ -2717,7 +2717,7 @@ paths:
       - Video Encoding Profiles
       summary: List File Transcoding Filters
       description: List all file transcoding filters for the service.
-      operationId: transcodingFileFilter
+      operationId: listVideoTranscodingFilters
       responses:
         '200':
           description: success
@@ -3339,7 +3339,7 @@ paths:
       - Video Encoding Profiles
       summary: Create File Transcoding Filter
       description: Create a new file transcoding filter.
-      operationId: createFileTranscodingFilter
+      operationId: createVideoTranscodingFilter
       requestBody:
         required: true
         content:
@@ -3392,7 +3392,7 @@ paths:
                   example: top_left
                 _METHOD:
                   type: string
-                  description: To cast request method POST to PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   enum: [PUT]
                   example: PUT
       responses:
@@ -3422,7 +3422,7 @@ paths:
       - Video Encoding Profiles
       summary: Edit Transcoding Profile Filter
       description: Edit an existing transcoding profile filter.
-      operationId: editTranscodingProfileFilter
+      operationId: editVideoTranscodingFilter
       parameters:
       - $ref: '#/components/parameters/filterIdParam'
       requestBody:
@@ -3495,7 +3495,7 @@ paths:
       description: >
         Delete the information of a transcoding profile filter. To cast request
         method POST, include parameter _METHOD = DELETE.
-      operationId: deleteTranscodingProfileFilter
+      operationId: deleteVideoTranscodingFilter
       parameters:
       - $ref: '#/components/parameters/filterIdParam'
       requestBody:
@@ -3509,7 +3509,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Signals DELETE to the backend.
+                  description: Method override. Use DELETE to remove this resource.
                   enum: [DELETE]
                   example: DELETE
       deprecated: false

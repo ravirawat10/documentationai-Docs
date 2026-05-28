@@ -773,7 +773,7 @@ paths:
       - HTTP Push
       summary: Get Servers
       description: HTTP Push Zone Servers
-      operationId: HTTPPushZoneServer
+      operationId: httpPushZoneServers
       deprecated: false
       responses:
         '200':
@@ -832,7 +832,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Must always be PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   example: PUT
                 alias:
                   type: string
@@ -1856,7 +1856,7 @@ paths:
       - HTTP Push
       summary: Delete Info
       description: Delete the information of HTTP Push Zone. To cast request method POST and parameters _METHOD = DELETE
-      operationId: deletZonePush
+      operationId: deleteZonePush
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -1870,7 +1870,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override header value (e.g. DELETE)
+                  description: Method override. Use DELETE to remove this resource.
                   example: DELETE
       deprecated: false
       responses:
@@ -2046,7 +2046,7 @@ paths:
       - HTTP Push
       summary: Update Geoblock
       description: Update geblock of HTTP push zone
-      operationId: updateGeblockZonePush
+      operationId: updateGeoblockZonePush
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -3146,7 +3146,7 @@ paths:
       - HTTP Push
       summary: Import HTTP Push Zone
       description: Import HTTP Push Zone
-      operationId: importHTTPPushZones
+      operationId: importHttpPushZones
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -4379,7 +4379,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Must always be PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   example: PUT
                 alias:
                   type: string
@@ -5671,7 +5671,7 @@ paths:
       - HTTP Pull
       summary: Update Bandwidth limit
       description: Update Bandwidth limit of HTTP pull zone
-      operationId: updatebwlimitZonePull
+      operationId: updateBwLimitZonePull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -7650,7 +7650,7 @@ paths:
       - VOD Push
       summary: Get Servers
       description: Vod Push Zone Servers
-      operationId: VodPushZoneServer
+      operationId: vodPushZoneServers
       deprecated: false
       responses:
         '200':
@@ -7708,7 +7708,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Must always be PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   example: PUT
                 alias:
                   type: string
@@ -8827,7 +8827,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override header value (e.g. DELETE)
+                  description: Method override. Use DELETE to remove this resource.
                   enum: [DELETE]
                   example: DELETE
       deprecated: false
@@ -10229,7 +10229,7 @@ paths:
       - VOD Push
       summary: Import VOD Push Zone
       description: Import VOD Push Zone
-      operationId: importVODPushZones
+      operationId: importVodPushZones
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -11450,7 +11450,7 @@ paths:
       - VOD Pull
       summary: Create Zone
       description: Create a new VOD pull Zone
-      operationId: createzonevodpull
+      operationId: createZoneVodPull
       requestBody:
         content:
           application/json:
@@ -11463,7 +11463,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: Must always be PUT.
+                  description: Method override. Use PUT to create or update this resource.
                   example: PUT
                 alias:
                   type: string
@@ -11701,7 +11701,7 @@ paths:
       - VOD Pull
       summary: Zone
       description: Return  VoD pull zone details
-      operationId: getVodzonepull
+      operationId: getVodZonePull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       deprecated: false
@@ -12440,7 +12440,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: HTTP method override header value (e.g. DELETE)
+                  description: Method override. Use DELETE to remove this resource.
                   enum: [DELETE]
                   example: DELETE
       deprecated: false
@@ -12555,7 +12555,7 @@ paths:
       - VOD Pull
       summary: Restore
       description: Restore VoD pull zone
-      operationId: restoreZonevodpull
+      operationId: restoreZoneVodPull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       deprecated: false
@@ -14112,7 +14112,7 @@ paths:
       tags:
       - HTTP Global Settings
       description: update zone http domain setting
-      operationId: settingsZoneHTTPDomain
+      operationId: settingsZoneHttpDomain
       requestBody:
         content:
           application/json:
@@ -14170,7 +14170,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http geoblock setting
       description: update zone http domain setting
-      operationId: settingsZoneHTTPGeoblock
+      operationId: settingsZoneHttpGeoblock
       requestBody:
         content:
           application/json:
@@ -14225,7 +14225,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http securetoken setting
       description: update zone http securetoken setting
-      operationId: settingsZoneHTTPSecuretoken
+      operationId: settingsZoneHttpSecuretoken
       requestBody:
         content:
           application/json:
@@ -14295,7 +14295,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http bwlimit setting
       description: update zone http bwlimit setting
-      operationId: settingsZoneHTTPBwlimit
+      operationId: settingsZoneHttpBwlimit
       requestBody:
         content:
           application/json:
@@ -14348,7 +14348,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http ipaccess setting
       description: update zone http ipaccess setting
-      operationId: settingsZoneHTTPIpaccess
+      operationId: settingsZoneHttpIpaccess
       requestBody:
         content:
           application/json:
@@ -14401,7 +14401,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http useragent setting
       description: update zone http useragent setting
-      operationId: settingsZoneHTTPUseragent
+      operationId: settingsZoneHttpUseragent
       requestBody:
         content:
           application/json:
@@ -14465,7 +14465,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod domain setting
       description: update zone vod domain setting
-      operationId: settingsZoneVODDomain
+      operationId: settingsZoneVodDomain
       requestBody:
         content:
           application/json:
@@ -14523,7 +14523,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod geoblock setting
       description: update zone vod domain setting
-      operationId: settingsZoneVODGeoblock
+      operationId: settingsZoneVodGeoblock
       requestBody:
         content:
           application/json:
@@ -14578,7 +14578,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod securetoken setting
       description: update zone vod securetoken setting
-      operationId: settingsZoneVODSecuretoken
+      operationId: settingsZoneVodSecuretoken
       requestBody:
         content:
           application/json:
@@ -14648,7 +14648,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod ipaccess setting
       description: update zone vod ipaccess setting
-      operationId: settingsZoneVODIpaccess
+      operationId: settingsZoneVodIpaccess
       requestBody:
         content:
           application/json:
@@ -14701,7 +14701,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod useragent setting
       description: update zone vod useragent setting
-      operationId: settingsZoneVODUseragent
+      operationId: settingsZoneVodUseragent
       requestBody:
         content:
           application/json:
@@ -14847,7 +14847,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method PUT
+          description: Method override. Use PUT to create or update this resource.
           example: PUT
         alias:
           type: string
@@ -15803,7 +15803,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: Method override. Use PUT to create or update this resource.
           example: PUT
         origin:
           type: string
@@ -15872,7 +15872,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: Method override. Use PUT to create or update this resource.
           example: PUT
         origin:
           type: string
@@ -15910,7 +15910,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method POST to PUT
+          description: Method override. Use PUT to create or update this resource.
           example: PUT
         server:
           type: string
@@ -16064,7 +16064,7 @@ components:
       properties:
         _METHOD:
           type: string
-          description: To cast request method to DELETE
+          description: Method override. Use DELETE to remove this resource.
           example: DELETE
         files:
           type: array
@@ -16080,6 +16080,7 @@ components:
           description: Values can be Y or N. Set to Y to enable pseudo stream seeking. Set to N to disable  pseudo stream seeking.
           example: Y
     domainlockList:
+      type: object
       properties:
         policy:
           type: string
@@ -16110,6 +16111,7 @@ components:
           description: Whether domain lock is currently active. Y means active, N means inactive.
           example: "N"
     geoblockList:
+      type: object
       properties:
         policy:
           type: string
@@ -16134,6 +16136,7 @@ components:
           description: Whether geo-blocking is currently active. Y means active, N means inactive.
           example: "N"
     securetokenList:
+      type: object
       properties:
         policy:
           type: string
@@ -16173,6 +16176,7 @@ components:
           description: Whether secure token is currently active. Y means active, N means inactive.
           example: "N"
     eacList:
+      type: object
       properties:
         policy:
           type: string
@@ -16210,6 +16214,7 @@ components:
           description: Geographic region or country of the server.
           example: SouthEast Asia
     zonePushResult:
+      type: object
       properties:
         type:
           type: string
@@ -16391,6 +16396,7 @@ components:
           description: Indicates whether any edge rules are configured for this zone.
           example: false
     zoneVodPushResult:
+      type: object
       properties:
         type:
           type: string
@@ -16466,6 +16472,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     zonePullResult:
+      type: object
       properties:
         type:
           type: string
@@ -16539,6 +16546,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     zoneVodPullResult:
+      type: object
       properties:
         type:
           type: string
@@ -16616,6 +16624,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     transcodefileList:
+      type: object
       properties:
         profiles:
           type: array
@@ -16636,6 +16645,7 @@ components:
             type: string
           example: ["https://hooks.example.com/webhook"]
     sslList:
+      type: object
       properties:
         http:
           type: string
@@ -16672,12 +16682,14 @@ components:
           description: SSL configuration warning message, or false if no warnings exist.
           example: false
     wafList:
+      type: object
       properties:
         enabled:
           type: string
           description: Whether WAF is enabled for this zone. Y means enabled, N means disabled.
           example: "N"
     shieldList:
+      type: object
       properties:
         shields:
           type: array
@@ -17093,6 +17105,7 @@ components:
           description: Delivered bandwidth or data value for this period.
           example: "107374182400"
     seoList:
+      type: object
       properties:
         id:
           type: integer
@@ -17124,6 +17137,7 @@ components:
           description: Custom robots.txt content when mode is set to custom.
           example: ""
     cacheList:
+      type: object
       properties:
         smart:
           type: string
@@ -17174,6 +17188,7 @@ components:
           format: int32
           example: 43200
     edgeList:
+      type: object
       properties:
         compression:
           type: string
@@ -17220,12 +17235,14 @@ components:
           description: Whether prefresh (background cache refresh) is enabled.
           example: "N"
     edgerules:
+      type: object
       properties:
         enabled:
           type: string
           description: Whether edge rules are enabled for this zone. Y means enabled, N means disabled.
           example: "N"
     ftpdetailsList:
+      type: object
       properties:
         username:
           type: string
