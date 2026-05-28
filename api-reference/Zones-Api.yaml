@@ -16080,6 +16080,7 @@ components:
           description: Values can be Y or N. Set to Y to enable pseudo stream seeking. Set to N to disable  pseudo stream seeking.
           example: Y
     domainlockList:
+      type: object
       properties:
         policy:
           type: string
@@ -16110,6 +16111,7 @@ components:
           description: Whether domain lock is currently active. Y means active, N means inactive.
           example: "N"
     geoblockList:
+      type: object
       properties:
         policy:
           type: string
@@ -16134,6 +16136,7 @@ components:
           description: Whether geo-blocking is currently active. Y means active, N means inactive.
           example: "N"
     securetokenList:
+      type: object
       properties:
         policy:
           type: string
@@ -16173,6 +16176,7 @@ components:
           description: Whether secure token is currently active. Y means active, N means inactive.
           example: "N"
     eacList:
+      type: object
       properties:
         policy:
           type: string
@@ -16210,6 +16214,7 @@ components:
           description: Geographic region or country of the server.
           example: SouthEast Asia
     zonePushResult:
+      type: object
       properties:
         type:
           type: string
@@ -16391,6 +16396,7 @@ components:
           description: Indicates whether any edge rules are configured for this zone.
           example: false
     zoneVodPushResult:
+      type: object
       properties:
         type:
           type: string
@@ -16466,6 +16472,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     zonePullResult:
+      type: object
       properties:
         type:
           type: string
@@ -16539,6 +16546,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     zoneVodPullResult:
+      type: object
       properties:
         type:
           type: string
@@ -16616,6 +16624,7 @@ components:
           description: Indicates whether SSL is enabled for this zone.
           example: "Y"
     transcodefileList:
+      type: object
       properties:
         profiles:
           type: array
@@ -16636,6 +16645,7 @@ components:
             type: string
           example: ["https://hooks.example.com/webhook"]
     sslList:
+      type: object
       properties:
         http:
           type: string
@@ -16672,12 +16682,14 @@ components:
           description: SSL configuration warning message, or false if no warnings exist.
           example: false
     wafList:
+      type: object
       properties:
         enabled:
           type: string
           description: Whether WAF is enabled for this zone. Y means enabled, N means disabled.
           example: "N"
     shieldList:
+      type: object
       properties:
         shields:
           type: array
@@ -17093,6 +17105,7 @@ components:
           description: Delivered bandwidth or data value for this period.
           example: "107374182400"
     seoList:
+      type: object
       properties:
         id:
           type: integer
@@ -17124,6 +17137,7 @@ components:
           description: Custom robots.txt content when mode is set to custom.
           example: ""
     cacheList:
+      type: object
       properties:
         smart:
           type: string
@@ -17174,6 +17188,7 @@ components:
           format: int32
           example: 43200
     edgeList:
+      type: object
       properties:
         compression:
           type: string
@@ -17220,12 +17235,14 @@ components:
           description: Whether prefresh (background cache refresh) is enabled.
           example: "N"
     edgerules:
+      type: object
       properties:
         enabled:
           type: string
           description: Whether edge rules are enabled for this zone. Y means enabled, N means disabled.
           example: "N"
     ftpdetailsList:
+      type: object
       properties:
         username:
           type: string
