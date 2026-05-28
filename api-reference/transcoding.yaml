@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: 5centsCDN - Transcoding API
   description: >
@@ -32,14 +32,14 @@ tags:
 paths:
 
   # ---------------------------------------------------------------------------
-  # Transcoding Dashboard — list / filter by date range
+  # Transcoding Dashboard â€” list / filter by date range
   # ---------------------------------------------------------------------------
   /transcoding:
     get:
       tags:
       - Video Encoding Jobs
       summary: List All Encoding Jobs (current)
-      description: List all encoding jobs for the service. No date filter — returns all.
+      description: List all encoding jobs for the service. No date filter â€” returns all.
       operationId: listEncodingJobs
       responses:
         '200':
@@ -1008,6 +1008,7 @@ paths:
                                   description: Comma-separated custom CNAME hostnames for the zone.
                                   example: ""
                                 zoneids:
+                                  type: string
                                   nullable: true
                                   example:
                                 edgeruleids:
@@ -1015,6 +1016,7 @@ paths:
                                   description: Edge rule set identifier applied to this zone.
                                   example: 0
                                 profile:
+                                  type: string
                                   nullable: true
                                   example:
                                 rclone:
@@ -1038,6 +1040,7 @@ paths:
                                   description: Timestamp when this record was last updated.
                                   example: "2026-04-26 17:50:21"
                                 deleted:
+                                  type: string
                                   nullable: true
                                   example:
                             jobid:
@@ -1162,18 +1165,18 @@ paths:
         in: query
         required: false
         description: >
-          Date range filter. Format: YYYY-MM-DD - YYYY-MM-DD.
-          Example: 2025-01-01 - 2025-01-31
+          Date-time range filter. Format: YYYY-MM-DD HH:mm - YYYY-MM-DD HH:mm.
+          Maximum span is 31 days; time component is required.
         schema:
           type: string
-          example: "2025-01-01 - 2025-01-31"
+          example: "2024-01-15 00:00 - 2024-01-31 23:59"
       - name: i
         in: query
         required: false
-        description: Zone ID to filter by.
+        description: Optional integer filter to restrict results to a specific zone or profile.
         schema:
           type: integer
-          example: 15
+          example: 5678
       requestBody:
         content:
           application/json:
@@ -1182,7 +1185,7 @@ paths:
               properties:
                 view:
                   type: string
-                  description: "Operation mode: `job` to fetch a single job, `new` to poll new jobs."
+                  description: "Switches the query operation. job = fetch paginated job list filtered by date range. new = poll for status updates on specific job IDs (requires jobids[])."
                   enum: [job, new]
                   example: job
                 jobid:
@@ -1193,6 +1196,12 @@ paths:
                   type: integer
                   description: Job index. Required when view=job.
                   example: 0
+                jobids:
+                  type: array
+                  description: "Array of job IDs to check for status updates. Required when view=new. Sent as repeated URL-encoded params (e.g. jobids[]=101&jobids[]=102)."
+                  items:
+                    type: integer
+                  example: [101, 102]
       responses:
         '200':
           description: success
@@ -2301,111 +2310,146 @@ paths:
                   example: PUT
                 name:
                   type: string
-                  description: Enter profile name. Each name should have minimum 3 characters.
-                  example: My Profile
+                  description: "Profile display name used throughout the encoding UI. Required; cannot be empty or whitespace only."
+                  example: HD 720p H.264
                 cv:
                   type: string
-                  description: "Video codec: libx264 | libx265 | vp9 | etc."
+                  description: "FFmpeg codec identifier for video encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9."
+                  enum: [libx264, libx265, libvpx-vp9]
                   example: libx264
                 ca:
                   type: string
-                  description: Audio codec.
+                  description: "Audio codec determined by container format (f). mp4/hls/hlsaes use aac; webm uses opus."
+                  enum: [aac, opus]
                   example: aac
                 f:
                   type: string
-                  description: Output format.
+                  description: "Output container format. Selecting this auto-populates codec defaults."
+                  enum: [mp4, webm, hls, hlsaes]
                   example: mp4
                 filemode:
                   type: string
-                  description: File mode.
-                  example: transcode
+                  description: "Output file organization. single = one output file per profile. combined = multi-bitrate HLS manifest bundle."
+                  enum: [single, combined]
+                  example: single
                 fps:
                   type: string
-                  description: Frames per second.
+                  description: "Target output frame rate as string. 0 copies the source frame rate."
+                  enum: ["0", "24", "25", "30", "48", "50", "60"]
                   example: "30"
                 gop:
                   type: string
-                  description: Keyframe interval.
+                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24â€“300."
                   example: "60"
                 preset:
                   type: string
-                  description: "Encoder preset: ultrafast | fast | medium | slow."
-                  example: medium
+                  description: "Encoding speed preset. Slower presets produce smaller files at the cost of encoding time."
+                  enum: [ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow]
+                  example: veryfast
                 vlevel:
                   type: string
-                  description: Video level.
-                  example: "4.0"
+                  description: "Codec encoding level constraining maximum resolution, frame rate, and bitrate. Valid values depend on cv and vprofile."
+                  enum: ["3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2"]
+                  example: "4.1"
                 vprofile:
                   type: string
-                  description: "Video profile: baseline | main | high."
+                  description: "Codec-specific encoding profile. H.264 (libx264): baseline, main, high. H.265 (libx265): main, main10. VP9 (libvpx-vp9): profile0, profile2. Available values are constrained by cv."
                   example: high
                 vpass:
                   type: string
-                  description: "Encoding pass: 1 | 2."
+                  description: "Number of encoding passes. 1 = faster single-pass. 2 = two-pass for more accurate bitrate targeting."
+                  enum: ["1", "2"]
                   example: "1"
+                tune:
+                  type: string
+                  description: "H.264 encoding tune preset; only applicable when cv=libx264. disabled = no tune applied."
+                  enum: [disabled, film, animation, grain, stillimage, fastdecode]
+                  example: film
                 bv:
                   type: string
-                  description: Enable video bitrate. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Video bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bvvalue to set target kbps)."
+                  enum: ["0", "1"]
+                  example: "1"
                 bvvalue:
                   type: string
-                  description: Video bitrate value.
-                  example: 2000k
+                  description: "Target video bitrate in kilobits per second, sent as a string. Required when bv=1."
+                  example: "4000"
                 ba:
                   type: string
-                  description: Enable audio bitrate. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Audio bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bavalue to set target kbps). Forced to 1 when f=webm."
+                  enum: ["0", "1"]
+                  example: "1"
                 bavalue:
                   type: string
-                  description: Audio bitrate value.
-                  example: 128k
+                  description: "Target audio bitrate in kilobits per second, sent as a string. Required when ba=1."
+                  example: "128"
                 sv:
                   type: string
-                  description: Enable scale video. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue. Use 0 to preserve source resolution."
+                  enum: ["2160p", "1440p", "1080p", "720p", "576p", "480p", "360p", "240p", "144p", "0", "as_defined"]
+                  example: "720p"
                 svvalue:
                   type: string
-                  description: Output resolution.
-                  example: 1280x720
+                  description: "Custom output dimensions as a single WIDTHxHEIGHT string. Only used when sv=as_defined. Both dimensions must be divisible by 2."
+                  example: "1920x800"
                 crfv:
                   type: string
-                  description: CRF value (constant rate factor).
-                  example: "23"
+                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0â€“51; typical H.264 range is 18â€“28."
+                  example: "24"
                 ara:
                   type: string
-                  description: Audio rate args.
-                  example: ""
+                  description: "Audio sample rate in Hz. 0 preserves the source sample rate."
+                  enum: ["0", "44100", "48000"]
+                  example: "48000"
                 aca:
                   type: string
-                  description: Audio codec args.
-                  example: ""
+                  description: "Audio output channel count. 0 = As Source. 1 = Mono. 2 = Stereo."
+                  enum: ["0", "1", "2"]
+                  example: "2"
                 bframe:
-                  type: integer
-                  description: B-frames count.
-                  example: 3
+                  type: string
+                  description: "Number of consecutive B-frames. Higher values improve compression efficiency."
+                  enum: ["0", "1", "2", "3", "4"]
+                  example: "2"
                 tm:
                   type: string
-                  description: Time mode.
-                  example: ""
+                  description: "Thumbnail generation mode. interval = generate thumbnails at periodic intervals. fixed = generate thumbnail at exact time tv. disabled = no thumbnails."
+                  enum: [interval, fixed, disabled]
+                  example: interval
                 tv:
                   type: string
-                  description: Time value.
-                  example: ""
+                  description: "Thumbnail time value in HH:MM:SS format. Required when tm=interval or tm=fixed."
+                  example: "0:01:30"
                 upscale:
                   type: string
-                  description: Allow upscaling. Y or N.
+                  description: "Whether to allow upscaling when the target resolution exceeds the source resolution. Y = allow upscaling. N = skip if source is lower resolution."
                   enum: ["Y", "N"]
                   example: "N"
+                sourcevideo:
+                  type: string
+                  description: "Whether to include the video stream in the output. N = creates audio-only output."
+                  enum: ["Y", "N"]
+                  example: "Y"
+                sourceaudio:
+                  type: string
+                  description: "Whether to include the audio stream in the output. N = creates video-only output."
+                  enum: ["Y", "N"]
+                  example: "Y"
+                hlsUnifiedSegments:
+                  type: boolean
+                  description: "Enables MPEG-TS segment format for HLS output. Defaults to false."
+                  example: false
+                hlsfMP4Segments:
+                  type: boolean
+                  description: "Enables fragmented MP4 format for HLS output; improves seeking. Mutually exclusive with hlsUnifiedSegments."
+                  example: false
                 outdir:
                   type: string
-                  description: Output directory override.
-                  example: ""
+                  description: "Output directory path relative to the storage root. Empty string stores in root. Characters < > : \\ | ? * are not allowed."
+                  example: "output/hd"
                 filters:
                   type: array
-                  description: Filter IDs to apply.
+                  description: Array of filter IDs to apply as video overlays during encoding.
                   items:
                     type: string
                   example: ["1", "2"]
@@ -2455,111 +2499,146 @@ paths:
               properties:
                 name:
                   type: string
-                  description: Profile name.
+                  description: "Profile display name used throughout the encoding UI. Cannot be empty or whitespace only."
                   example: Updated Profile
                 cv:
                   type: string
-                  description: "Video codec: libx264 | libx265 | vp9 | etc."
+                  description: "FFmpeg codec identifier for video encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9."
+                  enum: [libx264, libx265, libvpx-vp9]
                   example: libx264
                 ca:
                   type: string
-                  description: Audio codec.
+                  description: "Audio codec determined by container format (f). mp4/hls/hlsaes use aac; webm uses opus."
+                  enum: [aac, opus]
                   example: aac
                 f:
                   type: string
-                  description: Output format.
+                  description: "Output container format. Selecting this auto-populates codec defaults."
+                  enum: [mp4, webm, hls, hlsaes]
                   example: mp4
                 filemode:
                   type: string
-                  description: File mode.
-                  example: transcode
+                  description: "Output file organization. single = one output file per profile. combined = multi-bitrate HLS manifest bundle."
+                  enum: [single, combined]
+                  example: single
                 fps:
                   type: string
-                  description: Frames per second.
+                  description: "Target output frame rate as string. 0 copies the source frame rate."
+                  enum: ["0", "24", "25", "30", "48", "50", "60"]
                   example: "30"
                 gop:
                   type: string
-                  description: Keyframe interval.
+                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24â€“300."
                   example: "60"
                 preset:
                   type: string
-                  description: "Encoder preset: ultrafast | fast | medium | slow."
-                  example: medium
+                  description: "Encoding speed preset. Slower presets produce smaller files at the cost of encoding time."
+                  enum: [ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow]
+                  example: veryfast
                 vlevel:
                   type: string
-                  description: Video level.
-                  example: "4.0"
+                  description: "Codec encoding level constraining maximum resolution, frame rate, and bitrate. Valid values depend on cv and vprofile."
+                  enum: ["3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2"]
+                  example: "4.1"
                 vprofile:
                   type: string
-                  description: "Video profile: baseline | main | high."
+                  description: "Codec-specific encoding profile. H.264 (libx264): baseline, main, high. H.265 (libx265): main, main10. VP9 (libvpx-vp9): profile0, profile2. Available values are constrained by cv."
                   example: high
                 vpass:
                   type: string
-                  description: "Encoding pass: 1 | 2."
+                  description: "Number of encoding passes. 1 = faster single-pass. 2 = two-pass for more accurate bitrate targeting."
+                  enum: ["1", "2"]
                   example: "1"
+                tune:
+                  type: string
+                  description: "H.264 encoding tune preset; only applicable when cv=libx264. disabled = no tune applied."
+                  enum: [disabled, film, animation, grain, stillimage, fastdecode]
+                  example: film
                 bv:
                   type: string
-                  description: Enable video bitrate. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Video bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bvvalue to set target kbps)."
+                  enum: ["0", "1"]
+                  example: "1"
                 bvvalue:
                   type: string
-                  description: Video bitrate value.
-                  example: 2000k
+                  description: "Target video bitrate in kilobits per second, sent as a string. Required when bv=1."
+                  example: "4000"
                 ba:
                   type: string
-                  description: Enable audio bitrate. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Audio bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bavalue to set target kbps). Forced to 1 when f=webm."
+                  enum: ["0", "1"]
+                  example: "1"
                 bavalue:
                   type: string
-                  description: Audio bitrate value.
-                  example: 128k
+                  description: "Target audio bitrate in kilobits per second, sent as a string. Required when ba=1."
+                  example: "128"
                 sv:
                   type: string
-                  description: Enable scale video. Y or N.
-                  enum: ["Y", "N"]
-                  example: "Y"
+                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue. Use 0 to preserve source resolution."
+                  enum: ["2160p", "1440p", "1080p", "720p", "576p", "480p", "360p", "240p", "144p", "0", "as_defined"]
+                  example: "720p"
                 svvalue:
                   type: string
-                  description: Output resolution.
-                  example: 1280x720
+                  description: "Custom output dimensions as a single WIDTHxHEIGHT string. Only used when sv=as_defined. Both dimensions must be divisible by 2."
+                  example: "1920x800"
                 crfv:
                   type: string
-                  description: CRF value (constant rate factor).
-                  example: "23"
+                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0â€“51; typical H.264 range is 18â€“28."
+                  example: "24"
                 ara:
                   type: string
-                  description: Audio rate args.
-                  example: ""
+                  description: "Audio sample rate in Hz. 0 preserves the source sample rate."
+                  enum: ["0", "44100", "48000"]
+                  example: "48000"
                 aca:
                   type: string
-                  description: Audio codec args.
-                  example: ""
+                  description: "Audio output channel count. 0 = As Source. 1 = Mono. 2 = Stereo."
+                  enum: ["0", "1", "2"]
+                  example: "2"
                 bframe:
-                  type: integer
-                  description: B-frames count.
-                  example: 3
+                  type: string
+                  description: "Number of consecutive B-frames. Higher values improve compression efficiency."
+                  enum: ["0", "1", "2", "3", "4"]
+                  example: "2"
                 tm:
                   type: string
-                  description: Time mode.
-                  example: ""
+                  description: "Thumbnail generation mode. interval = generate thumbnails at periodic intervals. fixed = generate thumbnail at exact time tv. disabled = no thumbnails."
+                  enum: [interval, fixed, disabled]
+                  example: interval
                 tv:
                   type: string
-                  description: Time value.
-                  example: ""
+                  description: "Thumbnail time value in HH:MM:SS format. Required when tm=interval or tm=fixed."
+                  example: "0:01:30"
                 upscale:
                   type: string
-                  description: Allow upscaling. Y or N.
+                  description: "Whether to allow upscaling when the target resolution exceeds the source resolution. Y = allow upscaling. N = skip if source is lower resolution."
                   enum: ["Y", "N"]
                   example: "N"
+                sourcevideo:
+                  type: string
+                  description: "Whether to include the video stream in the output. N = creates audio-only output."
+                  enum: ["Y", "N"]
+                  example: "Y"
+                sourceaudio:
+                  type: string
+                  description: "Whether to include the audio stream in the output. N = creates video-only output."
+                  enum: ["Y", "N"]
+                  example: "Y"
+                hlsUnifiedSegments:
+                  type: boolean
+                  description: "Enables MPEG-TS segment format for HLS output. Defaults to false."
+                  example: false
+                hlsfMP4Segments:
+                  type: boolean
+                  description: "Enables fragmented MP4 format for HLS output; improves seeking. Mutually exclusive with hlsUnifiedSegments."
+                  example: false
                 outdir:
                   type: string
-                  description: Output directory override.
-                  example: ""
+                  description: "Output directory path relative to the storage root. Empty string stores in root. Characters < > : \\ | ? * are not allowed."
+                  example: "output/hd"
                 filters:
                   type: array
-                  description: Filter IDs to apply.
+                  description: Array of filter IDs to apply as video overlays during encoding.
                   items:
                     type: string
                   example: ["1"]
@@ -3254,6 +3333,7 @@ paths:
                                 description: FFmpeg filter name to apply.
                                 example: drawtext
                               args:
+                                type: string
                                 nullable: true
                                 example:
 
@@ -3281,37 +3361,39 @@ paths:
                   example: flutter
                 filter:
                   type: string
-                  description: "Filter type: drawtext or overlay."
-                  enum: [drawtext, overlay]
-                  example: drawtext
+                  description: "Filter category. overlay = apply image/logo watermark. drawtext = render text overlay on video."
+                  enum: [overlay, drawtext]
+                  example: overlay
                 args[overlay][url]:
                   type: string
-                  description: Logo image URL for overlay filter.
-                  example: "https://example.com/logo.png"
+                  description: "Public HTTP/HTTPS URL of the watermark image. PNG recommended for transparency. Required when filter=overlay."
+                  example: "https://cdn.example.com/logo.png"
                 args[overlay][scale]:
                   type: string
-                  description: Scale of the overlay.
-                  example: "50%"
+                  description: "Watermark image size as a percentage of the output video frame width. Required when filter=overlay."
+                  example: "10"
                 args[overlay][position]:
                   type: string
-                  description: Position of the overlay.
-                  example: top-right
+                  description: "Position of the watermark on the video frame. Required when filter=overlay."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_right
                 args[drawtext][text]:
                   type: string
-                  description: Text string to render on the video.
-                  example: "Flutter"
+                  description: "Text string to render as overlay on video. Required when filter=drawtext."
+                  example: "Â© 2024 My Brand"
                 args[drawtext][fontsize]:
                   type: integer
-                  description: Font size in pixels.
-                  example: 16
+                  description: "Font size of text overlay in pixels. Required when filter=drawtext."
+                  example: 24
                 args[drawtext][fontcolor]:
                   type: string
-                  description: Font color as hex string.
-                  example: "#2599f8"
+                  description: "Color of text overlay. Accepts CSS hex (#RRGGBB) or FFmpeg named colors (white, black, etc.). Required when filter=drawtext."
+                  example: "#FFFFFF"
                 args[drawtext][position]:
                   type: string
-                  description: Position of the text on the video.
-                  example: Top Left
+                  description: "Position of the text overlay on the video frame. Required when filter=drawtext."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_left
                 _METHOD:
                   type: string
                   description: To cast request method POST to PUT.
@@ -3358,22 +3440,41 @@ paths:
                   type: string
                   description: The name associated with the configuration or filter.
                   example: flutter
+                filter:
+                  type: string
+                  description: "Filter category. overlay = apply image/logo watermark. drawtext = render text overlay on video."
+                  enum: [overlay, drawtext]
+                  example: drawtext
+                args[overlay][url]:
+                  type: string
+                  description: "Public HTTP/HTTPS URL of the watermark image. PNG recommended for transparency. Required when filter=overlay."
+                  example: "https://cdn.example.com/logo.png"
+                args[overlay][scale]:
+                  type: string
+                  description: "Watermark image size as a percentage of the output video frame width. Required when filter=overlay."
+                  example: "10"
+                args[overlay][position]:
+                  type: string
+                  description: "Position of the watermark on the video frame."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_right
                 args[text]:
                   type: string
-                  description: The text to be displayed as part of the filter.
-                  example: Flutter
+                  description: "Text string to render as overlay on video. Required when filter=drawtext."
+                  example: "Â© 2024 My Brand"
                 args[fontsize]:
                   type: integer
-                  description: The size of the font for the displayed text.
-                  example: 16
+                  description: "Font size of text overlay in pixels. Required when filter=drawtext."
+                  example: 24
                 args[fontcolor]:
                   type: string
-                  description: The color of the font as a hex code.
-                  example: "#2599f8"
+                  description: "Color of text overlay. Accepts CSS hex (#RRGGBB) or FFmpeg named colors. Required when filter=drawtext."
+                  example: "#FFFFFF"
                 args[position]:
                   type: string
-                  description: The position of the text on the screen.
-                  example: Top Left
+                  description: "Position of the text overlay on the video frame."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_left
       deprecated: false
       responses:
         '200':
@@ -3504,12 +3605,12 @@ paths:
               properties:
                 zoneid:
                   type: integer
-                  description: Zone ID.
-                  example: 5394
+                  description: Zone ID for which the notification should be resent.
+                  example: 1234
                 index:
                   type: integer
-                  description: Job index.
-                  example: 3
+                  description: Index of the transcoding job notification to resend.
+                  example: 0
       responses:
         '200':
           description: Array of webhook call results.
@@ -3600,7 +3701,7 @@ components:
     filterIdParam:
       name: filterid
       in: path
-      description: ID of the Transcode Profile filter (`fs_transcodefilters.id`).
+      description: ID of the Transcoding Filter (`fs_transcodefilters.id`).
       required: true
       style: simple
       explode: false
