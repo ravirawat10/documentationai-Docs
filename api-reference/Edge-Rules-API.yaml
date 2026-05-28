@@ -5174,7 +5174,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
+                description: Method override. Use PUT to create or update this resource.
                 example: PUT
               name:
                 type: string
@@ -6264,7 +6264,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
+                description: Method override. Use PUT to create or update this resource.
                 example: PUT
               name:
                 type: string
@@ -7083,7 +7083,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
+                description: Method override. Use PUT to create or update this resource.
                 example: PUT
               name:
                 type: string
@@ -7877,7 +7877,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
+                description: Method override. Use PUT to create or update this resource.
                 example: PUT
               name:
                 type: string
@@ -14512,7 +14512,7 @@ components:
         _METHOD:
           type: string
           enum: [DELETE]
-          description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "DELETE"` in the request body to delete an existing resource.'
+          description: Method override. Use DELETE to remove this resource.
 
     RuleOptions:
       type: object
