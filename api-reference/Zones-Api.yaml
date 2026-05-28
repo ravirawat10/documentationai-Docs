@@ -773,7 +773,7 @@ paths:
       - HTTP Push
       summary: Get Servers
       description: HTTP Push Zone Servers
-      operationId: HTTPPushZoneServer
+      operationId: httpPushZoneServers
       deprecated: false
       responses:
         '200':
@@ -1856,7 +1856,7 @@ paths:
       - HTTP Push
       summary: Delete Info
       description: Delete the information of HTTP Push Zone. To cast request method POST and parameters _METHOD = DELETE
-      operationId: deletZonePush
+      operationId: deleteZonePush
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -2046,7 +2046,7 @@ paths:
       - HTTP Push
       summary: Update Geoblock
       description: Update geblock of HTTP push zone
-      operationId: updateGeblockZonePush
+      operationId: updateGeoblockZonePush
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -3146,7 +3146,7 @@ paths:
       - HTTP Push
       summary: Import HTTP Push Zone
       description: Import HTTP Push Zone
-      operationId: importHTTPPushZones
+      operationId: importHttpPushZones
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -5671,7 +5671,7 @@ paths:
       - HTTP Pull
       summary: Update Bandwidth limit
       description: Update Bandwidth limit of HTTP pull zone
-      operationId: updatebwlimitZonePull
+      operationId: updateBwLimitZonePull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -7650,7 +7650,7 @@ paths:
       - VOD Push
       summary: Get Servers
       description: Vod Push Zone Servers
-      operationId: VodPushZoneServer
+      operationId: vodPushZoneServers
       deprecated: false
       responses:
         '200':
@@ -10229,7 +10229,7 @@ paths:
       - VOD Push
       summary: Import VOD Push Zone
       description: Import VOD Push Zone
-      operationId: importVODPushZones
+      operationId: importVodPushZones
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       requestBody:
@@ -11450,7 +11450,7 @@ paths:
       - VOD Pull
       summary: Create Zone
       description: Create a new VOD pull Zone
-      operationId: createzonevodpull
+      operationId: createZoneVodPull
       requestBody:
         content:
           application/json:
@@ -11701,7 +11701,7 @@ paths:
       - VOD Pull
       summary: Zone
       description: Return  VoD pull zone details
-      operationId: getVodzonepull
+      operationId: getVodZonePull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       deprecated: false
@@ -12555,7 +12555,7 @@ paths:
       - VOD Pull
       summary: Restore
       description: Restore VoD pull zone
-      operationId: restoreZonevodpull
+      operationId: restoreZoneVodPull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
       deprecated: false
@@ -14112,7 +14112,7 @@ paths:
       tags:
       - HTTP Global Settings
       description: update zone http domain setting
-      operationId: settingsZoneHTTPDomain
+      operationId: settingsZoneHttpDomain
       requestBody:
         content:
           application/json:
@@ -14170,7 +14170,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http geoblock setting
       description: update zone http domain setting
-      operationId: settingsZoneHTTPGeoblock
+      operationId: settingsZoneHttpGeoblock
       requestBody:
         content:
           application/json:
@@ -14225,7 +14225,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http securetoken setting
       description: update zone http securetoken setting
-      operationId: settingsZoneHTTPSecuretoken
+      operationId: settingsZoneHttpSecuretoken
       requestBody:
         content:
           application/json:
@@ -14295,7 +14295,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http bwlimit setting
       description: update zone http bwlimit setting
-      operationId: settingsZoneHTTPBwlimit
+      operationId: settingsZoneHttpBwlimit
       requestBody:
         content:
           application/json:
@@ -14348,7 +14348,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http ipaccess setting
       description: update zone http ipaccess setting
-      operationId: settingsZoneHTTPIpaccess
+      operationId: settingsZoneHttpIpaccess
       requestBody:
         content:
           application/json:
@@ -14401,7 +14401,7 @@ paths:
       - HTTP Global Settings
       summary: update zone http useragent setting
       description: update zone http useragent setting
-      operationId: settingsZoneHTTPUseragent
+      operationId: settingsZoneHttpUseragent
       requestBody:
         content:
           application/json:
@@ -14465,7 +14465,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod domain setting
       description: update zone vod domain setting
-      operationId: settingsZoneVODDomain
+      operationId: settingsZoneVodDomain
       requestBody:
         content:
           application/json:
@@ -14523,7 +14523,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod geoblock setting
       description: update zone vod domain setting
-      operationId: settingsZoneVODGeoblock
+      operationId: settingsZoneVodGeoblock
       requestBody:
         content:
           application/json:
@@ -14578,7 +14578,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod securetoken setting
       description: update zone vod securetoken setting
-      operationId: settingsZoneVODSecuretoken
+      operationId: settingsZoneVodSecuretoken
       requestBody:
         content:
           application/json:
@@ -14648,7 +14648,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod ipaccess setting
       description: update zone vod ipaccess setting
-      operationId: settingsZoneVODIpaccess
+      operationId: settingsZoneVodIpaccess
       requestBody:
         content:
           application/json:
@@ -14701,7 +14701,7 @@ paths:
       - VOD Global Settings
       summary: update zone vod useragent setting
       description: update zone vod useragent setting
-      operationId: settingsZoneVODUseragent
+      operationId: settingsZoneVodUseragent
       requestBody:
         content:
           application/json:
