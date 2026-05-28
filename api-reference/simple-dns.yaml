@@ -1,4 +1,4 @@
-﻿openapi: 3.0.0
+openapi: 3.0.0
 info:
   title: 5centsCDN - SimpleDNS
   description: >
@@ -259,6 +259,7 @@ paths:
                           description: Timestamp when the zone was last validated.
                           example: '2026-04-17 22:57:53'
                         deleted:
+                          type: string
                           nullable: true
                           example:
                         proxied:

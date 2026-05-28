@@ -1,4 +1,4 @@
-﻿openapi: 3.0.0
+openapi: 3.0.0
 info:
   title: 5centsCDN - Transcoding API
   description: >
@@ -1008,6 +1008,7 @@ paths:
                                   description: Comma-separated custom CNAME hostnames for the zone.
                                   example: ""
                                 zoneids:
+                                  type: string
                                   nullable: true
                                   example:
                                 edgeruleids:
@@ -1015,6 +1016,7 @@ paths:
                                   description: Edge rule set identifier applied to this zone.
                                   example: 0
                                 profile:
+                                  type: string
                                   nullable: true
                                   example:
                                 rclone:
@@ -1038,6 +1040,7 @@ paths:
                                   description: Timestamp when this record was last updated.
                                   example: "2026-04-26 17:50:21"
                                 deleted:
+                                  type: string
                                   nullable: true
                                   example:
                             jobid:
@@ -3330,6 +3333,7 @@ paths:
                                 description: FFmpeg filter name to apply.
                                 example: drawtext
                               args:
+                                type: string
                                 nullable: true
                                 example:
 
