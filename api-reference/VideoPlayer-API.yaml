@@ -1,0 +1,1095 @@
+openapi: 3.0.0
+info:
+  title: 5centsCDN - VideoPlayer & Analytics
+  description: API for VideoPlayers & Analytics in 5centsCDN
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+components:
+  securitySchemes:
+    apikeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+- apikeyAuth: []
+tags:
+- name: 5centsCDN
+paths:
+  /players/5centscdn/analytics/stats:
+    post:
+      tags:
+      - 5centsCDN
+      summary: Analytics Statistics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                r:
+                  type: string
+                  description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Defines the reporting window.'
+                  example: '2026-01-01 00:00:00 - 2026-01-31 23:59:59'
+                granularity:
+                  type: string
+                  description: 'Time granularity for data aggregation. One of: 1m, 5m, 15m, 1h, 1d, 1M.'
+                  example: 1h
+                assets:
+                  type: string
+                  description: Comma-separated asset IDs filter. Retrieve available IDs from POST /players/5centscdn/analytics/search/assets.
+                  example: '1,234,567,890'
+                title:
+                  type: string
+                  description: Comma-separated title IDs filter. Retrieve available values from POST /players/5centscdn/analytics/search/titles.
+                  example: sample-video.mp4/playlist.m3u8
+                tag:
+                  type: string
+                  description: Comma-separated tag IDs filter. Retrieve available values from POST /players/5centscdn/analytics/search/tags.
+                  example: live
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  aggregate:
+                    type: object
+                    description: Aggregated totals across the entire requested date range.
+                    properties:
+                      concurrent:
+                        type: integer
+                        description: Peak number of concurrent viewers during the period.
+                        example: 2
+                      impression:
+                        type: integer
+                        description: Total number of player impression events.
+                        example: 23
+                      page_load:
+                        type: integer
+                        description: Total number of page load events recorded.
+                        example: 4586
+                      play:
+                        type: integer
+                        description: Total number of play events initiated by viewers.
+                        example: 15
+                      player_load:
+                        type: integer
+                        description: Total number of player load events.
+                        example: 1407
+                      total_played:
+                        type: integer
+                        description: Total playback duration in seconds across all sessions.
+                        example: 40
+                      unique:
+                        type: integer
+                        description: Total number of unique viewer sessions.
+                        example: 9
+                      hits:
+                        type: integer
+                        description: Total number of player interaction hits recorded.
+                        example: 110
+                      complete:
+                        type: integer
+                        description: Total number of complete playback events where the viewer watched to the end.
+                        example: 1
+                  concurrent:
+                    type: array
+                    description: Time-series data points for concurrent viewer counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of concurrent viewers at this time point.
+                          example: 1
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 03:00'
+                  impression:
+                    type: array
+                    description: Time-series data points for impression event counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of impression events at this time point.
+                          example: 1
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 06:00'
+                  page_load:
+                    type: array
+                    description: Time-series data points for page load event counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of page load events at this time point.
+                          example: 1020
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 06:00'
+                  play:
+                    type: array
+                    description: Time-series data points for play event counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of play events at this time point.
+                          example: 1
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 06:00'
+                  player_load:
+                    type: array
+                    description: Time-series data points for player load event counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of player load events at this time point.
+                          example: 1632
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 06:00'
+                  total_played:
+                    type: array
+                    description: Time-series data points for total playback duration in seconds.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Total playback seconds recorded at this time point.
+                          example: 40
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 03:00'
+                  unique:
+                    type: array
+                    description: Time-series data points for unique viewer session counts.
+                    items:
+                      type: object
+                      properties:
+                        count:
+                          type: integer
+                          description: Number of unique viewer sessions at this time point.
+                          example: 1
+                        date:
+                          type: string
+                          description: 'UTC timestamp for this data point. Format: YYYY-MM-DD HH:mm'
+                          example: '2026-01-20 06:00'
+              example:
+                aggregate:
+                  concurrent: 2
+                  impression: 23
+                  page_load: 4586
+                  play: 15
+                  player_load: 1407
+                  total_played: 40
+                  unique: 9
+                  hits: 110
+                  complete: 1
+                concurrent:
+                - count: 1
+                  date: '2026-01-20 03:00'
+                impression:
+                - count: 1
+                  date: '2026-01-20 06:00'
+                page_load:
+                - count: 1020
+                  date: '2026-01-20 06:00'
+                play:
+                - count: 1
+                  date: '2026-01-20 06:00'
+                player_load:
+                - count: 1632
+                  date: '2026-01-20 06:00'
+                total_played:
+                - count: 40
+                  date: '2026-01-20 03:00'
+                unique:
+                - count: 1
+                  date: '2026-01-20 06:00'
+  /players/5centscdn/analytics/data:
+    post:
+      tags:
+      - 5centsCDN
+      summary: Analytics Data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                r:
+                  type: string
+                  description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Defines the reporting window.'
+                  example: '2026-01-01 00:00:00 - 2026-01-31 23:59:59'
+                type:
+                  type: string
+                  description: 'Event type to aggregate. One of: play (view started), unique (unique viewer), impression (player visible).'
+                  enum:
+                  - play
+                  - unique
+                  - impression
+                  example: play
+                data_type:
+                  type: string
+                  description: 'Dimension to break down the data by. One of: country, browser, os, device, title.'
+                  enum:
+                  - country
+                  - browser
+                  - os
+                  - device
+                  - title
+                  example: country
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array of dimension breakdown entries for the selected data_type.
+                items:
+                  type: object
+                  properties:
+                    data:
+                      type: string
+                      description: Dimension value label such as a country name, browser name, OS name, device type, or title identifier.
+                      example: India
+                    count:
+                      type: integer
+                      description: Number of events recorded for this dimension value within the requested date range.
+                      example: 15
+              example:
+              - data: India
+                count: 15
+              - data: Chrome
+                count: 10
+              - data: Windows
+                count: 6
+              - data: sample-video.mp4
+                count: 5
+  /players/5centscdn/analytics/search/assets:
+    post:
+      tags:
+      - 5centsCDN
+      summary: Analytics Search Assets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                search:
+                  type: string
+                  description: Text search term for asset autocomplete. Filters assets by name.
+                  example: stream
+                page:
+                  type: integer
+                  description: Pagination page number. Starts at 1.
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    type: object
+                    description: Pagination metadata for the results set.
+                    properties:
+                      more:
+                        type: boolean
+                        description: Whether additional pages of results are available.
+                        example: true
+                  results:
+                    type: array
+                    description: List of matching asset records for the search term.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier of the asset. Use this value in the assets filter field.
+                          example: '12345'
+                        text:
+                          type: string
+                          description: Display label for the asset, combining the stream number and stream name.
+                          example: 'Stream #12345 - cdn/stream1'
+              example:
+                pagination:
+                  more: true
+                results:
+                - id: '12345'
+                  text: 'Stream #12345 - cdn/stream1'
+  /players/5centscdn/analytics/search/titles:
+    post:
+      tags:
+      - 5centsCDN
+      summary: Analytics Search Titles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                r:
+                  type: string
+                  description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Used to scope title results.'
+                  example: '2026-01-01 00:00:00 - 2026-01-31 23:59:59'
+                search:
+                  type: string
+                  description: Text search term to filter titles by name.
+                  example: intro
+                assets:
+                  type: string
+                  description: Comma-separated list of asset IDs to scope the title search. At least one asset is required.
+                  example: '12345,67890'
+                page:
+                  type: integer
+                  description: Pagination page number. Starts at 1.
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    type: object
+                    description: Pagination metadata for the results set.
+                    properties:
+                      more:
+                        type: boolean
+                        description: Whether additional pages of results are available.
+                        example: false
+                  results:
+                    type: array
+                    description: List of matching title records. Empty array if no titles match.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier of the title. Use this value in the titles[] filter field.
+                          example: sample-video.mp4
+                        text:
+                          type: string
+                          description: Display label for the title.
+                          example: sample-video.mp4
+              example:
+                pagination:
+                  more: false
+                results: []
+  /players/5centscdn/analytics/search/tags:
+    post:
+      tags:
+      - 5centsCDN
+      summary: Analytics Search Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                r:
+                  type: string
+                  description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Used to scope tag results.'
+                  example: '2026-01-01 00:00:00 - 2026-01-31 23:59:59'
+                assets:
+                  type: string
+                  description: Comma-separated list of asset IDs to scope the tag search.
+                  example: '1,234,567,890'
+                title:
+                  type: string
+                  description: Comma-separated list of title IDs to scope the tag search. At least one title is required.
+                  example: sample-video.mp4/playlist.m3u8
+                page:
+                  type: integer
+                  description: Pagination page number. Starts at 1.
+                  example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    type: object
+                    description: Pagination metadata for the results set.
+                    properties:
+                      more:
+                        type: boolean
+                        description: Whether additional pages of results are available.
+                        example: false
+                  results:
+                    type: array
+                    description: List of matching tag records. Empty array if no tags match.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier of the tag. Use this value in the tags[] filter field.
+                          example: live
+                        text:
+                          type: string
+                          description: Display label for the tag.
+                          example: live
+              example:
+                pagination:
+                  more: false
+                results: []
+  /players/5centscdn/skins:
+    get:
+      tags:
+      - 5centsCDN
+      summary: Skins List
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of all player skin configurations for this service account.
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Unique identifier of the player skin.
+                      example: 12345
+                    serviceid:
+                      type: integer
+                      description: Service account ID that owns this skin.
+                      example: 10001
+                    hashid:
+                      type: string
+                      description: Unique hash identifier for the skin, used in embed codes.
+                      example: sample-skin-hash
+                    name:
+                      type: string
+                      description: Display name of the player skin.
+                      example: Sample Player Skin
+                    base:
+                      type: integer
+                      description: 'Base skin template. Valid values: 1, 2, 3, 4, or 5'
+                      example: 1
+                    meta:
+                      type: object
+                      description: Skin configuration settings.
+                      properties:
+                        showskinoninit:
+                          type: integer
+                          description: Show the skin UI controls when the player initialises. 1=yes, 0=no
+                          example: 1
+                        showpip:
+                          type: integer
+                          description: Show Picture-in-Picture button. 1=yes, 0=no
+                          example: 1
+                        autoplay:
+                          type: integer
+                          description: Automatically start playback on load. 1=enabled, 0=disabled
+                          example: 1
+                        muted:
+                          type: integer
+                          description: Start playback muted. 1=muted, 0=unmuted
+                          example: 0
+                        endAction:
+                          type: string
+                          description: Action to perform when playback ends. Empty string means default behaviour.
+                          example: ''
+                        infoTitle:
+                          type: string
+                          description: Title text shown in the player info overlay.
+                          example: ''
+                        infoUrl:
+                          type: string
+                          description: URL linked from the player info overlay.
+                          example: ''
+                        infoDescription:
+                          type: string
+                          description: Description text shown in the player info overlay.
+                          example: ''
+                        infoIcon:
+                          type: string
+                          description: Icon identifier for the player info overlay.
+                          example: ''
+                        primaryColor:
+                          type: string
+                          description: Primary brand colour in hex format.
+                          example: '#1a73e8'
+                        secondaryColor:
+                          type: string
+                          description: Secondary accent colour in hex format.
+                          example: '#ffffff'
+                        showcv:
+                          type: integer
+                          description: Show concurrent viewers count overlay. 1=yes, 0=no
+                          example: 0
+                        logo:
+                          type: object
+                          description: Branding logo overlay configuration.
+                          properties:
+                            file:
+                              type: string
+                              description: Base64-encoded logo image in data URI format (data:image/png;base64,...).
+                              example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                            position:
+                              type: string
+                              description: 'Position of the logo overlay. One of: top-left, top-right, bottom-left, bottom-right'
+                              example: top-right
+                            width:
+                              type: string
+                              description: Logo width in pixels.
+                              example: '50'
+                            height:
+                              type: string
+                              description: Logo height in pixels.
+                              example: '50'
+                            offsetH:
+                              type: string
+                              description: Horizontal offset from the anchor position in pixels.
+                              example: '10'
+                            offsetV:
+                              type: string
+                              description: Vertical offset from the anchor position in pixels.
+                              example: '10'
+                            padding:
+                              type: string
+                              description: Inner padding around the logo in pixels.
+                              example: '5'
+                            opacity:
+                              type: string
+                              description: Logo opacity. Value between 0 (fully transparent) and 1 (fully opaque).
+                              example: '1'
+                            fadeDelay:
+                              type: string
+                              description: Time in milliseconds before the logo fades out. Use 0 to keep it always visible.
+                              example: '0'
+                        poster:
+                          type: string
+                          description: Poster image shown before playback starts, encoded as a data URI (data:image/jpeg;base64,...).
+                          example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                        contextUrl:
+                          type: string
+                          description: URL for the contextual link shown on the player.
+                          example: ''
+                        contextText:
+                          type: string
+                          description: Text label for the contextual link.
+                          example: ''
+                        contextIcon:
+                          type: string
+                          description: Icon identifier for the contextual link.
+                          example: ''
+                        imaAdOption:
+                          type: object
+                          description: Google IMA / VAST ad tag configuration.
+                          properties:
+                            adTagUrl:
+                              type: string
+                              description: VAST/VMAP ad tag URL for IMA ad insertion. Empty string disables IMA ads.
+                              example: ''
+                        vastAdOption:
+                          type: object
+                          description: VAST ad tag URL list (up to three slots).
+                          properties:
+                            tagURL:
+                              type: array
+                              description: Array of up to three VAST ad tag URLs. Empty string disables that slot.
+                              items:
+                                type: string
+                              example:
+                              - ''
+                              - ''
+                              - ''
+                        offline:
+                          type: object
+                          description: Offline / stream-down overlay configuration.
+                          properties:
+                            offlineImage:
+                              type: string
+                              description: Base64-encoded image shown when the stream is offline.
+                              example: ''
+                            offlineTimeout:
+                              type: string
+                              description: 'Duration to wait before showing the offline image. Format: HH:MM:SS'
+                              example: '00:00:00'
+                            label:
+                              type: string
+                              description: Text label shown in the overlay when the stream is offline.
+                              example: ''
+                        relatedVideos:
+                          type: array
+                          nullable: true
+                          description: List of related video items displayed after playback ends. Null if not configured.
+                          items:
+                            type: object
+                            properties:
+                              thumb:
+                                type: string
+                                description: Base64-encoded thumbnail image for the related video.
+                                example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                              url:
+                                type: string
+                                description: Playback URL of the related video.
+                                example: 'https://cdn.example.com/videos/sample-video.mp4'
+                              duration:
+                                type: string
+                                description: Duration of the related video in seconds.
+                                example: '120'
+                              title:
+                                type: string
+                                description: Display title of the related video.
+                                example: Sample Related Video
+                    created_at:
+                      type: string
+                      description: 'Creation timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+                      example: '2026-01-01 00:00:00'
+                    updated_at:
+                      type: string
+                      description: 'Last updated timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+                      example: '2026-01-15 12:00:00'
+              example:
+              - id: 12345
+                serviceid: 10001
+                hashid: sample-skin-hash
+                name: Sample Player Skin
+                base: 1
+                meta:
+                  showskinoninit: 1
+                  showpip: 1
+                  autoplay: 1
+                  muted: 0
+                  endAction: ''
+                  infoTitle: ''
+                  infoUrl: ''
+                  infoDescription: ''
+                  infoIcon: ''
+                  primaryColor: '#1a73e8'
+                  secondaryColor: '#ffffff'
+                  logo:
+                    file: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                    position: top-right
+                    width: '50'
+                    height: '50'
+                    offsetH: '10'
+                    offsetV: '10'
+                    padding: '5'
+                    opacity: '1'
+                    fadeDelay: '0'
+                  poster: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                  contextUrl: ''
+                  contextText: ''
+                  contextIcon: ''
+                  imaAdOption:
+                    adTagUrl: ''
+                  vastAdOption:
+                    tagURL:
+                    - ''
+                    - ''
+                    - ''
+                  offline:
+                    offlineImage: ''
+                    offlineTimeout: '00:00:00'
+                    label: ''
+                  relatedVideos:
+                  - thumb: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                    url: 'https://cdn.example.com/videos/sample-video.mp4'
+                    duration: '120'
+                    title: Sample Related Video
+                  showcv: 0
+                created_at: '2026-01-01 00:00:00'
+                updated_at: '2026-01-15 12:00:00'
+    post:
+      tags:
+      - 5centsCDN
+      summary: Create Player Skin
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Display name for the new player skin.
+                  example: My Custom Player
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Operation outcome.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: New skin created
+                  data:
+                    type: object
+                    description: Response data payload.
+                    properties:
+                      skinid:
+                        type: integer
+                        description: Unique identifier of the newly created player skin.
+                        example: 12345
+              example:
+                result: success
+                message: New skin created
+                data:
+                  skinid: 12345
+  /players/5centscdn/skins/{skinid}:
+    get:
+      tags:
+      - 5centsCDN
+      summary: Get Player Skin
+      parameters:
+      - name: skinid
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: Unique identifier of the player skin.
+                    example: 12345
+                  serviceid:
+                    type: integer
+                    description: Service account ID that owns this skin.
+                    example: 10001
+                  hashid:
+                    type: string
+                    description: Unique hash identifier for the skin, used in embed codes.
+                    example: sample-skin-hash
+                  name:
+                    type: string
+                    description: Display name of the player skin.
+                    example: My Custom Player
+                  base:
+                    type: integer
+                    description: 'Base skin template. Valid values: 1, 2, 3, 4, or 5'
+                    example: 1
+                  meta:
+                    type: object
+                    description: Skin configuration settings.
+                    properties:
+                      logo:
+                        type: object
+                        description: Branding logo overlay configuration.
+                        properties:
+                          position:
+                            type: string
+                            description: 'Position of the logo overlay. One of: top-left, top-right, bottom-left, bottom-right'
+                            example: bottom-right
+                          width:
+                            type: string
+                            description: Logo width in pixels, returned as string.
+                            example: '70'
+                          height:
+                            type: integer
+                            description: Logo height in pixels.
+                            example: 50
+                          offsetH:
+                            type: integer
+                            description: Horizontal offset from the anchor position in pixels.
+                            example: 6
+                          offsetV:
+                            type: integer
+                            description: Vertical offset from the anchor position in pixels.
+                            example: 46
+                  created_at:
+                    type: string
+                    description: 'Creation timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+                    example: '2026-01-01 00:00:00'
+                  updated_at:
+                    type: string
+                    description: 'Last updated timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+                    example: '2026-01-15 12:00:00'
+              example:
+                id: 12345
+                serviceid: 10001
+                hashid: sample-skin-hash
+                name: My Custom Player
+                base: 1
+                meta:
+                  logo:
+                    position: bottom-right
+                    width: '70'
+                    height: 50
+                    offsetH: 6
+                    offsetV: 46
+                created_at: '2026-01-01 00:00:00'
+                updated_at: '2026-01-15 12:00:00'
+    post:
+      tags:
+      - 5centsCDN
+      summary: Update Player Skin
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Updated display name for the player skin.
+                  example: My Updated Skin
+                meta[showskinoninit]:
+                  type: string
+                  description: Show skin controls when the player initialises. '1'=yes, '0'=no
+                  example: '1'
+                meta[showpip]:
+                  type: integer
+                  description: Show Picture-in-Picture button. 1=yes, 0=no
+                  example: '1'
+                meta[autoplay]:
+                  type: integer
+                  description: Automatically start playback on load. 1=enabled, 0=disabled
+                  example: '1'
+                meta[muted]:
+                  type: integer
+                  description: Start playback muted. 1=muted, 0=unmuted
+                  example: '0'
+                meta[showcv]:
+                  type: integer
+                  description: Show concurrent viewers count overlay. 1=yes, 0=no
+                  example: '0'
+                base:
+                  type: string
+                  description: "Base skin template to use. Valid values: '1', '2', '3', '4', or '5'"
+                  example: '2'
+                meta[primaryColor]:
+                  type: string
+                  description: Primary brand colour in hex format.
+                  example: '#1a73e8'
+                meta[secondaryColor]:
+                  type: string
+                  description: Secondary accent colour in hex format.
+                  example: '#ffffff'
+                meta[logo][file]:
+                  type: string
+                  description: Base64-encoded logo image in data URI format (data:image/png;base64,...).
+                  example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                meta[logo][url]:
+                  type: string
+                  description: URL to navigate to when the logo overlay is clicked.
+                  example: 'https://example.com'
+                meta[logo][position]:
+                  type: string
+                  description: 'Position of the logo overlay. One of: top-left, top-right, bottom-left, bottom-right'
+                  example: top-right
+                meta[logo][width]:
+                  type: string
+                  description: Logo width in pixels, sent as string.
+                  example: '32'
+                meta[logo][height]:
+                  type: string
+                  description: Logo height in pixels, sent as string.
+                  example: '32'
+                meta[logo][offsetH]:
+                  type: string
+                  description: Horizontal offset from the anchor position in pixels, sent as string.
+                  example: '10'
+                meta[logo][offsetV]:
+                  type: string
+                  description: Vertical offset from the anchor position in pixels, sent as string.
+                  example: '10'
+                meta[logo][padding]:
+                  type: string
+                  description: Inner padding around the logo in pixels, sent as string.
+                  example: '5'
+                meta[logo][opacity]:
+                  type: string
+                  description: Logo opacity as string. Value between '0' (fully transparent) and '1' (fully opaque).
+                  example: '0.9'
+                meta[logo][fadeDelay]:
+                  type: string
+                  description: Time in milliseconds before the logo fades out, sent as string. Use '0' to keep it always visible.
+                  example: '5000'
+                meta[logo][hideOnReady]:
+                  type: integer
+                  description: Hide logo once player is fully ready. 1=yes, 0=no
+                  example: '0'
+                meta[poster]:
+                  type: string
+                  description: Poster image shown before playback starts, encoded as a data URI (data:image/png;base64,...).
+                  example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+                meta[endAction]:
+                  type: string
+                  description: "Action to perform when playback ends. Empty string = default behaviour. 'related' = show related videos panel."
+                  example: ''
+                meta[videoInfo]:
+                  type: string
+                  description: Show video info overlay. '1' = show, '0' = hide.
+                  example: '0'
+                meta[zoomMenu]:
+                  type: string
+                  description: Show zoom menu controls. '1' = show, '0' = hide.
+                  example: '0'
+                meta[rewindforwardButton]:
+                  type: string
+                  description: Show rewind and forward skip buttons. '1' = show, '0' = hide.
+                  example: '0'
+                meta[contextMenu]:
+                  type: string
+                  description: Show the player context (right-click) menu. '1' = show, '0' = hide.
+                  example: '0'
+                meta[offline][offlineImage]:
+                  type: string
+                  description: Base64-encoded image shown when the stream is offline, as a data URI (data:image/...;base64,...).
+                  example: ''
+                meta[offline][offlineTimeout]:
+                  type: string
+                  description: 'Duration to wait before showing the offline image. Format: HH:MM:SS'
+                  example: '00:00:00'
+                meta[offline][offlineCountdown]:
+                  type: string
+                  description: Show countdown timer on the offline screen. '1' = show, '0' = hide.
+                  example: '0'
+                meta[offline][label]:
+                  type: string
+                  description: Text label shown in the overlay when the stream is offline.
+                  example: ''
+                meta[vastAd]:
+                  type: string
+                  description: "Enable VAST ad insertion. '1' = enabled, '0' = disabled. Mutually exclusive with meta[imaAd]."
+                  example: '0'
+                meta[imaAd]:
+                  type: string
+                  description: "Enable Google IMA ad insertion. '1' = enabled, '0' = disabled. Mutually exclusive with meta[vastAd]."
+                  example: '0'
+                meta[imaAdOption][adTagUrl]:
+                  type: string
+                  description: VAST/VMAP ad tag URL for IMA ad insertion. Empty string disables IMA ads.
+                  example: ''
+                meta[vastAdOption][tagURL][]:
+                  type: string
+                  description: "VAST ad tag URL. Send up to three instances via repeated FormData.append() calls to fill each slot."
+                  example: ''
+                meta[relatedVideos][:id][url]:
+                  type: string
+                  description: "Playback URL for a related video entry. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
+                  example: 'https://cdn.example.com/videos/sample-video.mp4'
+                meta[relatedVideos][:id][title]:
+                  type: string
+                  description: "Display title for a related video entry. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
+                  example: Sample Related Video
+                meta[relatedVideos][:id][duration]:
+                  type: string
+                  description: "Duration of the related video in seconds. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
+                  example: '120'
+                meta[relatedVideos][:id][thumb]:
+                  type: string
+                  description: "Base64-encoded thumbnail for a related video entry in data URI format. :id is a unique timestamp-based key per entry (e.g. 1714000000000)."
+                  example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+      parameters:
+      - name: skinid
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Operation outcome.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Settings Updated.
+              example:
+                result: success
+                message: Settings Updated.
+    delete:
+      tags:
+      - 5centsCDN
+      summary: Delete Player Skin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be DELETE to trigger skin deletion.
+                  example: DELETE
+            example:
+              _METHOD: DELETE
+      parameters:
+      - name: skinid
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Operation outcome.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable description of the operation outcome.
+                    example: Player Skin Deleted.
+              example:
+                result: success
+                message: Player Skin Deleted.

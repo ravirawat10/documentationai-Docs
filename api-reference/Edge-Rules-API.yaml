@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: 5centsCDN Edge Rules API
   version: "1.0.0"
@@ -16,7 +16,7 @@ servers:
     description: 5centsCDN API Server - Production
 
 security:
-  - ApiKeyAuth: []
+  - apikeyAuth: []
 
 tags:
   - name: HTTP Pull
@@ -34,9 +34,9 @@ tags:
 
 paths:
 
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
   # HTTP PULL
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
 
   /zones/http/pull/{zoneId}/rules:
     get:
@@ -94,7 +94,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             originProtocol:
-                              type: string
                               nullable: true
                               description: Origin protocol override. Null to inherit from zone settings.
                               example: null
@@ -543,12 +542,10 @@ paths:
                                       example:
                                         X-Response-Header: sample-value
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -618,12 +615,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -688,7 +683,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             originProtocol:
-                              type: string
                               nullable: true
                               description: Origin protocol override. Null to inherit from zone settings.
                               example: null
@@ -885,7 +879,6 @@ paths:
                                       type: string
                                       example: ""
                                     expected:
-                                      type: string
                                       nullable: true
                                       example: null
                                     value:
@@ -987,7 +980,6 @@ paths:
                                       type: boolean
                                       example: false
                                     policy_type:
-                                      type: string
                                       nullable: true
                                       example: null
                                     type:
@@ -1113,12 +1105,10 @@ paths:
                                       type: boolean
                                       example: false
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -1182,12 +1172,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -1363,10 +1351,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_httpPull
       summary: Update or delete a specific edge rule in an HTTP Pull zone
       description: >
-        **Update** â€” omit `_METHOD` or do not send it; the full rule options
+        **Update** — omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -1414,7 +1402,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored â€” only `options`
+        `name` and `rule` fields are effectively ignored — only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -1447,9 +1435,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
   # HTTP PUSH
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
 
   /zones/http/push/{zoneId}/rules:
     get:
@@ -1507,7 +1495,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             originProtocol:
-                              type: string
                               nullable: true
                               description: Origin protocol override. Null to inherit from zone settings.
                               example: null
@@ -1612,11 +1599,9 @@ paths:
                                       type: boolean
                                       example: false
                                     value:
-                                      type: string
                                       nullable: true
                                       example: null
                                     to:
-                                      type: string
                                       nullable: true
                                       example: null
                                 gzipOn:
@@ -1701,11 +1686,9 @@ paths:
                                       type: boolean
                                       example: false
                                     mode:
-                                      type: string
                                       nullable: true
                                       example: null
                                     expected:
-                                      type: string
                                       nullable: true
                                       example: null
                                     value:
@@ -1932,12 +1915,10 @@ paths:
                                       type: boolean
                                       example: false
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -2001,12 +1982,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -2071,7 +2050,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             overrideOriginProtocol:
-                              type: string
                               nullable: true
                               example: null
                             options:
@@ -2270,7 +2248,6 @@ paths:
                                       type: string
                                       example: ""
                                     expected:
-                                      type: string
                                       nullable: true
                                       example: null
                                     value:
@@ -2372,7 +2349,6 @@ paths:
                                       type: boolean
                                       example: false
                                     policy_type:
-                                      type: string
                                       nullable: true
                                       example: null
                                     type:
@@ -2509,12 +2485,10 @@ paths:
                                       type: boolean
                                       example: true
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -2578,12 +2552,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -2757,10 +2729,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_httpPush
       summary: Update or delete a specific edge rule in an HTTP Push zone
       description: >
-        **Update** â€” omit `_METHOD` or do not send it; the full rule options
+        **Update** — omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -2808,7 +2780,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored â€” only `options`
+        `name` and `rule` fields are effectively ignored — only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -2841,9 +2813,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
   # VOD PULL
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
 
   /zones/vod/pull/{zoneId}/rules:
     get:
@@ -2901,7 +2873,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             originProtocol:
-                              type: string
                               nullable: true
                               description: Origin protocol override. Null to inherit from zone settings.
                               example: null
@@ -3006,11 +2977,9 @@ paths:
                                       type: boolean
                                       example: false
                                     value:
-                                      type: string
                                       nullable: true
                                       example: null
                                     to:
-                                      type: string
                                       nullable: true
                                       example: null
                                 gzipOn:
@@ -3326,12 +3295,10 @@ paths:
                                       type: boolean
                                       example: false
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -3395,12 +3362,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -3472,16 +3437,13 @@ paths:
                               description: Behavior options applied when this rule matches a request.
                               properties:
                                 allowedHttpMethods:
-                                  type: string
                                   nullable: true
                                   description: Restrict which HTTP methods are accepted for requests.
                                   example: null
                                 bot_protection:
-                                  type: string
                                   nullable: true
                                   example: null
                                 brotli_compression:
-                                  type: string
                                   nullable: true
                                   description: Enable Brotli compression for specified MIME content types.
                                   example: null
@@ -3496,7 +3458,6 @@ paths:
                                       type: string
                                       example: 86400s
                                 cache_http_headers:
-                                  type: string
                                   nullable: true
                                   example: null
                                 cors:
@@ -3515,16 +3476,13 @@ paths:
                                         type: string
                                       example: ["*"]
                                 country_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the visitor country.
                                   example: null
                                 disable_cache:
-                                  type: string
                                   nullable: true
                                   example: null
                                 disable_proxy_force_ranges:
-                                  type: string
                                   nullable: true
                                   example: null
                                 edge_cache_settings:
@@ -3544,37 +3502,30 @@ paths:
                                       type: boolean
                                       example: true
                                 fetch_compressed:
-                                  type: string
                                   nullable: true
                                   description: Fetch and serve pre-compressed assets from origin.
                                   example: null
                                 follow_origin_redirect:
-                                  type: string
                                   nullable: true
                                   description: Follow 3xx redirects from origin instead of passing them to clients.
                                   example: null
                                 force_return:
-                                  type: string
                                   nullable: true
                                   description: Return a fixed HTTP status code and optional body for matched requests.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
                                 gzipOn:
-                                  type: string
                                   nullable: true
                                   description: Enable gzip compression for responses.
                                   example: null
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 http3_enabled:
-                                  type: string
                                   nullable: true
                                   example: null
                                 ignoreQueryString:
@@ -3588,64 +3539,51 @@ paths:
                                       type: boolean
                                       example: true
                                 ignore_cookie:
-                                  type: string
                                   nullable: true
                                   description: Ignore Set-Cookie headers from origin so responses can be cached.
                                   example: null
                                 ip_address_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the client IP address.
                                   example: null
                                 limit_bandwidth:
-                                  type: string
                                   nullable: true
                                   description: Throttle the response bandwidth for matched requests.
                                   example: null
                                 proxy_cache_methods_set:
-                                  type: string
                                   nullable: true
                                   example: null
                                 query_params_blacklist:
-                                  type: string
                                   nullable: true
                                   description: Exclude specific query parameters from the cache key.
                                   example: null
                                 query_params_whitelist:
-                                  type: string
                                   nullable: true
                                   description: Include only specific query parameters in the cache key.
                                   example: null
                                 redirect_http_to_https:
-                                  type: string
                                   nullable: true
                                   description: Automatically redirect HTTP requests to HTTPS.
                                   example: null
                                 redirect_https_to_http:
-                                  type: string
                                   nullable: true
                                   example: null
                                 referrer_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the HTTP Referer header.
                                   example: null
                                 response_headers_hiding_policy:
-                                  type: string
                                   nullable: true
                                   description: Filter or suppress specific response headers before delivery.
                                   example: null
                                 request_limiter:
-                                  type: string
                                   nullable: true
                                   example: null
                                 rewrite:
-                                  type: string
                                   nullable: true
                                   description: Rewrite the request URL path using a pattern and replacement.
                                   example: null
                                 secure_key:
-                                  type: string
                                   nullable: true
                                   description: Protect content using time-limited signed URL tokens.
                                   example: null
@@ -3660,63 +3598,50 @@ paths:
                                       type: boolean
                                       example: true
                                 sni:
-                                  type: string
                                   nullable: true
                                   description: Enable Server Name Indication for TLS connections.
                                   example: null
                                 stale:
-                                  type: string
                                   nullable: true
                                   description: Serve stale cached content when specified error conditions occur.
                                   example: null
                                 staticHeaders:
-                                  type: string
                                   nullable: true
                                   description: Add static headers to responses sent to clients.
                                   example: null
                                 staticRequestHeaders:
-                                  type: string
                                   nullable: true
                                   description: Add static headers to requests forwarded to origin.
                                   example: null
                                 static_response_headers:
-                                  type: string
                                   nullable: true
                                   example: null
                                 tls_versions:
-                                  type: string
                                   nullable: true
                                   description: Restrict TLS connections to specific protocol versions.
                                   example: null
                                 use_default_le_chain:
-                                  type: string
                                   nullable: true
                                   example: null
                                 use_dns01_le_challenge:
-                                  type: string
                                   nullable: true
                                   example: null
                                 use_rsa_le_cert:
-                                  type: string
                                   nullable: true
                                   example: null
                                 user_agent_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the User-Agent header.
                                   example: null
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 websockets:
-                                  type: string
                                   nullable: true
                                   description: Enable WebSocket proxying for matched requests.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -3901,10 +3826,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_vodPull
       summary: Update or delete a specific edge rule in a VOD Pull zone
       description: >
-        **Update** â€” omit `_METHOD` or do not send it; the full rule options
+        **Update** — omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -3952,7 +3877,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored â€” only `options`
+        `name` and `rule` fields are effectively ignored — only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -3985,9 +3910,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
   # VOD PUSH
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
 
   /zones/vod/push/{zoneId}/rules:
     get:
@@ -4045,7 +3970,6 @@ paths:
                               description: Rule type identifier. 0 = standard path-based rule.
                               example: 0
                             originProtocol:
-                              type: string
                               nullable: true
                               description: Origin protocol override. Null to inherit from zone settings.
                               example: null
@@ -4150,11 +4074,9 @@ paths:
                                       type: boolean
                                       example: false
                                     value:
-                                      type: string
                                       nullable: true
                                       example: null
                                     to:
-                                      type: string
                                       nullable: true
                                       example: null
                                 gzipOn:
@@ -4239,11 +4161,9 @@ paths:
                                       type: boolean
                                       example: false
                                     mode:
-                                      type: string
                                       nullable: true
                                       example: null
                                     expected:
-                                      type: string
                                       nullable: true
                                       example: null
                                     value:
@@ -4470,12 +4390,10 @@ paths:
                                       type: boolean
                                       example: false
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
@@ -4539,12 +4457,10 @@ paths:
                                         type: string
                                       example: []
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -4616,16 +4532,13 @@ paths:
                               description: Behavior options applied when this rule matches a request.
                               properties:
                                 allowedHttpMethods:
-                                  type: string
                                   nullable: true
                                   description: Restrict which HTTP methods are accepted for requests.
                                   example: null
                                 bot_protection:
-                                  type: string
                                   nullable: true
                                   example: null
                                 brotli_compression:
-                                  type: string
                                   nullable: true
                                   description: Enable Brotli compression for specified MIME content types.
                                   example: null
@@ -4640,7 +4553,6 @@ paths:
                                       type: string
                                       example: 2592000s
                                 cache_http_headers:
-                                  type: string
                                   nullable: true
                                   example: null
                                 cors:
@@ -4659,16 +4571,13 @@ paths:
                                         type: string
                                       example: ["*"]
                                 country_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the visitor country.
                                   example: null
                                 disable_cache:
-                                  type: string
                                   nullable: true
                                   example: null
                                 disable_proxy_force_ranges:
-                                  type: string
                                   nullable: true
                                   example: null
                                 edge_cache_settings:
@@ -4688,37 +4597,30 @@ paths:
                                       type: boolean
                                       example: true
                                 fetch_compressed:
-                                  type: string
                                   nullable: true
                                   description: Fetch and serve pre-compressed assets from origin.
                                   example: null
                                 follow_origin_redirect:
-                                  type: string
                                   nullable: true
                                   description: Follow 3xx redirects from origin instead of passing them to clients.
                                   example: null
                                 force_return:
-                                  type: string
                                   nullable: true
                                   description: Return a fixed HTTP status code and optional body for matched requests.
                                   example: null
                                 forward_host_header:
-                                  type: string
                                   nullable: true
                                   description: Forward the original client Host header to origin.
                                   example: null
                                 gzipOn:
-                                  type: string
                                   nullable: true
                                   description: Enable gzip compression for responses.
                                   example: null
                                 hostHeader:
-                                  type: string
                                   nullable: true
                                   description: Override the Host header sent to origin.
                                   example: null
                                 http3_enabled:
-                                  type: string
                                   nullable: true
                                   example: null
                                 ignoreQueryString:
@@ -4732,7 +4634,6 @@ paths:
                                       type: boolean
                                       example: true
                                 ignore_cookie:
-                                  type: string
                                   nullable: true
                                   description: Ignore Set-Cookie headers from origin so responses can be cached.
                                   example: null
@@ -4757,21 +4658,17 @@ paths:
                                         type: string
                                       example: [""]
                                 limit_bandwidth:
-                                  type: string
                                   nullable: true
                                   description: Throttle the response bandwidth for matched requests.
                                   example: null
                                 proxy_cache_methods_set:
-                                  type: string
                                   nullable: true
                                   example: null
                                 query_params_blacklist:
-                                  type: string
                                   nullable: true
                                   description: Exclude specific query parameters from the cache key.
                                   example: null
                                 query_params_whitelist:
-                                  type: string
                                   nullable: true
                                   description: Include only specific query parameters in the cache key.
                                   example: null
@@ -4786,25 +4683,20 @@ paths:
                                       type: boolean
                                       example: true
                                 redirect_https_to_http:
-                                  type: string
                                   nullable: true
                                   example: null
                                 referrer_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the HTTP Referer header.
                                   example: null
                                 response_headers_hiding_policy:
-                                  type: string
                                   nullable: true
                                   description: Filter or suppress specific response headers before delivery.
                                   example: null
                                 request_limiter:
-                                  type: string
                                   nullable: true
                                   example: null
                                 rewrite:
-                                  type: string
                                   nullable: true
                                   description: Rewrite the request URL path using a pattern and replacement.
                                   example: null
@@ -4846,7 +4738,6 @@ paths:
                                       type: boolean
                                       example: true
                                 sni:
-                                  type: string
                                   nullable: true
                                   description: Enable Server Name Indication for TLS connections.
                                   example: null
@@ -4874,53 +4765,42 @@ paths:
                                         - http_404
                                         - http_429
                                 staticHeaders:
-                                  type: string
                                   nullable: true
                                   description: Add static headers to responses sent to clients.
                                   example: null
                                 staticRequestHeaders:
-                                  type: string
                                   nullable: true
                                   description: Add static headers to requests forwarded to origin.
                                   example: null
                                 static_response_headers:
-                                  type: string
                                   nullable: true
                                   example: null
                                 tls_versions:
-                                  type: string
                                   nullable: true
                                   description: Restrict TLS connections to specific protocol versions.
                                   example: null
                                 use_default_le_chain:
-                                  type: string
                                   nullable: true
                                   example: null
                                 use_dns01_le_challenge:
-                                  type: string
                                   nullable: true
                                   example: null
                                 use_rsa_le_cert:
-                                  type: string
                                   nullable: true
                                   example: null
                                 user_agent_acl:
-                                  type: string
                                   nullable: true
                                   description: Allow or block requests based on the User-Agent header.
                                   example: null
                                 image_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable on-the-fly image optimization.
                                   example: null
                                 websockets:
-                                  type: string
                                   nullable: true
                                   description: Enable WebSocket proxying for matched requests.
                                   example: null
                                 asset_stack:
-                                  type: string
                                   nullable: true
                                   description: Enable web performance optimizations for CSS and JavaScript assets.
                                   example: null
@@ -5105,10 +4985,10 @@ paths:
       operationId: updateOrDeleteEdgeRule_vodPush
       summary: Update or delete a specific edge rule in a VOD Push zone
       description: >
-        **Update** â€” omit `_METHOD` or do not send it; the full rule options
+        **Update** — omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
 
-        **Delete** â€” include `"_METHOD": "DELETE"` as the only body field.
+        **Delete** — include `"_METHOD": "DELETE"` as the only body field.
         The rule identified by `ruleId` is permanently removed.
       parameters:
         - $ref: '#/components/parameters/zoneId'
@@ -5156,7 +5036,7 @@ paths:
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
-        `name` and `rule` fields are effectively ignored â€” only `options`
+        `name` and `rule` fields are effectively ignored — only `options`
         is applied. `behaviorId` is the `id` from the behaviors array
         returned by GET rules.
       parameters:
@@ -5189,9 +5069,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
   # VALIDATION
-  # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  # ═══════════════════════════════════════════════════════════════
 
   /validate/rule:
     post:
@@ -5234,19 +5114,19 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════
 # Components
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════
 components:
 
-  # â”€â”€â”€ Security Schemes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ─── Security Schemes ────────────────────────────────────────
   securitySchemes:
-    ApiKeyAuth:
+    apikeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
 
-  # â”€â”€â”€ Parameters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ─── Parameters ─────────────────────────────────────────────
   parameters:
     zoneId:
       name: zoneId
@@ -5275,7 +5155,7 @@ components:
         type: integer
         example: 1
 
-  # â”€â”€â”€ Request Bodies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ─── Request Bodies ──────────────────────────────────────────
   requestBodies:
     CreateRuleBody_httpPull:
       required: true
@@ -5283,7 +5163,7 @@ components:
         Request body for creating an edge rule on an HTTP Pull zone.
         Must include `"_METHOD": "PUT"`. Only tls_versions is excluded
         (Default Behaviors view only). Query string options (ignoreQueryString,
-        query_params_blacklist, query_params_whitelist) are mutually exclusive â€”
+        query_params_blacklist, query_params_whitelist) are mutually exclusive —
         only one should have enabled = true at a time.
       content:
         application/json:
@@ -6163,7 +6043,7 @@ components:
                     type: object
                     description: >
                       Controls the Host header sent to origin. Pull only.
-                      The system uses hostHeader for the setting; forward_host_header is a legacy alias â€” both must be sent.
+                      The system uses hostHeader for the setting; forward_host_header is a legacy alias — both must be sent.
                     properties:
                       enabled:
                         type: boolean
@@ -7192,7 +7072,7 @@ components:
         gzipOn, fetch_compressed, brotli_compression, slice, disposition,
         allowedHttpMethods, image_stack, asset_stack, cms, honor_vary, tls_versions.
         Query string options (ignoreQueryString, query_params_blacklist,
-        query_params_whitelist) are mutually exclusive â€” only one should have
+        query_params_whitelist) are mutually exclusive — only one should have
         enabled = true at a time.
       content:
         application/json:
@@ -8577,7 +8457,7 @@ components:
     UpdateOrDeleteRuleBody_httpPull:
       required: true
       description: >
-        Update an edge rule in an HTTP Pull zone. No _METHOD field required â€” direct POST.
+        Update an edge rule in an HTTP Pull zone. No _METHOD field required — direct POST.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -9361,7 +9241,7 @@ components:
     UpdateOrDeleteRuleBody_httpPush:
       required: true
       description: >
-        Update an edge rule in an HTTP Push zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, allowedHttpMethods, follow_origin_redirect, xff, sni, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
+        Update an edge rule in an HTTP Push zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, allowedHttpMethods, follow_origin_redirect, xff, sni, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -9942,7 +9822,7 @@ components:
     UpdateOrDeleteRuleBody_vodPull:
       required: true
       description: >
-        Update an edge rule in a VOD Pull zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, image_stack, asset_stack, cms, honor_vary.
+        Update an edge rule in a VOD Pull zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, image_stack, asset_stack, cms, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -10523,7 +10403,7 @@ components:
     UpdateOrDeleteRuleBody_vodPush:
       required: true
       description: >
-        Update an edge rule in a VOD Push zone. No _METHOD field required â€” direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, follow_origin_redirect, xff, sni, image_stack, asset_stack, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
+        Update an edge rule in a VOD Push zone. No _METHOD field required — direct POST. Excluded: segmenter_cache_settings, ignore_cookie, ignoreQueryString, query_params_blacklist/whitelist, gzipOn, fetch_compressed, brotli_compression, slice, disposition, allowedHttpMethods, follow_origin_redirect, xff, sni, image_stack, asset_stack, cms, staticRequestHeaders, response_headers_hiding_policy, hostHeader, forward_host_header, honor_vary.
         To delete: send only {"_METHOD": "DELETE"} instead of this payload.
       content:
         application/json:
@@ -10955,7 +10835,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a HTTPPULL zone.
-        No _METHOD override required â€” direct POST. tls_versions is available here
+        No _METHOD override required — direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -11857,7 +11737,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a HTTPPUSH zone.
-        No _METHOD override required â€” direct POST. tls_versions is available here
+        No _METHOD override required — direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -12733,7 +12613,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a VODPULL zone.
-        No _METHOD override required â€” direct POST. tls_versions is available here
+        No _METHOD override required — direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -13609,7 +13489,7 @@ components:
       required: true
       description: >
         Request body for updating the default behavior of a VODPUSH zone.
-        No _METHOD override required â€” direct POST. tls_versions is available here
+        No _METHOD override required — direct POST. tls_versions is available here
         (not available in rule editing). All options are sent regardless of zone type.
         name and rule should be sent back as received from the GET rules response.
       content:
@@ -14482,7 +14362,7 @@ components:
               honor_vary: { enabled: null }
               cors: { enabled: null, control: "*", always: false, value: "*", custom: "" }
 
-  # â”€â”€â”€ Responses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ─── Responses ──────────────────────────────────────────────
   responses:
     MutationSuccessResponse:
       description: Operation completed successfully
@@ -14528,7 +14408,7 @@ components:
                 type: string
                 example: "Unauthorized"
 
-  # â”€â”€â”€ Schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ─── Schemas ────────────────────────────────────────────────
   schemas:
 
     EdgeRulesListResponse:
@@ -14600,7 +14480,6 @@ components:
           enum: [0, 1]
           example: 1
         originProtocol:
-          type: string
           nullable: true
           description: Protocol override toward origin (null = inherit)
           example: null
@@ -15313,8 +15192,8 @@ components:
           type: string
           enum: [hide, show]
           description: >
-            `hide` â€” remove the headers listed in `expected.hide`;
-            `show` â€” remove everything except the headers listed in `expected.show`.
+            `hide` — remove the headers listed in `expected.hide`;
+            `show` — remove everything except the headers listed in `expected.show`.
           example: "hide"
         expected:
           type: object
@@ -15359,7 +15238,7 @@ components:
       description: >
         Controls whether the query string is included in the cache key.
         Mutually exclusive with `query_params_blacklist` /
-        `query_params_whitelist` â€” only one should be enabled at a time.
+        `query_params_whitelist` — only one should be enabled at a time.
       properties:
         enabled:
           type: boolean
