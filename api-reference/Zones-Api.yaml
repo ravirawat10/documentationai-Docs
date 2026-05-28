@@ -114,7 +114,6 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2023-01-20 12:00:00"
                         deleted:
-                          type: string
                           nullable: true
                           example:
                         router:
@@ -515,7 +514,6 @@ paths:
                           description: "Numeric identifier of the default behavior set"
                           example: 11111
                         linkedVideoManager:
-                          type: string
                           nullable: true
                           example:
                         hostHeader:
@@ -1153,7 +1151,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2023-01-20 12:00:00"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -1404,7 +1401,6 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 11111
                       linkedVideoManager:
-                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -1814,7 +1810,6 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
-                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -2417,7 +2412,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2025-03-23 05:49:30"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -2460,7 +2454,6 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
-                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -2520,7 +2513,6 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 11111
                       linkedVideoManager:
-                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -3684,7 +3676,6 @@ paths:
                           description: Whether live streaming is active for this zone
                           example: "N"
                         wafid:
-                          type: string
                           nullable: true
                           example:
                         edgeruleids:
@@ -3726,7 +3717,6 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-14 12:29:23"
                         deleted:
-                          type: string
                           nullable: true
                           example:
                         router:
@@ -4710,7 +4700,6 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
-                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -4722,7 +4711,6 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
-                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -4750,7 +4738,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-14 12:29:23"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -4793,7 +4780,6 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
-                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -5316,7 +5302,6 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
-                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -6189,7 +6174,6 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
-                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -6201,7 +6185,6 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
-                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -6213,7 +6196,6 @@ paths:
                         description: Whether WordPress integration mode is enabled (Y/N)
                         example: "0"
                       awsSignatureV4:
-                        type: string
                         nullable: true
                         example:
                       disabled:
@@ -6229,7 +6211,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2024-03-08 15:13:40"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -6272,7 +6253,6 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
-                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -6565,7 +6545,6 @@ paths:
                             description: "Comma-separated IP addresses or CIDR ranges"
                             example: ""
                           dirs:
-                            type: string
                             nullable: true
                             example:
                           active:
@@ -6949,7 +6928,6 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-08 06:06:49"
                         deleted:
-                          type: string
                           nullable: true
                           example:
                         router:
@@ -7286,7 +7264,6 @@ paths:
                           description: "Numeric identifier of the default behavior set"
                           example: 6785
                         linkedVideoManager:
-                          type: string
                           nullable: true
                           example:
                         hostHeader:
@@ -8044,7 +8021,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-08 06:06:49"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -8358,7 +8334,6 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 6785
                       linkedVideoManager:
-                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -8797,7 +8772,6 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
                   warnings:
-                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -9044,7 +9018,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-01 11:34:46"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -9091,7 +9064,6 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
-                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -9419,7 +9391,6 @@ paths:
                         description: "Numeric identifier of the default behavior set"
                         example: 8282
                       linkedVideoManager:
-                        type: string
                         nullable: true
                         example:
                       hostHeader:
@@ -10784,7 +10755,6 @@ paths:
                           description: Whether live streaming is active for this zone
                           example: "N"
                         wafid:
-                          type: string
                           nullable: true
                           example:
                         edgeruleids:
@@ -10826,7 +10796,6 @@ paths:
                           description: "ISO 8601 timestamp of the most recent update"
                           example: "2026-04-08 12:24:08"
                         deleted:
-                          type: string
                           nullable: true
                           example:
                         router:
@@ -11800,7 +11769,6 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
-                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -11812,7 +11780,6 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
-                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -11840,7 +11807,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-04-08 12:24:08"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -11887,7 +11853,6 @@ paths:
                             description: "Delivery mode of the zone (e.g. http, https)"
                             example: S
                           certid:
-                            type: string
                             nullable: true
                             example:
                           enabled:
@@ -12420,7 +12385,6 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: false
                   warnings:
-                    type: string
                     nullable: true
                     description: Array of non-fatal warning messages, or null if no warnings.
                     example: null
@@ -12663,7 +12627,6 @@ paths:
                         description: Whether live streaming is active for this zone
                         example: "N"
                       wafid:
-                        type: string
                         nullable: true
                         example:
                       edgeruleids:
@@ -12675,7 +12638,6 @@ paths:
                         description: Whether DNS propagation check is enabled
                         example: 1
                       ip:
-                        type: string
                         nullable: true
                         example:
                       customhostheader:
@@ -12687,7 +12649,6 @@ paths:
                         description: Whether WordPress integration mode is enabled (Y/N)
                         example: "0"
                       awsSignatureV4:
-                        type: string
                         nullable: true
                         example:
                       disabled:
@@ -12703,7 +12664,6 @@ paths:
                         description: "ISO 8601 timestamp of the most recent update"
                         example: "2026-03-04 09:36:36"
                       deleted:
-                        type: string
                         nullable: true
                         example:
                       router:
@@ -14151,7 +14111,6 @@ paths:
     post:
       tags:
       - HTTP Global Settings
-      summary: update zone http domain setting
       description: update zone http domain setting
       operationId: settingsZoneHTTPDomain
       requestBody:
@@ -14168,7 +14127,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
+                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14186,7 +14145,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14241,7 +14200,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14311,7 +14270,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14364,7 +14323,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14417,7 +14376,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14481,7 +14440,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14521,7 +14480,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: "Y = blacklist â€” blocks the listed domains from accessing content. N = whitelist â€” allows only the listed domains to access content."
+                  description: "Y = blacklist — blocks the listed domains from accessing content. N = whitelist — allows only the listed domains to access content."
                   example: Y
                 list:
                   type: string
@@ -14539,7 +14498,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14594,7 +14553,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14664,7 +14623,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14717,7 +14676,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -14781,7 +14740,7 @@ paths:
                 mode:
                   type: string
                   enum: [save, append, overwrite]
-                  description: "Controls how the settings are applied to zones. save â€” only saves the settings, no changes will be made to existing zone settings. append â€” appends the values to existing zones data and updates. overwrite â€” overwrites the existing zones values, replacing them and updates."
+                  description: "Controls how the settings are applied to zones. save — only saves the settings, no changes will be made to existing zone settings. append — appends the values to existing zones data and updates. overwrite — overwrites the existing zones values, replacing them and updates."
                   example: save
       deprecated: false
       responses:
@@ -16709,7 +16668,6 @@ components:
           description: Whether SSL is enabled for this zone. Y means enabled, N means disabled.
           example: "Y"
         warning:
-          type: boolean
           nullable: true
           description: SSL configuration warning message, or false if no warnings exist.
           example: false
@@ -17276,7 +17234,7 @@ components:
         password:
           type: string
           description: FTP password for authenticating to the push zone storage.
-          example: "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+          example: "••••••••"
     serverList:
       properties:
         code:

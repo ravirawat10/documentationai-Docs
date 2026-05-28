@@ -38,43 +38,43 @@
           {
             "group": "Live Stream",
             "pages": [],
-            "openapi": "api-reference/livestreams.yaml"
+            "openapi": "api-reference/Livestreams-Api.yaml"
           },
           {
             "group": "Zones",
             "pages": [],
-            "openapi": "api-reference/zones.yaml"
+            "openapi": "api-reference/Zones-Api.yaml"
           },
           {
             "group": "Video Encoding",
             "pages": [],
-            "openapi": "api-reference/transcoding.yaml"
+            "openapi": "api-reference/Transcoding-Api-.yaml"
           },
           {
             "group": "SimpleDNS",
             "pages": [],
-            "openapi": "api-reference/simple-dns.yaml"
+            "openapi": "api-reference/simpleDNS-API.yaml"
           },
           {
             "group": "VideoPlayer & Analytics",
             "pages": [],
-            "openapi": "api-reference/video-player.yaml"
+            "openapi": "api-reference/VideoPlayer-API.yaml"
           },
           {
             "group": "Accounts",
             "pages": [],
-            "openapi": "api-reference/account.yaml"
+            "openapi": "api-reference/Account-API.yaml"
           },
           {
             "group": "Analytics",
             "pages": [],
             "icon": "activity",
-            "openapi": "api-reference/analytics.yaml"
+            "openapi": "api-reference/Analytics-Api.yaml"
           },
           {
             "group": "Edge Rules",
             "pages": [],
-            "openapi": "api-reference/edge-rules.yaml"
+            "openapi": "api-reference/Edge-Rules-API.yaml"
           }
         ]
       }
