@@ -1074,7 +1074,7 @@ paths:
               properties:
                 _METHOD:
                   type: string
-                  description: "HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: \"DELETE\"` in the request body to delete an existing resource."
+                  description: HTTP method override for this request. This endpoint accepts POST requests; set _METHOD to DELETE in the request body to delete an existing resource.
                   example: DELETE
             example:
               _METHOD: DELETE
