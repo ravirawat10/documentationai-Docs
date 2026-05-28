@@ -13,12 +13,12 @@ servers:
   description: 5centsCDN API Server - Production
 components:
   securitySchemes:
-    ApiKeyAuth:
+    apikeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
 security:
-- ApiKeyAuth: []
+- apikeyAuth: []
 tags:
 - name: 5centsCDN
 paths:
