@@ -41,7 +41,7 @@ paths:
   /zones/http/pull/{zoneId}/rules:
     get:
       tags: [HTTP Pull]
-      operationId: listEdgeRules_httpPull
+      operationId: listEdgeRulesHttpPull
       summary: List all edge rules and default behaviors for an HTTP Pull zone
       description: >
         Returns all configured edge rules for the given zone, together with
@@ -1305,7 +1305,7 @@ paths:
   /zones/http/pull/{zoneId}/rules/rule:
     post:
       tags: [HTTP Pull]
-      operationId: createEdgeRule_httpPull
+      operationId: createEdgeRuleHttpPull
       summary: Create a new edge rule for an HTTP Pull zone
       description: >
         Creates a new edge rule for the zone. The body must include
@@ -1348,7 +1348,7 @@ paths:
   /zones/http/pull/{zoneId}/rules/rule/{ruleId}:
     post:
       tags: [HTTP Pull]
-      operationId: updateOrDeleteEdgeRule_httpPull
+      operationId: updateOrDeleteEdgeRuleHttpPull
       summary: Update or delete a specific edge rule in an HTTP Pull zone
       description: >
         **Update** — omit `_METHOD` or do not send it; the full rule options
@@ -1397,7 +1397,7 @@ paths:
   /zones/http/pull/{zoneId}/rules/behavior/{behaviorId}:
     post:
       tags: [Default Behaviors]
-      operationId: updateDefaultBehavior_httpPull
+      operationId: updateDefaultBehaviorHttpPull
       summary: Update the default behavior for an HTTP Pull zone
       description: >
         Saves changes to the zone's default behavior entry. The payload
@@ -1442,7 +1442,7 @@ paths:
   /zones/http/push/{zoneId}/rules:
     get:
       tags: [HTTP Push]
-      operationId: listEdgeRules_httpPush
+      operationId: listEdgeRulesHttpPush
       summary: List all edge rules and default behaviors for an HTTP Push zone
       description: >
         Returns all configured edge rules for the given zone, together with
@@ -2683,7 +2683,7 @@ paths:
   /zones/http/push/{zoneId}/rules/rule:
     post:
       tags: [HTTP Push]
-      operationId: createEdgeRule_httpPush
+      operationId: createEdgeRuleHttpPush
       summary: Create a new edge rule for an HTTP Push zone
       description: >
         Creates a new edge rule for the zone. The body must include
@@ -2726,7 +2726,7 @@ paths:
   /zones/http/push/{zoneId}/rules/rule/{ruleId}:
     post:
       tags: [HTTP Push]
-      operationId: updateOrDeleteEdgeRule_httpPush
+      operationId: updateOrDeleteEdgeRuleHttpPush
       summary: Update or delete a specific edge rule in an HTTP Push zone
       description: >
         **Update** — omit `_METHOD` or do not send it; the full rule options
@@ -2775,7 +2775,7 @@ paths:
   /zones/http/push/{zoneId}/rules/behavior/{behaviorId}:
     post:
       tags: [Default Behaviors]
-      operationId: updateDefaultBehavior_httpPush
+      operationId: updateDefaultBehaviorHttpPush
       summary: Update the default behavior for an HTTP Push zone
       description: >
         Saves changes to the zone's default behavior entry. The payload
@@ -2820,7 +2820,7 @@ paths:
   /zones/vod/pull/{zoneId}/rules:
     get:
       tags: [VOD Pull]
-      operationId: listEdgeRules_vodPull
+      operationId: listEdgeRulesVodPull
       summary: List all edge rules and default behaviors for a VOD Pull zone
       description: >
         Returns all configured edge rules for the given zone, together with
@@ -3780,7 +3780,7 @@ paths:
   /zones/vod/pull/{zoneId}/rules/rule:
     post:
       tags: [VOD Pull]
-      operationId: createEdgeRule_vodPull
+      operationId: createEdgeRuleVodPull
       summary: Create a new edge rule for a VOD Pull zone
       description: >
         Creates a new edge rule for the zone. The body must include
@@ -3823,7 +3823,7 @@ paths:
   /zones/vod/pull/{zoneId}/rules/rule/{ruleId}:
     post:
       tags: [VOD Pull]
-      operationId: updateOrDeleteEdgeRule_vodPull
+      operationId: updateOrDeleteEdgeRuleVodPull
       summary: Update or delete a specific edge rule in a VOD Pull zone
       description: >
         **Update** — omit `_METHOD` or do not send it; the full rule options
@@ -3872,7 +3872,7 @@ paths:
   /zones/vod/pull/{zoneId}/rules/behavior/{behaviorId}:
     post:
       tags: [Default Behaviors]
-      operationId: updateDefaultBehavior_vodPull
+      operationId: updateDefaultBehaviorVodPull
       summary: Update the default behavior for a VOD Pull zone
       description: >
         Saves changes to the zone's default behavior entry. The payload
@@ -3917,7 +3917,7 @@ paths:
   /zones/vod/push/{zoneId}/rules:
     get:
       tags: [VOD Push]
-      operationId: listEdgeRules_vodPush
+      operationId: listEdgeRulesVodPush
       summary: List all edge rules and default behaviors for a VOD Push zone
       description: >
         Returns all configured edge rules for the given zone, together with
@@ -4939,7 +4939,7 @@ paths:
   /zones/vod/push/{zoneId}/rules/rule:
     post:
       tags: [VOD Push]
-      operationId: createEdgeRule_vodPush
+      operationId: createEdgeRuleVodPush
       summary: Create a new edge rule for a VOD Push zone
       description: >
         Creates a new edge rule for the zone. The body must include
@@ -4982,7 +4982,7 @@ paths:
   /zones/vod/push/{zoneId}/rules/rule/{ruleId}:
     post:
       tags: [VOD Push]
-      operationId: updateOrDeleteEdgeRule_vodPush
+      operationId: updateOrDeleteEdgeRuleVodPush
       summary: Update or delete a specific edge rule in a VOD Push zone
       description: >
         **Update** — omit `_METHOD` or do not send it; the full rule options
@@ -5031,7 +5031,7 @@ paths:
   /zones/vod/push/{zoneId}/rules/behavior/{behaviorId}:
     post:
       tags: [Default Behaviors]
-      operationId: updateDefaultBehavior_vodPush
+      operationId: updateDefaultBehaviorVodPush
       summary: Update the default behavior for a VOD Push zone
       description: >
         Saves changes to the zone's default behavior entry. The payload
@@ -5174,7 +5174,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: HTTP method override. Always "PUT" for create.
+                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
                 example: PUT
               name:
                 type: string
@@ -6264,7 +6264,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: HTTP method override. Always "PUT" for create.
+                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
                 example: PUT
               name:
                 type: string
@@ -7083,7 +7083,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: HTTP method override. Always "PUT" for create.
+                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
                 example: PUT
               name:
                 type: string
@@ -7877,7 +7877,7 @@ components:
               _METHOD:
                 type: string
                 enum: [PUT]
-                description: HTTP method override. Always "PUT" for create.
+                description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "PUT"` in the request body to update an existing resource.'
                 example: PUT
               name:
                 type: string
@@ -14512,7 +14512,7 @@ components:
         _METHOD:
           type: string
           enum: [DELETE]
-          description: HTTP method override that instructs the API to delete the resource
+          description: 'HTTP method override for this request. This endpoint accepts POST requests; include `_METHOD: "DELETE"` in the request body to delete an existing resource.'
 
     RuleOptions:
       type: object

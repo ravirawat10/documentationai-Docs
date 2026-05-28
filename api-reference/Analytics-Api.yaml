@@ -341,7 +341,7 @@ paths:
 
   /analytics/traffic/os:
     post:
-      operationId: trafficOS
+      operationId: trafficOs
       summary: Get traffic breakdown by operating system
       description: Returns traffic metrics grouped by client operating system.
       tags: [traffic-analytics]
@@ -361,7 +361,7 @@ paths:
 
   /analytics/traffic/os/line:
     post:
-      operationId: trafficOSLine
+      operationId: trafficOsLine
       summary: Get traffic time-series for an operating system
       description: Returns per-time-bucket metrics for a specific OS.
       tags: [traffic-analytics]
@@ -581,7 +581,7 @@ paths:
 
   /analytics/traffic/asn:
     post:
-      operationId: trafficASN
+      operationId: trafficAsn
       summary: Get traffic breakdown by ASN
       description: Returns traffic metrics grouped by Autonomous System (AS) name.
       tags: [traffic-analytics]
@@ -601,7 +601,7 @@ paths:
 
   /analytics/traffic/asn/line:
     post:
-      operationId: trafficASNLine
+      operationId: trafficAsnLine
       summary: Get traffic time-series for an ASN
       description: Returns per-time-bucket metrics for a specific ASN.
       tags: [traffic-analytics]
