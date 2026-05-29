@@ -1906,45 +1906,46 @@ paths:
               properties:
                 http2:
                   type: boolean
-                  description: Indicates whether HTTP/2 protocol is enabled. Y means HTTP/2 is enabled, while N means it is disabled.
+                  description: Enable or disable HTTP/2 protocol. true = HTTP/2 enabled. false = HTTP/1.1 only.
                   example: true
                 redirect:
                   type: boolean
-                  description: Indicates whether HTTP traffic is automatically redirected to HTTPS. Y means redirection is enabled, while N means it is not.
+                  description: Enable or disable HTTPS redirect. true = all HTTP requests are redirected to HTTPS with a 301 Moved Permanently response. false = allow both HTTP and HTTPS.
                   example: true
                 mode:
                   type: string
-                  description: Specifies the SSL mode used for the server configuration. Typical values include S for strict mode or A for automated.
+                  enum: [N, S, L, C]
+                  description: "SSL certificate type. N = None (no SSL, HTTP only). S = Shared (5centsCDN shared wildcard certificate). L = Free SSL (auto-provisioned via ZeroSSL/Let's Encrypt, requires at least one CNAME configured). C = Custom (upload your own certificate)."
                   example: S
                 certid:
-                  type: string
+                  type: integer
                   nullable: true
-                  description: A unique identifier for the SSL certificate used. Optional; can be null if no certificate is assigned.
-                  example:
+                  description: ID of the custom SSL certificate to use. Required when mode is C. Null for all other modes.
+                  example: 42
                 enabled:
                   type: string
-                  description: Indicates whether SSL is enabled for the zone.
+                  description: Always sent as empty string. SSL state is determined by the mode field.
                   example: ""
                 warning:
                   type: boolean
-                  description: Indicates whether there is a warning associated with the SSL configuration.
+                  description: SSL configuration warning indicator. Always false in request payloads.
                   example: false
                 name:
                   type: string
-                  description: The name associated with the SSL certificate. Typically used to identify the certificate for a specific domain.
+                  description: Name of the SSL certificate. Only applicable when uploading a new custom certificate.
                   example: ""
                 crt:
                   type: string
-                  description: The SSL certificate content in PEM format. Required for custom SSL certificates.
-                  example: ""
+                  description: "SSL certificate content in PEM format (CRT). Only applicable when uploading a new custom certificate."
+                  example: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
                 key:
                   type: string
-                  description: The private key associated with the SSL certificate in PEM format. Required for setting up custom SSL certificates.
-                  example: ""
+                  description: "Private key in PEM format. Only applicable when uploading a new custom certificate."
+                  example: "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
                 cabundle:
                   type: string
-                  description: The Certificate Authority (CA) bundle content in PEM format. Used to validate the SSL certificate chain.
-                  example: ""
+                  description: "Certificate Authority (CA) bundle in PEM format. Only applicable when uploading a new custom certificate."
+                  example: "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
       deprecated: false
       responses:
         '200':
@@ -1985,6 +1986,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - list
               properties:
                 enabled:
                   type: string
@@ -2075,11 +2078,6 @@ paths:
                   type: string
                   description: Comma-separated IP addresses excluded from the geo check.
                   example: ""
-                mode:
-                  type: string
-                  enum: [save, append, overwrite]
-                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
-                  example: save
       deprecated: false
       responses:
         '200':
@@ -2137,11 +2135,6 @@ paths:
                   enum: [Y, N]
                   description: "Controls requests with no Referer header. Y = block requests that have no Referer header. N = allow requests with no Referer header."
                   example: Y
-                mode:
-                  type: string
-                  enum: [save, append, overwrite]
-                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
-                  example: save
       deprecated: false
       responses:
         '200':
@@ -3116,11 +3109,6 @@ paths:
                   type: number
                   description: Amount of data in KB served before the throttle rate kicks in.
                   example: 5120
-                mode:
-                  type: string
-                  enum: [save, append, overwrite]
-                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
-                  example: save
       deprecated: false
       responses:
         '200':
@@ -5429,43 +5417,49 @@ paths:
               properties:
                 enabled:
                   type: string
-                  enum: [Y, N]
-                  description: Enable or disable SSL.
-                  example: Y
+                  description: Always sent as empty string. SSL state is determined by the mode field.
+                  example: ""
+                warning:
+                  type: boolean
+                  description: SSL configuration warning indicator. Always false in request payloads.
+                  example: false
+                name:
+                  type: string
+                  description: Name of the SSL certificate. Only applicable when uploading a new custom certificate.
+                  example: ""
                 http2:
-                  type: string
-                  enum: [Y, N]
-                  description: Enable or disable HTTP/2.
-                  example: Y
+                  type: boolean
+                  description: Enable or disable HTTP/2 protocol. true = HTTP/2 enabled. false = HTTP/1.1 only.
+                  example: true
                 redirect:
-                  type: string
-                  enum: [Y, N]
-                  description: Enable or disable HTTP to HTTPS redirect.
-                  example: N
+                  type: boolean
+                  description: Enable or disable HTTPS redirect. true = all HTTP requests are redirected to HTTPS with a 301 Moved Permanently response. false = allow both HTTP and HTTPS.
+                  example: false
                 mode:
                   type: string
-                  description: SSL mode string.
+                  enum: [N, S, L, C]
+                  description: "SSL certificate type. N = None (no SSL, HTTP only). S = Shared (5centsCDN shared wildcard certificate). L = Free SSL (auto-provisioned via ZeroSSL/Let's Encrypt, requires at least one CNAME configured). C = Custom (upload your own certificate)."
                   example: S
                 certid:
-                  type: string
+                  type: integer
                   nullable: true
-                  description: Certificate ID, or null if not assigned.
-                  example:
+                  description: ID of the custom SSL certificate to use. Required when mode is C. Null for all other modes.
+                  example: 42
                 crt:
                   type: string
                   nullable: true
-                  description: Custom certificate PEM content, or null.
-                  example:
+                  description: "SSL certificate content in PEM format (CRT). Only applicable when uploading a new custom certificate."
+                  example: ""
                 key:
                   type: string
                   nullable: true
-                  description: Custom private key PEM content, or null.
-                  example:
+                  description: "Private key in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
                 cabundle:
                   type: string
                   nullable: true
-                  description: CA bundle PEM content, or null.
-                  example:
+                  description: "Certificate Authority (CA) bundle in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
       deprecated: false
       responses:
         '200':
@@ -5505,6 +5499,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - list
               properties:
                 enabled:
                   type: string
@@ -5698,11 +5694,6 @@ paths:
                   type: number
                   description: Amount of data in KB served before throttle kicks in.
                   example: 5120
-                mode:
-                  type: string
-                  enum: [save, append, overwrite]
-                  description: "Configuration persistence mode. save = replace current list. append = add entries to existing list. overwrite = reset and replace entirely."
-                  example: save
       deprecated: false
       responses:
         '200':
@@ -8864,53 +8855,50 @@ paths:
               properties:
                 enabled:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Always sent as empty string. SSL state is determined by the mode field.
+                  example: ""
                 http2:
-                  type: string
-                  enum: [Y, N]
-                  description: "Whether HTTP/2 is enabled (Y/N)"
-                  example: Y
+                  type: boolean
+                  description: Enable or disable HTTP/2 protocol. true = HTTP/2 enabled. false = HTTP/1.1 only.
+                  example: true
                 redirect:
-                  type: string
-                  enum: [Y, N]
-                  example: N
-                  description: Redirect configuration.
+                  type: boolean
+                  description: Enable or disable HTTPS redirect. true = all HTTP requests are redirected to HTTPS with a 301 Moved Permanently response. false = allow both HTTP and HTTPS.
+                  example: false
                 mode:
                   type: string
-                  enum: [S, C, F]
-                  description: S=shared, C=custom, F=free
+                  enum: [N, S, L, C]
+                  description: "SSL certificate type. N = None (no SSL, HTTP only). S = Shared (5centsCDN shared wildcard certificate). L = Free SSL (auto-provisioned via ZeroSSL/Let's Encrypt, requires at least one CNAME configured). C = Custom (upload your own certificate)."
                   example: S
                 certid:
-                  type: string
+                  type: integer
                   nullable: true
-                  description: SSL cert ID, or null if none.
-                  example:
+                  description: ID of the custom SSL certificate to use. Required when mode is C. Null for all other modes.
+                  example: 42
                 warning:
                   type: boolean
-                  description: "SSL warning flag or message, false if none"
+                  description: SSL configuration warning indicator. Always false in request payloads.
                   example: false
                 crt:
                   type: string
                   nullable: true
-                  description: "SSL certificate chain (PEM format)"
-                  example:
+                  description: "SSL certificate content in PEM format (CRT). Only applicable when uploading a new custom certificate."
+                  example: ""
                 name:
                   type: string
                   nullable: true
-                  example:
-                  description: Friendly name for the zone.
+                  description: Name of the SSL certificate. Only applicable when uploading a new custom certificate.
+                  example: ""
                 key:
                   type: string
                   nullable: true
-                  example:
-                  description: SSL private key content in PEM format.
+                  description: "Private key in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
                 cabundle:
                   type: string
                   nullable: true
-                  example:
-                  description: SSL CA bundle content in PEM format.
+                  description: "Certificate Authority (CA) bundle in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
       deprecated: false
       responses:
         '200':
@@ -9739,7 +9727,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Country filtering mode. Y = Block mode (block listed countries). N = Allow mode (allow listed countries)."
                   example: Y
                 list:
                   type: array
@@ -9751,15 +9739,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4,5.6.7.8
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how this update is applied. save = store the new list for this zone only. append = add entries to the existing list. overwrite = replace the existing list entirely."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -9921,6 +9905,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - list
               properties:
                 enabled:
                   type: string
@@ -12477,53 +12463,50 @@ paths:
               properties:
                 enabled:
                   type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable this feature. Y means enabled, N means disabled.
+                  description: Always sent as empty string. SSL state is determined by the mode field.
+                  example: ""
                 http2:
-                  type: string
-                  enum: [Y, N]
-                  description: "Whether HTTP/2 is enabled (Y/N)"
-                  example: Y
+                  type: boolean
+                  description: Enable or disable HTTP/2 protocol. true = HTTP/2 enabled. false = HTTP/1.1 only.
+                  example: true
                 redirect:
-                  type: string
-                  enum: [Y, N]
-                  example: N
-                  description: Redirect configuration.
+                  type: boolean
+                  description: Enable or disable HTTPS redirect. true = all HTTP requests are redirected to HTTPS with a 301 Moved Permanently response. false = allow both HTTP and HTTPS.
+                  example: false
                 mode:
                   type: string
-                  enum: [S, C, F]
-                  description: S=shared, C=custom, F=free
+                  enum: [N, S, L, C]
+                  description: "SSL certificate type. N = None (no SSL, HTTP only). S = Shared (5centsCDN shared wildcard certificate). L = Free SSL (auto-provisioned via ZeroSSL/Let's Encrypt, requires at least one CNAME configured). C = Custom (upload your own certificate)."
                   example: S
                 certid:
-                  type: string
+                  type: integer
                   nullable: true
-                  description: SSL cert ID, or null if none.
-                  example:
+                  description: ID of the custom SSL certificate to use. Required when mode is C. Null for all other modes.
+                  example: 42
                 warning:
                   type: boolean
-                  description: "SSL warning flag or message, false if none"
+                  description: SSL configuration warning indicator. Always false in request payloads.
                   example: false
                 crt:
                   type: string
                   nullable: true
-                  description: "SSL certificate chain (PEM format)"
-                  example:
+                  description: "SSL certificate content in PEM format (CRT). Only applicable when uploading a new custom certificate."
+                  example: ""
                 name:
                   type: string
                   nullable: true
-                  example:
-                  description: Friendly name for the zone.
+                  description: Name of the SSL certificate. Only applicable when uploading a new custom certificate.
+                  example: ""
                 key:
                   type: string
                   nullable: true
-                  example:
-                  description: SSL private key content in PEM format.
+                  description: "Private key in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
                 cabundle:
                   type: string
                   nullable: true
-                  example:
-                  description: SSL CA bundle content in PEM format.
+                  description: "Certificate Authority (CA) bundle in PEM format. Only applicable when uploading a new custom certificate."
+                  example: ""
       deprecated: false
       responses:
         '200':
@@ -13537,7 +13520,7 @@ paths:
                 policy:
                   type: string
                   enum: [Y, N]
-                  description: Y=whitelist, N=blacklist
+                  description: "Country filtering mode. Y = Block mode (block listed countries). N = Allow mode (allow listed countries)."
                   example: Y
                 list:
                   type: array
@@ -13549,15 +13532,11 @@ paths:
                   type: string
                   description: Comma-separated IPs excluded from geo check.
                   example: 1.2.3.4,5.6.7.8
-                active:
-                  type: string
-                  enum: [Y, N]
-                  example: Y
-                  description: Enable or disable the zone. Y means active, N means inactive.
                 mode:
                   type: string
-                  description: S=shared (zone-level)
-                  example: S
+                  enum: [save, append, overwrite]
+                  description: "Controls how this update is applied. save = store the new list for this zone only. append = add entries to the existing list. overwrite = replace the existing list entirely."
+                  example: save
       deprecated: false
       responses:
         '200':
@@ -13764,6 +13743,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - list
               properties:
                 enabled:
                   type: string
