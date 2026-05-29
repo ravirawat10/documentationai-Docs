@@ -36,49 +36,9 @@
             ]
           },
           {
-            "group": "Push Streams",
+            "group": "Live Stream",
             "pages": [],
-            "openapi": "api-reference/Livestreams-push.yaml"
-          },
-          {
-            "group": "Pull Streams",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-pull.yaml"
-          },
-          {
-            "group": "Multi-Bitrate Push",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-abr.yaml"
-          },
-          {
-            "group": "Multistreaming",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-multistream.yaml"
-          },
-          {
-            "group": "DVR",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-dvr.yaml"
-          },
-          {
-            "group": "Delayed Stream",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-delayed.yaml"
-          },
-          {
-            "group": "Scheduled Playlist",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-scheduled.yaml"
-          },
-          {
-            "group": "Global Settings",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-settings.yaml"
-          },
-          {
-            "group": "Transcoding Profiles",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-transcoding.yaml"
+            "openapi": "api-reference/Livestreams-Api.yaml"
           },
           {
             "group": "Zones",
