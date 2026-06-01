@@ -2778,9 +2778,9 @@ paths:
                   - '3'
                   - '4'
                 ltc:
-                  type: string
+                  type: integer
                   description: Number of transcoding profiles assigned. 0 means none.
-                  example: '1'
+                  example: 1
                 autostop:
                   type: integer
                   description: Auto-stop the transcoder after inactivity. 0 means disabled.
@@ -3535,7 +3535,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: N
                 list:
                   type: array
@@ -5698,8 +5698,10 @@ paths:
                   example: Y
                 retention:
                   type: integer
-                  description: How many days to keep recordings before automatic deletion.
-                  example: 30
+                  description: Rewind period in minutes.
+                  minimum: 5
+                  maximum: 180
+                  example: 5
       responses:
         '200':
           description: success
@@ -9698,7 +9700,7 @@ paths:
                   example: example.com,docs.example.com
                 domainlock[noreferer]:
                   type: string
-                  description: Indicates if referer headers should be ignored for domain access control. Y means ignore, N means do not ignore.
+                  description: Block requests with no referrer header. Y means blocked (requests with empty referer are blocked); N means allowed.
                   example: N
                 domainlock[ips]:
                   type: string
@@ -13960,9 +13962,9 @@ paths:
               type: object
               properties:
                 enabled:
-                  type: boolean
+                  type: string
                   description: Enable or disable this feature. Y means enabled, N means disabled.
-                  example: false
+                  example: Y
                 policy:
                   type: string
                   description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
@@ -14795,7 +14797,7 @@ paths:
                   example: N
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: N
                 list:
                   type: array
@@ -17796,9 +17798,9 @@ paths:
               type: object
               properties:
                 ltc:
-                  type: string
+                  type: integer
                   description: Number of transcoding profiles assigned. 0 means none.
-                  example: '3'
+                  example: 3
                 vprofiles:
                   type: array
                   description: List of video transcoding profile IDs to apply.
@@ -18632,7 +18634,8 @@ paths:
                   example: N
                 retention:
                   type: integer
-                  description: How many days to keep recordings before automatic deletion.
+                  description: Rewind period in minutes.
+                  minimum: 5
                   maximum: 180
                   example: 18
       responses:
@@ -24029,7 +24032,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: Y
                 list:
                   type: array
@@ -26388,7 +26391,8 @@ paths:
                   example: Y
                 retention:
                   type: integer
-                  description: How many days to keep recordings before automatic deletion.
+                  description: Rewind period in minutes.
+                  minimum: 5
                   maximum: 180
                   example: 21
       responses:
@@ -31276,9 +31280,9 @@ paths:
               type: object
               properties:
                 enabled:
-                  type: boolean
+                  type: string
                   description: Enable or disable this feature. Y means enabled, N means disabled.
-                  example: true
+                  example: Y
                 policy:
                   type: string
                   description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
@@ -32004,7 +32008,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: Y
                 list:
                   type: array
@@ -37460,9 +37464,9 @@ paths:
               type: object
               properties:
                 enabled:
-                  type: boolean
+                  type: string
                   description: Enable or disable this feature. Y means enabled, N means disabled.
-                  example: true
+                  example: Y
                 policy:
                   type: string
                   description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
@@ -38146,7 +38150,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: Y
                 list:
                   type: array
@@ -44541,9 +44545,9 @@ paths:
               type: object
               properties:
                 enabled:
-                  type: boolean
+                  type: string
                   description: Enable or disable this feature. Y means enabled, N means disabled.
-                  example: false
+                  example: Y
                 policy:
                   type: string
                   description: "Secure token path policy. F means Full Path (secure full path using token), Q means Partial Path (secure partial path using token in query), D means Partial Path (secure partial path using token in path). Allowed values: F, Q, D."
@@ -46356,7 +46360,7 @@ paths:
                   example: Y
                 policy:
                   type: string
-                  description: Access policy for domain lock. Y means whitelist (allow listed domain), N means blacklist (block listed domain).
+                  description: Access policy for geoblock. Y means block listed countries; N means allow listed countries.
                   example: N
                 list:
                   type: array
@@ -58265,7 +58269,7 @@ components:
               - google.com
             noreferer:
               type: string
-              description: Allows access with no referer. Use Y to enable and N to disable.
+              description: Block requests with no referrer header. Y means blocked (requests with empty referer are blocked); N means allowed.
               example: N
             ips:
               type: array
@@ -58375,7 +58379,7 @@ components:
               example: N
             session:
               type: string
-              description: Session value for token.
+              description: "Session type. 1 means moving session (URL is valid when requested within Token Expiration time and subsequent request is made within the Token Expiration time), 0 means fixed session (URL is valid till Token Expiration)."
               example: '0'
             timeout:
               type: integer
