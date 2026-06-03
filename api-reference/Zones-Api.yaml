@@ -7449,11 +7449,11 @@ paths:
                             hls:
                               type: string
                               description: HLS stream playlist URL for this zone
-                              example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8?$token
+                              example: https://hash-hls-live.5centscdn.com
                             dash:
                               type: string
                               description: MPEG-DASH stream manifest URL for this zone
-                              example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                              example: https://hash-hls-live.5centscdn.com
                             players:
                               type: object
                               properties:
@@ -7538,11 +7538,11 @@ paths:
                                 hls:
                                   type: string
                                   description: Tokenized HLS stream URL.
-                                  example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8?token=abc123
+                                  example: https://hash-hls-live.5centscdn.com
                                 dash:
                                   type: string
                                   description: Tokenized DASH manifest URL.
-                                  example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd?token=abc123
+                                  example: https://hash-hls-live.5centscdn.com
                                 players:
                                   type: object
                         s3details:
@@ -8518,11 +8518,11 @@ paths:
                           hls:
                             type: string
                             description: HLS stream playlist URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8?$token
+                            example: https://hash-hls-live.5centscdn.com
                           dash:
                             type: string
                             description: MPEG-DASH stream manifest URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                            example: https://hash-hls-live.5centscdn.com
                           players:
                             type: object
                             properties:
@@ -8606,11 +8606,11 @@ paths:
                               hls:
                                 type: string
                                 description: Tokenized HLS stream URL.
-                                example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8
+                                example: https://hash-hls-live.5centscdn.com
                               dash:
                                 type: string
                                 description: Tokenized DASH manifest URL.
-                                example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                                example: https://hash-hls-live.5centscdn.com
                               players:
                                 type: object
                                 properties:
@@ -9510,11 +9510,11 @@ paths:
                           hls:
                             type: string
                             description: HLS stream playlist URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8
+                            example: https://hash-hls-live.5centscdn.com
                           dash:
                             type: string
                             description: MPEG-DASH stream manifest URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                            example: https://hash-hls-live.5centscdn.com
                           players:
                             type: object
                             properties:
@@ -11347,11 +11347,11 @@ paths:
                             hls:
                               type: string
                               description: HLS stream playlist URL for this zone
-                              example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8
+                              example: https://hash-hls-live.5centscdn.com
                             dash:
                               type: string
                               description: MPEG-DASH stream manifest URL for this zone
-                              example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                              example: https://hash-hls-live.5centscdn.com
                             players:
                               type: object
                               properties:
@@ -12287,11 +12287,11 @@ paths:
                           hls:
                             type: string
                             description: HLS stream playlist URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/playlist.m3u8
+                            example: https://hash-hls-live.5centscdn.com
                           dash:
                             type: string
                             description: MPEG-DASH stream manifest URL for this zone
-                            example: https://cdn.example.com/path/to/filename.mp4/manifest.mpd
+                            example: https://hash-hls-live.5centscdn.com
                           players:
                             type: object
                             properties:
@@ -13370,11 +13370,11 @@ paths:
                           hls:
                             type: string
                             description: HLS stream playlist URL for this zone
-                            example: http://vod.wmncdn.com/path/to/filename.mp4/playlist.m3u8
+                            example: https://hash-hls-live.5centscdn.com
                           dash:
                             type: string
                             description: MPEG-DASH stream manifest URL for this zone
-                            example: http://vod.wmncdn.com/path/to/filename.mp4/manifest.mpd
+                            example: https://hash-hls-live.5centscdn.com
                           players:
                             type: object
                             properties:
