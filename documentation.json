@@ -1,5 +1,5 @@
 {
-  "name": "Starter Kit",
+  "name": "5centsCDN",
   "colors": {
     "light": {
       "brand": "#4FA83D",
@@ -123,6 +123,9 @@
   "scripts": [
     {
       "src": "scripts/Userback.js"
+    },
+    {
+      "src": "scripts/title-updater.js"
     }
   ]
 }
