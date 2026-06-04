@@ -57,8 +57,7 @@
           },
           {
             "group": "VideoPlayer & Analytics",
-            "pages": [],
-            "groups": [
+            "pages": [
               {
                 "group": "5centsCDN",
                 "pages": [],
