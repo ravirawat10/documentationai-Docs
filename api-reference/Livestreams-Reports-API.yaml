@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 5centsCDN - Livestreams Reports API
+  title: 5centsCDN - Livestreams
   description: API for managing Live Streams in 5centsCDN (https://www.5centscdn.net)
   version: 2.0.0
   contact:
@@ -15,9 +15,9 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: Recording Minutes
-  description: endpoints related to recording minutes reports
+  description: Recording usage reports
 - name: Transcoding Hours
-  description: Live stream transcoding profile and filter management
+  description: Live transcoding profiles and filters
 paths:
   /streams/reports/dvr:
     post:
@@ -33,7 +33,7 @@ paths:
               properties:
                 r:
                   type: string
-                  description: "Date range string in UTC format: \"YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss\""
+                  description: 'Date range string in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss"'
                   example: '2026-05-28 00:00:00 - 2026-06-04 23:59:59'
       responses:
         '200':
@@ -159,7 +159,7 @@ paths:
       description: update stream profiles setting
       operationId: settings-stream-profiles-update
       parameters:
-      - Transcoding Hours
+      - $ref: '#/components/parameters/profileIdParam'
       requestBody:
         content:
           application/json:
@@ -337,7 +337,7 @@ paths:
       description: Delete the profile of stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletestreamprofile
       parameters:
-      - Transcoding Hours
+      - $ref: '#/components/parameters/profileIdParam'
       requestBody:
         content:
           application/json:
@@ -620,7 +620,7 @@ paths:
       description: Edit Transcoding Profile Filter
       operationId: editTranscodingProfileFilter
       parameters:
-      - Transcoding Hours
+      - $ref: '#/components/parameters/filterIdParam'
       requestBody:
         content:
           application/json:
@@ -696,7 +696,7 @@ paths:
       description: Delete the information of Transcoding Profile filter. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteTranscodingProfileFilter
       parameters:
-      - Transcoding Hours
+      - $ref: '#/components/parameters/filterIdParam'
       requestBody:
         content:
           application/json:

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 5centsCDN - Livestreams Streaming API
+  title: 5centsCDN - Livestreams
   description: API for managing Live Streams in 5centsCDN (https://www.5centscdn.net)
   version: 2.0.0
   contact:
@@ -15,15 +15,15 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: List Streams
-  description: list all streams
+  description: List all streams
 - name: Push
-  description: endpoints related to Push streams
+  description: Endpoints related to Push streams
 - name: Pull
-  description: endpoints related to Pull streams
+  description: Endpoints related to Pull streams
 - name: Multi-Bitrate Push
-  description: endpoints related to MBR streams
+  description: Endpoints related to Multi-Bitrate Push streams
 - name: Multistreaming
-  description: endpoints related to Multistream Streams
+  description: Endpoints related to Multistream streams
 paths:
   /streams:
     get:
@@ -47,7 +47,7 @@ paths:
       description: push list
       operationId: streamsPushList
       parameters:
-      - Push
+      - in: query
         name: page
         schema:
           type: integer
@@ -89,7 +89,7 @@ paths:
       description: Returns the details of a push stream
       operationId: getStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -720,7 +720,7 @@ paths:
       description: Update the information of push stream
       operationId: updateStreamspush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -1304,7 +1304,7 @@ paths:
       description: Delete the information of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamspush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -1342,7 +1342,7 @@ paths:
       description: Returns the details of a push stream statistics
       operationId: getStreamsPushStatistics
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -1438,7 +1438,7 @@ paths:
       description: Update status of stream
       operationId: statusStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -2011,7 +2011,7 @@ paths:
       description: Change the ingest source region for a Push stream. Use the server field to specify one or more source region server IDs. Multiple server IDs can be provided as comma-separated values.
       operationId: updatesourceStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -2737,7 +2737,7 @@ paths:
       description: Update the transcode of a push stream
       operationId: updatetranscodeStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -3490,7 +3490,7 @@ paths:
       description: Update the domainlock of a publish stream
       operationId: updatedomainlockStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -3512,7 +3512,7 @@ paths:
       description: Update the geoblock of a push stream
       operationId: updategeoblockStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -4253,7 +4253,7 @@ paths:
       description: Update secure token of a push stream
       operationId: updateSecureTokenStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -5007,7 +5007,7 @@ paths:
       description: Update RTMPAuth of push stream
       operationId: updateRtmpauthStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -5675,7 +5675,7 @@ paths:
       summary: Update NDVR
       operationId: updateNdvrStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -6540,7 +6540,7 @@ paths:
       description: Restore a push stream
       operationId: restoreStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -7264,7 +7264,7 @@ paths:
       description: Restart a push stream
       operationId: restartStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -7289,7 +7289,7 @@ paths:
       summary: Update DVR
       operationId: updateDvrStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -7890,7 +7890,7 @@ paths:
       description: Add the platform of a push stream
       operationId: addplatformStreamsPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -8607,8 +8607,8 @@ paths:
       description: Update the platform of a push stream
       operationId: updateplatformStreamsPush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -8701,8 +8701,8 @@ paths:
       description: Delete the Platform of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -8740,8 +8740,8 @@ paths:
       description: Restart the platform of a push stream
       operationId: restartplatformStreamsPush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -8767,8 +8767,8 @@ paths:
       description: Status the platform of a push stream
       operationId: platformstatusStreamsPush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -8807,7 +8807,7 @@ paths:
       description: pull streams list
       operationId: listPullStreams
       parameters:
-      - Pull
+      - in: query
         name: page
         schema:
           type: integer
@@ -10502,7 +10502,7 @@ paths:
       description: Return the details of a restream
       operationId: getDetailsStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -11294,7 +11294,7 @@ paths:
       description: Update information of a restream
       operationId: updatesStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -12077,7 +12077,7 @@ paths:
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -12115,7 +12115,7 @@ paths:
       description: Returns the details of a pull stream statistics
       operationId: getStreamsPullStatistics
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -12306,7 +12306,7 @@ paths:
       summary: Update Source
       operationId: updateSourceStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -13125,7 +13125,7 @@ paths:
       description: Update domain lock of a restream
       operationId: updateDomainlockStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -13944,7 +13944,7 @@ paths:
       description: Update secure token of a restream
       operationId: updateSecuretokenStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -14774,7 +14774,7 @@ paths:
       summary: Update Geo Block
       operationId: updateGeoblockStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -15592,7 +15592,7 @@ paths:
       description: Update DVR of a restream
       operationId: updateDvrStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -16565,7 +16565,7 @@ paths:
       description: Restart a restream
       operationId: restartStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -16591,7 +16591,7 @@ paths:
       description: Restore a restream
       operationId: restoreStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -17179,7 +17179,7 @@ paths:
       description: Update status of stream
       operationId: statusStreamsRestream
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -17780,7 +17780,7 @@ paths:
       description: Update the transcode of a pull stream
       operationId: updatetranscodeStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -18611,7 +18611,7 @@ paths:
       summary: Update NDVR
       operationId: updateNdvrStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -19424,7 +19424,7 @@ paths:
       description: Add the platform of a pull stream
       operationId: addplatformStreamsPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -19446,8 +19446,8 @@ paths:
       description: Update the platform of a pull stream
       operationId: updateplatformStreamsPull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -19468,8 +19468,8 @@ paths:
       description: Delete the Platform of pull stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -19486,8 +19486,8 @@ paths:
       description: Restart the platform of a pull stream
       operationId: restartplatformStreamsPull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -19513,8 +19513,8 @@ paths:
       description: Status the platform of a pull stream
       operationId: platformstatusStreamsPull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -19545,7 +19545,7 @@ paths:
       description: List Multi Bitrate Push streams
       operationId: multiBitratePushlist
       parameters:
-      - Multi-Bitrate Push
+      - in: query
         name: page
         schema:
           type: integer
@@ -21149,7 +21149,7 @@ paths:
       description: Returns the details of an abr stream
       operationId: getDetailsMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -21862,7 +21862,7 @@ paths:
       description: Update information of ABR stream.
       operationId: updateMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -22615,7 +22615,7 @@ paths:
       description: Delete information of ABR stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -22653,7 +22653,7 @@ paths:
       description: Update status of stream
       operationId: statusStreamsabr
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -23270,7 +23270,7 @@ paths:
       summary: Update Domain Lock
       operationId: updateDomainlockMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -24009,7 +24009,7 @@ paths:
       description: Update Geoblock of ABR
       operationId: updateGeoblockMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -24801,7 +24801,7 @@ paths:
       description: Update RTMP auth of ABR
       operationId: updateRtmpauthMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -25586,7 +25586,7 @@ paths:
       description: Update Record ABR
       operationId: updateRecordMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -26368,7 +26368,7 @@ paths:
       description: Update Ndvr ABR
       operationId: updateNdvrMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -27151,7 +27151,7 @@ paths:
       description: Restart ABR
       operationId: restartMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -27177,7 +27177,7 @@ paths:
       description: Restore ABR Stream
       operationId: restoreMultiBitratePush
       parameters:
-      - Multi-Bitrate Push
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -27789,7 +27789,7 @@ paths:
       description: Restream list
       operationId: restreamList
       parameters:
-      - Multistreaming
+      - in: query
         name: page
         schema:
           type: integer
@@ -28334,7 +28334,7 @@ paths:
       description: Return the details of restream.
       operationId: get-details-of-a-stream-restream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -28350,7 +28350,7 @@ paths:
       description: Update information of Restream
       operationId: update-info-Restream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -28371,7 +28371,7 @@ paths:
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteRestream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -28388,7 +28388,7 @@ paths:
       description: Return the details of restream statistics
       operationId: getDetailsOfStreamRestreamStatistics
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -28456,7 +28456,7 @@ paths:
       description: Update status of stream
       operationId: statusRestream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -28892,7 +28892,7 @@ paths:
       description: Update RTMP auth of Restream
       operationId: update-rtmpauth-Restream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -28914,7 +28914,7 @@ paths:
       description: Restore publish stream
       operationId: restorePublishStream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -29337,7 +29337,7 @@ paths:
       description: Restart publish stream.
       operationId: restartPublishStream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -29363,7 +29363,7 @@ paths:
       description: Update the transcode of a publish stream
       operationId: updatetranscodeRestream
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -29879,7 +29879,7 @@ paths:
       description: Add the platform of a publish stream
       operationId: addplatformStreamspublish
       parameters:
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -29901,8 +29901,8 @@ paths:
       description: Update the platform of a publish stream
       operationId: updateplatformscheduledplaylist
       parameters:
-      - Multistreaming
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -29923,8 +29923,8 @@ paths:
       description: Delete the Platform of publish stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformscheduledplaylist
       parameters:
-      - Multistreaming
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -29941,8 +29941,8 @@ paths:
       description: Restart the platform of a publish stream
       operationId: restartplatformscheduledplaylist
       parameters:
-      - Multistreaming
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -29959,8 +29959,8 @@ paths:
       description: Status the platform of a publish stream
       operationId: platformstatusscheduledplaylist
       parameters:
-      - Multistreaming
-      - Multistreaming
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -29997,7 +29997,7 @@ paths:
         '
       operationId: adInsertionCreatePush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30023,7 +30023,7 @@ paths:
         '
       operationId: adInsertionUpdatePush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30045,7 +30045,7 @@ paths:
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       responses:
         '200':
           $ref: '#/components/responses/ErrorResult'
@@ -30063,7 +30063,7 @@ paths:
         '
       operationId: adInsertionCreatePull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30089,7 +30089,7 @@ paths:
         '
       operationId: adInsertionUpdatePull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30111,7 +30111,7 @@ paths:
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       responses:
         '200':
           $ref: '#/components/responses/ErrorResult'
@@ -30127,7 +30127,7 @@ paths:
         '
       operationId: adInsertionUpdateAdServerPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30163,7 +30163,7 @@ paths:
         '
       operationId: adInsertionUpdateAdServerPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30199,7 +30199,7 @@ paths:
         '
       operationId: adInsertionUpdateAdPreRollPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30226,7 +30226,7 @@ paths:
         '
       operationId: adInsertionUpdateAdPreRollPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30253,7 +30253,7 @@ paths:
         '
       operationId: adInsertionUpdateAdReplacementPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30294,7 +30294,7 @@ paths:
         '
       operationId: adInsertionUpdateAdReplacementPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30335,7 +30335,7 @@ paths:
         '
       operationId: adInsertionAddSchedulePush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30434,7 +30434,7 @@ paths:
         '
       operationId: adInsertionAddSchedulePull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30528,8 +30528,8 @@ paths:
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
       requestBody:
         required: true
         content:
@@ -30585,8 +30585,8 @@ paths:
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
       requestBody:
         required: true
         content:
@@ -30635,8 +30635,8 @@ paths:
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
       requestBody:
         required: true
         content:
@@ -30692,8 +30692,8 @@ paths:
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
       requestBody:
         required: true
         content:
@@ -30742,7 +30742,7 @@ paths:
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: false
         content:
@@ -30772,7 +30772,7 @@ paths:
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: false
         content:
@@ -30802,8 +30802,8 @@ paths:
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/triggerId'
       requestBody:
         required: true
         content:
@@ -30828,8 +30828,8 @@ paths:
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/triggerId'
       requestBody:
         required: true
         content:
@@ -30854,8 +30854,8 @@ paths:
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPush
       parameters:
-      - Push
-      - Push
+      - $ref: '#/components/parameters/streamId'
+      - in: query
         name: duration
         required: false
         schema:
@@ -30877,8 +30877,8 @@ paths:
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPull
       parameters:
-      - Pull
-      - Pull
+      - $ref: '#/components/parameters/streamId'
+      - in: query
         name: duration
         required: false
         schema:
@@ -30900,7 +30900,7 @@ paths:
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       responses:
         '200':
           description: Cue-in sent
@@ -30916,7 +30916,7 @@ paths:
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       responses:
         '200':
           description: Cue-in sent
@@ -30932,7 +30932,7 @@ paths:
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPush
       parameters:
-      - Push
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:
@@ -30957,7 +30957,7 @@ paths:
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPull
       parameters:
-      - Pull
+      - $ref: '#/components/parameters/streamId'
       requestBody:
         required: true
         content:

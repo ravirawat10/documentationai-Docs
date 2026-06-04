@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 5centsCDN - Livestreams Playback API
+  title: 5centsCDN - Livestreams
   description: API for managing Live Streams in 5centsCDN (https://www.5centscdn.net)
   version: 2.0.0
   contact:
@@ -15,11 +15,11 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: DVR
-  description: endpoints related to DVR streams
+  description: Endpoints related to DVR streams
 - name: Delayed Stream
-  description: endpoints related to Delayed streams
+  description: Endpoints related to Delayed streams
 - name: Scheduled Playlist
-  description: endpoints related to Scheduled Playlist streams
+  description: Endpoints related to Scheduled Playlist streams
 paths:
   /streams/record:
     get:
@@ -29,7 +29,7 @@ paths:
       description: List DVR streams
       operationId: dvrStreamlist
       parameters:
-      - DVR
+      - in: query
         name: page
         schema:
           type: integer
@@ -746,7 +746,7 @@ paths:
       description: Return the details of a DVR stream.
       operationId: getDetailsDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -1427,7 +1427,7 @@ paths:
       description: Update information of a record stream.
       operationId: updateInfoDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -2155,7 +2155,7 @@ paths:
       description: Delete information of a record stream.
       operationId: deleteInfoDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -2193,7 +2193,7 @@ paths:
       description: Return the details of a DVR stream statistics.
       operationId: getDetailsDvrStreamStatusStatistics
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -2224,7 +2224,7 @@ paths:
       description: Update status of stream
       operationId: statusStreamsdvr
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -2791,7 +2791,7 @@ paths:
       description: Update Domainlock of a record stream
       operationId: updateDomainlockDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -3502,7 +3502,7 @@ paths:
       description: Update Secure token of record stream.
       operationId: updateSecureTokenStreamsRecord
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -4225,7 +4225,7 @@ paths:
       description: Update geo block of record stream
       operationId: updateGeoblockStreamsRecord
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -4935,7 +4935,7 @@ paths:
       description: Update DVR Export of record stream
       operationId: updateDvrExportStreamsRecord
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -4957,7 +4957,7 @@ paths:
       description: Update DVR Auto Export of record stream
       operationId: updateDvrAutoExportStreamsRecord
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -5668,7 +5668,7 @@ paths:
       description: Restore record stream
       operationId: restoreDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -6353,7 +6353,7 @@ paths:
       description: Restart record stream
       operationId: restartDvrStream
       parameters:
-      - DVR
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -7209,7 +7209,7 @@ paths:
       description: List Delayed streams
       operationId: delayedStreamsList
       parameters:
-      - Delayed Stream
+      - in: query
         name: page
         schema:
           type: integer
@@ -7853,7 +7853,7 @@ paths:
       description: Return Delayed streams
       operationId: getDetailsDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -8395,7 +8395,7 @@ paths:
       description: Update informations of a delayed stream
       operationId: updateDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -8965,7 +8965,7 @@ paths:
       description: Delete informations of a delayed stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -9003,7 +9003,7 @@ paths:
       description: Return Delayed streams statistics
       operationId: getDetailsDelayedStreamStatistics
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -9031,7 +9031,7 @@ paths:
       description: Update status of stream
       operationId: statusStreamstimeshift
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -9686,7 +9686,7 @@ paths:
       description: Update secure token of a delayed stream
       operationId: updateSecureDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -10367,7 +10367,7 @@ paths:
       description: Update Geo block of a delayed stream
       operationId: updateGeoblockDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -11089,7 +11089,7 @@ paths:
       description: Update domainlock of a delayed stream.
       operationId: updateDomainlockDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -11812,7 +11812,7 @@ paths:
       description: Restart Delayed stream
       operationId: restartDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -11838,7 +11838,7 @@ paths:
       description: Restore Delayed stream
       operationId: restoreDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -12480,7 +12480,7 @@ paths:
       description: Add the platform of a delayed stream
       operationId: addplatformStreamsDelayedStream
       parameters:
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -12502,8 +12502,8 @@ paths:
       description: Update the platform of a delayed stream
       operationId: updateplatformDelayedStream
       parameters:
-      - Delayed Stream
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -12524,8 +12524,8 @@ paths:
       description: Delete the Platform of delayed stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformDelayedStream
       parameters:
-      - Delayed Stream
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -12542,8 +12542,8 @@ paths:
       description: Restart the platform of a delayed stream
       operationId: restartplatformtimeshift
       parameters:
-      - Delayed Stream
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -12560,8 +12560,8 @@ paths:
       description: Status the platform of a delayed stream
       operationId: platformstatustimeshift
       parameters:
-      - Delayed Stream
-      - Delayed Stream
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -12626,7 +12626,7 @@ paths:
       description: scheduledplaylist.
       operationId: scheduledPlayList
       parameters:
-      - Scheduled Playlist
+      - in: query
         name: page
         schema:
           type: integer
@@ -14748,7 +14748,7 @@ paths:
       description: Return details of the stream.
       operationId: getDetailsScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -15619,7 +15619,7 @@ paths:
       description: Update information of scheduled playlist
       operationId: updateInfoScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -16525,7 +16525,7 @@ paths:
       description: Delete information of scheduled playlist. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteInfoScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -16563,7 +16563,7 @@ paths:
       description: Return details of the stream statistics
       operationId: getDetailsScheduledStreamStatistics
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       deprecated: false
       responses:
         '200':
@@ -16716,7 +16716,7 @@ paths:
       description: Return details of the stream playlist statistics
       operationId: getDetailsScheduledPlaylistStatistics
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -16767,7 +16767,7 @@ paths:
       description: Update secure token of a scheduled playlist.
       operationId: updateSecureTokenScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -17684,7 +17684,7 @@ paths:
       description: Update RTMP auth of a scheduled playlist.
       operationId: updateRtmpauthScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -18577,7 +18577,7 @@ paths:
       description: Update geoblock of scheduled playlist
       operationId: updateGeoblockScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -19481,7 +19481,7 @@ paths:
       description: Update domain lock of scheduled playlist.
       operationId: updateDomainlockScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -20386,7 +20386,7 @@ paths:
       description: Update the transcode of a scheduled stream
       operationId: updatetranscodeScheduledStream
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -21302,7 +21302,7 @@ paths:
       description: Restore a scheduled playlist
       operationId: restoreScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -22183,7 +22183,7 @@ paths:
       description: Restart scheduled playlist
       operationId: restartScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -22209,7 +22209,7 @@ paths:
       description: Update status of stream
       operationId: statusScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -23103,7 +23103,7 @@ paths:
       description: Return details of the stream playlist
       operationId: getDetailsPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       responses:
         '200':
           description: success
@@ -23163,7 +23163,7 @@ paths:
       description: Create new playlist
       operationId: createPlaylistScheduledPlaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -23229,8 +23229,8 @@ paths:
       description: Get the playlist
       operationId: getPlaylistScheduledPlaylist
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/playlistidParam'
       responses:
         '200':
           description: success
@@ -24220,8 +24220,8 @@ paths:
       description: Update the playlist
       operationId: updatePlaylistScheduledPlaylist
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/playlistidParam'
       requestBody:
         content:
           application/json:
@@ -24287,8 +24287,8 @@ paths:
       description: Delete the playlist of Scheduled stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlaylistScheduled
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/playlistidParam'
       requestBody:
         content:
           application/json:
@@ -24326,8 +24326,8 @@ paths:
       description: Create the playlist
       operationId: createPlaylistCloneScheduledPlaylist
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/playlistidParam'
       requestBody:
         content:
           application/json:
@@ -24362,7 +24362,7 @@ paths:
       description: Add the platform of a Scheduled stream
       operationId: addplatformStreamsscheduledplaylist
       parameters:
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
       requestBody:
         content:
           application/json:
@@ -25271,8 +25271,8 @@ paths:
       description: Update the platform of a Scheduled stream
       operationId: updateplatformRestream
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -26180,8 +26180,8 @@ paths:
       description: Delete the Platform of Scheduled stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformRestream
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:
@@ -26219,8 +26219,8 @@ paths:
       description: Restart the platform of a Scheduled stream
       operationId: restartplatformRestream
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       responses:
         '200':
           description: success
@@ -26246,8 +26246,8 @@ paths:
       description: Status the platform of a Scheduled stream
       operationId: platformstatusRestream
       parameters:
-      - Scheduled Playlist
-      - Scheduled Playlist
+      - $ref: '#/components/parameters/streamIdParam'
+      - $ref: '#/components/parameters/platformIdParam'
       requestBody:
         content:
           application/json:

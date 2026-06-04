@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 5centsCDN - Livestreams Settings API
+  title: 5centsCDN - Livestreams
   description: API for managing Live Streams in 5centsCDN (https://www.5centscdn.net)
   version: 2.0.0
   contact:
@@ -15,7 +15,7 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: Global Settings
-  description: Global Stream Settings
+  description: Global stream settings
 paths:
   /streams/settings/security/domainlock:
     post:
