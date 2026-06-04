@@ -42,8 +42,18 @@
           },
           {
             "group": "Zones",
-            "pages": [],
-            "openapi": "api-reference/Zones-Api.yaml"
+            "pages": [
+              {
+                "group": "HTTP",
+                "pages": [],
+                "openapi": "api-reference/Zones-HTTP-API.yaml"
+              },
+              {
+                "group": "VOD",
+                "pages": [],
+                "openapi": "api-reference/Zones-VOD-API.yaml"
+              }
+            ]
           },
           {
             "group": "Video Encoding",
