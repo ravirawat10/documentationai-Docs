@@ -24,6 +24,11 @@ tags:
   description: Endpoints for managing Video Player skins and configurations.
 - name: Players Analytics
   description: Endpoints for querying Video Player analytics, statistics, and search filters.
+x-tagGroups:
+- name: 5centsCDN
+  tags:
+  - Players
+  - Players Analytics
 paths:
   /players/5centscdn/analytics/stats:
     post:
