@@ -58,7 +58,13 @@
           {
             "group": "VideoPlayer & Analytics",
             "pages": [],
-            "openapi": "api-reference/VideoPlayer-API.yaml"
+            "groups": [
+              {
+                "group": "5centsCDN",
+                "pages": [],
+                "openapi": "api-reference/VideoPlayer-API.yaml"
+              }
+            ]
           },
           {
             "group": "Accounts",
