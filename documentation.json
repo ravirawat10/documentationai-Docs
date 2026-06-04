@@ -40,13 +40,48 @@
             "pages": [
               {
                 "group": "Streaming",
-                "pages": [],
-                "openapi": "api-reference/Livestreams-Streaming-API.yaml"
+                "pages": [
+                  {
+                    "group": "Push",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Push-API.yaml"
+                  },
+                  {
+                    "group": "Pull",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Pull-API.yaml"
+                  },
+                  {
+                    "group": "Multi-Bitrate Push",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-ABR-API.yaml"
+                  },
+                  {
+                    "group": "Multistreaming",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Multistream-API.yaml"
+                  }
+                ]
               },
               {
                 "group": "Playback",
-                "pages": [],
-                "openapi": "api-reference/Livestreams-Playback-API.yaml"
+                "pages": [
+                  {
+                    "group": "DVR",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-DVR-API.yaml"
+                  },
+                  {
+                    "group": "Delayed Stream",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Delayed-API.yaml"
+                  },
+                  {
+                    "group": "Scheduled Playlist",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Playlist-API.yaml"
+                  }
+                ]
               },
               {
                 "group": "Reports",
