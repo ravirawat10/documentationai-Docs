@@ -37,8 +37,28 @@
           },
           {
             "group": "Live Stream",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-Api.yaml"
+            "pages": [
+              {
+                "group": "Streaming",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Streaming-API.yaml"
+              },
+              {
+                "group": "Playback",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Playback-API.yaml"
+              },
+              {
+                "group": "Reports",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Reports-API.yaml"
+              },
+              {
+                "group": "Settings",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Settings-API.yaml"
+              }
+            ]
           },
           {
             "group": "Zones",
