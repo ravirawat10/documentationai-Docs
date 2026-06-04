@@ -14,18 +14,18 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: Push
+- name: VOD Push
   description: Endpoints related to Push zones
-- name: Pull
+- name: VOD Pull
   description: Endpoints related to Pull zones
-- name: Global Settings
+- name: VOD Global Settings
   description: Global zone security settings
 
 paths:
   /zones/vod/push:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: VoD Push
       description: Return VoD Push zones
       operationId: zoneVodPushList
@@ -827,7 +827,7 @@ paths:
   /zones/vod/push/servers:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: Get Servers
       description: Vod Push Zone Servers
       operationId: vodPushZoneServers
@@ -873,7 +873,7 @@ paths:
   /zones/vod/push/new:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Create Zone
       description: Create a new VOD push Zone
       operationId: createZoneVodPush
@@ -1126,7 +1126,7 @@ paths:
   /zones/vod/push/{zoneid}:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: Zone
       description: Return  VoD push zone details
       operationId: getVodZone
@@ -1957,7 +1957,7 @@ paths:
                     example: null
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Info
       description: Update information of a VoD Push zone
       operationId: updateInfoZoneVod
@@ -1991,7 +1991,7 @@ paths:
                     example: []
     delete:
       tags:
-      - Push
+      - VOD Push
       summary: Delete Info
       description: Delete information of a VoD Push zone. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteInfoZoneVod
@@ -2030,7 +2030,7 @@ paths:
   /zones/vod/push/{zoneid}/ssl:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update SSL
       description: Update SSL of VoD push zone
       operationId: updateSslZoneVod
@@ -2116,7 +2116,7 @@ paths:
   /zones/vod/push/{zoneid}/restore:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: Restore
       description: Restore VoD push zone
       operationId: restoreZoneVod
@@ -2852,7 +2852,7 @@ paths:
   /zones/vod/push/{zoneid}/purge:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Purge
       description: Purge cache of a VoD Push zone
       operationId: zoneVodCachePurge
@@ -2896,7 +2896,7 @@ paths:
   /zones/vod/push/{zoneid}/geoblock:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Geoblock
       description: Update Geoblock of VoD push zone
       operationId: updateGeoblockZoneVod
@@ -2955,7 +2955,7 @@ paths:
   /zones/vod/push/{zoneid}/eac:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update External Auth Control
       description: Update External auth control for  of VoD push zone
       operationId: updateExternalAuthControlZoneVod
@@ -2984,7 +2984,7 @@ paths:
   /zones/vod/push/{zoneid}/edge:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Edge Settings
       description: Update Edge settings of VoD push zone
       operationId: updateEdgeSettingsZoneVod
@@ -3017,7 +3017,7 @@ paths:
   /zones/vod/push/{zoneid}/domainlock:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Domain Lock
       description: Update Domain lock of VoD push zone
       operationId: updateDomainLockZoneVod
@@ -3083,7 +3083,7 @@ paths:
   /zones/vod/push/{zoneid}/securetoken:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Securetoken
       description: Update Securetoken of VoD push zone
       operationId: updateSecuretokenZoneVod
@@ -3158,7 +3158,7 @@ paths:
   /zones/vod/push/{zoneid}/ipaccess:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update IP Access
       description: Update IP access control of VoD push zone
       operationId: updateIpAccessZoneVodPush
@@ -3214,7 +3214,7 @@ paths:
   /zones/vod/push/{zoneid}/useragent:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update User Agent
       description: Update user agent access control of VoD push zone
       operationId: updateUserAgentZoneVodPush
@@ -3281,7 +3281,7 @@ paths:
   /zones/vod/push/{zoneid}/cache:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Update Cache
       description: Update cache settings of VoD push zone
       operationId: updateCacheZoneVodPush
@@ -3361,7 +3361,7 @@ paths:
   /zones/vod/push/{zoneid}/prefetch:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Prefetch Cache
       description: Prefetch specific files into cache for a VoD push zone
       operationId: prefetchCacheZoneVodPush
@@ -3401,7 +3401,7 @@ paths:
   /zones/vod/push/{zoneid}/import:
     post:
       tags:
-      - Push
+      - VOD Push
       summary: Import VOD Push Zone
       description: Import VOD Push Zone
       operationId: importVodPushZones
@@ -3432,7 +3432,7 @@ paths:
   /zones/vod/push/{zoneid}/filemanager/list:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: Zone filemanager List
       description: Zone filemanager List
       operationId: zoneVodPushFilemanager
@@ -3467,7 +3467,7 @@ paths:
   /zones/vod/push/{zoneid}/filemanager/info:
     get:
       tags:
-      - Push
+      - VOD Push
       summary: Zone filemanager info
       description: Zone filemanager info
       operationId: zoneVodPushFilemanagerInfo
@@ -3851,7 +3851,7 @@ paths:
   /zones/vod/pull:
     get:
       tags:
-      - Pull
+      - VOD Pull
       summary: VoD Pull
       description: Return VoD Pull zones
       operationId: zoneVodPullList
@@ -4622,7 +4622,7 @@ paths:
   /zones/vod/pull/new:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Create Zone
       description: Create a new VOD pull Zone
       operationId: createZoneVodPull
@@ -4873,7 +4873,7 @@ paths:
   /zones/vod/pull/{zoneid}:
     get:
       tags:
-      - Pull
+      - VOD Pull
       summary: Zone
       description: Return  VoD pull zone details
       operationId: getVodZonePull
@@ -5565,7 +5565,7 @@ paths:
                     example: null
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Info
       description: Update information of a VoD Pull zone
       operationId: updateInfoZoneVodPull
@@ -5599,7 +5599,7 @@ paths:
                     example: []
     delete:
       tags:
-      - Pull
+      - VOD Pull
       summary: Delete Info
       description: Delete information of a VoD Pull zone. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteInfoZoneVodPull
@@ -5638,7 +5638,7 @@ paths:
   /zones/vod/pull/{zoneid}/ssl:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update SSL
       description: Update SSL of VoD pull zone
       operationId: updateSslZoneVodPull
@@ -5724,7 +5724,7 @@ paths:
   /zones/vod/pull/{zoneid}/restore:
     get:
       tags:
-      - Pull
+      - VOD Pull
       summary: Restore
       description: Restore VoD pull zone
       operationId: restoreZoneVodPull
@@ -6645,7 +6645,7 @@ paths:
   /zones/vod/pull/{zoneid}/purge:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Purge
       description: Purge cache of a VoD pull zone
       operationId: zoneVodPullCachePurge
@@ -6689,7 +6689,7 @@ paths:
   /zones/vod/pull/{zoneid}/geoblock:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Geoblock
       description: Update Geoblock of VoD pull zone
       operationId: updateGeoblockZoneVodPull
@@ -6748,7 +6748,7 @@ paths:
   /zones/vod/pull/{zoneid}/shield:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update shield Settings
       description: Update shield settings of VOD record zone
       operationId: updateShieldSettingsZoneVod
@@ -6793,7 +6793,7 @@ paths:
   /zones/vod/pull/{zoneid}/eac:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update External Auth Control
       description: Update External auth control for  of VoD push zone
       operationId: updateExternalAuthControlZoneVodPull
@@ -6822,7 +6822,7 @@ paths:
   /zones/vod/pull/{zoneid}/edge:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Edge Settings
       description: Update Edge settings of VoD push zone
       operationId: updateEdgeSettingsZoneVodPull
@@ -6855,7 +6855,7 @@ paths:
   /zones/vod/pull/{zoneid}/domainlock:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Domain Lock
       description: Update Domain lock of VoD push zone
       operationId: updateDomainLockZoneVodPull
@@ -6921,7 +6921,7 @@ paths:
   /zones/vod/pull/{zoneid}/securetoken:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Securetoken
       description: Update securetoken of VoD pull zone
       operationId: updateSecuretokenZoneVodPull
@@ -6996,7 +6996,7 @@ paths:
   /zones/vod/pull/{zoneid}/ipaccess:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update IP Access
       description: Update IP access control of VoD pull zone
       operationId: updateIpAccessZoneVodPull
@@ -7052,7 +7052,7 @@ paths:
   /zones/vod/pull/{zoneid}/useragent:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update User Agent
       description: Update user agent access control of VoD pull zone
       operationId: updateUserAgentZoneVodPull
@@ -7119,7 +7119,7 @@ paths:
   /zones/vod/pull/{zoneid}/cache:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Cache
       description: Update cache settings of VoD pull zone
       operationId: updateCacheZoneVodPull
@@ -7199,7 +7199,7 @@ paths:
   /zones/vod/pull/{zoneid}/prefetch:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Prefetch Cache
       description: Prefetch specific files into cache for a VoD pull zone
       operationId: prefetchCacheZoneVodPull
@@ -7239,7 +7239,7 @@ paths:
   /zones/vod/pull/{zoneid}/status:
     post:
       tags:
-      - Pull
+      - VOD Pull
       summary: Update Zone Status
       description: Enable or disable a VoD pull zone
       operationId: updateStatusZoneVodPull
@@ -7280,7 +7280,7 @@ paths:
   /zones/vod/settings/security/domainlock:
     post:
       tags:
-      - Global Settings
+      - VOD Global Settings
       summary: update zone vod domain setting
       description: update zone vod domain setting
       operationId: settingsZoneVodDomain
@@ -7338,7 +7338,7 @@ paths:
   /zones/vod/settings/security/geoblock:
     post:
       tags:
-      - Global Settings
+      - VOD Global Settings
       summary: update zone vod geoblock setting
       description: update zone vod domain setting
       operationId: settingsZoneVodGeoblock
@@ -7393,7 +7393,7 @@ paths:
   /zones/vod/settings/security/securetoken:
     post:
       tags:
-      - Global Settings
+      - VOD Global Settings
       summary: update zone vod securetoken setting
       description: update zone vod securetoken setting
       operationId: settingsZoneVodSecuretoken
@@ -7463,7 +7463,7 @@ paths:
   /zones/vod/settings/security/ipaccess:
     post:
       tags:
-      - Global Settings
+      - VOD Global Settings
       summary: update zone vod ipaccess setting
       description: update zone vod ipaccess setting
       operationId: settingsZoneVodIpaccess
@@ -7516,7 +7516,7 @@ paths:
   /zones/vod/settings/security/useragent:
     post:
       tags:
-      - Global Settings
+      - VOD Global Settings
       summary: update zone vod useragent setting
       description: update zone vod useragent setting
       operationId: settingsZoneVodUseragent

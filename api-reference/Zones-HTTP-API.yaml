@@ -14,18 +14,18 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: Push
+- name: HTTP Push
   description: Endpoints related to Push zones
-- name: Pull
+- name: HTTP Pull
   description: Endpoints related to Pull zones
-- name: Global Settings
+- name: HTTP Global Settings
   description: Global zone security settings
 
 paths:
   /zones/http/push:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Zone
       description: Return  HTTP push zone details
       operationId: zonePushList
@@ -764,7 +764,7 @@ paths:
   /zones/http/push/servers:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Get Servers
       description: HTTP Push Zone Servers
       operationId: httpPushZoneServers
@@ -810,7 +810,7 @@ paths:
   /zones/http/push/new:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Create Zone
       description: Create a new HTTP Push Zone
       operationId: createZonePush
@@ -1069,7 +1069,7 @@ paths:
   /zones/http/push/{zoneid}:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Zone
       description: Return  HTTP push zone details
       operationId: getDetailsZonePush
@@ -1809,7 +1809,7 @@ paths:
                     example: null
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Info
       description: Update the information of HTTP Push Zone
       operationId: updateZonePush
@@ -1847,7 +1847,7 @@ paths:
                     example: []
     delete:
       tags:
-      - Push
+      - HTTP Push
       summary: Delete Info
       description: Delete the information of HTTP Push Zone. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteZonePush
@@ -1886,7 +1886,7 @@ paths:
   /zones/http/push/{zoneid}/ssl:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update SSL
       description: Update SSL of HTTP push zone
       operationId: updateSslZonePush
@@ -1969,7 +1969,7 @@ paths:
   /zones/http/push/{zoneid}/securetoken:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Secure Token
       description: Update SecureToken of HTTP push zone
       operationId: updateSecureTokenZonePush
@@ -2040,7 +2040,7 @@ paths:
   /zones/http/push/{zoneid}/geoblock:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Geoblock
       description: Update geblock of HTTP push zone
       operationId: updateGeoblockZonePush
@@ -2094,7 +2094,7 @@ paths:
   /zones/http/push/{zoneid}/domainlock:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Domain Lock
       description: Update domain lock of HTTP push zone
       operationId: updateDomainLockZonePush
@@ -2151,7 +2151,7 @@ paths:
   /zones/http/push/{zoneid}/edge:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Edge Settings
       description: Update Edge settings of HTTP push zone
       operationId: updateEdgeSettingsZonePush
@@ -2240,7 +2240,7 @@ paths:
   /zones/http/push/{zoneid}/cache:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update Cache
       description: Update cache of HTTP Push Zone
       operationId: updateCacheZonePush
@@ -2319,7 +2319,7 @@ paths:
   /zones/http/push/{zoneid}/restore:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Restore
       description: Restore HTTP push zone
       operationId: restoreZonePush
@@ -3029,7 +3029,7 @@ paths:
                         example: true
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Zone Cache Purge
       description: Purge cache of a HTTP push zone
       operationId: zonePushCachePurge
@@ -3073,7 +3073,7 @@ paths:
   /zones/http/push/{zoneid}/bwlimit:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Update bandwidth limit
       description: Update bandwidth limit of HTTP push zone
       operationId: updateBwLimitZonePush
@@ -3125,7 +3125,7 @@ paths:
   /zones/http/push/{zoneid}/import:
     post:
       tags:
-      - Push
+      - HTTP Push
       summary: Import HTTP Push Zone
       description: Import HTTP Push Zone
       operationId: importHttpPushZones
@@ -3156,7 +3156,7 @@ paths:
   /zones/http/push/{zoneid}/filemanager/list:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Zone File Manager List
       description: Zone File Manager List
       operationId: zonePushFilemanagerList
@@ -3191,7 +3191,7 @@ paths:
   /zones/http/push/{zoneid}/filemanager/info:
     get:
       tags:
-      - Push
+      - HTTP Push
       summary: Zone File Manager  info
       description: Zone File Manager info
       operationId: zonePushFilemanagerInfo
@@ -3579,7 +3579,7 @@ paths:
   /zones/http/pull:
     get:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Zone
       description: Zone HTTP Pull list
       operationId: zonePullList
@@ -4345,7 +4345,7 @@ paths:
                           example: true
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Create Zone
       description: Create a new HTTP Pull Zone
       operationId: createZonePull
@@ -4611,7 +4611,7 @@ paths:
   /zones/http/pull/{zoneid}:
     get:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Zone
       description: Return  HTTP pull zone details
       operationId: getZonePull
@@ -5289,7 +5289,7 @@ paths:
                     example: null
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Info
       description: update the information of  HTTP pull Zone
       operationId: updateZonePull
@@ -5327,7 +5327,7 @@ paths:
                     example: []
     delete:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Delete Info
       description: Delete the information of HTTP pull Zone. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteZonePull
@@ -5353,7 +5353,7 @@ paths:
   /zones/http/pull/{zoneid}/purge:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Purge
       description: Purge cache of a HTTP pull zone
       operationId: zoneCachePurgeZonePull
@@ -5397,7 +5397,7 @@ paths:
   /zones/http/pull/{zoneid}/ssl:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update SSL
       description: Update SSL of HTTP pull zone
       operationId: updateSslZonePull
@@ -5482,7 +5482,7 @@ paths:
   /zones/http/pull/{zoneid}/securetoken:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Secure Token
       description: Update SecureToken of HTTP pull zone
       operationId: updateSecureTokenZonePull
@@ -5553,7 +5553,7 @@ paths:
   /zones/http/pull/{zoneid}/seo:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Seo
       description: Update Seo of HTTP pull zone
       operationId: updateSeoZonePull
@@ -5606,7 +5606,7 @@ paths:
   /zones/http/pull/{zoneid}/originip:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update originip
       description: Update originip of HTTP pull zone
       operationId: updateOriginipZonePull
@@ -5658,7 +5658,7 @@ paths:
   /zones/http/pull/{zoneid}/bwlimit:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Bandwidth limit
       description: Update Bandwidth limit of HTTP pull zone
       operationId: updateBwLimitZonePull
@@ -5710,7 +5710,7 @@ paths:
   /zones/http/pull/{zoneid}/edge:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Edge Settings
       description: Update Edge settings of HTTP record zone
       operationId: updateEdgeSettingsZonePull
@@ -5799,7 +5799,7 @@ paths:
   /zones/http/pull/{zoneid}/shield:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update shield Settings
       description: Update shield settings of HTTP record zone
       operationId: updateShieldSettingsZonePull
@@ -5844,7 +5844,7 @@ paths:
   /zones/http/pull/{zoneid}/domainlock:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Domain Lock
       description: Update Domain lock of HTTP pull zone
       operationId: updateDomainLockZonePull
@@ -5906,7 +5906,7 @@ paths:
   /zones/http/pull/{zoneid}/geoblock:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Geoblock
       description: Update Geoblock of HTTP pull zone
       operationId: updateGeoblockZonePull
@@ -5965,7 +5965,7 @@ paths:
   /zones/http/pull/{zoneid}/ipaccess:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update IP Access
       description: Update IP access control of HTTP pull zone
       operationId: updateIpAccessZonePull
@@ -6022,7 +6022,7 @@ paths:
   /zones/http/pull/{zoneid}/useragent:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update User Agent
       description: Update user agent access control of HTTP pull zone
       operationId: updateUserAgentZonePull
@@ -6084,7 +6084,7 @@ paths:
   /zones/http/pull/{zoneid}/restore:
     get:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Restore
       description: Restore HTTP pull zone
       operationId: restoreZonePull
@@ -6751,7 +6751,7 @@ paths:
   /zones/http/pull/{zoneid}/cache:
     post:
       tags:
-      - Pull
+      - HTTP Pull
       summary: Update Cache
       description: Update Cache HTTP Push Zone
       operationId: updateCacheZonePull
@@ -6830,7 +6830,7 @@ paths:
   /zones/http/settings/security/domainlock:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       description: update zone http domain setting
       operationId: settingsZoneHttpDomain
       requestBody:
@@ -6887,7 +6887,7 @@ paths:
   /zones/http/settings/security/geoblock:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       summary: update zone http geoblock setting
       description: update zone http domain setting
       operationId: settingsZoneHttpGeoblock
@@ -6942,7 +6942,7 @@ paths:
   /zones/http/settings/security/securetoken:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       summary: update zone http securetoken setting
       description: update zone http securetoken setting
       operationId: settingsZoneHttpSecuretoken
@@ -7012,7 +7012,7 @@ paths:
   /zones/http/settings/security/bwlimit:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       summary: update zone http bwlimit setting
       description: update zone http bwlimit setting
       operationId: settingsZoneHttpBwlimit
@@ -7065,7 +7065,7 @@ paths:
   /zones/http/settings/security/ipaccess:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       summary: update zone http ipaccess setting
       description: update zone http ipaccess setting
       operationId: settingsZoneHttpIpaccess
@@ -7118,7 +7118,7 @@ paths:
   /zones/http/settings/security/useragent:
     post:
       tags:
-      - Global Settings
+      - HTTP Global Settings
       summary: update zone http useragent setting
       description: update zone http useragent setting
       operationId: settingsZoneHttpUseragent
