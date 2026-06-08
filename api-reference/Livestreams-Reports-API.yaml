@@ -14,16 +14,14 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: Recording Minutes
-  description: Recording usage reports
-- name: Transcoding Hours
-  description: Live transcoding profiles and filters
+- name: Live Transcoding Profiles/Filters
+  description: Live stream transcoding profile and filter management
 paths:
   /streams/reports/dvr:
     post:
       operationId: getRecordingMinutes
       tags:
-      - Recording Minutes
+      - Live Transcoding Profiles/Filters
       summary: Recording Minutes
       requestBody:
         content:
@@ -99,7 +97,7 @@ paths:
   /streams/settings/profiles:
     get:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: List Live Transcoding Profiles
       description: List Live Transcoding Profiles
       operationId: listLiveTranscodingProfiles
@@ -121,7 +119,7 @@ paths:
   /streams/settings/profiles/new:
     post:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: add stream profiles setting
       description: add stream profiles setting
       operationId: settings-stream-profiles-add
@@ -154,7 +152,7 @@ paths:
   /streams/settings/profiles/{profileid}:
     post:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: update stream profiles setting
       description: update stream profiles setting
       operationId: settings-stream-profiles-update
@@ -332,7 +330,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: Delete Info
       description: Delete the profile of stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletestreamprofile
@@ -370,7 +368,7 @@ paths:
   /streams/settings/filters:
     get:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: List File Transcoding Filters
       description: List File Transcoding Filters
       operationId: transcodingFileFilter
@@ -482,7 +480,7 @@ paths:
   /streams/settings/filters/new:
     post:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: Create File Transcoding Filters
       description: Create File Transcoding Filters
       operationId: createFileTranscodingFilter
@@ -615,7 +613,7 @@ paths:
   /streams/settings/filters/{filterid}:
     post:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: Edit Transcoding Profile Filter
       description: Edit Transcoding Profile Filter
       operationId: editTranscodingProfileFilter
@@ -691,7 +689,7 @@ paths:
                     example: Transcoding Settings Updated
     delete:
       tags:
-      - Transcoding Hours
+      - Live Transcoding Profiles/Filters
       summary: Delete Transcoding Profile Filter
       description: Delete the information of Transcoding Profile filter. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteTranscodingProfileFilter

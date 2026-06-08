@@ -14,17 +14,17 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: DVR
+- name: DVR Streams
   description: Endpoints related to DVR streams
-- name: Delayed Stream
+- name: Delayed Streams
   description: Endpoints related to Delayed streams
-- name: Scheduled Playlist
+- name: Scheduled Playlist Streams
   description: Endpoints related to Scheduled Playlist streams
 paths:
   /streams/record:
     get:
       tags:
-      - DVR
+      - DVR Streams
       summary: List DvrStream
       description: List DVR streams
       operationId: dvrStreamlist
@@ -741,7 +741,7 @@ paths:
   /streams/record/{streamid}:
     get:
       tags:
-      - DVR
+      - DVR Streams
       summary: DvrStream
       description: Return the details of a DVR stream.
       operationId: getDetailsDvrStream
@@ -1422,7 +1422,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update DvrStream
       description: Update information of a record stream.
       operationId: updateInfoDvrStream
@@ -2150,7 +2150,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - DVR
+      - DVR Streams
       summary: DvrStream
       description: Delete information of a record stream.
       operationId: deleteInfoDvrStream
@@ -2188,7 +2188,7 @@ paths:
   /streams/record/{streamid}/statistics:
     get:
       tags:
-      - DVR
+      - DVR Streams
       summary: Dvr Stream statistics
       description: Return the details of a DVR stream statistics.
       operationId: getDetailsDvrStreamStatusStatistics
@@ -2219,7 +2219,7 @@ paths:
   /streams/record/{streamid}/status:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update status of stream
       description: Update status of stream
       operationId: statusStreamsdvr
@@ -2786,7 +2786,7 @@ paths:
   /streams/record/{streamid}/domainlock:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update Domain Lock
       description: Update Domainlock of a record stream
       operationId: updateDomainlockDvrStream
@@ -3497,7 +3497,7 @@ paths:
   /streams/record/{streamid}/securetoken:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update Secure Token
       description: Update Secure token of record stream.
       operationId: updateSecureTokenStreamsRecord
@@ -4220,7 +4220,7 @@ paths:
   /streams/record/{streamid}/geoblock:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update Geo Block
       description: Update geo block of record stream
       operationId: updateGeoblockStreamsRecord
@@ -4930,7 +4930,7 @@ paths:
   /streams/record/{streamid}/export:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update DVR Export
       description: Update DVR Export of record stream
       operationId: updateDvrExportStreamsRecord
@@ -4952,7 +4952,7 @@ paths:
   /streams/record/{streamid}/autoexport:
     post:
       tags:
-      - DVR
+      - DVR Streams
       summary: Update DVR Auto Export
       description: Update DVR Auto Export of record stream
       operationId: updateDvrAutoExportStreamsRecord
@@ -5663,7 +5663,7 @@ paths:
   /streams/record/{streamid}/restore:
     get:
       tags:
-      - DVR
+      - DVR Streams
       summary: Restore
       description: Restore record stream
       operationId: restoreDvrStream
@@ -6348,7 +6348,7 @@ paths:
   /streams/record/{streamid}/restart:
     get:
       tags:
-      - DVR
+      - DVR Streams
       summary: Restart
       description: Restart record stream
       operationId: restartDvrStream
@@ -6374,7 +6374,7 @@ paths:
   /streams/timeshift/new:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: insert Info
       description: insert informations of a delayed stream
       operationId: insertDelayedStream
@@ -7204,7 +7204,7 @@ paths:
   /streams/timeshift:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Delayedstreams
       description: List Delayed streams
       operationId: delayedStreamsList
@@ -7848,7 +7848,7 @@ paths:
   /streams/timeshift/{streamid}:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Stream
       description: Return Delayed streams
       operationId: getDetailsDelayedStream
@@ -8390,7 +8390,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update Info
       description: Update informations of a delayed stream
       operationId: updateDelayedStream
@@ -8960,7 +8960,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Delete Info
       description: Delete informations of a delayed stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteDelayedStream
@@ -8998,7 +8998,7 @@ paths:
   /streams/timeshift/{streamid}/statistics:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Stream statistics
       description: Return Delayed streams statistics
       operationId: getDetailsDelayedStreamStatistics
@@ -9026,7 +9026,7 @@ paths:
   /streams/timeshift/{streamid}/status:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update status of stream
       description: Update status of stream
       operationId: statusStreamstimeshift
@@ -9681,7 +9681,7 @@ paths:
   /streams/timeshift/{streamid}/securetoken:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update Secure Token
       description: Update secure token of a delayed stream
       operationId: updateSecureDelayedStream
@@ -10362,7 +10362,7 @@ paths:
   /streams/timeshift/{streamid}/geoblock:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update Geo Block
       description: Update Geo block of a delayed stream
       operationId: updateGeoblockDelayedStream
@@ -11084,7 +11084,7 @@ paths:
   /streams/timeshift/{streamid}/domainlock:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update Domain Lock
       description: Update domainlock of a delayed stream.
       operationId: updateDomainlockDelayedStream
@@ -11807,7 +11807,7 @@ paths:
   /streams/timeshift/{streamid}/restart:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Restart
       description: Restart Delayed stream
       operationId: restartDelayedStream
@@ -11833,7 +11833,7 @@ paths:
   /streams/timeshift/{streamid}/restore:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Restore
       description: Restore Delayed stream
       operationId: restoreDelayedStream
@@ -12475,7 +12475,7 @@ paths:
   /streams/timeshift/{streamid}/platforms:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Add platform
       description: Add the platform of a delayed stream
       operationId: addplatformStreamsDelayedStream
@@ -12497,7 +12497,7 @@ paths:
   /streams/timeshift/{streamid}/platform/{platformid}:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update platform
       description: Update the platform of a delayed stream
       operationId: updateplatformDelayedStream
@@ -12519,7 +12519,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Delete Info
       description: Delete the Platform of delayed stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformDelayedStream
@@ -12537,7 +12537,7 @@ paths:
   /streams/timeshift/{streamid}/platform/{platformid}/restart:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Restart Platform
       description: Restart the platform of a delayed stream
       operationId: restartplatformtimeshift
@@ -12555,7 +12555,7 @@ paths:
   /streams/timeshift/{streamid}/platform/{platformid}/status:
     post:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Update Platform Status
       description: Status the platform of a delayed stream
       operationId: platformstatustimeshift
@@ -12587,7 +12587,7 @@ paths:
   /streams/timeshift/parents:
     get:
       tags:
-      - Delayed Stream
+      - Delayed Streams
       summary: Source Streams
       description: Return the parents of a Delayed stream
       operationId: getParentsDelayedStream
@@ -12621,7 +12621,7 @@ paths:
   /streams/scheduledplaylist:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Stream
       description: scheduledplaylist.
       operationId: scheduledPlayList
@@ -13732,7 +13732,7 @@ paths:
   /streams/scheduledplaylist/new:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Create Scheduled Playlist
       description: Create new scheduled playlist
       operationId: createScheduledPlaylist
@@ -14743,7 +14743,7 @@ paths:
   /streams/scheduledplaylist/{streamid}:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Stream
       description: Return details of the stream.
       operationId: getDetailsScheduledPlaylist
@@ -15614,7 +15614,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Info
       description: Update information of scheduled playlist
       operationId: updateInfoScheduledPlaylist
@@ -16520,7 +16520,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Delete Info
       description: Delete information of scheduled playlist. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteInfoScheduledPlaylist
@@ -16558,7 +16558,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/statistics:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Stream
       description: Return details of the stream statistics
       operationId: getDetailsScheduledStreamStatistics
@@ -16711,7 +16711,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/statistics/playlist:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Stream playlist statistics
       description: Return details of the stream playlist statistics
       operationId: getDetailsScheduledPlaylistStatistics
@@ -16762,7 +16762,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/securetoken:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Secure Token
       description: Update secure token of a scheduled playlist.
       operationId: updateSecureTokenScheduledPlaylist
@@ -17679,7 +17679,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/rtmpauth:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update RTMPAuth
       description: Update RTMP auth of a scheduled playlist.
       operationId: updateRtmpauthScheduledPlaylist
@@ -18572,7 +18572,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/geoblock:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Geo Block
       description: Update geoblock of scheduled playlist
       operationId: updateGeoblockScheduledPlaylist
@@ -19476,7 +19476,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/domainlock:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Domain Lock
       description: Update domain lock of scheduled playlist.
       operationId: updateDomainlockScheduledPlaylist
@@ -20381,7 +20381,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/transcode:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update transcode
       description: Update the transcode of a scheduled stream
       operationId: updatetranscodeScheduledStream
@@ -21297,7 +21297,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/restore:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Restore
       description: Restore a scheduled playlist
       operationId: restoreScheduledPlaylist
@@ -22178,7 +22178,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/restart:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Restart
       description: Restart scheduled playlist
       operationId: restartScheduledPlaylist
@@ -22204,7 +22204,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/status:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update status of stream
       description: Update status of stream
       operationId: statusScheduledPlaylist
@@ -23098,7 +23098,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/playlists/events:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Stream playlist
       description: Return details of the stream playlist
       operationId: getDetailsPlaylist
@@ -23158,7 +23158,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/playlist/new:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Create Playlist
       description: Create new playlist
       operationId: createPlaylistScheduledPlaylist
@@ -23224,7 +23224,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/playlist/{playlistid}:
     get:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Get Playlist
       description: Get the playlist
       operationId: getPlaylistScheduledPlaylist
@@ -24215,7 +24215,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Playlist
       description: Update the playlist
       operationId: updatePlaylistScheduledPlaylist
@@ -24282,7 +24282,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Delete playlist
       description: Delete the playlist of Scheduled stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlaylistScheduled
@@ -24321,7 +24321,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/playlist/{playlistid}/clone:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Create Playlist clone
       description: Create the playlist
       operationId: createPlaylistCloneScheduledPlaylist
@@ -24357,7 +24357,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/platforms:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Add platform
       description: Add the platform of a Scheduled stream
       operationId: addplatformStreamsscheduledplaylist
@@ -25266,7 +25266,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/platform/{platformid}:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update platform
       description: Update the platform of a Scheduled stream
       operationId: updateplatformRestream
@@ -26175,7 +26175,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Delete Info
       description: Delete the Platform of Scheduled stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformRestream
@@ -26214,7 +26214,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/platform/{platformid}/restart:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Restart Platform
       description: Restart the platform of a Scheduled stream
       operationId: restartplatformRestream
@@ -26241,7 +26241,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/platform/{platformid}/status:
     post:
       tags:
-      - Scheduled Playlist
+      - Scheduled Playlist Streams
       summary: Update Platform Status
       description: Status the platform of a Scheduled stream
       operationId: platformstatusRestream
