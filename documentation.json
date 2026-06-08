@@ -78,12 +78,12 @@
           {
             "group": "Video Encoding",
             "pages": [],
-            "openapi": "api-reference/Transcoding-Api-.yaml"
+            "openapi": "api-reference/Transcoding-API.yaml"
           },
           {
             "group": "SimpleDNS",
             "pages": [],
-            "openapi": "api-reference/simpleDNS-API.yaml"
+            "openapi": "api-reference/SimpleDNS-API.yaml"
           },
           {
             "group": "VideoPlayer & Analytics",
@@ -104,7 +104,7 @@
             "group": "Analytics",
             "pages": [],
             "icon": "activity",
-            "openapi": "api-reference/Analytics-Api.yaml"
+            "openapi": "api-reference/Analytics-API.yaml"
           },
           {
             "group": "Edge Rules",
@@ -162,6 +162,9 @@
     },
     {
       "src": "scripts/title-updater.js"
+    },
+    {
+      "src": "scripts/navbar-styles.js"
     }
   ]
 }
