@@ -162,6 +162,9 @@
     },
     {
       "src": "scripts/title-updater.js"
+    },
+    {
+      "src": "scripts/api-modal-width.js"
     }
   ]
 }
