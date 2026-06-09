@@ -14,21 +14,37 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: List Streams
-  description: List all streams
-- name: Push Streams
-  description: Endpoints related to Push streams
-- name: Pull Streams
-  description: Endpoints related to Pull streams
-- name: Multi Bitrate Push Streams
-  description: Endpoints related to Multi-Bitrate Push streams
-- name: Multistream Streams
-  description: Endpoints related to Multistream streams
+- name: Stream Info
+  description: Create, list, update, and delete streams
+- name: Preview
+  description: Enable, disable, restart, and restore streams
+- name: Encoder Credentials
+  description: Server info and encoder source configuration
+- name: Transcode
+  description: Transcoding profile settings
+- name: Stream Health Check
+  description: Stream health monitoring and statistics
+- name: NDVR
+  description: Network DVR settings
+- name: DVR
+  description: DVR recording settings
+- name: Ad Insertion
+  description: Ad insertion configuration and management
+- name: Security - Domain Lock
+  description: Domain lock security settings
+- name: Security - Geo Block
+  description: Geographic blocking security settings
+- name: Security - IP Access
+  description: RTMP authentication and IP access control
+- name: Security - Secure Token
+  description: Secure token authentication settings
+- name: Multistream Platforms
+  description: Multistream platform management
 paths:
   /streams:
     get:
       tags:
-      - List Streams
+      - Stream Info
       summary: List streams
       description: list streams
       operationId: streamsList
@@ -42,7 +58,7 @@ paths:
   /streams/push:
     get:
       tags:
-      - Push Streams
+      - Stream Info
       summary: List Streams
       description: push list
       operationId: streamsPushList
@@ -64,7 +80,7 @@ paths:
   /streams/push/new:
     post:
       tags:
-      - Push Streams
+      - Stream Info
       summary: Create Push
       description: Create a Push stream
       operationId: createPushStreams
@@ -84,7 +100,7 @@ paths:
   /streams/push/{streamid}:
     get:
       tags:
-      - Push Streams
+      - Stream Info
       summary: Stream
       description: Returns the details of a push stream
       operationId: getStreamsPush
@@ -715,7 +731,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Push Streams
+      - Stream Info
       summary: Update Info
       description: Update the information of push stream
       operationId: updateStreamspush
@@ -1299,7 +1315,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Push Streams
+      - Stream Info
       summary: Delete Info
       description: Delete the information of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamspush
@@ -1337,7 +1353,7 @@ paths:
   /streams/push/{streamid}/statistics:
     get:
       tags:
-      - Push Streams
+      - Stream Health Check
       summary: Stream statistics
       description: Returns the details of a push stream statistics
       operationId: getStreamsPushStatistics
@@ -1433,7 +1449,7 @@ paths:
   /streams/push/{streamid}/status:
     post:
       tags:
-      - Push Streams
+      - Preview
       summary: Update status of stream
       description: Update status of stream
       operationId: statusStreamsPush
@@ -2006,7 +2022,7 @@ paths:
   /streams/push/{streamid}/source:
     post:
       tags:
-      - Push Streams
+      - Encoder Credentials
       summary: Update Source
       description: Change the ingest source region for a Push stream. Use the server field to specify one or more source region server IDs. Multiple server IDs can be provided as comma-separated values.
       operationId: updatesourceStreamsPush
@@ -2732,7 +2748,7 @@ paths:
   /streams/push/{streamid}/transcode:
     post:
       tags:
-      - Push Streams
+      - Transcode
       summary: Update transcode
       description: Update the transcode of a push stream
       operationId: updatetranscodeStreamsPush
@@ -3485,7 +3501,7 @@ paths:
   /streams/push/{streamid}/domainlock:
     post:
       tags:
-      - Push Streams
+      - Security - Domain Lock
       summary: Update Domain Lock
       description: Update the domainlock of a publish stream
       operationId: updatedomainlockStreamsPush
@@ -3507,7 +3523,7 @@ paths:
   /streams/push/{streamid}/geoblock:
     post:
       tags:
-      - Push Streams
+      - Security - Geo Block
       summary: Update Geo Block
       description: Update the geoblock of a push stream
       operationId: updategeoblockStreamsPush
@@ -4248,7 +4264,7 @@ paths:
   /streams/push/{streamid}/securetoken:
     post:
       tags:
-      - Push Streams
+      - Security - Secure Token
       summary: Update Secure Token
       description: Update secure token of a push stream
       operationId: updateSecureTokenStreamsPush
@@ -5002,7 +5018,7 @@ paths:
   /streams/push/{streamid}/rtmpauth:
     post:
       tags:
-      - Push Streams
+      - Security - IP Access
       summary: Update RTMPAuth
       description: Update RTMPAuth of push stream
       operationId: updateRtmpauthStreamsPush
@@ -5671,7 +5687,7 @@ paths:
   /streams/push/{streamid}/ndvr:
     post:
       tags:
-      - Push Streams
+      - NDVR
       summary: Update NDVR
       operationId: updateNdvrStreamsPush
       parameters:
@@ -6402,7 +6418,7 @@ paths:
   /streams/push/servers:
     get:
       tags:
-      - Push Streams
+      - Encoder Credentials
       summary: Servers
       description: Return the list of servers of push stream
       operationId: getServersStreamsPush
@@ -6535,7 +6551,7 @@ paths:
   /streams/push/{streamid}/restore:
     get:
       tags:
-      - Push Streams
+      - Preview
       summary: Restore
       description: Restore a push stream
       operationId: restoreStreamsPush
@@ -7259,7 +7275,7 @@ paths:
   /streams/push/{streamid}/restart:
     get:
       tags:
-      - Push Streams
+      - Preview
       summary: Restart
       description: Restart a push stream
       operationId: restartStreamsPush
@@ -7285,7 +7301,7 @@ paths:
   /streams/push/{streamid}/record:
     post:
       tags:
-      - Push Streams
+      - DVR
       summary: Update DVR
       operationId: updateDvrStreamsPush
       parameters:
@@ -7885,7 +7901,7 @@ paths:
   /streams/push/{streamid}/platforms:
     post:
       tags:
-      - Push Streams
+      - Multistream Platforms
       summary: Add platform
       description: Add the platform of a push stream
       operationId: addplatformStreamsPush
@@ -8602,7 +8618,7 @@ paths:
   /streams/push/{streamid}/platform/{platformid}:
     post:
       tags:
-      - Push Streams
+      - Multistream Platforms
       summary: Update platform
       description: Update the platform of a push stream
       operationId: updateplatformStreamsPush
@@ -8696,7 +8712,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Push Streams
+      - Multistream Platforms
       summary: Delete Info
       description: Delete the Platform of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspush
@@ -8735,7 +8751,7 @@ paths:
   /streams/push/{streamid}/platform/{platformid}/restart:
     get:
       tags:
-      - Push Streams
+      - Multistream Platforms
       summary: Restart Platform
       description: Restart the platform of a push stream
       operationId: restartplatformStreamsPush
@@ -8762,7 +8778,7 @@ paths:
   /streams/push/{streamid}/platform/{platformid}/status:
     post:
       tags:
-      - Push Streams
+      - Multistream Platforms
       summary: Update Platform Status
       description: Status the platform of a push stream
       operationId: platformstatusStreamsPush
@@ -8802,7 +8818,7 @@ paths:
   /streams/restream:
     get:
       tags:
-      - Pull Streams
+      - Stream Info
       summary: List Streams
       description: pull streams list
       operationId: listPullStreams
@@ -9620,7 +9636,7 @@ paths:
   /streams/restream/new:
     post:
       tags:
-      - Pull Streams
+      - Stream Info
       summary: Create Restream
       description: Create a restream
       operationId: createStreamsPull
@@ -10497,7 +10513,7 @@ paths:
   /streams/restream/{streamid}:
     get:
       tags:
-      - Pull Streams
+      - Stream Info
       summary: Stream
       description: Return the details of a restream
       operationId: getDetailsStreamsPull
@@ -11289,7 +11305,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Pull Streams
+      - Stream Info
       summary: Update Info
       description: Update information of a restream
       operationId: updatesStreamsPull
@@ -12072,7 +12088,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Pull Streams
+      - Stream Info
       summary: Delete Info
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamsPull
@@ -12110,7 +12126,7 @@ paths:
   /streams/restream/{streamid}/statistics:
     get:
       tags:
-      - Pull Streams
+      - Stream Health Check
       summary: Stream statistics
       description: Returns the details of a pull stream statistics
       operationId: getStreamsPullStatistics
@@ -12302,7 +12318,7 @@ paths:
   /streams/restream/{streamid}/source:
     post:
       tags:
-      - Pull Streams
+      - Encoder Credentials
       summary: Update Source
       operationId: updateSourceStreamsPull
       parameters:
@@ -13120,7 +13136,7 @@ paths:
   /streams/restream/{streamid}/domainlock:
     post:
       tags:
-      - Pull Streams
+      - Security - Domain Lock
       summary: Update Domain Lock
       description: Update domain lock of a restream
       operationId: updateDomainlockStreamsPull
@@ -13939,7 +13955,7 @@ paths:
   /streams/restream/{streamid}/securetoken:
     post:
       tags:
-      - Pull Streams
+      - Security - Secure Token
       summary: Update SecureToken
       description: Update secure token of a restream
       operationId: updateSecuretokenStreamsPull
@@ -14770,7 +14786,7 @@ paths:
   /streams/restream/{streamid}/geoblock:
     post:
       tags:
-      - Pull Streams
+      - Security - Geo Block
       summary: Update Geo Block
       operationId: updateGeoblockStreamsPull
       parameters:
@@ -15587,7 +15603,7 @@ paths:
   /streams/restream/{streamid}/record:
     post:
       tags:
-      - Pull Streams
+      - DVR
       summary: Update DVR
       description: Update DVR of a restream
       operationId: updateDvrStreamsPull
@@ -16395,7 +16411,7 @@ paths:
   /streams/restream/servers:
     get:
       tags:
-      - Pull Streams
+      - Encoder Credentials
       summary: Servers
       description: Return the list of servers of pull stream
       operationId: serversStreamsPull
@@ -16560,7 +16576,7 @@ paths:
   /streams/restream/{streamid}/restart:
     get:
       tags:
-      - Pull Streams
+      - Preview
       summary: Restart
       description: Restart a restream
       operationId: restartStreamsPull
@@ -16586,7 +16602,7 @@ paths:
   /streams/restream/{streamid}/restore:
     get:
       tags:
-      - Pull Streams
+      - Preview
       summary: Restore
       description: Restore a restream
       operationId: restoreStreamsPull
@@ -17174,7 +17190,7 @@ paths:
   /streams/restream/{streamid}/status:
     post:
       tags:
-      - Pull Streams
+      - Preview
       summary: Update status of stream
       description: Update status of stream
       operationId: statusStreamsRestream
@@ -17775,7 +17791,7 @@ paths:
   /streams/restream/{streamid}/transcode:
     post:
       tags:
-      - Pull Streams
+      - Transcode
       summary: Update transcode
       description: Update the transcode of a pull stream
       operationId: updatetranscodeStreamsPull
@@ -18607,7 +18623,7 @@ paths:
   /streams/restream/{streamid}/ndvr:
     post:
       tags:
-      - Pull Streams
+      - NDVR
       summary: Update NDVR
       operationId: updateNdvrStreamsPull
       parameters:
@@ -19419,7 +19435,7 @@ paths:
   /streams/restream/{streamid}/platforms:
     post:
       tags:
-      - Pull Streams
+      - Multistream Platforms
       summary: Add platform
       description: Add the platform of a pull stream
       operationId: addplatformStreamsPull
@@ -19441,7 +19457,7 @@ paths:
   /streams/restream/{streamid}/platform/{platformid}:
     post:
       tags:
-      - Pull Streams
+      - Multistream Platforms
       summary: Update platform
       description: Update the platform of a pull stream
       operationId: updateplatformStreamsPull
@@ -19463,7 +19479,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Pull Streams
+      - Multistream Platforms
       summary: Delete Info
       description: Delete the Platform of pull stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspull
@@ -19481,7 +19497,7 @@ paths:
   /streams/restream/{streamid}/platform/{platformid}/restart:
     get:
       tags:
-      - Pull Streams
+      - Multistream Platforms
       summary: Restart Platform
       description: Restart the platform of a pull stream
       operationId: restartplatformStreamsPull
@@ -19508,7 +19524,7 @@ paths:
   /streams/restream/{streamid}/platform/{platformid}/status:
     post:
       tags:
-      - Pull Streams
+      - Multistream Platforms
       summary: Update Platform Status
       description: Status the platform of a pull stream
       operationId: platformstatusStreamsPull
@@ -19540,7 +19556,7 @@ paths:
   /streams/abr:
     get:
       tags:
-      - Multi Bitrate Push Streams
+      - Stream Info
       summary: ABR
       description: List Multi Bitrate Push streams
       operationId: multiBitratePushlist
@@ -20261,7 +20277,7 @@ paths:
   /streams/abr/new:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Stream Info
       summary: Create ABR
       description: Create a new ABR stream
       operationId: multiBitratePushCreate
@@ -21144,7 +21160,7 @@ paths:
   /streams/abr/{streamid}:
     get:
       tags:
-      - Multi Bitrate Push Streams
+      - Stream Info
       summary: Stream
       description: Returns the details of an abr stream
       operationId: getDetailsMultiBitratePush
@@ -21857,7 +21873,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Stream Info
       summary: Update Info
       description: Update information of ABR stream.
       operationId: updateMultiBitratePush
@@ -22610,7 +22626,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Multi Bitrate Push Streams
+      - Stream Info
       summary: Delete Info
       description: Delete information of ABR stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteMultiBitratePush
@@ -22648,7 +22664,7 @@ paths:
   /streams/abr/{streamid}/status:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Preview
       summary: Update status of stream
       description: Update status of stream
       operationId: statusStreamsabr
@@ -23266,7 +23282,7 @@ paths:
   /streams/abr/{streamid}/domainlock:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Security - Domain Lock
       summary: Update Domain Lock
       operationId: updateDomainlockMultiBitratePush
       parameters:
@@ -24004,7 +24020,7 @@ paths:
   /streams/abr/{streamid}/geoblock:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Security - Geo Block
       summary: Update Geo Block
       description: Update Geoblock of ABR
       operationId: updateGeoblockMultiBitratePush
@@ -24796,7 +24812,7 @@ paths:
   /streams/abr/{streamid}/rtmpauth:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - Security - IP Access
       summary: Update RTMP Auth
       description: Update RTMP auth of ABR
       operationId: updateRtmpauthMultiBitratePush
@@ -25581,7 +25597,7 @@ paths:
   /streams/abr/{streamid}/record:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - DVR
       summary: Update Record
       description: Update Record ABR
       operationId: updateRecordMultiBitratePush
@@ -26363,7 +26379,7 @@ paths:
   /streams/abr/{streamid}/ndvr:
     post:
       tags:
-      - Multi Bitrate Push Streams
+      - NDVR
       summary: Update Ndvr
       description: Update Ndvr ABR
       operationId: updateNdvrMultiBitratePush
@@ -27146,7 +27162,7 @@ paths:
   /streams/abr/{streamid}/restart:
     get:
       tags:
-      - Multi Bitrate Push Streams
+      - Preview
       summary: Restart
       description: Restart ABR
       operationId: restartMultiBitratePush
@@ -27172,7 +27188,7 @@ paths:
   /streams/abr/{streamid}/restore:
     get:
       tags:
-      - Multi Bitrate Push Streams
+      - Preview
       summary: Restore
       description: Restore ABR Stream
       operationId: restoreMultiBitratePush
@@ -27784,7 +27800,7 @@ paths:
   /streams/publish:
     get:
       tags:
-      - Multistream Streams
+      - Stream Info
       summary: Restream List.
       description: Restream list
       operationId: restreamList
@@ -27806,7 +27822,7 @@ paths:
   /streams/publish/new:
     post:
       tags:
-      - Multistream Streams
+      - Stream Info
       summary: Create Restream
       description: Create new Restream (push or pull type)
       operationId: create-Restream
@@ -28329,7 +28345,7 @@ paths:
   /streams/publish/{streamid}:
     get:
       tags:
-      - Multistream Streams
+      - Stream Info
       summary: Return the details of restream.
       description: Return the details of restream.
       operationId: get-details-of-a-stream-restream
@@ -28345,7 +28361,7 @@ paths:
       deprecated: false
     post:
       tags:
-      - Multistream Streams
+      - Stream Info
       summary: Update Info of Restream
       description: Update information of Restream
       operationId: update-info-Restream
@@ -28366,7 +28382,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Multistream Streams
+      - Stream Info
       summary: Delete Info
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteRestream
@@ -28383,7 +28399,7 @@ paths:
   /streams/publish/{streamid}/statistics:
     get:
       tags:
-      - Multistream Streams
+      - Stream Health Check
       summary: Return the details of restream statistics
       description: Return the details of restream statistics
       operationId: getDetailsOfStreamRestreamStatistics
@@ -28451,7 +28467,7 @@ paths:
   /streams/publish/{streamid}/status:
     post:
       tags:
-      - Multistream Streams
+      - Preview
       summary: Update status of stream
       description: Update status of stream
       operationId: statusRestream
@@ -28887,7 +28903,7 @@ paths:
   /streams/publish/{streamid}/rtmpauth:
     post:
       tags:
-      - Multistream Streams
+      - Security - IP Access
       summary: Update RTMP Auth Restream
       description: Update RTMP auth of Restream
       operationId: update-rtmpauth-Restream
@@ -28909,7 +28925,7 @@ paths:
   /streams/publish/{streamid}/restore:
     get:
       tags:
-      - Multistream Streams
+      - Preview
       summary: Restore
       description: Restore publish stream
       operationId: restorePublishStream
@@ -29332,7 +29348,7 @@ paths:
   /streams/publish/{streamid}/restart:
     get:
       tags:
-      - Multistream Streams
+      - Preview
       summary: Restart
       description: Restart publish stream.
       operationId: restartPublishStream
@@ -29358,7 +29374,7 @@ paths:
   /streams/publish/{streamid}/transcode:
     post:
       tags:
-      - Multistream Streams
+      - Transcode
       summary: Update transcode
       description: Update the transcode of a publish stream
       operationId: updatetranscodeRestream
@@ -29874,7 +29890,7 @@ paths:
   /streams/publish/{streamid}/platforms:
     post:
       tags:
-      - Multistream Streams
+      - Multistream Platforms
       summary: Add platform
       description: Add the platform of a publish stream
       operationId: addplatformStreamspublish
@@ -29896,7 +29912,7 @@ paths:
   /streams/publish/{streamid}/platform/{platformid}:
     post:
       tags:
-      - Multistream Streams
+      - Multistream Platforms
       summary: Update platform
       description: Update the platform of a publish stream
       operationId: updateplatformscheduledplaylist
@@ -29918,7 +29934,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Multistream Streams
+      - Multistream Platforms
       summary: Delete Info
       description: Delete the Platform of publish stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformscheduledplaylist
@@ -29936,7 +29952,7 @@ paths:
   /streams/publish/{streamid}/platform/{platformid}/restart:
     post:
       tags:
-      - Multistream Streams
+      - Multistream Platforms
       summary: Restart Platform
       description: Restart the platform of a publish stream
       operationId: restartplatformscheduledplaylist
@@ -29954,7 +29970,7 @@ paths:
   /streams/publish/{streamid}/platform/{platformid}/status:
     post:
       tags:
-      - Multistream Streams
+      - Multistream Platforms
       summary: Update Platform Status
       description: Status the platform of a publish stream
       operationId: platformstatusscheduledplaylist
@@ -29986,7 +30002,7 @@ paths:
   /streams/push/{streamid}/adinsertion:
     put:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Enable ad insertion (push stream)
       description: 'Creates (or updates) the ad insertion record for the push stream.
 
@@ -30014,7 +30030,7 @@ paths:
           $ref: '#/components/responses/SuccessResult'
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Update ad insertion settings (push stream)
       description: 'Updates the ad insertion record for the push stream. The record must already
 
@@ -30040,7 +30056,7 @@ paths:
           $ref: '#/components/responses/SuccessResult'
     delete:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Delete ad insertion (push stream - not implemented)
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePush
@@ -30052,7 +30068,7 @@ paths:
   /streams/pull/{streamid}/adinsertion:
     put:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Enable ad insertion (pull stream)
       description: 'Creates (or updates) the ad insertion record for the pull stream.
 
@@ -30080,7 +30096,7 @@ paths:
           $ref: '#/components/responses/SuccessResult'
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Update ad insertion settings (pull stream)
       description: 'Updates the ad insertion record for the pull stream. The record must already
 
@@ -30106,7 +30122,7 @@ paths:
           $ref: '#/components/responses/SuccessResult'
     delete:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Delete ad insertion (pull stream - not implemented)
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePull
@@ -30118,7 +30134,7 @@ paths:
   /streams/push/{streamid}/adinsertion/server:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Configure ad server (push stream)
       description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
@@ -30154,7 +30170,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/server:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Configure ad server (pull stream)
       description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
@@ -30190,7 +30206,7 @@ paths:
   /streams/push/{streamid}/adinsertion/preroll:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Configure pre-roll ads (push stream)
       description: 'Enables or disables live ad pre-roll. When enabled is N the
 
@@ -30217,7 +30233,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/preroll:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Configure pre-roll ads (pull stream)
       description: 'Enables or disables live ad pre-roll. When enabled is N the
 
@@ -30244,7 +30260,7 @@ paths:
   /streams/push/{streamid}/adinsertion/replacement:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Configure ad replacement (push stream)
       description: 'Enables or disables live ad replacement. When enabled is N the
 
@@ -30285,7 +30301,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/replacement:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Configure ad replacement (pull stream)
       description: 'Enables or disables live ad replacement. When enabled is N the
 
@@ -30326,7 +30342,7 @@ paths:
   /streams/push/{streamid}/adinsertion/schedule:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Add ad break schedule (push stream)
       description: 'Adds a new ad break schedule. Two schedule types are supported.
 
@@ -30425,7 +30441,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/schedule:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Add ad break schedule (pull stream)
       description: 'Adds a new ad break schedule. Two schedule types are supported.
 
@@ -30523,7 +30539,7 @@ paths:
   /streams/push/{streamid}/adinsertion/schedule/{scheduleid}:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Update a schedule (push stream)
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePush
@@ -30580,7 +30596,7 @@ paths:
                     example: success
     delete:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Delete a schedule (push stream)
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePush
@@ -30630,7 +30646,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/schedule/{scheduleid}:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Update a schedule (pull stream)
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePull
@@ -30687,7 +30703,7 @@ paths:
                     example: success
     delete:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Delete a schedule (pull stream)
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePull
@@ -30737,7 +30753,7 @@ paths:
   /streams/push/{streamid}/adinsertion/triggers:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: List triggers (push stream)
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPush
@@ -30767,7 +30783,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/triggers:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: List triggers (pull stream)
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPull
@@ -30797,7 +30813,7 @@ paths:
   /streams/push/{streamid}/adinsertion/trigger/{triggerid}:
     delete:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Delete a trigger (push stream)
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPush
@@ -30823,7 +30839,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/trigger/{triggerid}:
     delete:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Delete a trigger (pull stream)
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPull
@@ -30849,7 +30865,7 @@ paths:
   /streams/push/{streamid}/adinsertion/cue-out:
     get:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Trigger cue-out / ad break start (push stream)
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPush
@@ -30872,7 +30888,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/cue-out:
     get:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Trigger cue-out / ad break start (pull stream)
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPull
@@ -30895,7 +30911,7 @@ paths:
   /streams/push/{streamid}/adinsertion/cue-in:
     get:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Trigger cue-in / return to content (push stream)
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPush
@@ -30911,7 +30927,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/cue-in:
     get:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Trigger cue-in / return to content (pull stream)
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPull
@@ -30927,7 +30943,7 @@ paths:
   /streams/push/{streamid}/adinsertion/consumption:
     post:
       tags:
-      - Push Streams
+      - Ad Insertion
       summary: Get ad insertion consumption (push stream)
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPush
@@ -30952,7 +30968,7 @@ paths:
   /streams/pull/{streamid}/adinsertion/consumption:
     post:
       tags:
-      - Pull Streams
+      - Ad Insertion
       summary: Get ad insertion consumption (pull stream)
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPull
