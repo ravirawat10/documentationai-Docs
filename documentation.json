@@ -40,8 +40,28 @@
             "pages": [
               {
                 "group": "Streaming",
-                "pages": [],
-                "openapi": "api-reference/Livestreams-Streaming-API.yaml"
+                "pages": [
+                  {
+                    "group": "Push Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Push-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Pull Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Pull-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Multi Bitrate Push Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-ABR-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Multistream Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Multistream-API.yaml"
+                  }
+                ]
               },
               {
                 "group": "Playback",
