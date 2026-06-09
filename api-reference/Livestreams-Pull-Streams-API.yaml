@@ -26,11 +26,11 @@ tags:
   description: Network DVR settings
 - name: DVR
   description: DVR recording settings
-- name: Security - Domain Lock
+- name: Domain Lock
   description: Domain lock security settings
-- name: Security - Geo Block
+- name: Geo Block
   description: Geographic blocking security settings
-- name: Security - Secure Token
+- name: Secure Token
   description: Secure token authentication settings
 - name: Platforms
   description: Multistream platform management
@@ -4358,7 +4358,7 @@ paths:
   /streams/restream/{streamid}/domainlock:
     post:
       tags:
-      - Security - Domain Lock
+      - Domain Lock
       summary: Update Domain Lock
       description: Update domain lock of a restream
       operationId: updateDomainlockStreamsPull
@@ -5177,7 +5177,7 @@ paths:
   /streams/restream/{streamid}/securetoken:
     post:
       tags:
-      - Security - Secure Token
+      - Secure Token
       summary: Update SecureToken
       description: Update secure token of a restream
       operationId: updateSecuretokenStreamsPull
@@ -6008,7 +6008,7 @@ paths:
   /streams/restream/{streamid}/geoblock:
     post:
       tags:
-      - Security - Geo Block
+      - Geo Block
       summary: Update Geo Block
       operationId: updateGeoblockStreamsPull
       parameters:

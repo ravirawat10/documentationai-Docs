@@ -22,11 +22,11 @@ tags:
   description: Network DVR settings
 - name: DVR
   description: DVR recording settings
-- name: Security - Domain Lock
+- name: Domain Lock
   description: Domain lock security settings
-- name: Security - Geo Block
+- name: Geo Block
   description: Geographic blocking security settings
-- name: Security - IP Access
+- name: IP Access
   description: RTMP / IP access control
 paths:
   /streams/abr:
@@ -3758,7 +3758,7 @@ paths:
   /streams/abr/{streamid}/domainlock:
     post:
       tags:
-      - Security - Domain Lock
+      - Domain Lock
       summary: Update Domain Lock
       operationId: updateDomainlockMultiBitratePush
       parameters:
@@ -4496,7 +4496,7 @@ paths:
   /streams/abr/{streamid}/geoblock:
     post:
       tags:
-      - Security - Geo Block
+      - Geo Block
       summary: Update Geo Block
       description: Update Geoblock of ABR
       operationId: updateGeoblockMultiBitratePush
@@ -5288,7 +5288,7 @@ paths:
   /streams/abr/{streamid}/rtmpauth:
     post:
       tags:
-      - Security - IP Access
+      - IP Access
       summary: Update RTMP Auth
       description: Update RTMP auth of ABR
       operationId: updateRtmpauthMultiBitratePush

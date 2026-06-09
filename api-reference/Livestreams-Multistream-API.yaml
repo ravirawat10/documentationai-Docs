@@ -20,7 +20,7 @@ tags:
   description: Transcoding profile settings
 - name: Statistics
   description: Stream health and performance statistics
-- name: Security - IP Access
+- name: IP Access
   description: RTMP / IP access control
 - name: Platform Management
   description: Platform management for Multistream streams
@@ -1131,7 +1131,7 @@ paths:
   /streams/publish/{streamid}/rtmpauth:
     post:
       tags:
-      - Security - IP Access
+      - IP Access
       summary: Update RTMP Auth Restream
       description: Update RTMP auth of Restream
       operationId: update-rtmpauth-Restream
