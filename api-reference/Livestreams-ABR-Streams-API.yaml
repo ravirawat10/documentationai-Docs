@@ -23,9 +23,7 @@ tags:
 - name: DVR
   description: DVR recording settings
 - name: Security
-  description: Domain lock security settings
-  description: Geographic blocking security settings
-  description: RTMP / IP access control
+  description: Security settings (domain lock, geo block, IP access)
 paths:
   /streams/abr:
     get:

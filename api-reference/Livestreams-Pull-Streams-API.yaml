@@ -27,9 +27,7 @@ tags:
 - name: DVR
   description: DVR recording settings
 - name: Security
-  description: Domain lock security settings
-  description: Geographic blocking security settings
-  description: Secure token authentication settings
+  description: Security settings (domain lock, geo block, secure token)
 - name: Platforms
   description: Multistream platform management
 - name: Ad Insertion
