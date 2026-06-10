@@ -65,8 +65,23 @@
               },
               {
                 "group": "Playback",
-                "pages": [],
-                "openapi": "api-reference/Livestreams-Playback-API.yaml"
+                "pages": [
+                  {
+                    "group": "DVR",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-DVR-API.yaml"
+                  },
+                  {
+                    "group": "Delayed Stream",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-DelayedStream-API.yaml"
+                  },
+                  {
+                    "group": "Scheduled Playlist",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-ScheduledPlaylist-API.yaml"
+                  }
+                ]
               },
               {
                 "group": "Reports",
