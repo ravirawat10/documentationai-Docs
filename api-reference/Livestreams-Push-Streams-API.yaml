@@ -26,13 +26,10 @@ tags:
   description: Network DVR settings
 - name: DVR
   description: DVR recording settings
-- name: Domain Lock
+- name: Security
   description: Domain lock security settings
-- name: Geo Block
   description: Geographic blocking security settings
-- name: IP Access
   description: RTMP / IP access control
-- name: Secure Token
   description: Secure token authentication settings
 - name: Platforms
   description: Multistream platform management
@@ -3499,7 +3496,7 @@ paths:
   /streams/push/{streamid}/domainlock:
     post:
       tags:
-      - Domain Lock
+      - Security
       summary: Update Domain Lock
       description: Update the domainlock of a publish stream
       operationId: updatedomainlockStreamsPush
@@ -3521,7 +3518,7 @@ paths:
   /streams/push/{streamid}/geoblock:
     post:
       tags:
-      - Geo Block
+      - Security
       summary: Update Geo Block
       description: Update the geoblock of a push stream
       operationId: updategeoblockStreamsPush
@@ -4262,7 +4259,7 @@ paths:
   /streams/push/{streamid}/securetoken:
     post:
       tags:
-      - Secure Token
+      - Security
       summary: Update Secure Token
       description: Update secure token of a push stream
       operationId: updateSecureTokenStreamsPush
@@ -5016,7 +5013,7 @@ paths:
   /streams/push/{streamid}/rtmpauth:
     post:
       tags:
-      - IP Access
+      - Security
       summary: Update RTMPAuth
       description: Update RTMPAuth of push stream
       operationId: updateRtmpauthStreamsPush

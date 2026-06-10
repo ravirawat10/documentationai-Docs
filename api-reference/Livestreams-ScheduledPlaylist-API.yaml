@@ -20,10 +20,7 @@ tags:
 - name: Transcoding
 - name: Stream Health Check
 - name: Multistream Platforms
-- name: Domain Lock
-- name: Geo Block
-- name: IP Access
-- name: Secure Token
+- name: Security
 paths:
   /streams/scheduledplaylist:
     get:
@@ -4169,7 +4166,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/securetoken:
     post:
       tags:
-      - Secure Token
+      - Security
       summary: Update Secure Token
       description: Update secure token of a scheduled playlist.
       operationId: updateSecureTokenScheduledPlaylist
@@ -5086,7 +5083,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/rtmpauth:
     post:
       tags:
-      - IP Access
+      - Security
       summary: Update RTMPAuth
       description: Update RTMP auth of a scheduled playlist.
       operationId: updateRtmpauthScheduledPlaylist
@@ -5979,7 +5976,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/geoblock:
     post:
       tags:
-      - Geo Block
+      - Security
       summary: Update Geo Block
       description: Update geoblock of scheduled playlist
       operationId: updateGeoblockScheduledPlaylist
@@ -6883,7 +6880,7 @@ paths:
   /streams/scheduledplaylist/{streamid}/domainlock:
     post:
       tags:
-      - Domain Lock
+      - Security
       summary: Update Domain Lock
       description: Update domain lock of scheduled playlist.
       operationId: updateDomainlockScheduledPlaylist

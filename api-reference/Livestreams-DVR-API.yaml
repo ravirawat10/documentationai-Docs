@@ -19,9 +19,7 @@ tags:
 - name: Export
 - name: Auto Export
 - name: Stream Health Check
-- name: Domain Lock
-- name: Geo Block
-- name: Secure Token
+- name: Security
 paths:
   /streams/record:
     get:
@@ -2788,7 +2786,7 @@ paths:
   /streams/record/{streamid}/domainlock:
     post:
       tags:
-      - Domain Lock
+      - Security
       summary: Update Domain Lock
       description: Update Domainlock of a record stream
       operationId: updateDomainlockDvrStream
@@ -3499,7 +3497,7 @@ paths:
   /streams/record/{streamid}/securetoken:
     post:
       tags:
-      - Secure Token
+      - Security
       summary: Update Secure Token
       description: Update Secure token of record stream.
       operationId: updateSecureTokenStreamsRecord
@@ -4222,7 +4220,7 @@ paths:
   /streams/record/{streamid}/geoblock:
     post:
       tags:
-      - Geo Block
+      - Security
       summary: Update Geo Block
       description: Update geo block of record stream
       operationId: updateGeoblockStreamsRecord

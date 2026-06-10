@@ -18,9 +18,7 @@ tags:
 - name: Preview
 - name: Stream Health Check
 - name: Multistream Platforms
-- name: Domain Lock
-- name: Geo Block
-- name: Secure Token
+- name: Security
 paths:
   /streams/timeshift/new:
     post:
@@ -3332,7 +3330,7 @@ paths:
   /streams/timeshift/{streamid}/securetoken:
     post:
       tags:
-      - Secure Token
+      - Security
       summary: Update Secure Token
       description: Update secure token of a delayed stream
       operationId: updateSecureDelayedStream
@@ -4013,7 +4011,7 @@ paths:
   /streams/timeshift/{streamid}/geoblock:
     post:
       tags:
-      - Geo Block
+      - Security
       summary: Update Geo Block
       description: Update Geo block of a delayed stream
       operationId: updateGeoblockDelayedStream
@@ -4735,7 +4733,7 @@ paths:
   /streams/timeshift/{streamid}/domainlock:
     post:
       tags:
-      - Domain Lock
+      - Security
       summary: Update Domain Lock
       description: Update domainlock of a delayed stream.
       operationId: updateDomainlockDelayedStream
