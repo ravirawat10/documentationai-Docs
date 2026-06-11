@@ -1,0 +1,211 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Transcoding API
+  description: >
+    Transcoding management endpoints for the 5centsCDN platform.
+    Covers video encoding job management, encoding preset profile management,
+    configurable video filters, and encode-completion notification settings.
+    Authentication is via API key header (X-API-Key) for the public API, and
+    WHMCS session cookie (WHMCSUID) for the dashboard routes.
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+
+security:
+- ApiKeyAuth: []
+
+tags:
+- name: Notifications
+  description: Email and webhook notification configuration for encode-completion events.
+paths:
+  /transcoding/notifications/defaults:
+    post:
+      tags:
+      - Notifications
+      summary: Save Notification Emails and Webhook URLs
+      description: >
+        Updates email addresses and webhook URLs for encode-completion
+        notifications. The emails field is a comma-separated list of email
+        addresses; webhooks is a comma-separated list of HTTP/HTTPS URLs.
+      operationId: updateNotifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: string
+                  description: >
+                    Comma-separated list of email addresses to receive
+                    encode-completion notifications.
+                  example: "admin@example.com,ops@example.com"
+                webhooks:
+                  type: string
+                  description: >
+                    Comma-separated list of HTTP/HTTPS URLs to POST
+                    encode-completion payloads to.
+                  example: "https://hooks.example.com/encode,https://api.example.com/notify"
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: API response status.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable result or error message.
+                    example: Transcoding Settings Updated
+
+  /transcoding/notifications/resend:
+    post:
+      tags:
+      - Notifications
+      summary: Resend Encode-Completion Webhook Notification
+      description: >
+        Looks up a completed encode job and re-POSTs the original completion
+        payload to all configured webhook URLs. Exactly one of index, infile,
+        or outfile must be provided along with zoneid.
+      operationId: resendNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - zoneid
+              - index
+              properties:
+                zoneid:
+                  type: integer
+                  description: Zone ID for which the notification should be resent.
+                  example: 1234
+                index:
+                  type: integer
+                  description: Index of the transcoding job notification to resend.
+                  example: 0
+      responses:
+        '200':
+          description: Array of webhook call results.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    time:
+                      type: integer
+                      description: Unix timestamp of the call.
+                      example: 1742810400
+                    hook:
+                      type: string
+                      description: Webhook URL that was called.
+                      example: "https://hooks.example.com/encode"
+                    body:
+                      type: array
+                      description: JSON payload posted to the webhook.
+                      items:
+                        type: object
+                    respCode:
+                      type: integer
+                      description: HTTP response status code from the webhook endpoint.
+                      example: 200
+                    respBody:
+                      type: string
+                      description: HTTP response body from the webhook endpoint.
+                      example: "OK"
+                    error:
+                      type: string
+                      description: Exception message if the HTTP call threw an exception.
+        '400':
+          description: Lookup or configuration error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message if the encoding job failed.
+                    example: "No Match Found"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    zoneIdParam:
+      name: zoneId
+      in: path
+      description: ID of the Push Zone (`fs_pushzones.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 15
+
+    jobIdParam:
+      name: jobid
+      in: path
+      description: ID of the Video Encoding job (Beanstalkd job ID stored in `fs_encodejobs.jobid`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 10042
+
+    profileIdParam:
+      name: profileid
+      in: path
+      description: ID of the Transcode Profile (`fs_transcodeprofiles.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 7
+
+    filterIdParam:
+      name: filterid
+      in: path
+      description: ID of the Transcoding Filter (`fs_transcodefilters.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 3
+
+  schemas:
+    createProfileCombined:
+      type: object
+
+    editProfileCombined:
+      type: object
+
+    createFileTranscodingFilter:
+      type: object
+
+    editFileTranscodingFilter:
+      type: object

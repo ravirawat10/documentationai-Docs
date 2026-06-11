@@ -22,11 +22,13 @@ security:
 - ApiKeyAuth: []
 
 tags:
-- name: Video Encoding Jobs
+- name: Jobs
   description: Manage active, pending, and historical video encoding jobs.
-- name: Video Encoding Profiles
-  description: Manage encoding preset profiles and configurable video filters.
-- name: Transcoding Notifications
+- name: Preset Profile
+  description: Manage encoding preset profiles for transcoding jobs.
+- name: Filter
+  description: Manage configurable video filters applied to transcoding profiles.
+- name: Notifications
   description: Email and webhook notification configuration for encode-completion events.
 
 paths:
@@ -37,7 +39,7 @@ paths:
   /transcoding:
     get:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: List All Encoding Jobs (current)
       description: List all encoding jobs for the service. No date filter — returns all.
       operationId: listEncodingJobs
@@ -1149,7 +1151,7 @@ paths:
                         example: 0
     post:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: List Jobs / Get Job Details
       description: >
         Multi-purpose POST endpoint. Behaviour depends on body content:
@@ -1253,7 +1255,7 @@ paths:
   /transcoding/jobs:
     get:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: List Active Video Encoding Jobs
       description: List all active / pending video encoding job queue for the service.
       operationId: getEncodingJobs
@@ -1424,7 +1426,7 @@ paths:
   /transcoding/jobs/{zoneId}:
     get:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: Get Active Jobs for a Zone
       description: List all active encoding jobs for a specific zone.
       operationId: getEncodingJobsByZone
@@ -1597,7 +1599,7 @@ paths:
   /transcoding/jobs/{profileid}:
     post:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: Add Video Encoding Job
       description: Add a file encoding job.
       operationId: addEncodingJob
@@ -1644,7 +1646,7 @@ paths:
   /transcoding/jobs/retry/{jobid}:
     get:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: Retry Encoding Job
       description: Retry an encoding job after fixing issues.
       operationId: retryEncodingJob
@@ -1670,7 +1672,7 @@ paths:
   /transcoding/jobs/cancel/{jobid}:
     get:
       tags:
-      - Video Encoding Jobs
+      - Jobs
       summary: Cancel Encoding Job
       description: >
         Cancel an encoding job. Jobs can only be cancelled before they are processed.
@@ -1700,7 +1702,7 @@ paths:
   /transcoding/profiles:
     get:
       tags:
-      - Video Encoding Profiles
+      - Preset Profile
       summary: List File Transcoding Profiles
       description: List all file transcoding profiles for the service.
       operationId: profilesList
@@ -2248,7 +2250,7 @@ paths:
   /transcoding/profiles/defaults:
     post:
       tags:
-      - Video Encoding Profiles
+      - Preset Profile
       summary: Create Global Auto Transcode Preset Profiles
       description: These presets will be automatically added to your new zones.
       operationId: createAutoTranscodeProfiles
@@ -2287,7 +2289,7 @@ paths:
   /transcoding/profiles/new:
     post:
       tags:
-      - Video Encoding Profiles
+      - Preset Profile
       summary: Create Transcoding Profile
       description: Create a new transcoding profile.
       operationId: createTranscodingProfile
@@ -2481,7 +2483,7 @@ paths:
   /transcoding/profiles/{profileid}:
     post:
       tags:
-      - Video Encoding Profiles
+      - Preset Profile
       summary: Edit Transcoding Profile
       description: Edit an existing transcoding profile.
       operationId: editTranscodingProfile
@@ -2668,7 +2670,7 @@ paths:
                     example: Transcoding Settings Updated
     delete:
       tags:
-      - Video Encoding Profiles
+      - Preset Profile
       summary: Delete Transcoding Profile
       description: >
         Delete the information of a transcoding profile. To cast request method
@@ -2714,7 +2716,7 @@ paths:
   /transcoding/filters:
     get:
       tags:
-      - Video Encoding Profiles
+      - Filter
       summary: List File Transcoding Filters
       description: List all file transcoding filters for the service.
       operationId: listVideoTranscodingFilters
@@ -3336,7 +3338,7 @@ paths:
   /transcoding/filters/new:
     post:
       tags:
-      - Video Encoding Profiles
+      - Filter
       summary: Create File Transcoding Filter
       description: Create a new file transcoding filter.
       operationId: createVideoTranscodingFilter
@@ -3419,7 +3421,7 @@ paths:
   /transcoding/filters/{filterid}:
     post:
       tags:
-      - Video Encoding Profiles
+      - Filter
       summary: Edit Transcoding Profile Filter
       description: Edit an existing transcoding profile filter.
       operationId: editVideoTranscodingFilter
@@ -3490,7 +3492,7 @@ paths:
                     example: Transcoding Settings Updated
     delete:
       tags:
-      - Video Encoding Profiles
+      - Filter
       summary: Delete Transcoding Profile Filter
       description: >
         Delete the information of a transcoding profile filter. To cast request
@@ -3536,7 +3538,7 @@ paths:
   /transcoding/notifications/defaults:
     post:
       tags:
-      - Transcoding Notifications
+      - Notifications
       summary: Save Notification Emails and Webhook URLs
       description: >
         Updates email addresses and webhook URLs for encode-completion
@@ -3582,7 +3584,7 @@ paths:
   /transcoding/notifications/resend:
     post:
       tags:
-      - Transcoding Notifications
+      - Notifications
       summary: Resend Encode-Completion Webhook Notification
       description: >
         Looks up a completed encode job and re-POSTs the original completion

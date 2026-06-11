@@ -112,8 +112,33 @@
           },
           {
             "group": "Video Encoding",
-            "pages": [],
-            "openapi": "api-reference/Transcoding-API.yaml"
+            "pages": [
+              {
+                "group": "Jobs",
+                "pages": [],
+                "openapi": "api-reference/Transcoding-Jobs-API.yaml"
+              },
+              {
+                "group": "Preset Profiles / Filters",
+                "pages": [
+                  {
+                    "group": "Preset Profiles",
+                    "pages": [],
+                    "openapi": "api-reference/Transcoding-Profiles-API.yaml"
+                  },
+                  {
+                    "group": "Filters",
+                    "pages": [],
+                    "openapi": "api-reference/Transcoding-Filters-API.yaml"
+                  }
+                ]
+              },
+              {
+                "group": "Notifications",
+                "pages": [],
+                "openapi": "api-reference/Transcoding-Notifications-API.yaml"
+              }
+            ]
           },
           {
             "group": "SimpleDNS",
