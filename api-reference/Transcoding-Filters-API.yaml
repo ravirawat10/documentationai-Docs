@@ -21,14 +21,9 @@ servers:
 security:
 - ApiKeyAuth: []
 
-tags:
-- name: Filters
-  description: Manage configurable video filters applied to transcoding profiles.
 paths:
   /transcoding/filters:
     get:
-      tags:
-      - Filters
       summary: List File Transcoding Filters
       description: List all file transcoding filters for the service.
       operationId: listVideoTranscodingFilters
@@ -649,8 +644,6 @@ paths:
 
   /transcoding/filters/new:
     post:
-      tags:
-      - Filters
       summary: Create File Transcoding Filter
       description: Create a new file transcoding filter.
       operationId: createVideoTranscodingFilter
@@ -732,8 +725,6 @@ paths:
 
   /transcoding/filters/{filterid}:
     post:
-      tags:
-      - Filters
       summary: Edit Transcoding Profile Filter
       description: Edit an existing transcoding profile filter.
       operationId: editVideoTranscodingFilter
@@ -803,8 +794,6 @@ paths:
                     description: Human-readable result or error message.
                     example: Transcoding Settings Updated
     delete:
-      tags:
-      - Filters
       summary: Delete Transcoding Profile Filter
       description: >
         Delete the information of a transcoding profile filter. To cast request

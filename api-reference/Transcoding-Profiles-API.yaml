@@ -21,14 +21,9 @@ servers:
 security:
 - ApiKeyAuth: []
 
-tags:
-- name: Preset Profiles
-  description: Manage encoding preset profiles for transcoding jobs.
 paths:
   /transcoding/profiles:
     get:
-      tags:
-      - Preset Profiles
       summary: List File Transcoding Profiles
       description: List all file transcoding profiles for the service.
       operationId: profilesList
@@ -575,8 +570,6 @@ paths:
 
   /transcoding/profiles/defaults:
     post:
-      tags:
-      - Preset Profiles
       summary: Create Global Auto Transcode Preset Profiles
       description: These presets will be automatically added to your new zones.
       operationId: createAutoTranscodeProfiles
@@ -614,8 +607,6 @@ paths:
 
   /transcoding/profiles/new:
     post:
-      tags:
-      - Preset Profiles
       summary: Create Transcoding Profile
       description: Create a new transcoding profile.
       operationId: createTranscodingProfile
@@ -808,8 +799,6 @@ paths:
 
   /transcoding/profiles/{profileid}:
     post:
-      tags:
-      - Preset Profiles
       summary: Edit Transcoding Profile
       description: Edit an existing transcoding profile.
       operationId: editTranscodingProfile
@@ -995,8 +984,6 @@ paths:
                     description: Human-readable result or error message.
                     example: Transcoding Settings Updated
     delete:
-      tags:
-      - Preset Profiles
       summary: Delete Transcoding Profile
       description: >
         Delete the information of a transcoding profile. To cast request method

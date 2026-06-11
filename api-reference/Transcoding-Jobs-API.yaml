@@ -21,14 +21,9 @@ servers:
 security:
 - ApiKeyAuth: []
 
-tags:
-- name: Jobs
-  description: Manage active, pending, and historical video encoding jobs.
 paths:
   /transcoding:
     get:
-      tags:
-      - Jobs
       summary: List All Encoding Jobs (current)
       description: List all encoding jobs for the service. No date filter — returns all.
       operationId: listEncodingJobs
@@ -1139,8 +1134,6 @@ paths:
                         description: Number of currently active or in-progress encoding jobs.
                         example: 0
     post:
-      tags:
-      - Jobs
       summary: List Jobs / Get Job Details
       description: >
         Multi-purpose POST endpoint. Behaviour depends on body content:
@@ -1243,8 +1236,6 @@ paths:
   # ---------------------------------------------------------------------------
   /transcoding/jobs:
     get:
-      tags:
-      - Jobs
       summary: List Active Video Encoding Jobs
       description: List all active / pending video encoding job queue for the service.
       operationId: getEncodingJobs
@@ -1414,8 +1405,6 @@ paths:
 
   /transcoding/jobs/{zoneId}:
     get:
-      tags:
-      - Jobs
       summary: Get Active Jobs for a Zone
       description: List all active encoding jobs for a specific zone.
       operationId: getEncodingJobsByZone
@@ -1587,8 +1576,6 @@ paths:
 
   /transcoding/jobs/{profileid}:
     post:
-      tags:
-      - Jobs
       summary: Add Video Encoding Job
       description: Add a file encoding job.
       operationId: addEncodingJob
@@ -1634,8 +1621,6 @@ paths:
 
   /transcoding/jobs/retry/{jobid}:
     get:
-      tags:
-      - Jobs
       summary: Retry Encoding Job
       description: Retry an encoding job after fixing issues.
       operationId: retryEncodingJob
@@ -1660,8 +1645,6 @@ paths:
 
   /transcoding/jobs/cancel/{jobid}:
     get:
-      tags:
-      - Jobs
       summary: Cancel Encoding Job
       description: >
         Cancel an encoding job. Jobs can only be cancelled before they are processed.

@@ -21,14 +21,9 @@ servers:
 security:
 - ApiKeyAuth: []
 
-tags:
-- name: Notifications
-  description: Email and webhook notification configuration for encode-completion events.
 paths:
   /transcoding/notifications/defaults:
     post:
-      tags:
-      - Notifications
       summary: Save Notification Emails and Webhook URLs
       description: >
         Updates email addresses and webhook URLs for encode-completion
@@ -73,8 +68,6 @@ paths:
 
   /transcoding/notifications/resend:
     post:
-      tags:
-      - Notifications
       summary: Resend Encode-Completion Webhook Notification
       description: >
         Looks up a completed encode job and re-POSTs the original completion
