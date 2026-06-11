@@ -855,7 +855,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Create Restream
+      summary: Create Pull Stream
       description: Create a restream
       operationId: createStreamsPull
       requestBody:
@@ -1732,7 +1732,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Stream
+      summary: Get Pull Stream
       description: Return the details of a restream
       operationId: getDetailsStreamsPull
       parameters:
@@ -2524,7 +2524,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Info
+      summary: Update Pull Stream
       description: Update information of a restream
       operationId: updatesStreamsPull
       parameters:
@@ -3307,7 +3307,7 @@ paths:
     delete:
       tags:
       - Stream Management
-      summary: Delete Info
+      summary: Delete Pull Stream
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamsPull
       parameters:
@@ -3345,7 +3345,7 @@ paths:
     get:
       tags:
       - Statistics
-      summary: Stream statistics
+      summary: Get Stream Statistics
       description: Returns the details of a pull stream statistics
       operationId: getStreamsPullStatistics
       parameters:
@@ -3537,7 +3537,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Source
+      summary: Update Source URL
       operationId: updateSourceStreamsPull
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
@@ -5174,7 +5174,7 @@ paths:
     post:
       tags:
       - Security
-      summary: Update SecureToken
+      summary: Update Secure Token
       description: Update secure token of a restream
       operationId: updateSecuretokenStreamsPull
       parameters:
@@ -6822,7 +6822,7 @@ paths:
     post:
       tags:
       - DVR
-      summary: Update DVR
+      summary: Update DVR Settings
       description: Update DVR of a restream
       operationId: updateDvrStreamsPull
       parameters:
@@ -7630,7 +7630,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Servers
+      summary: List Servers
       description: Return the list of servers of pull stream
       operationId: serversStreamsPull
       responses:
@@ -7795,7 +7795,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restart
+      summary: Restart Stream
       description: Restart a restream
       operationId: restartStreamsPull
       parameters:
@@ -7821,7 +7821,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restore
+      summary: Restore Stream
       description: Restore a restream
       operationId: restoreStreamsPull
       parameters:
@@ -8409,7 +8409,7 @@ paths:
     post:
       tags:
       - Playback
-      summary: Update status of stream
+      summary: Enable / Disable Stream
       description: Update status of stream
       operationId: statusStreamsRestream
       parameters:
@@ -9010,7 +9010,7 @@ paths:
     post:
       tags:
       - Transcoding
-      summary: Update transcode
+      summary: Update Transcoding Profile
       description: Update the transcode of a pull stream
       operationId: updatetranscodeStreamsPull
       parameters:
@@ -9842,7 +9842,7 @@ paths:
     post:
       tags:
       - NDVR
-      summary: Update NDVR
+      summary: Update NDVR Settings
       operationId: updateNdvrStreamsPull
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
@@ -10654,7 +10654,7 @@ paths:
     post:
       tags:
       - Platforms
-      summary: Add platform
+      summary: Add Platform
       description: Add the platform of a pull stream
       operationId: addplatformStreamsPull
       parameters:
@@ -10676,7 +10676,7 @@ paths:
     post:
       tags:
       - Platforms
-      summary: Update platform
+      summary: Update Platform
       description: Update the platform of a pull stream
       operationId: updateplatformStreamsPull
       parameters:
@@ -10698,7 +10698,7 @@ paths:
     delete:
       tags:
       - Platforms
-      summary: Delete Info
+      summary: Delete Platform
       description: Delete the Platform of pull stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspull
       parameters:
@@ -10775,7 +10775,7 @@ paths:
     put:
       tags:
       - Ad Insertion
-      summary: Enable ad insertion (pull stream)
+      summary: Enable Ad Insertion
       description: 'Creates (or updates) the ad insertion record for the pull stream.
 
         Requires the service to have **Advanced Features** enabled and an
@@ -10803,7 +10803,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Update ad insertion settings (pull stream)
+      summary: Update Ad Insertion Settings
       description: 'Updates the ad insertion record for the pull stream. The record must already
 
         exist (i.e. ad insertion must have been enabled with PUT first).
@@ -10829,7 +10829,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete ad insertion (pull stream - not implemented)
+      summary: Delete Ad Insertion
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePull
       parameters:
@@ -10841,7 +10841,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure ad server (pull stream)
+      summary: Configure Ad Server
       description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
         origin headers. Triggers a stream-adserver provisioning job.
@@ -10877,7 +10877,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure pre-roll ads (pull stream)
+      summary: Configure Pre-Roll Ads
       description: 'Enables or disables live ad pre-roll. When enabled is N the
 
         pre-roll configuration is removed entirely.
@@ -10904,7 +10904,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure ad replacement (pull stream)
+      summary: Configure Ad Replacement
       description: 'Enables or disables live ad replacement. When enabled is N the
 
         replacement configuration is removed entirely.
@@ -10945,7 +10945,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Add ad break schedule (pull stream)
+      summary: Add Ad Break Schedule
       description: 'Adds a new ad break schedule. Two schedule types are supported.
 
         Maximum 10 schedules per stream.
@@ -11043,7 +11043,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Update a schedule (pull stream)
+      summary: Update Ad Break Schedule
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePull
       parameters:
@@ -11100,7 +11100,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete a schedule (pull stream)
+      summary: Delete Ad Break Schedule
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePull
       parameters:
@@ -11150,7 +11150,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: List triggers (pull stream)
+      summary: List Ad Triggers
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPull
       parameters:
@@ -11180,7 +11180,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete a trigger (pull stream)
+      summary: Delete Ad Trigger
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPull
       parameters:
@@ -11206,7 +11206,7 @@ paths:
     get:
       tags:
       - Ad Insertion
-      summary: Trigger cue-out / ad break start (pull stream)
+      summary: Trigger Cue-Out
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPull
       parameters:
@@ -11229,7 +11229,7 @@ paths:
     get:
       tags:
       - Ad Insertion
-      summary: Trigger cue-in / return to content (pull stream)
+      summary: Trigger Cue-In
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPull
       parameters:
@@ -11245,7 +11245,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Get ad insertion consumption (pull stream)
+      summary: Get Ad Consumption
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPull
       parameters:

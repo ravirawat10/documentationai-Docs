@@ -22,7 +22,7 @@ paths:
       operationId: getRecordingMinutes
       tags:
       - Live Transcoding Profiles/Filters
-      summary: Recording Minutes
+      summary: Get DVR Recording Report
       requestBody:
         content:
           application/json:
@@ -120,7 +120,7 @@ paths:
     post:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: add stream profiles setting
+      summary: Create Transcoding Profile
       description: add stream profiles setting
       operationId: settings-stream-profiles-add
       requestBody:
@@ -153,7 +153,7 @@ paths:
     post:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: update stream profiles setting
+      summary: Update Transcoding Profile
       description: update stream profiles setting
       operationId: settings-stream-profiles-update
       parameters:
@@ -331,7 +331,7 @@ paths:
     delete:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: Delete Info
+      summary: Delete Transcoding Profile
       description: Delete the profile of stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletestreamprofile
       parameters:
@@ -369,7 +369,7 @@ paths:
     get:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: List File Transcoding Filters
+      summary: List Transcoding Filters
       description: List File Transcoding Filters
       operationId: transcodingFileFilter
       responses:
@@ -481,7 +481,7 @@ paths:
     post:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: Create File Transcoding Filters
+      summary: Create Transcoding Filter
       description: Create File Transcoding Filters
       operationId: createFileTranscodingFilter
       requestBody:
@@ -614,7 +614,7 @@ paths:
     post:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: Edit Transcoding Profile Filter
+      summary: Update Transcoding Filter
       description: Edit Transcoding Profile Filter
       operationId: editTranscodingProfileFilter
       parameters:
@@ -690,7 +690,7 @@ paths:
     delete:
       tags:
       - Live Transcoding Profiles/Filters
-      summary: Delete Transcoding Profile Filter
+      summary: Delete Transcoding Filter
       description: Delete the information of Transcoding Profile filter. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteTranscodingProfileFilter
       parameters:

@@ -21,7 +21,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream domain setting
+      summary: Update Domain Lock Settings
       description: update stream domain setting
       operationId: settings-stream-domain
       requestBody:
@@ -50,7 +50,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update streams geoblock setting
+      summary: Update Geo Block Settings
       description: update streams geoblock setting
       operationId: settings-streams-geoblock
       requestBody:
@@ -79,7 +79,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream securetoken setting
+      summary: Update Secure Token Settings
       description: update stream securetoken setting
       operationId: settings-stream-securetoken
       requestBody:
@@ -108,7 +108,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream rtmpauth setting
+      summary: Update IP Access Settings
       description: update stream rtmpauth setting
       operationId: settings-stream-rtmpauth
       requestBody:
@@ -137,7 +137,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream record setting
+      summary: Update DVR Settings
       description: update stream record setting
       operationId: settings-stream-record
       requestBody:
@@ -166,7 +166,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream ndvr setting
+      summary: Update NDVR Settings
       description: update stream ndvr setting
       operationId: settings-stream-ndvr
       requestBody:
@@ -195,7 +195,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream cname setting
+      summary: Update CNAME Settings
       description: update stream cname setting
       operationId: settings-stream-cname
       requestBody:
@@ -224,7 +224,7 @@ paths:
     post:
       tags:
       - Global Settings
-      summary: update stream hash setting
+      summary: Update Hash Settings
       description: update stream hash setting
       operationId: settings-stream-hash
       requestBody:

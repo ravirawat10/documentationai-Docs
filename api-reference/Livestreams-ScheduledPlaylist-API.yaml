@@ -26,7 +26,7 @@ paths:
     get:
       tags:
       - Stream Info
-      summary: Stream
+      summary: List Scheduled Playlists
       description: scheduledplaylist.
       operationId: scheduledPlayList
       parameters:
@@ -2148,7 +2148,7 @@ paths:
     get:
       tags:
       - Stream Info
-      summary: Stream
+      summary: Get Scheduled Playlist
       description: Return details of the stream.
       operationId: getDetailsScheduledPlaylist
       parameters:
@@ -3019,7 +3019,7 @@ paths:
     post:
       tags:
       - Stream Info
-      summary: Update Info
+      summary: Update Scheduled Playlist
       description: Update information of scheduled playlist
       operationId: updateInfoScheduledPlaylist
       parameters:
@@ -3925,7 +3925,7 @@ paths:
     delete:
       tags:
       - Stream Info
-      summary: Delete Info
+      summary: Delete Scheduled Playlist
       description: Delete information of scheduled playlist. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteInfoScheduledPlaylist
       parameters:
@@ -3963,7 +3963,7 @@ paths:
     get:
       tags:
       - Stream Health Check
-      summary: Stream
+      summary: Get Stream Statistics
       description: Return details of the stream statistics
       operationId: getDetailsScheduledStreamStatistics
       parameters:
@@ -4116,7 +4116,7 @@ paths:
     get:
       tags:
       - Playlist Management
-      summary: Stream playlist statistics
+      summary: Get Playlist Statistics
       description: Return details of the stream playlist statistics
       operationId: getDetailsScheduledPlaylistStatistics
       parameters:
@@ -5084,7 +5084,7 @@ paths:
     post:
       tags:
       - Security
-      summary: Update RTMPAuth
+      summary: Update IP Access
       description: Update RTMP auth of a scheduled playlist.
       operationId: updateRtmpauthScheduledPlaylist
       parameters:
@@ -7786,7 +7786,7 @@ paths:
     post:
       tags:
       - Transcoding
-      summary: Update transcode
+      summary: Update Transcoding Profile
       description: Update the transcode of a scheduled stream
       operationId: updatetranscodeScheduledStream
       parameters:
@@ -8702,7 +8702,7 @@ paths:
     get:
       tags:
       - Stream Info
-      summary: Restore
+      summary: Restore Stream
       description: Restore a scheduled playlist
       operationId: restoreScheduledPlaylist
       parameters:
@@ -9583,7 +9583,7 @@ paths:
     get:
       tags:
       - Stream Info
-      summary: Restart
+      summary: Restart Stream
       description: Restart scheduled playlist
       operationId: restartScheduledPlaylist
       parameters:
@@ -9609,7 +9609,7 @@ paths:
     post:
       tags:
       - Playback
-      summary: Update status of stream
+      summary: Enable / Disable Stream
       description: Update status of stream
       operationId: statusScheduledPlaylist
       parameters:
@@ -10503,7 +10503,7 @@ paths:
     get:
       tags:
       - Playlist Management
-      summary: Stream playlist
+      summary: List Playlist Events
       description: Return details of the stream playlist
       operationId: getDetailsPlaylist
       parameters:
@@ -11726,7 +11726,7 @@ paths:
     post:
       tags:
       - Playlist Management
-      summary: Create Playlist clone
+      summary: Clone Playlist
       description: Create the playlist
       operationId: createPlaylistCloneScheduledPlaylist
       parameters:
@@ -11762,7 +11762,7 @@ paths:
     post:
       tags:
       - Multistream Platforms
-      summary: Add platform
+      summary: Add Platform
       description: Add the platform of a Scheduled stream
       operationId: addplatformStreamsscheduledplaylist
       parameters:
@@ -12671,7 +12671,7 @@ paths:
     post:
       tags:
       - Multistream Platforms
-      summary: Update platform
+      summary: Update Platform
       description: Update the platform of a Scheduled stream
       operationId: updateplatformRestream
       parameters:
@@ -13580,7 +13580,7 @@ paths:
     delete:
       tags:
       - Multistream Platforms
-      summary: Delete Info
+      summary: Delete Platform
       description: Delete the Platform of Scheduled stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformRestream
       parameters:

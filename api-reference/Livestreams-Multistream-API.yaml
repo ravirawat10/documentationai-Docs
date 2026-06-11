@@ -29,7 +29,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Restream List.
+      summary: List Multistream Streams
       description: Restream list
       operationId: restreamList
       parameters:
@@ -51,7 +51,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Create Restream
+      summary: Create Multistream Stream
       description: Create new Restream (push or pull type)
       operationId: create-Restream
       requestBody:
@@ -574,7 +574,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Return the details of restream.
+      summary: Get Multistream Stream
       description: Return the details of restream.
       operationId: get-details-of-a-stream-restream
       parameters:
@@ -590,7 +590,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Info of Restream
+      summary: Update Multistream Stream
       description: Update information of Restream
       operationId: update-info-Restream
       parameters:
@@ -611,7 +611,7 @@ paths:
     delete:
       tags:
       - Stream Management
-      summary: Delete Info
+      summary: Delete Multistream Stream
       description: Delete information of a restream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteRestream
       parameters:
@@ -628,7 +628,7 @@ paths:
     get:
       tags:
       - Statistics
-      summary: Return the details of restream statistics
+      summary: Get Stream Statistics
       description: Return the details of restream statistics
       operationId: getDetailsOfStreamRestreamStatistics
       parameters:
@@ -696,7 +696,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update status of stream
+      summary: Enable / Disable Stream
       description: Update status of stream
       operationId: statusRestream
       parameters:
@@ -1132,7 +1132,7 @@ paths:
     post:
       tags:
       - Security
-      summary: Update RTMP Auth Restream
+      summary: Update IP Access
       description: Update RTMP auth of Restream
       operationId: update-rtmpauth-Restream
       parameters:
@@ -1154,7 +1154,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Restore
+      summary: Restore Stream
       description: Restore publish stream
       operationId: restorePublishStream
       parameters:
@@ -1577,7 +1577,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Restart
+      summary: Restart Stream
       description: Restart publish stream.
       operationId: restartPublishStream
       parameters:
@@ -1603,7 +1603,7 @@ paths:
     post:
       tags:
       - Transcoding
-      summary: Update transcode
+      summary: Update Transcoding Profile
       description: Update the transcode of a publish stream
       operationId: updatetranscodeRestream
       parameters:
@@ -2119,7 +2119,7 @@ paths:
     post:
       tags:
       - Platform Management
-      summary: Add platform
+      summary: Add Platform
       description: Add the platform of a publish stream
       operationId: addplatformStreamspublish
       parameters:
@@ -2141,7 +2141,7 @@ paths:
     post:
       tags:
       - Platform Management
-      summary: Update platform
+      summary: Update Platform
       description: Update the platform of a publish stream
       operationId: updateplatformscheduledplaylist
       parameters:
@@ -2163,7 +2163,7 @@ paths:
     delete:
       tags:
       - Platform Management
-      summary: Delete Info
+      summary: Delete Platform
       description: Delete the Platform of publish stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformscheduledplaylist
       parameters:

@@ -37,7 +37,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: List streams
+      summary: List All Streams
       description: list streams
       operationId: streamsList
       responses:
@@ -51,7 +51,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: List Streams
+      summary: List Push Streams
       description: push list
       operationId: streamsPushList
       parameters:
@@ -73,7 +73,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Create Push
+      summary: Create Push Stream
       description: Create a Push stream
       operationId: createPushStreams
       requestBody:
@@ -93,7 +93,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Stream
+      summary: Get Push Stream
       description: Returns the details of a push stream
       operationId: getStreamsPush
       parameters:
@@ -724,7 +724,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Info
+      summary: Update Push Stream
       description: Update the information of push stream
       operationId: updateStreamspush
       parameters:
@@ -1308,7 +1308,7 @@ paths:
     delete:
       tags:
       - Stream Management
-      summary: Delete Info
+      summary: Delete Push Stream
       description: Delete the information of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteStreamspush
       parameters:
@@ -1346,7 +1346,7 @@ paths:
     get:
       tags:
       - Statistics
-      summary: Stream statistics
+      summary: Get Stream Statistics
       description: Returns the details of a push stream statistics
       operationId: getStreamsPushStatistics
       parameters:
@@ -1442,7 +1442,7 @@ paths:
     post:
       tags:
       - Playback
-      summary: Update status of stream
+      summary: Enable / Disable Stream
       description: Update status of stream
       operationId: statusStreamsPush
       parameters:
@@ -2015,7 +2015,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Source
+      summary: Update Source Settings
       description: Change the ingest source region for a Push stream. Use the server field to specify one or more source region server IDs. Multiple server IDs can be provided as comma-separated values.
       operationId: updatesourceStreamsPush
       parameters:
@@ -2741,7 +2741,7 @@ paths:
     post:
       tags:
       - Transcoding
-      summary: Update transcode
+      summary: Update Transcoding Profile
       description: Update the transcode of a push stream
       operationId: updatetranscodeStreamsPush
       parameters:
@@ -5011,7 +5011,7 @@ paths:
     post:
       tags:
       - Security
-      summary: Update RTMPAuth
+      summary: Update IP Access
       description: Update RTMPAuth of push stream
       operationId: updateRtmpauthStreamsPush
       parameters:
@@ -5680,7 +5680,7 @@ paths:
     post:
       tags:
       - NDVR
-      summary: Update NDVR
+      summary: Update NDVR Settings
       operationId: updateNdvrStreamsPush
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
@@ -6411,7 +6411,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Servers
+      summary: List Servers
       description: Return the list of servers of push stream
       operationId: getServersStreamsPush
       responses:
@@ -6544,7 +6544,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restore
+      summary: Restore Stream
       description: Restore a push stream
       operationId: restoreStreamsPush
       parameters:
@@ -7268,7 +7268,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restart
+      summary: Restart Stream
       description: Restart a push stream
       operationId: restartStreamsPush
       parameters:
@@ -7294,7 +7294,7 @@ paths:
     post:
       tags:
       - DVR
-      summary: Update DVR
+      summary: Update DVR Settings
       operationId: updateDvrStreamsPush
       parameters:
       - $ref: '#/components/parameters/streamIdParam'
@@ -7894,7 +7894,7 @@ paths:
     post:
       tags:
       - Platforms
-      summary: Add platform
+      summary: Add Platform
       description: Add the platform of a push stream
       operationId: addplatformStreamsPush
       parameters:
@@ -8611,7 +8611,7 @@ paths:
     post:
       tags:
       - Platforms
-      summary: Update platform
+      summary: Update Platform
       description: Update the platform of a push stream
       operationId: updateplatformStreamsPush
       parameters:
@@ -8705,7 +8705,7 @@ paths:
     delete:
       tags:
       - Platforms
-      summary: Delete Info
+      summary: Delete Platform
       description: Delete the Platform of push stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletePlatformStreamspush
       parameters:
@@ -8811,7 +8811,7 @@ paths:
     put:
       tags:
       - Ad Insertion
-      summary: Enable ad insertion (push stream)
+      summary: Enable Ad Insertion
       description: 'Creates (or updates) the ad insertion record for the push stream.
 
         Requires the service to have **Advanced Features** enabled and an
@@ -8839,7 +8839,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Update ad insertion settings (push stream)
+      summary: Update Ad Insertion Settings
       description: 'Updates the ad insertion record for the push stream. The record must already
 
         exist (i.e. ad insertion must have been enabled with PUT first).
@@ -8865,7 +8865,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete ad insertion (push stream - not implemented)
+      summary: Delete Ad Insertion
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePush
       parameters:
@@ -8877,7 +8877,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure ad server (push stream)
+      summary: Configure Ad Server
       description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
         origin headers. Triggers a stream-adserver provisioning job.
@@ -8913,7 +8913,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure pre-roll ads (push stream)
+      summary: Configure Pre-Roll Ads
       description: 'Enables or disables live ad pre-roll. When enabled is N the
 
         pre-roll configuration is removed entirely.
@@ -8940,7 +8940,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Configure ad replacement (push stream)
+      summary: Configure Ad Replacement
       description: 'Enables or disables live ad replacement. When enabled is N the
 
         replacement configuration is removed entirely.
@@ -8981,7 +8981,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Add ad break schedule (push stream)
+      summary: Add Ad Break Schedule
       description: 'Adds a new ad break schedule. Two schedule types are supported.
 
         Maximum 10 schedules per stream.
@@ -9080,7 +9080,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Update a schedule (push stream)
+      summary: Update Ad Break Schedule
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePush
       parameters:
@@ -9137,7 +9137,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete a schedule (push stream)
+      summary: Delete Ad Break Schedule
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePush
       parameters:
@@ -9187,7 +9187,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: List triggers (push stream)
+      summary: List Ad Triggers
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPush
       parameters:
@@ -9217,7 +9217,7 @@ paths:
     delete:
       tags:
       - Ad Insertion
-      summary: Delete a trigger (push stream)
+      summary: Delete Ad Trigger
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPush
       parameters:
@@ -9243,7 +9243,7 @@ paths:
     get:
       tags:
       - Ad Insertion
-      summary: Trigger cue-out / ad break start (push stream)
+      summary: Trigger Cue-Out
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPush
       parameters:
@@ -9266,7 +9266,7 @@ paths:
     get:
       tags:
       - Ad Insertion
-      summary: Trigger cue-in / return to content (push stream)
+      summary: Trigger Cue-In
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPush
       parameters:
@@ -9282,7 +9282,7 @@ paths:
     post:
       tags:
       - Ad Insertion
-      summary: Get ad insertion consumption (push stream)
+      summary: Get Ad Consumption
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPush
       parameters:

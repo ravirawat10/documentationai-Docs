@@ -29,7 +29,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: ABR
+      summary: List ABR Streams
       description: List Multi Bitrate Push streams
       operationId: multiBitratePushlist
       parameters:
@@ -750,7 +750,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Create ABR
+      summary: Create ABR Stream
       description: Create a new ABR stream
       operationId: multiBitratePushCreate
       requestBody:
@@ -1633,7 +1633,7 @@ paths:
     get:
       tags:
       - Stream Management
-      summary: Stream
+      summary: Get ABR Stream
       description: Returns the details of an abr stream
       operationId: getDetailsMultiBitratePush
       parameters:
@@ -2346,7 +2346,7 @@ paths:
     post:
       tags:
       - Stream Management
-      summary: Update Info
+      summary: Update ABR Stream
       description: Update information of ABR stream.
       operationId: updateMultiBitratePush
       parameters:
@@ -3099,7 +3099,7 @@ paths:
     delete:
       tags:
       - Stream Management
-      summary: Delete Info
+      summary: Delete ABR Stream
       description: Delete information of ABR stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteMultiBitratePush
       parameters:
@@ -3137,7 +3137,7 @@ paths:
     post:
       tags:
       - Playback
-      summary: Update status of stream
+      summary: Enable / Disable Stream
       description: Update status of stream
       operationId: statusStreamsabr
       parameters:
@@ -5285,7 +5285,7 @@ paths:
     post:
       tags:
       - Security
-      summary: Update RTMP Auth
+      summary: Update IP Access
       description: Update RTMP auth of ABR
       operationId: updateRtmpauthMultiBitratePush
       parameters:
@@ -6070,7 +6070,7 @@ paths:
     post:
       tags:
       - DVR
-      summary: Update Record
+      summary: Update DVR Settings
       description: Update Record ABR
       operationId: updateRecordMultiBitratePush
       parameters:
@@ -6852,7 +6852,7 @@ paths:
     post:
       tags:
       - NDVR
-      summary: Update Ndvr
+      summary: Update NDVR Settings
       description: Update Ndvr ABR
       operationId: updateNdvrMultiBitratePush
       parameters:
@@ -7635,7 +7635,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restart
+      summary: Restart Stream
       description: Restart ABR
       operationId: restartMultiBitratePush
       parameters:
@@ -7661,7 +7661,7 @@ paths:
     get:
       tags:
       - Playback
-      summary: Restore
+      summary: Restore Stream
       description: Restore ABR Stream
       operationId: restoreMultiBitratePush
       parameters:
