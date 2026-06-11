@@ -24,7 +24,7 @@ security:
 paths:
   /transcoding/filters:
     get:
-      summary: List File Transcoding Filters
+      summary: List Encoding Filters
       description: List all file transcoding filters for the service.
       operationId: listVideoTranscodingFilters
       responses:
@@ -644,7 +644,7 @@ paths:
 
   /transcoding/filters/new:
     post:
-      summary: Create File Transcoding Filter
+      summary: Create Encoding Filter
       description: Create a new file transcoding filter.
       operationId: createVideoTranscodingFilter
       requestBody:
@@ -725,7 +725,7 @@ paths:
 
   /transcoding/filters/{filterid}:
     post:
-      summary: Edit Transcoding Profile Filter
+      summary: Update Encoding Filter
       description: Edit an existing transcoding profile filter.
       operationId: editVideoTranscodingFilter
       parameters:
@@ -794,7 +794,7 @@ paths:
                     description: Human-readable result or error message.
                     example: Transcoding Settings Updated
     delete:
-      summary: Delete Transcoding Profile Filter
+      summary: Delete Encoding Filter
       description: >
         Delete the information of a transcoding profile filter. To cast request
         method POST, include parameter _METHOD = DELETE.

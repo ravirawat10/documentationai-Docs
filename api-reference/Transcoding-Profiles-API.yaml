@@ -24,7 +24,7 @@ security:
 paths:
   /transcoding/profiles:
     get:
-      summary: List File Transcoding Profiles
+      summary: List Encoding Profiles
       description: List all file transcoding profiles for the service.
       operationId: profilesList
       responses:
@@ -570,7 +570,7 @@ paths:
 
   /transcoding/profiles/defaults:
     post:
-      summary: Create Global Auto Transcode Preset Profiles
+      summary: Create Default Preset Profiles
       description: These presets will be automatically added to your new zones.
       operationId: createAutoTranscodeProfiles
       requestBody:
@@ -607,7 +607,7 @@ paths:
 
   /transcoding/profiles/new:
     post:
-      summary: Create Transcoding Profile
+      summary: Create Encoding Profile
       description: Create a new transcoding profile.
       operationId: createTranscodingProfile
       requestBody:
@@ -799,7 +799,7 @@ paths:
 
   /transcoding/profiles/{profileid}:
     post:
-      summary: Edit Transcoding Profile
+      summary: Update Encoding Profile
       description: Edit an existing transcoding profile.
       operationId: editTranscodingProfile
       parameters:
@@ -984,7 +984,7 @@ paths:
                     description: Human-readable result or error message.
                     example: Transcoding Settings Updated
     delete:
-      summary: Delete Transcoding Profile
+      summary: Delete Encoding Profile
       description: >
         Delete the information of a transcoding profile. To cast request method
         POST, include parameter _METHOD = DELETE.

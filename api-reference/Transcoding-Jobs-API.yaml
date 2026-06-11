@@ -24,7 +24,7 @@ security:
 paths:
   /transcoding:
     get:
-      summary: List All Encoding Jobs (current)
+      summary: List All Encoding Jobs
       description: List all encoding jobs for the service. No date filter — returns all.
       operationId: listEncodingJobs
       responses:
@@ -1134,7 +1134,7 @@ paths:
                         description: Number of currently active or in-progress encoding jobs.
                         example: 0
     post:
-      summary: List Jobs / Get Job Details
+      summary: Query Encoding Jobs
       description: >
         Multi-purpose POST endpoint. Behaviour depends on body content:
         - No body + query string `r` / `r&i`: filter jobs by date range and optionally zone.
@@ -1236,7 +1236,7 @@ paths:
   # ---------------------------------------------------------------------------
   /transcoding/jobs:
     get:
-      summary: List Active Video Encoding Jobs
+      summary: List Active Encoding Jobs
       description: List all active / pending video encoding job queue for the service.
       operationId: getEncodingJobs
       responses:
@@ -1405,7 +1405,7 @@ paths:
 
   /transcoding/jobs/{zoneId}:
     get:
-      summary: Get Active Jobs for a Zone
+      summary: List Active Jobs by Zone
       description: List all active encoding jobs for a specific zone.
       operationId: getEncodingJobsByZone
       parameters:
@@ -1576,7 +1576,7 @@ paths:
 
   /transcoding/jobs/{profileid}:
     post:
-      summary: Add Video Encoding Job
+      summary: Create Encoding Job
       description: Add a file encoding job.
       operationId: addEncodingJob
       parameters:

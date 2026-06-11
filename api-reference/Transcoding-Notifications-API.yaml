@@ -24,7 +24,7 @@ security:
 paths:
   /transcoding/notifications/defaults:
     post:
-      summary: Save Notification Emails and Webhook URLs
+      summary: Update Notification Settings
       description: >
         Updates email addresses and webhook URLs for encode-completion
         notifications. The emails field is a comma-separated list of email
@@ -68,7 +68,7 @@ paths:
 
   /transcoding/notifications/resend:
     post:
-      summary: Resend Encode-Completion Webhook Notification
+      summary: Resend Job Completion Notification
       description: >
         Looks up a completed encode job and re-POSTs the original completion
         payload to all configured webhook URLs. Exactly one of index, infile,
