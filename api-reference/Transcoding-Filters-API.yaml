@@ -21,9 +21,15 @@ servers:
 security:
 - ApiKeyAuth: []
 
+tags:
+- name: Encoding Filters
+  description: Video filter management endpoints for encoding overlays and effects
+
 paths:
   /transcoding/filters:
     get:
+      tags:
+      - Encoding Filters
       summary: List Encoding Filters
       description: List all file transcoding filters for the service.
       operationId: listVideoTranscodingFilters
@@ -644,6 +650,8 @@ paths:
 
   /transcoding/filters/new:
     post:
+      tags:
+      - Encoding Filters
       summary: Create Encoding Filter
       description: Create a new file transcoding filter.
       operationId: createVideoTranscodingFilter
@@ -725,6 +733,8 @@ paths:
 
   /transcoding/filters/{filterid}:
     post:
+      tags:
+      - Encoding Filters
       summary: Update Encoding Filter
       description: Edit an existing transcoding profile filter.
       operationId: editVideoTranscodingFilter
@@ -794,6 +804,8 @@ paths:
                     description: Human-readable result or error message.
                     example: Transcoding Settings Updated
     delete:
+      tags:
+      - Encoding Filters
       summary: Delete Encoding Filter
       description: >
         Delete the information of a transcoding profile filter. To cast request

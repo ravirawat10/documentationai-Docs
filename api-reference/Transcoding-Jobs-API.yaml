@@ -21,9 +21,15 @@ servers:
 security:
 - ApiKeyAuth: []
 
+tags:
+- name: Encoding Jobs
+  description: Video encoding job management and monitoring endpoints
+
 paths:
   /transcoding:
     get:
+      tags:
+      - Encoding Jobs
       summary: List All Encoding Jobs
       description: List all encoding jobs for the service. No date filter — returns all.
       operationId: listEncodingJobs
@@ -1134,6 +1140,8 @@ paths:
                         description: Number of currently active or in-progress encoding jobs.
                         example: 0
     post:
+      tags:
+      - Encoding Jobs
       summary: Query Encoding Jobs
       description: >
         Multi-purpose POST endpoint. Behaviour depends on body content:
@@ -1236,6 +1244,8 @@ paths:
   # ---------------------------------------------------------------------------
   /transcoding/jobs:
     get:
+      tags:
+      - Encoding Jobs
       summary: List Active Encoding Jobs
       description: List all active / pending video encoding job queue for the service.
       operationId: getEncodingJobs
@@ -1405,6 +1415,8 @@ paths:
 
   /transcoding/jobs/{zoneId}:
     get:
+      tags:
+      - Encoding Jobs
       summary: List Active Jobs by Zone
       description: List all active encoding jobs for a specific zone.
       operationId: getEncodingJobsByZone
@@ -1576,6 +1588,8 @@ paths:
 
   /transcoding/jobs/{profileid}:
     post:
+      tags:
+      - Encoding Jobs
       summary: Create Encoding Job
       description: Add a file encoding job.
       operationId: addEncodingJob
@@ -1621,6 +1635,8 @@ paths:
 
   /transcoding/jobs/retry/{jobid}:
     get:
+      tags:
+      - Encoding Jobs
       summary: Retry Encoding Job
       description: Retry an encoding job after fixing issues.
       operationId: retryEncodingJob
@@ -1645,6 +1661,8 @@ paths:
 
   /transcoding/jobs/cancel/{jobid}:
     get:
+      tags:
+      - Encoding Jobs
       summary: Cancel Encoding Job
       description: >
         Cancel an encoding job. Jobs can only be cancelled before they are processed.

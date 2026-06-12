@@ -40,7 +40,8 @@ paths:
 
   /zones/http/push/{zoneId}/rules:
     get:
-      tags: [HTTP Push]
+      tags:
+      - HTTP Push
       operationId: listEdgeRulesHttpPush
       summary: List Rules
       description: >
@@ -1281,7 +1282,8 @@ paths:
 
   /zones/http/push/{zoneId}/rules/rule:
     post:
-      tags: [HTTP Push]
+      tags:
+      - HTTP Push
       operationId: createEdgeRuleHttpPush
       summary: Create Rule
       description: >
@@ -1324,7 +1326,8 @@ paths:
 
   /zones/http/push/{zoneId}/rules/rule/{ruleId}:
     post:
-      tags: [HTTP Push]
+      tags:
+      - HTTP Push
       operationId: updateOrDeleteEdgeRuleHttpPush
       summary: Update or Delete Rule
       description: >
@@ -1373,7 +1376,8 @@ paths:
 
   /zones/http/pull/{zoneId}/rules:
     get:
-      tags: [HTTP Pull]
+      tags:
+      - HTTP Pull
       operationId: listEdgeRulesHttpPull
       summary: List Rules
       description: >
@@ -2637,7 +2641,8 @@ paths:
 
   /zones/http/pull/{zoneId}/rules/rule:
     post:
-      tags: [HTTP Pull]
+      tags:
+      - HTTP Pull
       operationId: createEdgeRuleHttpPull
       summary: Create Rule
       description: >
@@ -2680,7 +2685,8 @@ paths:
 
   /zones/http/pull/{zoneId}/rules/rule/{ruleId}:
     post:
-      tags: [HTTP Pull]
+      tags:
+      - HTTP Pull
       operationId: updateOrDeleteEdgeRuleHttpPull
       summary: Update or Delete Rule
       description: >
@@ -2729,7 +2735,8 @@ paths:
 
   /zones/vod/push/{zoneId}/rules:
     get:
-      tags: [VOD Push]
+      tags:
+      - VOD Push
       operationId: listEdgeRulesVodPush
       summary: List Rules
       description: >
@@ -3751,7 +3758,8 @@ paths:
 
   /zones/vod/push/{zoneId}/rules/rule:
     post:
-      tags: [VOD Push]
+      tags:
+      - VOD Push
       operationId: createEdgeRuleVodPush
       summary: Create Rule
       description: >
@@ -3794,7 +3802,8 @@ paths:
 
   /zones/vod/push/{zoneId}/rules/rule/{ruleId}:
     post:
-      tags: [VOD Push]
+      tags:
+      - VOD Push
       operationId: updateOrDeleteEdgeRuleVodPush
       summary: Update or Delete Rule
       description: >
@@ -3843,7 +3852,8 @@ paths:
 
   /zones/vod/pull/{zoneId}/rules:
     get:
-      tags: [VOD Pull]
+      tags:
+      - VOD Pull
       operationId: listEdgeRulesVodPull
       summary: List Rules
       description: >
@@ -4803,7 +4813,8 @@ paths:
 
   /zones/vod/pull/{zoneId}/rules/rule:
     post:
-      tags: [VOD Pull]
+      tags:
+      - VOD Pull
       operationId: createEdgeRuleVodPull
       summary: Create Rule
       description: >
@@ -4846,7 +4857,8 @@ paths:
 
   /zones/vod/pull/{zoneId}/rules/rule/{ruleId}:
     post:
-      tags: [VOD Pull]
+      tags:
+      - VOD Pull
       operationId: updateOrDeleteEdgeRuleVodPull
       summary: Update or Delete Rule
       description: >
@@ -4895,7 +4907,8 @@ paths:
 
   /zones/http/pull/{zoneId}/rules/behavior/{behaviorId}:
     post:
-      tags: [Default Behaviors]
+      tags:
+      - Default Behaviors
       operationId: updateDefaultBehaviorHttpPull
       summary: Update HTTP Pull Default Behavior
       description: >
@@ -4940,7 +4953,8 @@ paths:
 
   /zones/http/push/{zoneId}/rules/behavior/{behaviorId}:
     post:
-      tags: [Default Behaviors]
+      tags:
+      - Default Behaviors
       operationId: updateDefaultBehaviorHttpPush
       summary: Update HTTP Push Default Behavior
       description: >
@@ -4985,7 +4999,8 @@ paths:
 
   /zones/vod/pull/{zoneId}/rules/behavior/{behaviorId}:
     post:
-      tags: [Default Behaviors]
+      tags:
+      - Default Behaviors
       operationId: updateDefaultBehaviorVodPull
       summary: Update VOD Pull Default Behavior
       description: >
@@ -5030,7 +5045,8 @@ paths:
 
   /zones/vod/push/{zoneId}/rules/behavior/{behaviorId}:
     post:
-      tags: [Default Behaviors]
+      tags:
+      - Default Behaviors
       operationId: updateDefaultBehaviorVodPush
       summary: Update VOD Push Default Behavior
       description: >
@@ -5075,7 +5091,8 @@ paths:
 
   /validate/rule:
     post:
-      tags: [Validation]
+      tags:
+      - Validation
       operationId: validateRulePattern
       summary: Validate Rule Pattern
       description: >
