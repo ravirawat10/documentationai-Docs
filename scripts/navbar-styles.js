@@ -1,15 +1,7 @@
 (function () {
   var css = [
     "a[href*='dashboard/login'],",
-    "button[data-testid*='login'],",
-    "[class*='NavbarCta'] a,",
-    "[class*='navbar-cta'] a,",
-    "[class*='NavbarAction'] a,",
-    "[class*='navbar-action'] a,",
-    "[class*='PrimaryAction'] a,",
-    "[class*='primary-action'] a,",
-    "[class*='NavbarButton'] a,",
-    "[class*='navbar-button'] a {",
+    "button[data-testid*='login'] {",
     "  color: #ffffff !important;",
     "}",
     "a[href*='dashboard/login']:hover,",
