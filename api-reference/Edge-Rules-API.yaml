@@ -42,7 +42,7 @@ paths:
     get:
       tags: [HTTP Push]
       operationId: listEdgeRulesHttpPush
-      summary: List all edge rules and default behaviors for an HTTP Push zone
+      summary: List Rules
       description: >
         Returns all configured edge rules for the given zone, together with
         the zone's default-behavior entries. The response `rules` array is used
@@ -1283,7 +1283,7 @@ paths:
     post:
       tags: [HTTP Push]
       operationId: createEdgeRuleHttpPush
-      summary: Create a new edge rule for an HTTP Push zone
+      summary: Create Rule
       description: >
         Creates a new edge rule for the zone. The body must include
         `"_METHOD": "PUT"` alongside the standard rule payload. On success the
@@ -1326,7 +1326,7 @@ paths:
     post:
       tags: [HTTP Push]
       operationId: updateOrDeleteEdgeRuleHttpPush
-      summary: Update or delete a specific edge rule in an HTTP Push zone
+      summary: Update or Delete Rule
       description: >
         **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
@@ -1375,7 +1375,7 @@ paths:
     get:
       tags: [HTTP Pull]
       operationId: listEdgeRulesHttpPull
-      summary: List all edge rules and default behaviors for an HTTP Pull zone
+      summary: List Rules
       description: >
         Returns all configured edge rules for the given zone, together with
         the zone's default-behavior entries. The response `rules` array is used
@@ -2639,7 +2639,7 @@ paths:
     post:
       tags: [HTTP Pull]
       operationId: createEdgeRuleHttpPull
-      summary: Create a new edge rule for an HTTP Pull zone
+      summary: Create Rule
       description: >
         Creates a new edge rule for the zone. The body must include
         `"_METHOD": "PUT"` alongside the standard rule payload. On success the
@@ -2682,7 +2682,7 @@ paths:
     post:
       tags: [HTTP Pull]
       operationId: updateOrDeleteEdgeRuleHttpPull
-      summary: Update or delete a specific edge rule in an HTTP Pull zone
+      summary: Update or Delete Rule
       description: >
         **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
@@ -2731,7 +2731,7 @@ paths:
     get:
       tags: [VOD Push]
       operationId: listEdgeRulesVodPush
-      summary: List all edge rules and default behaviors for a VOD Push zone
+      summary: List Rules
       description: >
         Returns all configured edge rules for the given zone, together with
         the zone's default-behavior entries. The response `rules` array is used
@@ -3753,7 +3753,7 @@ paths:
     post:
       tags: [VOD Push]
       operationId: createEdgeRuleVodPush
-      summary: Create a new edge rule for a VOD Push zone
+      summary: Create Rule
       description: >
         Creates a new edge rule for the zone. The body must include
         `"_METHOD": "PUT"` alongside the standard rule payload. On success the
@@ -3796,7 +3796,7 @@ paths:
     post:
       tags: [VOD Push]
       operationId: updateOrDeleteEdgeRuleVodPush
-      summary: Update or delete a specific edge rule in a VOD Push zone
+      summary: Update or Delete Rule
       description: >
         **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
@@ -3845,7 +3845,7 @@ paths:
     get:
       tags: [VOD Pull]
       operationId: listEdgeRulesVodPull
-      summary: List all edge rules and default behaviors for a VOD Pull zone
+      summary: List Rules
       description: >
         Returns all configured edge rules for the given zone, together with
         the zone's default-behavior entries. The response `rules` array is used
@@ -4805,7 +4805,7 @@ paths:
     post:
       tags: [VOD Pull]
       operationId: createEdgeRuleVodPull
-      summary: Create a new edge rule for a VOD Pull zone
+      summary: Create Rule
       description: >
         Creates a new edge rule for the zone. The body must include
         `"_METHOD": "PUT"` alongside the standard rule payload. On success the
@@ -4848,7 +4848,7 @@ paths:
     post:
       tags: [VOD Pull]
       operationId: updateOrDeleteEdgeRuleVodPull
-      summary: Update or delete a specific edge rule in a VOD Pull zone
+      summary: Update or Delete Rule
       description: >
         **Update** â€” omit `_METHOD` or do not send it; the full rule options
         object is sent as the body and the rule is updated in place.
@@ -4897,7 +4897,7 @@ paths:
     post:
       tags: [Default Behaviors]
       operationId: updateDefaultBehaviorHttpPull
-      summary: Update the default behavior for an HTTP Pull zone
+      summary: Update HTTP Pull Default Behavior
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
@@ -4942,7 +4942,7 @@ paths:
     post:
       tags: [Default Behaviors]
       operationId: updateDefaultBehaviorHttpPush
-      summary: Update the default behavior for an HTTP Push zone
+      summary: Update HTTP Push Default Behavior
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
@@ -4987,7 +4987,7 @@ paths:
     post:
       tags: [Default Behaviors]
       operationId: updateDefaultBehaviorVodPull
-      summary: Update the default behavior for a VOD Pull zone
+      summary: Update VOD Pull Default Behavior
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
@@ -5032,7 +5032,7 @@ paths:
     post:
       tags: [Default Behaviors]
       operationId: updateDefaultBehaviorVodPush
-      summary: Update the default behavior for a VOD Push zone
+      summary: Update VOD Push Default Behavior
       description: >
         Saves changes to the zone's default behavior entry. The payload
         structure is identical to a rule update (`RulePayload`) but the
@@ -5077,7 +5077,7 @@ paths:
     post:
       tags: [Validation]
       operationId: validateRulePattern
-      summary: Validate an edge rule pattern string
+      summary: Validate Rule Pattern
       description: >
         Checks whether the supplied `rule` glob/pattern is syntactically valid
         for the given zone. Called client-side with a 500 ms debounce as the
