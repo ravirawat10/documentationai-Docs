@@ -162,9 +162,19 @@
           },
           {
             "group": "Analytics",
-            "pages": [],
             "icon": "activity",
-            "openapi": "api-reference/Analytics-API.yaml"
+            "pages": [
+              {
+                "group": "Summary",
+                "pages": [],
+                "openapi": "api-reference/Analytics-Summary-API.yaml"
+              },
+              {
+                "group": "Traffic",
+                "pages": [],
+                "openapi": "api-reference/Analytics-Traffic-API.yaml"
+              }
+            ]
           },
           {
             "group": "Edge Rules",

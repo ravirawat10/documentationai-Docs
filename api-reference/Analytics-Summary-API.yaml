@@ -1,0 +1,517 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Analytics & Reports
+  description: |
+    Unified API for CDN analytics and reporting in 5centsCDN.
+
+    **REST API** (server: `https://api.5centscdn.com/v2`): Unified traffic analytics
+    (breakdown and time-series data by location, country, browser, OS, device, status code,
+    referrer, file, visitor IP, and ASN). Authenticate with `X-API-Key` header.
+  version: "2.0.0"
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN REST API - Production
+security:
+- ApiKeyAuth: []
+
+paths:
+
+  /analytics/traffic/resources:
+    post:
+      operationId: trafficResources
+      summary: List available resources for filtering
+      description: Returns a map of resource-hash to resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in `resource_hashes` filter fields on all other analytics endpoints.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficResourcesRequest'
+      responses:
+        '200':
+          description: Returns a map of resource-hash to resource-ID for all CDN resources on the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficResourcesResponse'
+
+  /analytics/traffic/summary:
+    post:
+      operationId: trafficSummary
+      summary: Get traffic summary
+      description: Returns aggregate traffic metrics for the selected date range.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [r]
+              description: |
+                If `resource_type` is `all`, omit `resource_hashes`.
+                If `resource_type` is a specific type, `resource_hashes` must be provided.
+              properties:
+                r:
+                  type: string
+                  description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+                  example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
+                resource_type:
+                  type: string
+                  description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+                  enum: [push, pull, all, livestream]
+                  example: push
+                resource_hashes:
+                  type: array
+                  items:
+                    type: string
+                  description: |
+                    Array of resource hashes to filter by (from /analytics/traffic/resources).
+                    Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
+                  example: ["abc12hash", "def34hash"]
+                granularity:
+                  type: string
+                  description: Defines the time interval for data aggregation.
+                  enum: ["1m", "5m", "15m", "30m", "1h", "3h", "6h", "12h", "24h"]
+                  example: "1h"
+      responses:
+        '200':
+          description: Returns aggregate traffic metrics for the selected date range
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficSummaryResponse'
+
+  /analytics/traffic/summary/line:
+    post:
+      operationId: trafficSummaryLine
+      summary: Get traffic summary time-series
+      description: Returns per-time-bucket traffic metrics for the selected date range, along with period totals and granularity metadata.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficSummaryLineRequest'
+      responses:
+        '200':
+          description: Returns per-time-bucket traffic metrics for the selected date range, along with period totals and granularity metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficSummaryLineResponse'
+
+  /analytics/traffic/summary/card:
+    post:
+      operationId: trafficSummaryCard
+      summary: Get period-over-period traffic summary
+      description: Returns current-period totals, equivalent previous-period totals, and percentage deviations for all core traffic metrics.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficSummaryCardRequest'
+      responses:
+        '200':
+          description: Returns current-period totals, equivalent previous-period totals, and percentage deviations for all core traffic metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficCardResponse'
+
+components:
+  parameters: {}
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+
+    TrafficBytesValue:
+      type: object
+      description: A bandwidth metric consisting of raw bytes and a human-readable string, with an optional percentage of total.
+      properties:
+        bytes:
+          type: integer
+          format: int64
+          description: Raw byte count for this traffic metric.
+          example: 1262343731219
+        formatted:
+          type: string
+          description: Human-readable bandwidth value (e.g. "1.26 TB").
+          example: "1.26 TB"
+        percent:
+          type: string
+          description: Share of the response-level total for this dimension value. Only present in breakdown and line data items.
+          example: "+35.67%"
+
+    TrafficCountValue:
+      type: object
+      description: A count metric consisting of a raw integer count and a human-readable string, with an optional percentage of total.
+      properties:
+        count:
+          type: integer
+          format: int64
+          description: Raw integer count for this metric.
+          example: 1172166
+        formatted:
+          type: string
+          description: Human-readable count value (e.g. "1.172M").
+          example: "1.172M"
+        percent:
+          type: string
+          description: Share of the response-level total. Only present in breakdown and line data items.
+          example: "+51.24%"
+
+    TrafficEfficiencyValue:
+      type: object
+      description: A cache-efficiency or traffic-efficiency ratio expressed as a decimal and a formatted percentage.
+      properties:
+        percent:
+          type: number
+          format: float
+          description: Efficiency ratio as a decimal between 0 and 1.
+          example: 0.71
+        formatted:
+          type: string
+          description: Human-readable formatted percentage value.
+          example: "+71%"
+
+    TrafficSummary:
+      type: object
+      description: Aggregate traffic metrics for a period or resource, including bandwidth, request counts, unique visitors, and efficiency ratios.
+      properties:
+        traffic:
+          $ref: '#/components/schemas/TrafficBytesValue'
+        traffic_cached:
+          $ref: '#/components/schemas/TrafficBytesValue'
+        hits:
+          $ref: '#/components/schemas/TrafficCountValue'
+        requests:
+          $ref: '#/components/schemas/TrafficCountValue'
+        unique_visitors:
+          $ref: '#/components/schemas/TrafficCountValue'
+        caching_efficiency:
+          $ref: '#/components/schemas/TrafficEfficiencyValue'
+        traffic_efficiency:
+          $ref: '#/components/schemas/TrafficEfficiencyValue'
+
+    TrafficCacheStatusValue:
+      type: object
+      description: Request count for a single cache status.
+      properties:
+        count:
+          type: integer
+          format: int64
+          description: Raw request count for this cache status.
+          example: 1172166
+        formatted:
+          type: string
+          description: Human-readable request count for this cache status.
+          example: "1.172M"
+
+    TrafficCacheDeviationValue:
+      type: object
+      description: Period-over-period change for a single cache status.
+      properties:
+        percent:
+          type: number
+          format: float
+          description: Relative change as a decimal. Negative values indicate a decrease, positive values indicate an increase.
+          example: -0.08
+        formatted:
+          type: string
+          description: Human-readable change string showing the percentage shift (e.g. "-8%").
+          example: "-8%"
+
+    TrafficResourcesRequest:
+      type: object
+      properties:
+        resource_type:
+          type: string
+          description: Filter to a specific resource type. Omit to return all resource types.
+          enum: [push, pull, all, livestream]
+          example: push
+          x-enum-descriptions:
+            push: HTTP Push zones
+            pull: HTTP Pull zones
+            livestream: Live stream resources
+            all: All resource types (default when omitted)
+
+    TrafficResourcesResponse:
+      type: object
+      description: |
+        Map of resource hash (string key) to resource database ID (integer value).
+        Use these hashes in `resource_hashes` filter fields on all analytics endpoints.
+        Push/pull zones use short alphanumeric hashes as keys. Livestream resources
+        use path-style keys in the format `[stream_name]/[source_name]`.
+      additionalProperties:
+        type: integer
+        description: Unique integer ID of the CDN resource (push zone, pull zone, or livestream).
+        example: 10001
+      example:
+        sample-hash-abc12: 10001
+        sample-hash-def34: 10002
+        sample-hash-ghi56: 10003
+
+    TrafficSummaryResponse:
+      type: object
+      description: Aggregate traffic metrics for the selected date range.
+      properties:
+        summary:
+          type: object
+          description: Aggregated traffic totals for the requested period and resource set.
+          properties:
+            traffic:
+              type: object
+              description: Total bytes transferred across all requests (cached and uncached).
+              properties:
+                bytes:
+                  type: integer
+                  format: int64
+                  description: Raw byte count for total traffic.
+                  example: 1262343731219
+                formatted:
+                  type: string
+                  description: Human-readable total traffic value.
+                  example: "1.26 TB"
+            traffic_cached:
+              type: object
+              description: Total bytes served from cache.
+              properties:
+                bytes:
+                  type: integer
+                  format: int64
+                  description: Raw byte count for cache-served traffic.
+                  example: 864713098005
+                formatted:
+                  type: string
+                  description: Human-readable cached traffic value.
+                  example: "864.71 GB"
+            hits:
+              type: object
+              description: Total cache hit request count for the period.
+              properties:
+                count:
+                  type: integer
+                  format: int64
+                  description: Raw cache hit count.
+                  example: 1172166
+                formatted:
+                  type: string
+                  description: Human-readable cache hit count.
+                  example: "1.172M"
+            requests:
+              type: object
+              description: Total request count including cache hits and misses.
+              properties:
+                count:
+                  type: integer
+                  format: int64
+                  description: Raw total request count.
+                  example: 1646341
+                formatted:
+                  type: string
+                  description: Human-readable total request count.
+                  example: "1.646M"
+            unique_visitors:
+              type: object
+              description: Count of distinct visitor IP addresses for the period.
+              properties:
+                count:
+                  type: integer
+                  format: int64
+                  description: Raw unique visitor count.
+                  example: 27056
+                formatted:
+                  type: string
+                  description: Human-readable unique visitor count.
+                  example: "27.06k"
+            caching_efficiency:
+              type: object
+              description: Ratio of cache hits to total requests.
+              properties:
+                percent:
+                  type: number
+                  format: float
+                  description: Caching efficiency as a decimal between 0 and 1.
+                  example: 0.71
+                formatted:
+                  type: string
+                  description: Human-readable caching efficiency percentage.
+                  example: "+71%"
+            traffic_efficiency:
+              type: object
+              description: Ratio of cached bytes to total traffic bytes.
+              properties:
+                percent:
+                  type: number
+                  format: float
+                  description: Traffic efficiency as a decimal between 0 and 1.
+                  example: 0.69
+                formatted:
+                  type: string
+                  description: Human-readable traffic efficiency percentage.
+                  example: "+69%"
+
+    TrafficSummaryLineRequest:
+      type: object
+      required: [r]
+      description: |
+        Request body for the traffic summary time-series endpoint.
+        If `resource_type` is `all`, omit `resource_hashes`.
+        If `resource_type` is a specific type, `resource_hashes` must be provided.
+      properties:
+        r:
+          type: string
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
+        resource_type:
+          type: string
+          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          enum: [push, pull, all, livestream]
+          example: push
+        resource_hashes:
+          type: array
+          items:
+            type: string
+          description: |
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
+            Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
+          example: ["abc12hash", "def34hash", "ghi56hash"]
+        granularity:
+          type: string
+          description: Defines the time interval for data aggregation.
+          enum: ["1m", "5m", "15m", "30m", "1h", "3h", "6h", "12h", "24h"]
+          example: "1h"
+
+    TrafficSummaryLineResponse:
+      type: object
+      description: Per-cache-status period-over-period comparison with date range metadata.
+      properties:
+        period:
+          type: object
+          description: Date range boundaries for the current and previous comparison periods.
+          properties:
+            current:
+              type: object
+              description: Start and end timestamps for the selected (current) period.
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                  description: Start timestamp of the current period (ISO 8601 UTC).
+                  example: "2026-01-01T00:00:00Z"
+                to:
+                  type: string
+                  format: date-time
+                  description: End timestamp of the current period (ISO 8601 UTC).
+                  example: "2026-01-31T23:59:59Z"
+            previous:
+              type: object
+              description: Start and end timestamps for the equivalent preceding period.
+              properties:
+                from:
+                  type: string
+                  format: date-time
+                  description: Start timestamp of the previous period (ISO 8601 UTC).
+                  example: "2025-12-01T00:00:01Z"
+                to:
+                  type: string
+                  format: date-time
+                  description: End timestamp of the previous period (ISO 8601 UTC).
+                  example: "2026-01-01T00:00:00Z"
+        current:
+          $ref: '#/components/schemas/TrafficSummaryStatusMap'
+        previous:
+          $ref: '#/components/schemas/TrafficSummaryStatusMap'
+        deviation:
+          type: object
+          description: Per-status period-over-period deviation values showing relative change for each cache status.
+          properties:
+            "-":
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            BYPASS:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            MISS:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            HIT:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            STALE:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            EXPIRED:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+            UPDATING:
+              $ref: '#/components/schemas/TrafficCacheDeviationValue'
+
+    TrafficSummaryStatusMap:
+      type: object
+      description: Request counts keyed by cache status. Known statuses include HIT, MISS, EXPIRED, BYPASS, STALE, UPDATING, "-".
+      properties:
+        "-":
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        BYPASS:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        MISS:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        HIT:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        STALE:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        EXPIRED:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+        UPDATING:
+          $ref: '#/components/schemas/TrafficCacheStatusValue'
+
+    TrafficSummaryCardRequest:
+      type: object
+      required: [r]
+      description: |
+        If `resource_type` is `all`, omit `resource_hashes`.
+        If `resource_type` is a specific type, `resource_hashes` must be provided.
+      properties:
+        r:
+          type: string
+          description: Date range in "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss" format (UTC).
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
+        resource_type:
+          type: string
+          description: Resource category to filter by. Use `all` to include all resources (omit resource_hashes when using all).
+          enum: [push, pull, all, livestream]
+          example: push
+        resource_hashes:
+          type: array
+          items:
+            type: string
+          description: |
+            Array of resource hashes to filter by (from /analytics/traffic/resources).
+            Required when resource_type is push, pull, or livestream. Omit when resource_type is all.
+          example: ["abc12hash", "def34hash", "ghi56hash"]
+        granularity:
+          type: string
+          description: Defines the time interval for data aggregation. Defaults to "24h".
+          enum: ["1m", "5m", "15m", "30m", "1h", "3h", "6h", "12h", "24h"]
+          example: "24h"
+
+    TrafficCardResponse:
+      type: object
+      description: |
+        Period-over-period comparison for summary metrics. The comparison period is
+        equivalent to the selected range shifted backward by the same duration.
+        Deviation values use the same TrafficSummary structure, where each metric's
+        `percent` or `formatted` field encodes the relative change (e.g. "-4%").
+      properties:
+        current:
+          $ref: '#/components/schemas/TrafficSummary'
+        previous:
+          $ref: '#/components/schemas/TrafficSummary'
+        deviation:
+          $ref: '#/components/schemas/TrafficSummary'
