@@ -140,7 +140,6 @@ paths:
                 $ref: '#/components/schemas/TrafficCardResponse'
 
 components:
-  parameters: {}
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -557,7 +557,6 @@ paths:
                 $ref: '#/components/schemas/TrafficLineResponse'
 
 components:
-  parameters: {}
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
