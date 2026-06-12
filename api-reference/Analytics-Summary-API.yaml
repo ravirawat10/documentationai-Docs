@@ -20,11 +20,19 @@ servers:
 security:
 - ApiKeyAuth: []
 
+tags:
+- name: Resources
+  description: Endpoints for listing CDN resources available for analytics filtering
+- name: Summary
+  description: Aggregate and time-series traffic summary endpoints
+
 paths:
 
   /analytics/traffic/resources:
     post:
       operationId: trafficResources
+      tags:
+      - Resources
       summary: List available resources for filtering
       description: Returns a map of resource-hash to resource-ID for all CDN resources (streams, push zones, pull zones) on the account. Use the returned hashes in `resource_hashes` filter fields on all other analytics endpoints.
       requestBody:
@@ -44,6 +52,8 @@ paths:
   /analytics/traffic/summary:
     post:
       operationId: trafficSummary
+      tags:
+      - Summary
       summary: Get traffic summary
       description: Returns aggregate traffic metrics for the selected date range.
       requestBody:
@@ -90,6 +100,8 @@ paths:
   /analytics/traffic/summary/line:
     post:
       operationId: trafficSummaryLine
+      tags:
+      - Summary
       summary: Get traffic summary time-series
       description: Returns per-time-bucket traffic metrics for the selected date range, along with period totals and granularity metadata.
       requestBody:
@@ -109,6 +121,8 @@ paths:
   /analytics/traffic/summary/card:
     post:
       operationId: trafficSummaryCard
+      tags:
+      - Summary
       summary: Get period-over-period traffic summary
       description: Returns current-period totals, equivalent previous-period totals, and percentage deviations for all core traffic metrics.
       requestBody:
