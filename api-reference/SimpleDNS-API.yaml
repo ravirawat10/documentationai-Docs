@@ -75,7 +75,8 @@ paths:
   /dns:
     get:
       operationId: listDnsZones
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: List Zones
       responses:
         '200':
@@ -306,7 +307,8 @@ paths:
                     example: [ns1.example-dns.com, ns2.example-dns.com, ns3.example-dns.com, ns4.example-dns.com]
     post:
       operationId: createDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Create Zone
       requestBody:
         required: true
@@ -360,7 +362,8 @@ paths:
   /dns/{dnsId}/updated:
     get:
       operationId: getDnsZoneUpdatedStatus
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Get Updated Status
       parameters:
       - name: dnsId
@@ -380,7 +383,8 @@ paths:
   /dns/{dnsId}/status:
     post:
       operationId: enableDisableDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Enable/Disable Zone
       parameters:
       - name: dnsId
@@ -421,7 +425,8 @@ paths:
   /dns/{dnsId}:
     post:
       operationId: deleteDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Delete Zone
       parameters:
       - name: dnsId
@@ -462,7 +467,8 @@ paths:
   /dns/{dnsId}/restore:
     get:
       operationId: restoreDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Restore Zone
       parameters:
       - name: dnsId
@@ -493,7 +499,8 @@ paths:
   /dns/{dnsId}/statistics:
     get:
       operationId: getDnsZoneStatistics
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics
       parameters:
       - name: dnsId
@@ -543,7 +550,8 @@ paths:
   /dns/{dnsId}/statistics/last30:
     get:
       operationId: getDnsZoneStatisticsLast30
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics (Last 30 Days)
       parameters:
       - name: dnsId
@@ -593,7 +601,8 @@ paths:
   /dns/{dnsId}/statistics/monthly/{year}:
     get:
       operationId: getDnsZoneStatisticsMonthly
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics (Monthly)
       parameters:
       - name: dnsId
@@ -648,7 +657,8 @@ paths:
   /dns/{dnsId}/statistics/yearly:
     get:
       operationId: getDnsZoneStatisticsYearly
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics (Yearly)
       parameters:
       - name: dnsId
@@ -698,7 +708,8 @@ paths:
   /dns/{dnsId}/statistics/daily/{year}/{month}:
     get:
       operationId: getDnsZoneStatisticsDaily
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics (Daily)
       parameters:
       - name: dnsId
@@ -758,7 +769,8 @@ paths:
   /dns/{dnsId}/statistics/hourly/{year}/{month}/{day}:
     get:
       operationId: getDnsZoneStatisticsHourly
-      tags: [DNS Statistics]
+      tags:
+      - DNS Statistics
       summary: Get Zone Statistics (Hourly)
       parameters:
       - name: dnsId
@@ -823,7 +835,8 @@ paths:
   /dns/{dnsId}/dnssec:
     get:
       operationId: getDnsZoneDnssec
-      tags: [DNS Security]
+      tags:
+      - DNS Security
       summary: Get Zone DNSSEC
       parameters:
       - name: dnsId
@@ -897,7 +910,8 @@ paths:
                         example: '1'
     post:
       operationId: activateDnsZoneDnssec
-      tags: [DNS Security]
+      tags:
+      - DNS Security
       summary: Activate Zone DNSSEC
       parameters:
       - name: dnsId
@@ -938,7 +952,8 @@ paths:
   /dns/{dnsId}/soa:
     get:
       operationId: getDnsZoneSoa
-      tags: [DNS Security]
+      tags:
+      - DNS Security
       summary: Get Zone SOA
       parameters:
       - name: dnsId
@@ -997,7 +1012,8 @@ paths:
                   defaultTTL: '3600'
     post:
       operationId: updateDnsZoneSoa
-      tags: [DNS Security]
+      tags:
+      - DNS Security
       summary: Update Zone SOA
       parameters:
       - name: dnsId
@@ -1058,7 +1074,8 @@ paths:
   /dns/{dnsId}/export:
     get:
       operationId: exportDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Export Zone
       parameters:
       - name: dnsId
@@ -1078,7 +1095,8 @@ paths:
   /dns/{dnsId}/import:
     post:
       operationId: importDnsZone
-      tags: [DNS Zones]
+      tags:
+      - DNS Zones
       summary: Import Zone
       parameters:
       - name: dnsId
@@ -1133,7 +1151,8 @@ paths:
   /dns/{dnsId}/mail:
     get:
       operationId: getMailForwards
-      tags: [Mail Forwards]
+      tags:
+      - Mail Forwards
       summary: Get Mail Forwards
       parameters:
       - name: dnsId
@@ -1178,7 +1197,8 @@ paths:
                             example: '1'
     put:
       operationId: addMailForward
-      tags: [Mail Forwards]
+      tags:
+      - Mail Forwards
       summary: Add Mail Forward
       parameters:
       - name: dnsId
@@ -1239,7 +1259,8 @@ paths:
                   id: 12345
     post:
       operationId: updateMailForward
-      tags: [Mail Forwards]
+      tags:
+      - Mail Forwards
       summary: Update Mail Forward
       parameters:
       - name: dnsId
@@ -1290,7 +1311,8 @@ paths:
                 statusDescription: The mail forward has been edited successfully.
     delete:
       operationId: deleteMailForward
-      tags: [Mail Forwards]
+      tags:
+      - Mail Forwards
       summary: Delete Mail Forward
       parameters:
       - name: dnsId
@@ -1339,7 +1361,8 @@ paths:
   /dns/{dnsId}/records:
     get:
       operationId: getDnsRecords
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Get Records
       parameters:
       - name: limit
@@ -1401,7 +1424,8 @@ paths:
                     items: {}
     post:
       operationId: addDnsRecord
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Add Record
       parameters:
       - name: dnsId
@@ -1668,7 +1692,8 @@ paths:
   /dns/{dnsId}/records/{recordid}:
     post:
       operationId: updateDnsRecord
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Update Record
       parameters:
       - name: dnsId
@@ -1938,7 +1963,8 @@ paths:
                   id: 12345
     delete:
       operationId: deleteDnsRecord
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Delete Record
       parameters:
       - name: dnsId
@@ -1974,7 +2000,8 @@ paths:
   /dns/{dnsId}/records/{recordid}/status:
     post:
       operationId: enableDisableDnsRecord
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Enable/Disable Record
       parameters:
       - name: dnsId
@@ -2020,7 +2047,8 @@ paths:
   /dns/{dnsId}/records/{recordid}/proxy:
     post:
       operationId: proxyDnsRecord
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Proxy Record
       parameters:
       - name: dnsId
@@ -2129,7 +2157,8 @@ paths:
   /dns/{dnsId}/records/{recordid}/dynamicurl:
     get:
       operationId: getDnsRecordDynamicUrl
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Get/Activate Record DynamicURL
       parameters:
       - name: dnsId
@@ -2179,7 +2208,8 @@ paths:
                     url: "https://api.example.com/dynamicURL/?q=sample-dynamic-token"
     post:
       operationId: deleteDnsRecordDynamicUrl
-      tags: [DNS Records]
+      tags:
+      - DNS Records
       summary: Delete/Disable Record DynamicURL
       parameters:
       - name: dnsId
