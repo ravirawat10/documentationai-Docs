@@ -1,0 +1,1755 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Transcoding API
+  description: >
+    Transcoding management endpoints for the 5centsCDN platform.
+    Covers video encoding job management, encoding preset profile management,
+    configurable video filters, and encode-completion notification settings.
+    Authentication is via API key header (X-API-Key) for the public API, and
+    WHMCS session cookie (WHMCSUID) for the dashboard routes.
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+
+security:
+- ApiKeyAuth: []
+
+tags:
+- name: Encoding Jobs
+  description: Video encoding job management and monitoring endpoints
+
+paths:
+  /transcoding:
+    get:
+      tags:
+      - Encoding Jobs
+      summary: List All Encoding Jobs
+      description: List all encoding jobs for the service. No date filter — returns all.
+      operationId: listEncodingJobs
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zonesInRange:
+                    type: array
+                    description: Array of zone IDs that have encoding jobs within the queried date range.
+                    items:
+                      type: integer
+                    example: [2331, 6643]
+                  logsInRange:
+                    type: array
+                    description: Array of encoding job log entries within the queried date range.
+                    items:
+                      type: object
+                      properties:
+                        index:
+                          type: integer
+                          description: Sequential index of the encoding job record.
+                          example: 146206
+                        serviceid:
+                          type: integer
+                          description: Service account identifier.
+                          example: 103
+                        zoneid:
+                          type: integer
+                          description: Push zone identifier associated with this encoding job.
+                          example: 6643
+                        hash:
+                          type: string
+                          description: Unique hash identifier for the encoding job.
+                          example: a1b2c3d4e5f67890a1b2c3d4e5f67890
+                        meta:
+                          type: object
+                          description: Job metadata object containing encoding parameters and results.
+                          properties:
+                            zoneid:
+                              type: string
+                              description: Push zone identifier associated with this encoding job.
+                              example: "6643"
+                            profileid:
+                              type: string
+                              description: Transcoding profile identifier used for this job.
+                              example: "1"
+                            infile:
+                              type: string
+                              description: Input file relative path.
+                              example: /zone-12345/source/sample-video.mp4
+                            extension:
+                              type: string
+                              description: File extension of the input file.
+                              example: mp4
+                            sbrmp4:
+                              type: array
+                              description: List of sub-bitrate MP4 output files generated.
+                              items: {}
+                              example: []
+                            outfile:
+                              type: string
+                              description: Output file relative path.
+                              example: /zone-12345/mp4/sample-video_720p.mp4
+                            outdir:
+                              type: string
+                              description: Output directory path for the encoded file.
+                              example: /zone-12345/mp4
+                            relativepath:
+                              type: object
+                              description: Relative paths object for input and output files.
+                              properties:
+                                infile:
+                                  type: string
+                                  description: Input file relative path.
+                                  example: /sample-video.mp4
+                                outfile:
+                                  type: string
+                                  description: Output file relative path.
+                                  example: /mp4/sample-video_720p.mp4
+                            orientationLock:
+                              type: boolean
+                              description: Whether orientation lock is applied during encoding.
+                              example: true
+                            hlsUnifiedSegments:
+                              type: boolean
+                              description: Whether HLS unified segment output is enabled.
+                              example: false
+                            hlsfMP4Segments:
+                              type: boolean
+                              description: Whether HLS fragmented MP4 segment output is enabled.
+                              example: false
+                            time:
+                              type: object
+                              description: Timing data for each stage of the encoding pipeline.
+                              properties:
+                                process:
+                                  type: object
+                                  description: Overall process timing with start and end timestamps.
+                                  properties:
+                                    start:
+                                      type: string
+                                      description: Stage start timestamp in milliseconds (Unix epoch).
+                                      example: "1777227925968"
+                                    end:
+                                      type: string
+                                      description: Stage end timestamp in milliseconds (Unix epoch).
+                                      example: "1777228373550"
+                                infile:
+                                  type: object
+                                  description: Input file relative path.
+                                  properties:
+                                    check:
+                                      type: object
+                                      description: File existence and validity check stage timing.
+                                      properties:
+                                        start:
+                                          type: string
+                                          description: Stage start timestamp in milliseconds (Unix epoch).
+                                          example: "1777227926036"
+                                        end:
+                                          type: string
+                                          description: Stage end timestamp in milliseconds (Unix epoch).
+                                          example: "1777227926751"
+                                    probe:
+                                      type: object
+                                      description: FFprobe analysis stage timing.
+                                      properties:
+                                        start:
+                                          type: string
+                                          description: Stage start timestamp in milliseconds (Unix epoch).
+                                          example: "1777227926751"
+                                        end:
+                                          type: string
+                                          description: Stage end timestamp in milliseconds (Unix epoch).
+                                          example: "1777227929617"
+                                download:
+                                  type: object
+                                  description: File download stage timing.
+                                  properties:
+                                    start:
+                                      type: string
+                                      description: Stage start timestamp in milliseconds (Unix epoch).
+                                      example: "1777227929688"
+                                    end:
+                                      type: string
+                                      description: Stage end timestamp in milliseconds (Unix epoch).
+                                      example: "1777227935071"
+                                encoder:
+                                  type: object
+                                  description: Encoder execution stage timing.
+                                  properties:
+                                    start:
+                                      type: string
+                                      description: Stage start timestamp in milliseconds (Unix epoch).
+                                      example: "1777227935139"
+                                    end:
+                                      type: string
+                                      description: Stage end timestamp in milliseconds (Unix epoch).
+                                      example: "1777228373140"
+                                outfile:
+                                  type: object
+                                  description: Output file relative path.
+                                  properties:
+                                    check:
+                                      type: object
+                                      description: File existence and validity check stage timing.
+                                    probe:
+                                      type: object
+                                      description: FFprobe analysis stage timing.
+                                      properties:
+                                        start:
+                                          type: string
+                                          description: Stage start timestamp in milliseconds (Unix epoch).
+                                          example: "1777228373140"
+                                        end:
+                                          type: string
+                                          description: Stage end timestamp in milliseconds (Unix epoch).
+                                          example: "1777228373199"
+                                    segment:
+                                      type: object
+                                      description: HLS segmentation stage timing.
+                                thumbs:
+                                  type: object
+                                  description: Thumbnail generation stage timing.
+                                  properties:
+                                    process:
+                                      type: object
+                                      description: Overall process timing with start and end timestamps.
+                                upload:
+                                  type: object
+                                  description: Output file upload stage timing.
+                                  properties:
+                                    start:
+                                      type: string
+                                      description: Stage start timestamp in milliseconds (Unix epoch).
+                                      example: "1777228373489"
+                                    end:
+                                      type: string
+                                      description: Stage end timestamp in milliseconds (Unix epoch).
+                                      example: "1777228373540"
+                            probe:
+                              type: object
+                              description: FFprobe analysis stage timing.
+                              properties:
+                                infile:
+                                  type: object
+                                  description: Input file relative path.
+                                  properties:
+                                    streams:
+                                      type: array
+                                      description: Array of codec stream descriptors from FFprobe analysis.
+                                      items:
+                                        type: object
+                                        properties:
+                                          index:
+                                            type: integer
+                                            description: Sequential index of the encoding job record.
+                                            example: 0
+                                          codec_name:
+                                            type: string
+                                            description: Short codec name (e.g. h264, aac).
+                                            example: h264
+                                          codec_long_name:
+                                            type: string
+                                            description: Full human-readable codec name.
+                                            example: H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+                                          profile:
+                                            type: string
+                                            description: Codec or encoder profile name.
+                                            example: High
+                                          codec_type:
+                                            type: string
+                                            description: Type of the codec stream (video or audio).
+                                            example: video
+                                          codec_tag_string:
+                                            type: string
+                                            description: FourCC codec tag string.
+                                            example: avc1
+                                          codec_tag:
+                                            type: string
+                                            description: Hex codec tag value.
+                                            example: "0x31637661"
+                                          width:
+                                            type: integer
+                                            description: Video frame width in pixels.
+                                            example: 1920
+                                          height:
+                                            type: integer
+                                            description: Video frame height in pixels.
+                                            example: 1080
+                                          coded_width:
+                                            type: integer
+                                            description: Encoded frame width before crop or padding.
+                                            example: 1920
+                                          coded_height:
+                                            type: integer
+                                            description: Encoded frame height before crop or padding.
+                                            example: 1080
+                                          closed_captions:
+                                            type: integer
+                                            description: Whether the stream contains closed captions (1 = yes, 0 = no).
+                                            example: 0
+                                          film_grain:
+                                            type: integer
+                                            description: Film grain synthesis flag (1 = enabled, 0 = disabled).
+                                            example: 0
+                                          has_b_frames:
+                                            type: integer
+                                            description: Number of consecutive B-frames used in the video stream.
+                                            example: 1
+                                          sample_aspect_ratio:
+                                            type: string
+                                            description: Sample aspect ratio as reported by FFprobe.
+                                            example: "1:1"
+                                          display_aspect_ratio:
+                                            type: string
+                                            description: Display aspect ratio as reported by FFprobe.
+                                            example: "16:9"
+                                          pix_fmt:
+                                            type: string
+                                            description: Pixel format of the video stream.
+                                            example: yuv420p
+                                          level:
+                                            type: integer
+                                            description: Codec level value.
+                                            example: 40
+                                          color_range:
+                                            type: string
+                                            description: Color range of the video stream (tv = limited, pc = full).
+                                            example: tv
+                                          color_space:
+                                            type: string
+                                            description: Color space of the video stream.
+                                            example: bt709
+                                          color_transfer:
+                                            type: string
+                                            description: Color transfer characteristics of the video stream.
+                                            example: bt709
+                                          color_primaries:
+                                            type: string
+                                            description: Color primaries of the video stream.
+                                            example: bt709
+                                          chroma_location:
+                                            type: string
+                                            description: Chroma sample location.
+                                            example: left
+                                          field_order:
+                                            type: string
+                                            description: Field order (e.g. progressive or interlaced).
+                                            example: progressive
+                                          refs:
+                                            type: integer
+                                            description: Number of reference frames used by the codec.
+                                            example: 1
+                                          is_avc:
+                                            type: string
+                                            description: Whether the stream uses Annex B AVC format.
+                                            example: "true"
+                                          nal_length_size:
+                                            type: string
+                                            description: NAL unit length size in bytes.
+                                            example: "4"
+                                          sample_fmt:
+                                            type: string
+                                            description: Audio sample format.
+                                            example: fltp
+                                          sample_rate:
+                                            type: string
+                                            description: Audio sample rate in Hz.
+                                            example: "44100"
+                                          channels:
+                                            type: integer
+                                            description: Number of audio channels.
+                                            example: 2
+                                          channel_layout:
+                                            type: string
+                                            description: Audio channel layout (e.g. stereo, 5.1).
+                                            example: stereo
+                                          bits_per_sample:
+                                            type: integer
+                                            description: Bits per audio sample.
+                                            example: 0
+                                          initial_padding:
+                                            type: integer
+                                            description: Initial padding samples for audio streams.
+                                            example: 0
+                                          id:
+                                            type: string
+                                            description: Unique stream or record identifier.
+                                            example: "0x1"
+                                          r_frame_rate:
+                                            type: string
+                                            description: Real base frame rate of the video stream.
+                                            example: 24000/1001
+                                          avg_frame_rate:
+                                            type: string
+                                            description: Average frame rate of the video stream.
+                                            example: 462960000/19309289
+                                          time_base:
+                                            type: string
+                                            description: Time base used for timestamp calculations.
+                                            example: 1/90000
+                                          start_pts:
+                                            type: integer
+                                            description: Stream start presentation timestamp.
+                                            example: 0
+                                          start_time:
+                                            type: string
+                                            description: Stream or container start time in seconds.
+                                            example: "0.000000"
+                                          duration_ts:
+                                            type: integer
+                                            description: Stream duration in time base units.
+                                            example: 19309289
+                                          duration:
+                                            type: string
+                                            description: Stream or container duration in seconds.
+                                            example: "214.547656"
+                                          bit_rate:
+                                            type: string
+                                            description: Stream or container bitrate in bits per second.
+                                            example: "3001829"
+                                          bits_per_raw_sample:
+                                            type: string
+                                            description: Bits per raw uncompressed sample.
+                                            example: "8"
+                                          nb_frames:
+                                            type: string
+                                            description: Total number of frames in the stream.
+                                            example: "5144"
+                                          extradata_size:
+                                            type: integer
+                                            description: Size of codec extradata in bytes.
+                                            example: 48
+                                          disposition:
+                                            type: object
+                                            description: Stream disposition flags from FFprobe.
+                                            properties:
+                                              default:
+                                                type: integer
+                                                description: Default stream flag (1 = default, 0 = not default).
+                                                example: 1
+                                              dub:
+                                                type: integer
+                                                description: Dubbed audio stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              original:
+                                                type: integer
+                                                description: Original language stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              comment:
+                                                type: integer
+                                                description: Commentary track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              lyrics:
+                                                type: integer
+                                                description: Lyrics track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              karaoke:
+                                                type: integer
+                                                description: Karaoke track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              forced:
+                                                type: integer
+                                                description: Forced subtitle or stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              hearing_impaired:
+                                                type: integer
+                                                description: Stream designed for hearing-impaired audiences (1 = yes, 0 = no).
+                                                example: 0
+                                              visual_impaired:
+                                                type: integer
+                                                description: Stream designed for visually-impaired audiences (1 = yes, 0 = no).
+                                                example: 0
+                                              clean_effects:
+                                                type: integer
+                                                description: Audio clean effects flag (1 = yes, 0 = no).
+                                                example: 0
+                                              attached_pic:
+                                                type: integer
+                                                description: Stream is an attached picture or cover art flag (1 = yes, 0 = no).
+                                                example: 0
+                                              timed_thumbnails:
+                                                type: integer
+                                                description: Stream contains timed thumbnail images (1 = yes, 0 = no).
+                                                example: 0
+                                              non_diegetic:
+                                                type: integer
+                                                description: Non-diegetic audio stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              captions:
+                                                type: integer
+                                                description: Captions track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              descriptions:
+                                                type: integer
+                                                description: Audio descriptions track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              metadata:
+                                                type: integer
+                                                description: Metadata-only stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              dependent:
+                                                type: integer
+                                                description: Stream depends on another stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              still_image:
+                                                type: integer
+                                                description: Stream is a still image flag (1 = yes, 0 = no).
+                                                example: 0
+                                          tags:
+                                            type: object
+                                            description: Metadata tags embedded in the stream or container.
+                                            properties:
+                                              language:
+                                                type: string
+                                                description: ISO 639 language code for the stream.
+                                                example: und
+                                              handler_name:
+                                                type: string
+                                                description: Stream handler name from container metadata.
+                                                example: VideoHandler
+                                              vendor_id:
+                                                type: string
+                                                description: Vendor identifier tag embedded in the stream.
+                                                example: "[0][0][0][0]"
+                                              encoder:
+                                                type: string
+                                                description: Encoder execution stage timing.
+                                                example: Lavc61.1.100 libx264
+                                          dar:
+                                            type: object
+                                            description: Display aspect ratio parsed from the stream metadata.
+                                            properties:
+                                              width:
+                                                type: string
+                                                description: Video frame width in pixels.
+                                                example: "16"
+                                              height:
+                                                type: string
+                                                description: Video frame height in pixels.
+                                                example: "9"
+                                              ratio:
+                                                type: number
+                                                description: Display aspect ratio as a decimal number.
+                                                example: 1.78
+                                    format:
+                                      type: object
+                                      description: Container format metadata from FFprobe.
+                                      properties:
+                                        nb_streams:
+                                          type: integer
+                                          description: Number of streams in the container.
+                                          example: 2
+                                        nb_programs:
+                                          type: integer
+                                          description: Number of programs in the container.
+                                          example: 0
+                                        nb_stream_groups:
+                                          type: integer
+                                          description: Number of stream groups in the container.
+                                          example: 0
+                                        format_name:
+                                          type: string
+                                          description: Short format name(s) as reported by FFprobe.
+                                          example: "mov,mp4,m4a,3gp,3g2,mj2"
+                                        format_long_name:
+                                          type: string
+                                          description: Full human-readable container format name.
+                                          example: QuickTime / MOV
+                                        start_time:
+                                          type: string
+                                          description: Stream or container start time in seconds.
+                                          example: "0.000000"
+                                        duration:
+                                          type: string
+                                          description: Stream or container duration in seconds.
+                                          example: "214.552381"
+                                        size:
+                                          type: string
+                                          description: File size in bytes.
+                                          example: "168235626"
+                                        bit_rate:
+                                          type: string
+                                          description: Stream or container bitrate in bits per second.
+                                          example: "6272990"
+                                        probe_score:
+                                          type: integer
+                                          description: FFprobe format detection confidence score.
+                                          example: 100
+                                        tags:
+                                          type: object
+                                          description: Metadata tags embedded in the stream or container.
+                                          properties:
+                                            major_brand:
+                                              type: string
+                                              description: Major brand identifier from the MP4 container header.
+                                              example: isom
+                                            minor_version:
+                                              type: string
+                                              description: Minor version of the MP4 brand specification.
+                                              example: "512"
+                                            compatible_brands:
+                                              type: string
+                                              description: Compatible brands list from the MP4 container header.
+                                              example: isomiso2avc1mp41
+                                            encoder:
+                                              type: string
+                                              description: Encoder execution stage timing.
+                                              example: Lavf61.1.100
+                                outfile:
+                                  type: object
+                                  description: Output file relative path.
+                                  properties:
+                                    streams:
+                                      type: array
+                                      description: Array of codec stream descriptors from FFprobe analysis.
+                                      items:
+                                        type: object
+                                        properties:
+                                          index:
+                                            type: integer
+                                            description: Sequential index of the encoding job record.
+                                            example: 0
+                                          codec_name:
+                                            type: string
+                                            description: Short codec name (e.g. h264, aac).
+                                            example: h264
+                                          codec_long_name:
+                                            type: string
+                                            description: Full human-readable codec name.
+                                            example: H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+                                          profile:
+                                            type: string
+                                            description: Codec or encoder profile name.
+                                            example: High
+                                          codec_type:
+                                            type: string
+                                            description: Type of the codec stream (video or audio).
+                                            example: video
+                                          codec_tag_string:
+                                            type: string
+                                            description: FourCC codec tag string.
+                                            example: avc1
+                                          codec_tag:
+                                            type: string
+                                            description: Hex codec tag value.
+                                            example: "0x31637661"
+                                          width:
+                                            type: integer
+                                            description: Video frame width in pixels.
+                                            example: 1280
+                                          height:
+                                            type: integer
+                                            description: Video frame height in pixels.
+                                            example: 720
+                                          coded_width:
+                                            type: integer
+                                            description: Encoded frame width before crop or padding.
+                                            example: 1280
+                                          coded_height:
+                                            type: integer
+                                            description: Encoded frame height before crop or padding.
+                                            example: 720
+                                          closed_captions:
+                                            type: integer
+                                            description: Whether the stream contains closed captions (1 = yes, 0 = no).
+                                            example: 0
+                                          film_grain:
+                                            type: integer
+                                            description: Film grain synthesis flag (1 = enabled, 0 = disabled).
+                                            example: 0
+                                          has_b_frames:
+                                            type: integer
+                                            description: Number of consecutive B-frames used in the video stream.
+                                            example: 2
+                                          sample_aspect_ratio:
+                                            type: string
+                                            description: Sample aspect ratio as reported by FFprobe.
+                                            example: "1:1"
+                                          display_aspect_ratio:
+                                            type: string
+                                            description: Display aspect ratio as reported by FFprobe.
+                                            example: "16:9"
+                                          pix_fmt:
+                                            type: string
+                                            description: Pixel format of the video stream.
+                                            example: yuv420p
+                                          level:
+                                            type: integer
+                                            description: Codec level value.
+                                            example: 42
+                                          color_range:
+                                            type: string
+                                            description: Color range of the video stream (tv = limited, pc = full).
+                                            example: tv
+                                          color_space:
+                                            type: string
+                                            description: Color space of the video stream.
+                                            example: bt709
+                                          color_transfer:
+                                            type: string
+                                            description: Color transfer characteristics of the video stream.
+                                            example: bt709
+                                          color_primaries:
+                                            type: string
+                                            description: Color primaries of the video stream.
+                                            example: bt709
+                                          chroma_location:
+                                            type: string
+                                            description: Chroma sample location.
+                                            example: left
+                                          field_order:
+                                            type: string
+                                            description: Field order (e.g. progressive or interlaced).
+                                            example: progressive
+                                          refs:
+                                            type: integer
+                                            description: Number of reference frames used by the codec.
+                                            example: 1
+                                          is_avc:
+                                            type: string
+                                            description: Whether the stream uses Annex B AVC format.
+                                            example: "true"
+                                          nal_length_size:
+                                            type: string
+                                            description: NAL unit length size in bytes.
+                                            example: "4"
+                                          sample_fmt:
+                                            type: string
+                                            description: Audio sample format.
+                                            example: fltp
+                                          sample_rate:
+                                            type: string
+                                            description: Audio sample rate in Hz.
+                                            example: "44100"
+                                          channels:
+                                            type: integer
+                                            description: Number of audio channels.
+                                            example: 2
+                                          channel_layout:
+                                            type: string
+                                            description: Audio channel layout (e.g. stereo, 5.1).
+                                            example: stereo
+                                          bits_per_sample:
+                                            type: integer
+                                            description: Bits per audio sample.
+                                            example: 0
+                                          initial_padding:
+                                            type: integer
+                                            description: Initial padding samples for audio streams.
+                                            example: 0
+                                          id:
+                                            type: string
+                                            description: Unique stream or record identifier.
+                                            example: "0x1"
+                                          r_frame_rate:
+                                            type: string
+                                            description: Real base frame rate of the video stream.
+                                            example: 30/1
+                                          avg_frame_rate:
+                                            type: string
+                                            description: Average frame rate of the video stream.
+                                            example: 30/1
+                                          time_base:
+                                            type: string
+                                            description: Time base used for timestamp calculations.
+                                            example: 1/15360
+                                          start_pts:
+                                            type: integer
+                                            description: Stream start presentation timestamp.
+                                            example: 0
+                                          start_time:
+                                            type: string
+                                            description: Stream or container start time in seconds.
+                                            example: "0.000000"
+                                          duration_ts:
+                                            type: integer
+                                            description: Stream duration in time base units.
+                                            example: 872448
+                                          duration:
+                                            type: string
+                                            description: Stream or container duration in seconds.
+                                            example: "56.800000"
+                                          bit_rate:
+                                            type: string
+                                            description: Stream or container bitrate in bits per second.
+                                            example: "1497168"
+                                          bits_per_raw_sample:
+                                            type: string
+                                            description: Bits per raw uncompressed sample.
+                                            example: "8"
+                                          nb_frames:
+                                            type: string
+                                            description: Total number of frames in the stream.
+                                            example: "1704"
+                                          extradata_size:
+                                            type: integer
+                                            description: Size of codec extradata in bytes.
+                                            example: 48
+                                          disposition:
+                                            type: object
+                                            description: Stream disposition flags from FFprobe.
+                                            properties:
+                                              default:
+                                                type: integer
+                                                description: Default stream flag (1 = default, 0 = not default).
+                                                example: 1
+                                              dub:
+                                                type: integer
+                                                description: Dubbed audio stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              original:
+                                                type: integer
+                                                description: Original language stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              comment:
+                                                type: integer
+                                                description: Commentary track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              lyrics:
+                                                type: integer
+                                                description: Lyrics track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              karaoke:
+                                                type: integer
+                                                description: Karaoke track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              forced:
+                                                type: integer
+                                                description: Forced subtitle or stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              hearing_impaired:
+                                                type: integer
+                                                description: Stream designed for hearing-impaired audiences (1 = yes, 0 = no).
+                                                example: 0
+                                              visual_impaired:
+                                                type: integer
+                                                description: Stream designed for visually-impaired audiences (1 = yes, 0 = no).
+                                                example: 0
+                                              clean_effects:
+                                                type: integer
+                                                description: Audio clean effects flag (1 = yes, 0 = no).
+                                                example: 0
+                                              attached_pic:
+                                                type: integer
+                                                description: Stream is an attached picture or cover art flag (1 = yes, 0 = no).
+                                                example: 0
+                                              timed_thumbnails:
+                                                type: integer
+                                                description: Stream contains timed thumbnail images (1 = yes, 0 = no).
+                                                example: 0
+                                              non_diegetic:
+                                                type: integer
+                                                description: Non-diegetic audio stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              captions:
+                                                type: integer
+                                                description: Captions track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              descriptions:
+                                                type: integer
+                                                description: Audio descriptions track flag (1 = yes, 0 = no).
+                                                example: 0
+                                              metadata:
+                                                type: integer
+                                                description: Metadata-only stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              dependent:
+                                                type: integer
+                                                description: Stream depends on another stream flag (1 = yes, 0 = no).
+                                                example: 0
+                                              still_image:
+                                                type: integer
+                                                description: Stream is a still image flag (1 = yes, 0 = no).
+                                                example: 0
+                                          tags:
+                                            type: object
+                                            description: Metadata tags embedded in the stream or container.
+                                            properties:
+                                              language:
+                                                type: string
+                                                description: ISO 639 language code for the stream.
+                                                example: und
+                                              handler_name:
+                                                type: string
+                                                description: Stream handler name from container metadata.
+                                                example: VideoHandler
+                                              vendor_id:
+                                                type: string
+                                                description: Vendor identifier tag embedded in the stream.
+                                                example: "[0][0][0][0]"
+                                              encoder:
+                                                type: string
+                                                description: Encoder execution stage timing.
+                                                example: Lavc61.1.100 libx264
+                                    format:
+                                      type: object
+                                      description: Container format metadata from FFprobe.
+                                      properties:
+                                        nb_streams:
+                                          type: integer
+                                          description: Number of streams in the container.
+                                          example: 2
+                                        nb_programs:
+                                          type: integer
+                                          description: Number of programs in the container.
+                                          example: 0
+                                        nb_stream_groups:
+                                          type: integer
+                                          description: Number of stream groups in the container.
+                                          example: 0
+                                        format_name:
+                                          type: string
+                                          description: Short format name(s) as reported by FFprobe.
+                                          example: "mov,mp4,m4a,3gp,3g2,mj2"
+                                        format_long_name:
+                                          type: string
+                                          description: Full human-readable container format name.
+                                          example: QuickTime / MOV
+                                        start_time:
+                                          type: string
+                                          description: Stream or container start time in seconds.
+                                          example: "0.000000"
+                                        duration:
+                                          type: string
+                                          description: Stream or container duration in seconds.
+                                          example: "56.800000"
+                                        size:
+                                          type: string
+                                          description: File size in bytes.
+                                          example: "11613187"
+                                        bit_rate:
+                                          type: string
+                                          description: Stream or container bitrate in bits per second.
+                                          example: "1635660"
+                                        probe_score:
+                                          type: integer
+                                          description: FFprobe format detection confidence score.
+                                          example: 100
+                                        tags:
+                                          type: object
+                                          description: Metadata tags embedded in the stream or container.
+                                          properties:
+                                            major_brand:
+                                              type: string
+                                              description: Major brand identifier from the MP4 container header.
+                                              example: isom
+                                            minor_version:
+                                              type: string
+                                              description: Minor version of the MP4 brand specification.
+                                              example: "512"
+                                            compatible_brands:
+                                              type: string
+                                              description: Compatible brands list from the MP4 container header.
+                                              example: isomiso2avc1mp41
+                                            encoder:
+                                              type: string
+                                              description: Encoder execution stage timing.
+                                              example: Lavf61.1.100
+                            serviceid:
+                              type: string
+                              description: Service account identifier.
+                              example: "103"
+                            codec:
+                              type: string
+                              description: Short codec name used for the encoding job.
+                              example: h264
+                            zone:
+                              type: object
+                              description: Zone object associated with this encoding job.
+                              properties:
+                                id:
+                                  type: integer
+                                  description: Unique stream or record identifier.
+                                  example: 6643
+                                serviceid:
+                                  type: integer
+                                  description: Service account identifier.
+                                  example: 103
+                                alias:
+                                  type: string
+                                  description: Optional alias or label for the zone.
+                                  example: ""
+                                hashid:
+                                  type: string
+                                  description: Short alphanumeric hash ID for the zone.
+                                  example: abc123xyz789
+                                mode:
+                                  type: string
+                                  description: Zone operating mode.
+                                  example: http
+                                optimizer:
+                                  type: string
+                                  description: Optimizer configuration flag.
+                                  example: "0"
+                                server:
+                                  type: integer
+                                  description: Edge server identifier hosting this zone.
+                                  example: 206
+                                cnames:
+                                  type: string
+                                  description: Comma-separated custom CNAME hostnames for the zone.
+                                  example: ""
+                                zoneids:
+                                  nullable: true
+                                  example:
+                                edgeruleids:
+                                  type: integer
+                                  description: Edge rule set identifier applied to this zone.
+                                  example: 0
+                                profile:
+                                  nullable: true
+                                  example:
+                                rclone:
+                                  type: integer
+                                  description: Rclone sync configuration flag (0 = disabled).
+                                  example: 0
+                                lsd_count:
+                                  type: integer
+                                  description: Live stream domain count.
+                                  example: 0
+                                disabled:
+                                  type: string
+                                  description: Whether the zone is disabled (0 = enabled, 1 = disabled).
+                                  example: "0"
+                                created_at:
+                                  type: string
+                                  description: Timestamp when this record was created.
+                                  example: "2026-04-09 09:35:43"
+                                updated_at:
+                                  type: string
+                                  description: Timestamp when this record was last updated.
+                                  example: "2026-04-26 17:50:21"
+                                deleted:
+                                  nullable: true
+                                  example:
+                            jobid:
+                              type: string
+                              description: Unique identifier of the encoding job.
+                              example: "1346217"
+                            isDemo:
+                              type: boolean
+                              description: Whether this is a demo or trial encoding job.
+                              example: false
+                            processLog:
+                              type: string
+                              description: Raw process log output from the encoder.
+                              example: ""
+                            duration:
+                              type: string
+                              description: Stream or container duration in seconds.
+                              example: "214.552381"
+                            billedSecs:
+                              type: integer
+                              description: Billed duration in seconds for this job.
+                              example: 57
+                            infileLink:
+                              type: string
+                              description: Full URL to the source input file.
+                              example: "https://cdn.example.com/sample-video.mp4"
+                            outfileLink:
+                              type: string
+                              description: Full URL to the transcoded output file.
+                              example: "https://cdn.example.com/mp4/sample-video_720p.mp4"
+                        notified:
+                          type: string
+                          description: Whether the encode-completion notification has been sent (0 = pending, 1 = sent).
+                          example: "0"
+                        response:
+                          type: object
+                          description: Raw webhook response object from the notification call.
+                        created_at:
+                          type: string
+                          description: Timestamp when this record was created.
+                          example: "2026-04-26 18:25:25"
+                        jobid:
+                          type: string
+                          description: Unique identifier of the encoding job.
+                          example: "1346217"
+                        profile:
+                          type: string
+                          description: Codec or encoder profile name.
+                          example: 720p
+                        billedMins:
+                          type: string
+                          description: Human-readable billed duration.
+                          example: "0m 57s"
+                        notificationConfigured:
+                          type: boolean
+                          description: Whether a notification endpoint is configured for this job.
+                          example: false
+                        encoder:
+                          type: string
+                          description: Encoder execution stage timing.
+                          example: Super
+                        progress:
+                          type: string
+                          description: Current job progress status (e.g. Completed, Processing).
+                          example: Completed
+                        canCancel:
+                          type: boolean
+                          description: Whether the job can be cancelled at its current state.
+                          example: false
+                        canRetry:
+                          type: boolean
+                          description: Whether the job can be retried after a failure.
+                          example: false
+                        speed:
+                          type: string
+                          description: Encoding speed relative to real-time playback.
+                          example: 0.49x
+                        billedSecs:
+                          type: integer
+                          description: Billed duration in seconds for this job.
+                          example: 57
+                  billed:
+                    type: object
+                    description: Billing summary for encoding jobs in the queried period.
+                    properties:
+                      jobs:
+                        type: integer
+                        description: Total number of encoding jobs in the period.
+                        example: 4
+                      secs:
+                        type: integer
+                        description: Total billed duration in seconds.
+                        example: 4495
+                      mins:
+                        type: string
+                        description: Human-readable total billed duration.
+                        example: 75 mins
+                      sourceMins:
+                        type: string
+                        description: Total source video duration in minutes.
+                        example: 72 mins
+                      completed:
+                        type: integer
+                        description: Number of successfully completed encoding jobs.
+                        example: 4
+                      active:
+                        type: integer
+                        description: Number of currently active or in-progress encoding jobs.
+                        example: 0
+    post:
+      tags:
+      - Encoding Jobs
+      summary: Query Encoding Jobs
+      description: >
+        Multi-purpose POST endpoint. Behaviour depends on body content:
+        - No body + query string `r` / `r&i`: filter jobs by date range and optionally zone.
+        - Body `view=job`: get single job details by jobid and index (form-encoded).
+        - Body `view=new`: get new / polling jobs (form-encoded).
+      operationId: postEncodingJobs
+      parameters:
+      - name: r
+        in: query
+        required: false
+        description: >
+          Date-time range filter. Format: YYYY-MM-DD HH:mm - YYYY-MM-DD HH:mm.
+          Maximum span is 31 days; time component is required.
+        schema:
+          type: string
+          example: "2024-01-15 00:00 - 2024-01-31 23:59"
+      - name: i
+        in: query
+        required: false
+        description: Optional integer filter to restrict results to a specific zone or profile.
+        schema:
+          type: integer
+          example: 5678
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                view:
+                  type: string
+                  description: "Switches the query operation. job = fetch paginated job list filtered by date range. new = poll for status updates on specific job IDs (requires jobids[])."
+                  enum: [job, new]
+                  example: job
+                jobid:
+                  type: integer
+                  description: Job ID. Required when view=job.
+                  example: 12345
+                index:
+                  type: integer
+                  description: Job index. Required when view=job.
+                  example: 0
+                jobids:
+                  type: array
+                  description: "Array of job IDs to check for status updates. Required when view=new. Sent as repeated URL-encoded params (e.g. jobids[]=101&jobids[]=102)."
+                  items:
+                    type: integer
+                  example: [101, 102]
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zonesInRange:
+                    type: array
+                    description: Array of zone IDs that have encoding jobs within the queried date range.
+                    items:
+                      type: integer
+                    example: [12345, 67890, 11111]
+                  logsInRange:
+                    type: array
+                    description: Array of encoding job log entries within the queried date range.
+                    items: {}
+                    example: []
+                  billed:
+                    type: object
+                    description: Billing summary for encoding jobs in the queried period.
+                    properties:
+                      jobs:
+                        type: integer
+                        description: Total number of encoding jobs in the period.
+                        example: 0
+                      secs:
+                        type: integer
+                        description: Total billed duration in seconds.
+                        example: 0
+                      mins:
+                        type: string
+                        description: Human-readable total billed duration.
+                        example: 0 mins
+                      sourceMins:
+                        type: string
+                        description: Total source video duration in minutes.
+                        example: 0 mins
+                      completed:
+                        type: integer
+                        description: Number of successfully completed encoding jobs.
+                        example: 0
+                      active:
+                        type: integer
+                        description: Number of currently active or in-progress encoding jobs.
+                        example: 0
+
+  # ---------------------------------------------------------------------------
+  # Encoding Jobs
+  # ---------------------------------------------------------------------------
+  /transcoding/jobs:
+    get:
+      tags:
+      - Encoding Jobs
+      summary: List Active Encoding Jobs
+      description: List all active / pending video encoding job queue for the service.
+      operationId: getEncodingJobs
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Unique stream or record identifier.
+                      example: 2331
+                    jobid:
+                      type: string
+                      description: Unique identifier of the encoding job.
+                      example: "1343703"
+                    profileid:
+                      type: string
+                      description: Transcoding profile identifier used for this job.
+                      example: "2939"
+                    infile:
+                      type: string
+                      description: Input file relative path.
+                      example: /sample-video.mp4
+                    outfile:
+                      type: string
+                      description: Output file relative path.
+                      example: /mp4/sample-video_1080p.mp4
+                    percent:
+                      type: string
+                      description: Encoding completion percentage (0-100).
+                      example: "100"
+                    log:
+                      type: string
+                      description: Encoder process log output.
+                      example: ""
+                    error:
+                      type: string
+                      description: Error message if the encoding job failed.
+                      example: ""
+                    created_at:
+                      type: string
+                      description: Timestamp when this record was created.
+                      example: "2026-04-25 12:29:13"
+                    updated_at:
+                      type: string
+                      description: Timestamp when this record was last updated.
+                      example: "2026-04-25 12:33:52"
+                    timings:
+                      type: object
+                      description: Timing breakdown for each stage of the encoding pipeline.
+                      properties:
+                        process:
+                          type: object
+                          description: Overall process timing with start and end timestamps.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777120159097"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777120432214"
+                        infile:
+                          type: object
+                          description: Input file relative path.
+                          properties:
+                            check:
+                              type: object
+                              description: File existence and validity check stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777120159166"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777120160243"
+                            probe:
+                              type: object
+                              description: FFprobe analysis stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777120160243"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777120161860"
+                        download:
+                          type: object
+                          description: File download stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777120161932"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777120168733"
+                        encoder:
+                          type: object
+                          description: Encoder execution stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777120168803"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777120431882"
+                        outfile:
+                          type: object
+                          description: Output file relative path.
+                          properties:
+                            check:
+                              type: object
+                              description: File existence and validity check stage timing.
+                            probe:
+                              type: object
+                              description: FFprobe analysis stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777120431882"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777120431928"
+                            segment:
+                              type: object
+                              description: HLS segmentation stage timing.
+                        thumbs:
+                          type: object
+                          description: Thumbnail generation stage timing.
+                          properties:
+                            process:
+                              type: object
+                              description: Overall process timing with start and end timestamps.
+                        upload:
+                          type: object
+                          description: Output file upload stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777120432173"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777120432203"
+                    profile:
+                      type: string
+                      description: Codec or encoder profile name.
+                      example: 1080p
+
+  /transcoding/jobs/{zoneId}:
+    get:
+      tags:
+      - Encoding Jobs
+      summary: List Active Jobs by Zone
+      description: List all active encoding jobs for a specific zone.
+      operationId: getEncodingJobsByZone
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Unique stream or record identifier.
+                      example: 6643
+                    jobid:
+                      type: string
+                      description: Unique identifier of the encoding job.
+                      example: "1346186"
+                    profileid:
+                      type: string
+                      description: Transcoding profile identifier used for this job.
+                      example: "1"
+                    infile:
+                      type: string
+                      description: Input file relative path.
+                      example: /sample-video.mp4
+                    outfile:
+                      type: string
+                      description: Output file relative path.
+                      example: /mp4/sample-video_720p.mp4
+                    percent:
+                      type: string
+                      description: Encoding completion percentage (0-100).
+                      example: "100"
+                    log:
+                      type: string
+                      description: Encoder process log output.
+                      example: ""
+                    error:
+                      type: string
+                      description: Error message if the encoding job failed.
+                      example: ""
+                    created_at:
+                      type: string
+                      description: Timestamp when this record was created.
+                      example: "2026-04-26 17:54:34"
+                    updated_at:
+                      type: string
+                      description: Timestamp when this record was last updated.
+                      example: "2026-04-26 17:57:29"
+                    timings:
+                      type: object
+                      description: Timing breakdown for each stage of the encoding pipeline.
+                      properties:
+                        process:
+                          type: object
+                          description: Overall process timing with start and end timestamps.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777226080001"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777226249617"
+                        infile:
+                          type: object
+                          description: Input file relative path.
+                          properties:
+                            check:
+                              type: object
+                              description: File existence and validity check stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777226080073"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777226081293"
+                            probe:
+                              type: object
+                              description: FFprobe analysis stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777226081293"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777226083693"
+                        download:
+                          type: object
+                          description: File download stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777226083767"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777226087759"
+                        encoder:
+                          type: object
+                          description: Encoder execution stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777226087832"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777226249331"
+                        outfile:
+                          type: object
+                          description: Output file relative path.
+                          properties:
+                            check:
+                              type: object
+                              description: File existence and validity check stage timing.
+                            probe:
+                              type: object
+                              description: FFprobe analysis stage timing.
+                              properties:
+                                start:
+                                  type: string
+                                  description: Stage start timestamp in milliseconds (Unix epoch).
+                                  example: "1777226249331"
+                                end:
+                                  type: string
+                                  description: Stage end timestamp in milliseconds (Unix epoch).
+                                  example: "1777226249367"
+                            segment:
+                              type: object
+                              description: HLS segmentation stage timing.
+                        thumbs:
+                          type: object
+                          description: Thumbnail generation stage timing.
+                          properties:
+                            process:
+                              type: object
+                              description: Overall process timing with start and end timestamps.
+                        upload:
+                          type: object
+                          description: Output file upload stage timing.
+                          properties:
+                            start:
+                              type: string
+                              description: Stage start timestamp in milliseconds (Unix epoch).
+                              example: "1777226249579"
+                            end:
+                              type: string
+                              description: Stage end timestamp in milliseconds (Unix epoch).
+                              example: "1777226249606"
+                    profile:
+                      type: string
+                      description: Codec or encoder profile name.
+                      example: 720p
+
+  /transcoding/jobs/{profileid}:
+    post:
+      tags:
+      - Encoding Jobs
+      summary: Create Encoding Job
+      description: Add a file encoding job.
+      operationId: addEncodingJob
+      parameters:
+      - $ref: '#/components/parameters/profileIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Input file relative path.
+                  example: "/uploads/source_clip.mp4"
+                priority:
+                  type: integer
+                  description: Encode job priority. 0 = High, 100 = Lowest.
+                  example: 0
+                map:
+                  type: string
+                  description: >
+                    Video/Audio/Subtitle stream selection from input source.
+                    Passed as a string value to the encoder.
+                  example: "0:v:0 0:a:0 0:s:0"
+      responses:
+        '200':
+          description: Success or error message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: success/error
+                  jobid:
+                    type: integer
+                    description: Video encoding job ID.
+                  message:
+                    type: string
+                    description: Error message, only present if an error occurs.
+
+  /transcoding/jobs/retry/{jobid}:
+    get:
+      tags:
+      - Encoding Jobs
+      summary: Retry Encoding Job
+      description: Retry an encoding job after fixing issues.
+      operationId: retryEncodingJob
+      parameters:
+      - $ref: '#/components/parameters/jobIdParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    result:
+                      type: string
+                      description: success/error
+                    message:
+                      type: string
+                      description: Success/error message detail.
+
+  /transcoding/jobs/cancel/{jobid}:
+    get:
+      tags:
+      - Encoding Jobs
+      summary: Cancel Encoding Job
+      description: >
+        Cancel an encoding job. Jobs can only be cancelled before they are processed.
+      operationId: cancelEncodingJob
+      parameters:
+      - $ref: '#/components/parameters/jobIdParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    result:
+                      type: string
+                      description: success/error
+                    message:
+                      type: string
+                      description: Success/error message detail.
+
+  # ---------------------------------------------------------------------------
+  # File Transcoding Profiles
+  # ---------------------------------------------------------------------------
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    zoneIdParam:
+      name: zoneId
+      in: path
+      description: ID of the Push Zone (`fs_pushzones.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 15
+
+    jobIdParam:
+      name: jobid
+      in: path
+      description: ID of the Video Encoding job (Beanstalkd job ID stored in `fs_encodejobs.jobid`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 10042
+
+    profileIdParam:
+      name: profileid
+      in: path
+      description: ID of the Transcode Profile (`fs_transcodeprofiles.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 7
+
+    filterIdParam:
+      name: filterid
+      in: path
+      description: ID of the Transcoding Filter (`fs_transcodefilters.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 3
+
+  schemas:
+    createProfileCombined:
+      type: object
+
+    editProfileCombined:
+      type: object
+
+    createFileTranscodingFilter:
+      type: object
+
+    editFileTranscodingFilter:
+      type: object

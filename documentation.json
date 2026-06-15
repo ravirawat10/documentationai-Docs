@@ -37,28 +37,123 @@
           },
           {
             "group": "Live Stream",
-            "pages": [],
-            "openapi": "api-reference/Livestreams-Api.yaml"
+            "pages": [
+              {
+                "group": "Streaming",
+                "pages": [
+                  {
+                    "group": "Push Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Push-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Pull Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Pull-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Multi Bitrate Push Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-ABR-Streams-API.yaml"
+                  },
+                  {
+                    "group": "Multistream Streams",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-Multistream-API.yaml"
+                  }
+                ]
+              },
+              {
+                "group": "Playback",
+                "pages": [
+                  {
+                    "group": "DVR",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-DVR-API.yaml"
+                  },
+                  {
+                    "group": "Delayed Stream",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-DelayedStream-API.yaml"
+                  },
+                  {
+                    "group": "Scheduled Playlist",
+                    "pages": [],
+                    "openapi": "api-reference/Livestreams-ScheduledPlaylist-API.yaml"
+                  }
+                ]
+              },
+              {
+                "group": "Reports",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Reports-API.yaml"
+              },
+              {
+                "group": "Settings",
+                "pages": [],
+                "openapi": "api-reference/Livestreams-Settings-API.yaml"
+              }
+            ]
           },
           {
             "group": "Zones",
-            "pages": [],
-            "openapi": "api-reference/Zones-Api.yaml"
+            "pages": [
+              {
+                "group": "HTTP",
+                "pages": [],
+                "openapi": "api-reference/Zones-HTTP-API.yaml"
+              },
+              {
+                "group": "VOD",
+                "pages": [],
+                "openapi": "api-reference/Zones-VOD-API.yaml"
+              }
+            ]
           },
           {
             "group": "Video Encoding",
-            "pages": [],
-            "openapi": "api-reference/Transcoding-Api-.yaml"
+            "pages": [
+              {
+                "group": "Jobs",
+                "pages": [],
+                "openapi": "api-reference/Transcoding-Jobs-API.yaml"
+              },
+              {
+                "group": "Preset Profiles / Filters",
+                "pages": [
+                  {
+                    "group": "Preset Profiles",
+                    "pages": [],
+                    "openapi": "api-reference/Transcoding-Profiles-API.yaml"
+                  },
+                  {
+                    "group": "Filters",
+                    "pages": [],
+                    "openapi": "api-reference/Transcoding-Filters-API.yaml"
+                  }
+                ]
+              },
+              {
+                "group": "Notifications",
+                "pages": [],
+                "openapi": "api-reference/Transcoding-Notifications-API.yaml"
+              }
+            ]
           },
           {
             "group": "SimpleDNS",
             "pages": [],
-            "openapi": "api-reference/simpleDNS-API.yaml"
+            "openapi": "api-reference/SimpleDNS-API.yaml"
           },
           {
             "group": "VideoPlayer & Analytics",
-            "pages": [],
-            "openapi": "api-reference/VideoPlayer-API.yaml"
+            "pages": [
+              {
+                "group": "5centsCDN",
+                "pages": [],
+                "openapi": "api-reference/VideoPlayer-API.yaml"
+              }
+            ]
           },
           {
             "group": "Accounts",
@@ -67,9 +162,19 @@
           },
           {
             "group": "Analytics",
-            "pages": [],
             "icon": "activity",
-            "openapi": "api-reference/Analytics-Api.yaml"
+            "pages": [
+              {
+                "group": "Summary",
+                "pages": [],
+                "openapi": "api-reference/Analytics-Summary-API.yaml"
+              },
+              {
+                "group": "Traffic",
+                "pages": [],
+                "openapi": "api-reference/Analytics-Traffic-API.yaml"
+              }
+            ]
           },
           {
             "group": "Edge Rules",
@@ -81,14 +186,15 @@
     ]
   },
   "initialRoute": "introduction",
-  "logo-dark": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
-  "logo-light": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875296729-dfxmjc5hr56-Color-logo---no-background.png?q=85&fm=auto&auto=compress%2Cformat",
+  "logo-dark": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1780918393580-8c0kbu51mic-Logo.png?fm=auto&auto=compress%2Cformat",
+  "logo-light": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1780918418632-pa2d70y8fol-Logolight.png?fm=auto&auto=compress%2Cformat",
   "favicon": "https://blob-cdn.documentation.ai/org-ceea9b24-b23b-47ee-a888-e63346a461fa/doc-1f87e362-a760-4d1d-9661-0d77b4aee64c/1771875329738-h20psk07n97-favicon.png?q=85&fm=auto&auto=compress%2Cformat",
   "navbar": {
     "actions": {
       "primary": {
         "title": "Login",
-        "link": "https://www.5centscdn.net/dashboard/login"
+        "link": "https://www.5centscdn.net/dashboard/login",
+        "color": "#ffffff"
       },
       "links": [
         {
@@ -126,6 +232,9 @@
     },
     {
       "src": "scripts/title-updater.js"
+    },
+    {
+      "src": "scripts/navbar-styles.js"
     }
   ]
 }

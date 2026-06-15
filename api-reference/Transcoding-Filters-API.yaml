@@ -1,0 +1,914 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Transcoding API
+  description: >
+    Transcoding management endpoints for the 5centsCDN platform.
+    Covers video encoding job management, encoding preset profile management,
+    configurable video filters, and encode-completion notification settings.
+    Authentication is via API key header (X-API-Key) for the public API, and
+    WHMCS session cookie (WHMCSUID) for the dashboard routes.
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+
+security:
+- ApiKeyAuth: []
+
+tags:
+- name: Encoding Filters
+  description: Video filter management endpoints for encoding overlays and effects
+
+paths:
+  /transcoding/filters:
+    get:
+      tags:
+      - Encoding Filters
+      summary: List Encoding Filters
+      description: List all file transcoding filters for the service.
+      operationId: listVideoTranscodingFilters
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: API response status.
+                    example: success
+                  filters:
+                    type: object
+                    description: Map of transcoding filters keyed by filter ID string.
+                    properties:
+                      "1":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 1
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: Horizontal Flip
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: hflip
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "2":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 2
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: Vertical Flip
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: vflip
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "5":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 5
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: 5centsText
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  filter:
+                                    type: string
+                                    description: FFmpeg filter name to apply.
+                                    example: drawtext
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Center
+                                  fontcolor:
+                                    type: string
+                                    description: Font color as a hex color string.
+                                    example: "#1cb74d"
+                                  fontsize:
+                                    type: integer
+                                    description: Font size in pixels for text overlay.
+                                    example: 36
+                                  text:
+                                    type: string
+                                    description: Text string to render as an overlay.
+                                    example: Sample Overlay Text
+                      "6":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 6
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: 5centsLogo
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: overlay
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  url:
+                                    type: string
+                                    description: Image URL for overlay filter.
+                                    example: "https://cdn.example.com/watermark-logo.png"
+                                  scale:
+                                    type: integer
+                                    description: Scale percentage for the overlay image.
+                                    example: 15
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Center
+                                  filter:
+                                    type: string
+                                    description: FFmpeg filter name to apply.
+                                    example: overlay
+                      "43":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 43
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: Demo Text
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  text:
+                                    type: string
+                                    description: Text string to render as an overlay.
+                                    example: "Sample watermark text"
+                                  fontsize:
+                                    type: string
+                                    description: Font size in pixels for text overlay.
+                                    example: "20"
+                                  fontcolor:
+                                    type: string
+                                    description: Font color as a hex color string.
+                                    example: "#4caf50"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Bottom Center
+                      "155":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 155
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: "Rotate 90&deg;Clockwise"
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: c90
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "157":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 157
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: "Rotate 180&deg;Clockwise"
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: c180
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "159":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 159
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: "Rotate 90&deg;CounterClockwise"
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: cc90
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "161":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 161
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 0
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: "Rotate 180&deg;CounterClockwise"
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: cc180
+                              args:
+                                type: array
+                                description: Arguments passed to the FFmpeg filter.
+                                items: {}
+                                example: []
+                      "292":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 292
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: sample-text-filter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  text:
+                                    type: string
+                                    description: Text string to render as an overlay.
+                                    example: Sample Watermark Text
+                                  fontsize:
+                                    type: integer
+                                    description: Font size in pixels for text overlay.
+                                    example: 48
+                                  fontcolor:
+                                    type: string
+                                    description: Font color as a hex color string.
+                                    example: "#1cb74d"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Top Center
+                                  filter:
+                                    type: string
+                                    description: FFmpeg filter name to apply.
+                                    example: drawtext
+                      "295":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 295
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: sample-filter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: overlay
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  url:
+                                    type: string
+                                    description: Image URL for overlay filter.
+                                    example: "https://cdn.example.com/logo.svg"
+                                  scale:
+                                    type: string
+                                    description: Scale percentage for the overlay image.
+                                    example: "50"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Top Right
+                      "297":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 297
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: sample-filter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: overlay
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  url:
+                                    type: string
+                                    description: Image URL for overlay filter.
+                                    example: "https://cdn.example.com/logo.svg"
+                                  scale:
+                                    type: string
+                                    description: Scale percentage for the overlay image.
+                                    example: "150"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Center Right
+                      "298":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 298
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: sample-filter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  text:
+                                    type: string
+                                    description: Text string to render as an overlay.
+                                    example: test
+                                  fontsize:
+                                    type: string
+                                    description: Font size in pixels for text overlay.
+                                    example: "15"
+                                  fontcolor:
+                                    type: string
+                                    description: Font color as a hex color string.
+                                    example: "#2599f8"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Center
+                      "317":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 317
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: sample-filter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                type: object
+                                description: Arguments passed to the FFmpeg filter.
+                                properties:
+                                  text:
+                                    type: string
+                                    description: Text string to render as an overlay.
+                                    example: test
+                                  fontsize:
+                                    type: string
+                                    description: Font size in pixels for text overlay.
+                                    example: "15"
+                                  fontcolor:
+                                    type: string
+                                    description: Font color as a hex color string.
+                                    example: "#2599f8"
+                                  position:
+                                    type: string
+                                    description: Position of the overlay or text on the video frame.
+                                    example: Top Center
+                      "324":
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique stream or record identifier.
+                            example: 324
+                          serviceid:
+                            type: integer
+                            description: Service account identifier.
+                            example: 103
+                          type:
+                            type: string
+                            description: Record type identifier.
+                            example: file
+                          name:
+                            type: string
+                            description: Human-readable name.
+                            example: flutter
+                          settings:
+                            type: object
+                            description: Profile settings object containing encoding parameters.
+                            properties:
+                              filter:
+                                type: string
+                                description: FFmpeg filter name to apply.
+                                example: drawtext
+                              args:
+                                nullable: true
+                                example:
+
+  /transcoding/filters/new:
+    post:
+      tags:
+      - Encoding Filters
+      summary: Create Encoding Filter
+      description: Create a new file transcoding filter.
+      operationId: createVideoTranscodingFilter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - filter
+              - _METHOD
+              properties:
+                name:
+                  type: string
+                  description: Filter name.
+                  example: flutter
+                filter:
+                  type: string
+                  description: "Filter category. overlay = apply image/logo watermark. drawtext = render text overlay on video."
+                  enum: [overlay, drawtext]
+                  example: overlay
+                args[overlay][url]:
+                  type: string
+                  description: "Public HTTP/HTTPS URL of the watermark image. PNG recommended for transparency. Required when filter=overlay."
+                  example: "https://cdn.example.com/logo.png"
+                args[overlay][scale]:
+                  type: string
+                  description: "Watermark image size as a percentage of the output video frame width. Required when filter=overlay."
+                  example: "10"
+                args[overlay][position]:
+                  type: string
+                  description: "Position of the watermark on the video frame. Required when filter=overlay."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_right
+                args[drawtext][text]:
+                  type: string
+                  description: "Text string to render as overlay on video. Required when filter=drawtext."
+                  example: "© 2024 My Brand"
+                args[drawtext][fontsize]:
+                  type: integer
+                  description: "Font size of text overlay in pixels. Required when filter=drawtext."
+                  example: 24
+                args[drawtext][fontcolor]:
+                  type: string
+                  description: "Color of text overlay. Accepts CSS hex (#RRGGBB) or FFmpeg named colors (white, black, etc.). Required when filter=drawtext."
+                  example: "#FFFFFF"
+                args[drawtext][position]:
+                  type: string
+                  description: "Position of the text overlay on the video frame. Required when filter=drawtext."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_left
+                _METHOD:
+                  type: string
+                  description: To cast request method POST to PUT.
+                  enum: [PUT]
+                  example: PUT
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: API response status.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable result or error message.
+                    example: "Transcoding Settings, New Filter Created"
+                  filterid:
+                    type: integer
+                    description: Unique identifier of the newly created filter.
+                    example: 429
+
+  /transcoding/filters/{filterid}:
+    post:
+      tags:
+      - Encoding Filters
+      summary: Update Encoding Filter
+      description: Edit an existing transcoding profile filter.
+      operationId: editVideoTranscodingFilter
+      parameters:
+      - $ref: '#/components/parameters/filterIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name associated with the configuration or filter.
+                  example: flutter
+                filter:
+                  type: string
+                  description: "Filter category. overlay = apply image/logo watermark. drawtext = render text overlay on video."
+                  enum: [overlay, drawtext]
+                  example: drawtext
+                args[overlay][url]:
+                  type: string
+                  description: "Public HTTP/HTTPS URL of the watermark image. PNG recommended for transparency. Required when filter=overlay."
+                  example: "https://cdn.example.com/logo.png"
+                args[overlay][scale]:
+                  type: string
+                  description: "Watermark image size as a percentage of the output video frame width. Required when filter=overlay."
+                  example: "10"
+                args[overlay][position]:
+                  type: string
+                  description: "Position of the watermark on the video frame."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_right
+                args[text]:
+                  type: string
+                  description: "Text string to render as overlay on video. Required when filter=drawtext."
+                  example: "© 2024 My Brand"
+                args[fontsize]:
+                  type: integer
+                  description: "Font size of text overlay in pixels. Required when filter=drawtext."
+                  example: 24
+                args[fontcolor]:
+                  type: string
+                  description: "Color of text overlay. Accepts CSS hex (#RRGGBB) or FFmpeg named colors. Required when filter=drawtext."
+                  example: "#FFFFFF"
+                args[position]:
+                  type: string
+                  description: "Position of the text overlay on the video frame."
+                  enum: [top_left, top_right, bottom_left, bottom_right, center]
+                  example: top_left
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: API response status.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable result or error message.
+                    example: Transcoding Settings Updated
+    delete:
+      tags:
+      - Encoding Filters
+      summary: Delete Encoding Filter
+      description: >
+        Delete the information of a transcoding profile filter. To cast request
+        method POST, include parameter _METHOD = DELETE.
+      operationId: deleteVideoTranscodingFilter
+      parameters:
+      - $ref: '#/components/parameters/filterIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: Signals DELETE to the backend.
+                  enum: [DELETE]
+                  example: DELETE
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: API response status.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable result or error message.
+                    example: Transcoding Filter Deleted
+
+  # ---------------------------------------------------------------------------
+  # Transcoding Notifications
+  # ---------------------------------------------------------------------------
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    zoneIdParam:
+      name: zoneId
+      in: path
+      description: ID of the Push Zone (`fs_pushzones.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 15
+
+    jobIdParam:
+      name: jobid
+      in: path
+      description: ID of the Video Encoding job (Beanstalkd job ID stored in `fs_encodejobs.jobid`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 10042
+
+    profileIdParam:
+      name: profileid
+      in: path
+      description: ID of the Transcode Profile (`fs_transcodeprofiles.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 7
+
+    filterIdParam:
+      name: filterid
+      in: path
+      description: ID of the Transcoding Filter (`fs_transcodefilters.id`).
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 3
+
+  schemas:
+    createProfileCombined:
+      type: object
+
+    editProfileCombined:
+      type: object
+
+    createFileTranscodingFilter:
+      type: object
+
+    editFileTranscodingFilter:
+      type: object

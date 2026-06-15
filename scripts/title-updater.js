@@ -1,4 +1,5 @@
 (function () {
+  if (typeof window === "undefined") return;
   var SITE_NAME = "5centsCDN";
 
   function updateTitle() {

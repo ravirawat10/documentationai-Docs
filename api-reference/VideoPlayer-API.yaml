@@ -20,13 +20,16 @@ components:
 security:
 - apikeyAuth: []
 tags:
-- name: 5centsCDN
+- name: Players
+  description: Endpoints for managing Video Player skins and configurations.
+- name: Players Analytics
+  description: Endpoints for querying Video Player analytics, statistics, and search filters.
 paths:
   /players/5centscdn/analytics/stats:
     post:
       operationId: analyticsStats
       tags:
-      - 5centsCDN
+      - Players Analytics
       summary: Analytics Statistics
       requestBody:
         content:
@@ -236,7 +239,7 @@ paths:
     post:
       operationId: analyticsData
       tags:
-      - 5centsCDN
+      - Players Analytics
       summary: Analytics Data
       requestBody:
         content:
@@ -298,7 +301,7 @@ paths:
     post:
       operationId: analyticsSearchAssets
       tags:
-      - 5centsCDN
+      - Players Analytics
       summary: Analytics Search Assets
       requestBody:
         content:
@@ -354,7 +357,7 @@ paths:
     post:
       operationId: analyticsSearchTitles
       tags:
-      - 5centsCDN
+      - Players Analytics
       summary: Analytics Search Titles
       requestBody:
         content:
@@ -416,7 +419,7 @@ paths:
     post:
       operationId: analyticsSearchTags
       tags:
-      - 5centsCDN
+      - Players Analytics
       summary: Analytics Search Tags
       requestBody:
         content:
@@ -478,7 +481,7 @@ paths:
     get:
       operationId: listPlayerSkins
       tags:
-      - 5centsCDN
+      - Players
       summary: Skins List
       responses:
         '200':
@@ -741,7 +744,7 @@ paths:
     post:
       operationId: createPlayerSkin
       tags:
-      - 5centsCDN
+      - Players
       summary: Create Player Skin
       requestBody:
         content:
@@ -786,7 +789,7 @@ paths:
     get:
       operationId: getPlayerSkin
       tags:
-      - 5centsCDN
+      - Players
       summary: Get Player Skin
       parameters:
       - name: skinid
@@ -876,7 +879,7 @@ paths:
     post:
       operationId: updatePlayerSkin
       tags:
-      - 5centsCDN
+      - Players
       summary: Update Player Skin
       requestBody:
         content:
@@ -1064,7 +1067,7 @@ paths:
     delete:
       operationId: deletePlayerSkin
       tags:
-      - 5centsCDN
+      - Players
       summary: Delete Player Skin
       requestBody:
         content:
