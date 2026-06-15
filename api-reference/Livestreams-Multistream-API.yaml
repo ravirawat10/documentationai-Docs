@@ -16,10 +16,10 @@ security:
 tags:
 - name: Stream Management
   description: Create, list, update, delete, and control Multistream streams
-- name: Transcoding
-  description: Transcoding profile settings
 - name: Statistics
   description: Stream health and performance statistics
+- name: Transcoding
+  description: Transcoding profile settings
 - name: Security
   description: RTMP / IP access control
 - name: Platform Management
@@ -624,74 +624,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_200_4'
       deprecated: false
-  /streams/publish/{streamid}/statistics:
-    get:
-      tags:
-      - Statistics
-      summary: Get Stream Statistics
-      description: Return the details of restream statistics
-      operationId: getDetailsOfStreamRestreamStatistics
-      parameters:
-      - $ref: '#/components/parameters/streamIdParam'
-      deprecated: false
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    platform:
-                      type: array
-                      description: Restream platform configuration object.
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            description: Unique numeric identifier.
-                            example: 46674
-                          time:
-                            type: integer
-                            description: Total uptime duration of the stream session.
-                            example: 0
-                          bitrate:
-                            type: string
-                            description: Current bitrate of the stream.
-                            example: ''
-                          fps:
-                            type: string
-                            description: Target frames per second for the output.
-                            example: ''
-                          cpu:
-                            type: string
-                            example: ''
-                          mem:
-                            type: string
-                            description: Memory usage statistic.
-                            example: ''
-                          log:
-                            type: string
-                            description: Error log output when the platform fails to connect. Only present when an error has occurred.
-                            example: '[http @ 0x5574d50fa780] HTTP error 503 Service Unavailable
-
-                              http://fms-02-01-midgress.5centscdn.com:8080/testalthaf2/testpublish2/mpeg.2ts: Server returned 5XX Server Error reply
-
-                              '
-                          node:
-                            description: Transcoder node identifier. false when no node is assigned.
-                            example: false
-                    status:
-                      type: string
-                      description: Current deployment or operational status of the stream.
-                      example: Enabled
-                    lastseen:
-                      type: integer
-                      description: Elapsed time since the stream was last detected as active.
-                      example: 0
   /streams/publish/{streamid}/status:
     post:
       tags:
@@ -1127,28 +1059,6 @@ paths:
                         nullable: true
                         description: Ad insertion configuration for the stream, or null if not configured.
                         example:
-      deprecated: false
-  /streams/publish/{streamid}/rtmpauth:
-    post:
-      tags:
-      - Security
-      summary: Update IP Access
-      description: Update RTMP auth of Restream
-      operationId: update-rtmpauth-Restream
-      parameters:
-      - $ref: '#/components/parameters/streamIdParam'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostRtmpauth'
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_200_33'
       deprecated: false
   /streams/publish/{streamid}/restore:
     get:
@@ -1599,6 +1509,74 @@ paths:
                     description: Human-readable message describing the result.
                     example: Stream Restarted
       deprecated: false
+  /streams/publish/{streamid}/statistics:
+    get:
+      tags:
+      - Statistics
+      summary: Get Stream Statistics
+      description: Return the details of restream statistics
+      operationId: getDetailsOfStreamRestreamStatistics
+      parameters:
+      - $ref: '#/components/parameters/streamIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    platform:
+                      type: array
+                      description: Restream platform configuration object.
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            description: Unique numeric identifier.
+                            example: 46674
+                          time:
+                            type: integer
+                            description: Total uptime duration of the stream session.
+                            example: 0
+                          bitrate:
+                            type: string
+                            description: Current bitrate of the stream.
+                            example: ''
+                          fps:
+                            type: string
+                            description: Target frames per second for the output.
+                            example: ''
+                          cpu:
+                            type: string
+                            example: ''
+                          mem:
+                            type: string
+                            description: Memory usage statistic.
+                            example: ''
+                          log:
+                            type: string
+                            description: Error log output when the platform fails to connect. Only present when an error has occurred.
+                            example: '[http @ 0x5574d50fa780] HTTP error 503 Service Unavailable
+
+                              http://fms-02-01-midgress.5centscdn.com:8080/testalthaf2/testpublish2/mpeg.2ts: Server returned 5XX Server Error reply
+
+                              '
+                          node:
+                            description: Transcoder node identifier. false when no node is assigned.
+                            example: false
+                    status:
+                      type: string
+                      description: Current deployment or operational status of the stream.
+                      example: Enabled
+                    lastseen:
+                      type: integer
+                      description: Elapsed time since the stream was last detected as active.
+                      example: 0
   /streams/publish/{streamid}/transcode:
     post:
       tags:
@@ -2114,6 +2092,28 @@ paths:
                         nullable: true
                         description: Ad insertion configuration for the stream, or null if not configured.
                         example:
+      deprecated: false
+  /streams/publish/{streamid}/rtmpauth:
+    post:
+      tags:
+      - Security
+      summary: Update IP Access
+      description: Update RTMP auth of Restream
+      operationId: update-rtmpauth-Restream
+      parameters:
+      - $ref: '#/components/parameters/streamIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRtmpauth'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_33'
       deprecated: false
   /streams/publish/{streamid}/platforms:
     post:
