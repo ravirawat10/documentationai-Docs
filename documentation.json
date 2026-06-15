@@ -100,13 +100,43 @@
             "pages": [
               {
                 "group": "HTTP",
-                "pages": [],
-                "openapi": "api-reference/Zones-HTTP-API.yaml"
+                "pages": [
+                  {
+                    "group": "HTTP Push",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-HTTP-Push-API.yaml"
+                  },
+                  {
+                    "group": "HTTP Pull",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-HTTP-Pull-API.yaml"
+                  },
+                  {
+                    "group": "Global Settings",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-HTTP-API.yaml"
+                  }
+                ]
               },
               {
                 "group": "VOD",
-                "pages": [],
-                "openapi": "api-reference/Zones-VOD-API.yaml"
+                "pages": [
+                  {
+                    "group": "VOD Push",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-VOD-Push-API.yaml"
+                  },
+                  {
+                    "group": "VOD Pull",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-VOD-Pull-API.yaml"
+                  },
+                  {
+                    "group": "Global Settings",
+                    "pages": [],
+                    "openapi": "api-reference/Zones-VOD-API.yaml"
+                  }
+                ]
               }
             ]
           },
