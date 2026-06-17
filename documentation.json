@@ -223,8 +223,7 @@
     "actions": {
       "primary": {
         "title": "Login",
-        "link": "https://www.5centscdn.net/dashboard/login",
-        "color": "#ffffff"
+        "link": "https://www.5centscdn.net/dashboard/login"
       },
       "links": [
         {
@@ -234,10 +233,6 @@
         {
           "title": "Blog",
           "link": "https://www.5centscdn.net/blog/"
-        },
-        {
-          "title": "Developer Hub",
-          "link": "https://developer.5centscdn.net/"
         },
         {
           "title": "Help Center",
