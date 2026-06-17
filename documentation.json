@@ -249,6 +249,15 @@
   "integrations": {
     "crisp": {
       "websiteId": "c983e61e-5589-45e7-a083-57490e8a91cb"
+    },
+    "cookies": {
+      "analytics": {
+        "key": "",
+        "value": ""
+      }
+    },
+    "gtm": {
+      "tagId": "GTM-TQL85CT"
     }
   },
   "scripts": [
