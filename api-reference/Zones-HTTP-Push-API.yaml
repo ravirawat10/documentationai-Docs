@@ -3536,6 +3536,7 @@ paths:
                         type: boolean
                         description: "Whether this zone has any edge rules configured"
                         example: true
+  /zones/http/push/{zoneid}/purge:
     post:
       tags:
       - Restore & Purge
