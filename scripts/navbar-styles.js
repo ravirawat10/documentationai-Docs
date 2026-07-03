@@ -1,12 +1,16 @@
 (function () {
   var css = [
-    "a[href*='dashboard/login'],",
+    "nav a[href*='dashboard/login'],",
+    "header a[href*='dashboard/login'],",
     "button[data-testid*='login'] {",
     "  color: #ffffff !important;",
     "}",
-    "a[href*='dashboard/login']:hover,",
-    "a[href*='dashboard/login']:focus,",
-    "a[href*='dashboard/login']:active {",
+    "nav a[href*='dashboard/login']:hover,",
+    "nav a[href*='dashboard/login']:focus,",
+    "nav a[href*='dashboard/login']:active,",
+    "header a[href*='dashboard/login']:hover,",
+    "header a[href*='dashboard/login']:focus,",
+    "header a[href*='dashboard/login']:active {",
     "  color: #ffffff !important;",
     "}"
   ].join("\n");
