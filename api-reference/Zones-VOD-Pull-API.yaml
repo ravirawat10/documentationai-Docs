@@ -2483,10 +2483,10 @@ paths:
                     type: string
                     description: Status of the API response.
                     example: success
-                  message:
+                  purgeId:
                     type: string
-                    description: Human-readable status message describing the outcome.
-                    example: Zone updated successfully
+                    description: Unique identifier for this operation, returned in the success response and used to look up operation details via the purge history and purge details endpoints.
+                    example: "1234667788957"
   /zones/vod/pull/{zoneid}/restore:
     get:
       tags:
@@ -3409,6 +3409,87 @@ paths:
                         description: "Whether this zone has any edge rules configured"
                         example: true
   /zones/vod/pull/{zoneid}/purge:
+    get:
+      tags:
+      - Restore & Purge
+      summary: Zone Purge History
+      description: List cache purge and prefetch operation history for a VoD pull zone. Used by the Manage Cache "History" tab, which paginates 10 records per page and renders each row's operation type, file count, completion state, and created date.
+      operationId: zoneVodPullPurgeHistory
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - in: query
+        name: page
+        required: true
+        schema:
+          type: integer
+          example: 1
+          description: 1-based page number of the purge/prefetch history to retrieve.
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  total:
+                    type: integer
+                    description: Total number of purge/prefetch history records for this zone, used by the History tab to drive pagination.
+                    example: 42
+                  data:
+                    type: array
+                    description: Array of purge/prefetch operation history records, most recent first.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier of the purge or prefetch operation. Used as the Operation ID column and to fetch per-operation details via the purge details endpoint.
+                          example: "8f3a1c2d"
+                        serviceid:
+                          type: integer
+                          description: "Service account identifier associated with this zone"
+                          example: 67890
+                        zone:
+                          type: string
+                          description: Identifier of the zone this operation was run against.
+                          example: "12345"
+                        type:
+                          type: string
+                          description: "Operation type. fetch = prefetch operation, rendered in the History tab as \"Prefetch Content\". url = purge-by-path operation, rendered as \"Purge By Path\". Any other value (e.g. a full-zone or pattern purge) is rendered generically as \"Purge {type}\" (titlecased)."
+                          example: url
+                        list:
+                          type: array
+                          items:
+                            type: string
+                          description: List of file paths submitted for this purge/prefetch operation. The History tab shows this array's length as the File Count column.
+                          example: ["/video/file.mp4"]
+                        meta:
+                          type: string
+                          description: Additional metadata associated with this operation.
+                          example: ""
+                        errors:
+                          type: string
+                          description: Error message recorded for this operation, or empty string if none.
+                          example: ""
+                        created_at:
+                          type: string
+                          description: Unix timestamp (in seconds, as a string) when this operation was created. The History tab parses this with parseInt and multiplies by 1000 to render a local date/time.
+                          example: "1717236000"
+                        completed_at:
+                          type: string
+                          nullable: true
+                          description: Unix timestamp (in seconds, as a string) when this operation completed. The History tab treats this as a boolean flag - empty/null means the operation is still pending and shows the pending icon instead of the completed icon.
+                          example: "1717236060"
+                        updated_at:
+                          type: string
+                          description: Unix timestamp (in seconds, as a string) of the most recent update to this operation.
+                          example: "1717236060"
     post:
       tags:
       - Restore & Purge
@@ -3448,10 +3529,106 @@ paths:
                     type: string
                     description: Status of the API response.
                     example: success
-                  message:
+                  purgeId:
                     type: string
-                    description: Human-readable status message describing the outcome.
-                    example: Zone updated successfully
+                    description: Unique identifier for this operation, returned in the success response and used to look up operation details via the purge history and purge details endpoints.
+                    example: "1234667788957"
+  /zones/vod/pull/{zoneid}/purge/{purgeId}:
+    get:
+      tags:
+      - Restore & Purge
+      summary: Zone Purge Details
+      description: Get detailed per-server logs for a specific purge or prefetch operation of a VoD pull zone. Used when a row is expanded in the Manage Cache "History" tab.
+      operationId: zoneVodPullPurgeDetails
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - in: path
+        name: purgeId
+        description: Unique identifier of the purge or prefetch operation, returned by the purge/prefetch endpoints or the purge history list.
+        required: true
+        schema:
+          type: string
+          example: "8f3a1c2d"
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  id:
+                    type: string
+                    description: Unique identifier of the purge or prefetch operation.
+                    example: "8f3a1c2d"
+                  serviceid:
+                    type: integer
+                    description: "Service account identifier associated with this zone"
+                    example: 67890
+                  zone:
+                    type: string
+                    description: Identifier of the zone this operation was run against.
+                    example: "12345"
+                  type:
+                    type: string
+                    description: "Operation type. fetch = prefetch operation. url = purge-by-path operation. Any other value represents another purge operation type."
+                    example: url
+                  list:
+                    type: array
+                    items:
+                      type: string
+                    description: List of file paths submitted for this purge/prefetch operation.
+                    example: ["/video/file.mp4"]
+                  meta:
+                    type: string
+                    description: Additional metadata associated with this operation.
+                    example: ""
+                  logs:
+                    type: array
+                    description: Per-server logs for this purge/prefetch operation. The History tab uses the array length (minus 1) as the "Total Server" count and counts entries where completed is false (minus 1) as "Cache pending".
+                    items:
+                      type: object
+                      properties:
+                        serverId:
+                          type: string
+                          description: "Identifier of the edge server this log entry belongs to. Rendered as \"N/A\" in the UI when absent."
+                          example: "31"
+                        serverName:
+                          type: string
+                          description: "Human-readable name of the edge server. Rendered as \"unknown\" in the UI when absent."
+                          example: London, United Kingdom
+                        purged:
+                          type: array
+                          items:
+                            type: string
+                          description: "List of file paths purged or prefetched on this server. The UI shows \"Purged {purged.length} files\" when non-empty, and lets the user open a dialog to view the full list."
+                          example: ["/video/file.mp4"]
+                        completed:
+                          type: boolean
+                          description: "Whether this server has finished processing the operation. When false and purged is empty, the UI shows \"Pending\"; when true and purged is empty, it shows \"Purged 0 files\"."
+                          example: true
+                  completed_at:
+                    type: string
+                    nullable: true
+                    description: Unix timestamp (in seconds, as a string) when this operation completed, or empty/null while still pending.
+                    example: "1717236060"
+                  created_at:
+                    type: string
+                    description: Unix timestamp (in seconds, as a string) when this operation was created.
+                    example: "1717236000"
+                  updated_at:
+                    type: string
+                    description: Unix timestamp (in seconds, as a string) of the most recent update to this operation.
+                    example: "1717236060"
+                  errors:
+                    type: string
+                    description: Error message recorded for this operation, or empty string if none.
+                    example: ""
 components:
   parameters:
     zoneIdParam:
