@@ -154,7 +154,7 @@ paths:
       tags:
       - Live Transcoding Profiles/Filters
       summary: Update Transcoding Profile
-      description: update stream profiles setting
+      description: Update stream profile settings. The frontend edit form (Manage Profile page) runs full client-side validation before submitting - Angular form validity, required-field checks, and the shared EncodingValidationService checks described on each property below - and sends the payload as-is with no _METHOD override (unlike the Create endpoint).
       operationId: settings-stream-profiles-update
       parameters:
       - $ref: '#/components/parameters/profileIdParam'
@@ -163,154 +163,133 @@ paths:
           application/json:
             schema:
               required:
-              - _METHOD
               - name
+              - f
+              - cv
+              - filemode
+              - bvvalue
+              - vprofile
+              - vlevel
+              - ca
+              - bavalue
+              - aca
+              - ara
               type: object
               properties:
-                _METHOD:
-                  type: string
-                  description: HTTP method override. Must be set to PUT to perform an update operation.
-                  example: PUT
                 name:
                   type: string
-                  description: Name of the transcoding profile.
+                  description: Name of the transcoding profile. Required; the frontend blocks saving if this is empty or only whitespace.
                   example: My 720p Profile
                 filemode:
                   type: string
-                  description: "Profile mode. single encodes the file to one output; combined bundles multiple sub-profiles. Allowed values: single, combined."
-                  example: single
-                outdir:
-                  type: string
-                  description: Output directory path where encoded files are stored.
-                  example: /output/videos
-                sourceaudio:
-                  type: string
-                  description: Source audio stream identifier used during encoding.
-                  example: ''
-                sourcevideo:
-                  type: string
-                  description: Source video stream identifier used during encoding.
-                  example: ''
+                  enum: [sd, hd, uhd]
+                  description: "Stream quality tier, chosen via the Type field on the Basic Info tab. Required."
+                  example: hd
                 f:
                   type: string
-                  description: "Container format for the output file. Allowed values: mp4, webm, hls, hlsaes. webm requires VP9 or AV1 codec. hls and hlsaes convert to HLS segments and manifest."
+                  enum: [mp4]
+                  description: "Container format for the output stream. Only mp4 is currently selectable in the UI - the WebM radio option exists in the template but is commented out/hidden. Required together with cv."
                   example: mp4
-                hlsUnifiedSegments:
-                  type: boolean
-                  description: "Applicable only when f is hls or hlsaes. When true, audio and video are embedded in the same HLS segments. Enable if compatibility issues occur or when the source has multiple audio tracks (only the first audio track will be encoded)."
-                  example: false
-                hlsfMP4Segments:
-                  type: boolean
-                  description: "Applicable only when f is hls or hlsaes. When true, fMP4 (fragmented MP4) segments are used instead of the default MPEG-TS segments."
-                  example: false
                 cv:
                   type: string
-                  description: "Video codec. libx264 = H.264, libx265 = H.265, libvpx-vp9 = VP9 (webm only), libaom-av1 = AV1 (advanced feature). Allowed values: libx264, libx265, libvpx-vp9, libaom-av1."
+                  enum: [libx264, libx265]
+                  description: "Video codec. libx264 = H.264, libx265 = H.265. Only these two codecs are exposed in the Live Transcoding Profiles form (VP9/AV1 exist in the shared validation service's limits table but are not selectable here). Required together with f. Changing cv restricts which vprofile and tune values are selectable (see those fields) and, for H.264, also restricts vprofile/vlevel combinations against the codec's macroblocks-per-frame and macroblocks-per-second ceilings for the selected level."
                   example: libx264
                 sv:
                   type: string
-                  description: "Output resolution preset. Use as_defined to specify a custom resolution via svvalue. 0 means As Source. Allowed values: 2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, 0, as_defined."
+                  enum: [2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, as_defined]
+                  description: "Output resolution preset. Select as_defined to specify a custom resolution via svvalue (and the paired svwidth/svheight inputs)."
                   example: 720p
                 svvalue:
                   type: string
-                  description: "Custom resolution in WIDTHxHEIGHT format. Required when sv is as_defined. Width range 256–7680, height range 144–4320, both values must be divisible by 2."
+                  description: "Custom resolution in WIDTHxHEIGHT format (e.g. 1920x1080). Required and validated only when sv is as_defined: width and height must each be numeric and divisible by 2 (validateCustomResolution). When populated via the paired Width/Height inputs, the frontend additionally enforces width between 256 and 7680 and height between 144 and 4320 (both inclusive), and blocks values exceeding the maximum resolution allowed for the selected cv/vprofile/vlevel combination (see vlevel). Ignored when sv is a fixed preset."
                   example: 1280x720
-                crfv:
+                svwidth:
                   type: string
-                  description: "Constrained Quality factor controlling quality vs file size. 18 = High quality, 24 = Medium quality, 28 = Low quality. Allowed values: 18, 24, 28."
-                  example: '24'
-                kar:
+                  description: "Width component of the custom resolution, shown only when sv is as_defined. On blur, the frontend combines it with svheight into svvalue (subject to the same 256-7680 range, even-number, and codec/profile/level resolution-ceiling rules as svvalue) and submits svwidth alongside svvalue and svheight even though this field is not declared on the ProfileReq TypeScript interface."
+                  example: '1280'
+                svheight:
                   type: string
-                  description: "Keep Aspect Ratio. When set to 1, only height is fixed and width adjusts automatically to preserve the source aspect ratio. Allowed values: 0, 1."
+                  description: "Height component of the custom resolution, shown only when sv is as_defined. On blur, the frontend combines it with svwidth into svvalue (subject to the same 144-4320 range, even-number, and codec/profile/level resolution-ceiling rules as svvalue) and submits svheight alongside svvalue and svwidth even though this field is not declared on the ProfileReq TypeScript interface."
+                  example: '720'
+                deinterlace:
+                  type: string
+                  enum: ['0', '1']
+                  description: "Deinterlacing toggle. 1 = Yes (enabled), 0 = No (disabled)."
                   example: '0'
-                ol:
-                  type: string
-                  description: "Orientation Lock. When set to 1, the landscape or portrait orientation of the source video is preserved. Allowed values: 0, 1."
-                  example: '0'
-                bv:
-                  type: string
-                  description: "Video bitrate mode. 0 = As Source (copy source bitrate), 1 = As Defined (use custom bvvalue). Allowed values: 0, 1."
-                  example: '1'
                 bvvalue:
                   type: string
-                  description: Custom video bitrate in kbps. Required when bv is 1.
+                  description: "Video bitrate in kbps. Required; must be numeric and at least 512 (validateVideoBitrate) - no upper bound is enforced client-side, aside from the per-level bitrate ceiling described under vlevel."
                   example: '2500'
-                vpass:
+                fps:
                   type: string
-                  description: "Number of encoding passes. 1 = One Pass, 2 = Two Pass. Disabled when bv is 0. Allowed values: 1, 2."
-                  example: '1'
+                  enum: ['0', '24', '25', '30', '48', '50', '60']
+                  description: "Frames per second. 0 means As Source. The 48/50/60 options are only selectable once vlevel is 4.2 or higher; the frontend also disables any fps value that exceeds the maximum FPS allowed for the selected cv/vprofile/vlevel combination (see vlevel)."
+                  example: '30'
+                preset:
+                  type: string
+                  enum: [superfast, veryfast, faster, fast]
+                  description: "Encoding speed preset. Faster presets reduce CPU usage but may lower quality."
+                  example: veryfast
                 vprofile:
                   type: string
-                  description: "Video encoding profile. H.264 (libx264) supports baseline, main, high. H.265 (libx265) supports main, main10. VP9 (libvpx-vp9) supports profile0, profile2. AV1 (libaom-av1) supports main. Allowed values: baseline, main, high, main10, profile0, profile2."
+                  enum: [baseline, main, high]
+                  description: "Video encoding profile. Required, and must not be left unselected/disabled. When cv is libx264, all three options (baseline, main, high) are selectable. When cv is libx265, only main is selectable - baseline and high are disabled in the UI, and the form auto-switches away from them if they were previously selected."
                   example: main
                 vlevel:
                   type: string
-                  description: "Encoding level defining resolution and bitrate constraints. Available levels depend on codec and profile selection. Allowed values: 3.0, 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 6.1, 6.2."
+                  enum: ['3.0', '3.1', '3.2', '4.0', '4.1', '4.2', '5.0', '5.1', '5.2']
+                  description: >-
+                    Encoding level. Required. Which levels are selectable depends on the chosen cv + vprofile
+                    combination: libx264 + baseline allows 3.0, 3.1; libx264 + main allows 3.0, 3.1, 3.2, 4.0,
+                    4.1, 4.2; libx264 + high allows 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2; libx265 + main allows
+                    3.0, 3.1, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2. (libx265 + baseline/high are never reachable since
+                    those profiles are disabled for libx265.) Each cv/vprofile/vlevel combination additionally
+                    caps the maximum resolution, video bitrate, and FPS that can be submitted - for example
+                    libx264/main/4.0 allows up to 1920x1080 at up to 20000kbps and 30fps, libx264/high/5.1 allows
+                    up to 3840x2160 at up to 240000kbps and 30fps, and libx265/main/5.0 allows up to 3840x2160 at
+                    up to 100000kbps and 60fps; submitting resolution/bitrate/fps above the selected level's
+                    ceiling is rejected client-side before the request is sent. For libx264 specifically, an
+                    additional macroblocks-per-frame and macroblocks-per-second ceiling for the selected level is
+                    also enforced.
                   example: '4.0'
-                fps:
-                  type: string
-                  description: "Frames per second. 0 means As Source. Allowed values: 0, 24, 25, 30, 48, 50, 60."
-                  example: '30'
                 gop:
                   type: string
-                  description: "Group of Pictures (keyframe) interval in seconds. Left empty when fps is 0. Allowed values: 2, 4, 6, 8, 10, 12."
-                  example: '6'
-                preset:
-                  type: string
-                  description: "Encoding speed preset controlling compression efficiency and CPU usage. Faster presets use less CPU but may reduce quality. Allowed values: superfast, veryfast, faster, fast, medium, slow."
-                  example: veryfast
-                tune:
-                  type: string
-                  description: "Encoding tune to optimise for specific content or use case. H.264 supports disabled, film, animation, grain, stillimage, fastdecode. H.265 supports disabled, fastdecode. VP9 and AV1 support disabled only. Allowed values: disabled, film, animation, grain, stillimage, fastdecode."
-                  example: disabled
+                  enum: ['2', '4', '6', '8', '10', '12']
+                  description: "Group of Pictures (keyframe) interval in seconds. The control is disabled in the UI (and retains its existing value) while fps is 0 (As Source). If provided, must be numeric; the frontend shows a non-blocking warning when gop x fps is below 30 frames or above 300 frames."
+                  example: '2'
                 bframe:
                   type: string
-                  description: "Number of consecutive B-frames used in encoding. Higher values improve compression efficiency but increase encoding latency. Allowed values: 0, 1, 2, 3, 4."
-                  example: '1'
-                upscale:
+                  description: "Number of consecutive B-frames used in encoding. The B-frame selector is currently hidden/commented out in the UI, so this value is carried through unchanged from the existing profile and cannot currently be edited via the Update form."
+                  example: '0'
+                tune:
                   type: string
-                  description: "Video upscaling. Y = Allow upscaling when source resolution is lower than the target. N = Disallow upscaling. Allowed values: Y, N."
-                  example: Y
+                  enum: [disabled, zerolatency, fastdecode]
+                  description: "Encoding tune. Available options depend on cv: libx264 allows disabled, zerolatency, fastdecode; libx265 allows disabled, fastdecode only (no zerolatency). The entire Tune control is locked to disabled, with all other options disabled and an Advanced Features upsell prompt shown, unless the account has Advanced Features enabled (service.hasAdvancedFeatures)."
+                  example: disabled
+                crf:
+                  type: string
+                  description: "Internal CRF quality flag. Not exposed as a visible control in the UI; always submitted with the default value ll."
+                  example: ll
                 ca:
                   type: string
-                  description: "Audio codec. copy = As Source (pass-through). aac and libmp3lame are for mp4, hls, hlsaes containers. libopus is for webm only. Allowed values: copy, aac, libmp3lame, libopus."
+                  enum: [aac]
+                  description: "Audio codec. Only aac is currently offered in the UI. Required."
                   example: aac
                 aca:
                   type: string
-                  description: "Audio channel configuration. 0 = As Source, 1 = Mono, 2 = Stereo. Allowed values: 0, 1, 2."
+                  enum: ['0', '1', '2']
+                  description: "Audio channel configuration. 0 = As Source, 1 = Stereo, 2 = Mono. Required."
                   example: '2'
-                ba:
-                  type: string
-                  description: "Audio bitrate mode. 0 = As Source, 1 = As Defined (use custom bavalue). As Source is not available for webm. Allowed values: 0, 1."
-                  example: '1'
                 bavalue:
                   type: string
-                  description: Audio bitrate in kbps. Required when ba is 1.
+                  description: "Audio bitrate in kbps. Required; must be numeric, at least 32, and no more than 320 (enforced client-side on the Update flow)."
                   example: '128'
                 ara:
                   type: string
-                  description: "Audio sample rate. 0 = As Source. Allowed values: 0, 44100, 48000."
+                  enum: ['48000', '44100', '32000', '22050', '16000']
+                  description: "Audio sample rate in Hz. Required."
                   example: '44100'
-                tm:
-                  type: string
-                  description: "Thumbnail generation mode. disabled = no thumbnails, fixed = capture once at time tv, interval = capture repeatedly at tv interval, sprite = generate sprite sheet. Allowed values: disabled, fixed, interval, sprite."
-                  example: disabled
-                tv:
-                  type: string
-                  description: "Time value for thumbnail capture in HH:MM:SS format. Required when tm is fixed or interval."
-                  example: 00:00:05
-                filters:
-                  type: array
-                  description: Array of filter names to apply to the encoding output.
-                  items:
-                    type: string
-                  example: []
-                profiles:
-                  type: array
-                  description: "Array of sub-profile configurations. Applicable when filemode is combined."
-                  items:
-                    type: string
-                  example: []
       responses:
         '200':
           description: success
@@ -1489,91 +1468,146 @@ components:
       required:
       - _METHOD
       - name
+      - filemode
+      - f
+      - cv
+      - sv
+      - deinterlace
+      - bvvalue
+      - fps
+      - preset
+      - vprofile
+      - bframe
+      - gop
+      - ca
+      - aca
+      - bavalue
+      - ara
       type: object
       properties:
         _METHOD:
           type: string
-          description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
+          description: HTTP method override injected automatically by the frontend's create-profile service call - not a form field the user fills in. Always PUT for this endpoint.
           example: PUT
         name:
           type: string
-          description: Name of the transcoding profile.
+          description: Name of the transcoding profile. Required; the Create Profile dialog blocks submission if this is empty.
           example: My 720p Profile
         filemode:
           type: string
-          description: "Stream quality tier. Allowed values: sd, hd, uhd."
-          example: hd
+          enum: [sd, hd, uhd]
+          description: "Stream quality tier. Required. Defaults to sd in the Create Profile dialog."
+          default: sd
+          example: sd
         f:
           type: string
-          description: "Container format for the output stream. Allowed value: mp4."
+          enum: [mp4]
+          description: "Container format for the output stream. Only mp4 is currently selectable in the UI (the WebM option is hidden). Required. Defaults to mp4 in the Create Profile dialog."
+          default: mp4
           example: mp4
         cv:
           type: string
-          description: "Video codec for encoding. libx264 means H.264, libx265 means H.265. Allowed values: libx264, libx265."
+          enum: [libx264, libx265]
+          description: "Video codec. libx264 = H.264, libx265 = H.265. Only these two codecs are exposed in the Create Profile dialog. Required. Defaults to libx264. Selecting libx265 restricts vprofile to main and tune to disabled/fastdecode (see those fields); unlike the Update endpoint, the Create dialog does not run the full codec/profile/level/resolution/bitrate/fps cross-validation before submitting."
+          default: libx264
           example: libx264
         sv:
           type: string
-          description: "Output resolution preset. Use as_defined to specify a custom resolution via svvalue. Allowed values: 2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, as_defined."
+          enum: [2160p, 1440p, 1080p, 720p, 576p, 480p, 360p, 240p, 144p, as_defined]
+          description: "Output resolution preset. Select as_defined to specify a custom resolution via svvalue/svwidth/svheight. Defaults to 720p."
+          default: 720p
           example: 720p
         svvalue:
           type: string
-          description: Custom resolution in WIDTHxHEIGHT format. Required when sv is set to as_defined. Width range is 256–7680, height range is 144–4320, both values must be divisible by 2.
-          example: 1280x720
+          description: "Custom resolution in WIDTHxHEIGHT format (e.g. 1920x1080), used when sv is as_defined. Optional (no Angular validator is attached in the Create Profile dialog) and not validated client-side - the Create dialog does not enforce the numeric/divisible-by-2 or 256-7680 / 144-4320 range rules that the Update/edit flow applies. Empty string when sv is a fixed preset."
+          example: ''
+        svwidth:
+          type: string
+          description: "Width component of the custom resolution, shown only when sv is as_defined. Optional; the Create Profile dialog does not validate or combine it into svvalue, and it is not declared on the ProfileReq TypeScript interface, but it is still sent in the request body as a raw form value."
+          example: ''
+        svheight:
+          type: string
+          description: "Height component of the custom resolution, shown only when sv is as_defined. Optional; the Create Profile dialog does not validate or combine it into svvalue, and it is not declared on the ProfileReq TypeScript interface, but it is still sent in the request body as a raw form value."
+          example: ''
         deinterlace:
           type: string
-          description: Enable or disable deinterlacing. 1 means enabled, 0 means disabled.
+          enum: ['0', '1']
+          description: "Deinterlacing toggle. 1 = Yes (enabled), 0 = No (disabled). Defaults to 0."
+          default: '0'
           example: '0'
         bvvalue:
-          type: integer
-          format: int32
-          description: Video bitrate in kbps.
-          example: 2500
+          type: string
+          description: "Video bitrate in kbps. Required. Defaults to 2000. No numeric range is enforced client-side in the Create Profile dialog (the >=512 kbps rule only applies on the Update endpoint)."
+          default: '2000'
+          example: '2000'
         fps:
-          type: integer
-          format: int32
-          description: "Frames per second for the output stream. 0 means As Source. Allowed values: 0, 24, 25, 30, 48, 50, 60."
-          example: 30
+          type: string
+          enum: ['0', '24', '25', '30', '48', '50', '60']
+          description: "Frames per second. 0 means As Source. Required. Defaults to 24. The Create Profile dialog does not gate 48/50/60 behind vlevel the way the Update/edit flow does."
+          default: '24'
+          example: '24'
         preset:
           type: string
-          description: "Encoding speed preset. Faster presets reduce CPU usage but may lower quality. Allowed values: superfast, veryfast, faster, fast."
-          example: veryfast
+          enum: [superfast, veryfast, faster, fast]
+          description: "Encoding speed preset. Required. Defaults to faster."
+          default: faster
+          example: faster
         vprofile:
           type: string
-          description: "Video encoding profile. libx264 supports baseline, main, high. libx265 supports main only. Allowed values: baseline, main, high."
+          enum: [baseline, main, high]
+          description: "Video encoding profile. Required. Defaults to main. When cv is libx264, all three options are selectable; when cv is libx265, only main is selectable. Selecting a profile auto-sets vlevel to a codec-independent default: disabled -> '', baseline -> 3.0, high -> 4.0, main -> 3.1 - this auto-select behaviour is specific to the Create dialog and differs from the Update/edit flow's level-repair logic."
+          default: main
           example: main
         vlevel:
           type: string
-          description: "H.264/H.265 encoding level. Allowed values: 3.0, 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2."
-          example: '4.0'
+          enum: ['3.0', '3.1', '3.2', '4.0', '4.1', '4.2', '5.0', '5.1', '5.2']
+          description: "Encoding level. Optional in the Create Profile dialog (no Angular validator attached) and auto-populated when vprofile changes (see vprofile). Defaults to 3.1. Unlike the Update endpoint, the Create dialog does not cross-check vlevel against cv/vprofile-specific resolution, bitrate, or FPS ceilings before submitting."
+          default: '3.1'
+          example: '3.1'
         bframe:
           type: string
-          description: Number of consecutive B-frames used in encoding. Higher values improve compression but increase latency.
-          example: '3'
+          description: "Number of consecutive B-frames used in encoding. The B-frame selector is hidden/commented out in the Create Profile dialog, so this is always submitted as its default value of 0."
+          default: '0'
+          example: '0'
         gop:
-          type: integer
-          format: int32
-          description: "Group of Pictures (keyframe) interval in seconds. Allowed values: 2, 4, 6, 8, 10, 12."
-          example: 2
+          type: string
+          enum: ['2', '4', '6', '8', '10', '12']
+          description: "Group of Pictures (keyframe) interval in seconds. Required. Defaults to 10."
+          default: '10'
+          example: '10'
         tune:
           type: string
-          description: "Encoding tune to optimize for a specific use case. zerolatency reduces encoding delay, fastdecode optimizes for fast decoding, disabled applies no tuning. libx264 supports disabled, zerolatency, fastdecode. libx265 supports disabled, fastdecode. Allowed values: disabled, zerolatency, fastdecode."
+          enum: [disabled, zerolatency, fastdecode]
+          description: "Encoding tune. Optional (no Angular validator attached). Defaults to disabled. Available options depend on cv: libx264 allows disabled, zerolatency, fastdecode; libx265 allows disabled, fastdecode only. Unlike the Update/edit flow, the Create Profile dialog does not lock this field behind the account's Advanced Features flag."
+          default: disabled
           example: disabled
+        crf:
+          type: string
+          description: "Internal CRF quality flag. Not exposed as a visible control in the Create Profile dialog; always submitted with the default value ll."
+          default: ll
+          example: ll
         ca:
           type: string
-          description: "Audio codec for encoding. Allowed value: aac."
+          enum: [aac]
+          description: "Audio codec. Only aac is currently offered. Required. Defaults to aac."
+          default: aac
           example: aac
         aca:
-          type: integer
-          format: int32
-          description: Audio channel configuration. 0 means As Source, 1 means Mono, 2 means Stereo.
-          example: 2
+          type: string
+          enum: ['0', '1', '2']
+          description: "Audio channel configuration. 0 = As Source, 1 = Stereo, 2 = Mono. Required. Defaults to 1 (Stereo)."
+          default: '1'
+          example: '1'
         bavalue:
           type: string
-          description: Audio bitrate in kbps. Min 32 max 320.
-          example: '128'
+          description: "Audio bitrate in kbps. Required. Defaults to 80. No numeric range is enforced client-side in the Create Profile dialog (the 32-320 kbps rule only applies on the Update endpoint)."
+          default: '80'
+          example: '80'
         ara:
           type: string
-          description: "Audio sample rate in Hz. Allowed values: 16000, 22050, 32000, 44100, 48000."
+          enum: ['48000', '44100', '32000', '22050', '16000']
+          description: "Audio sample rate in Hz. Required. Defaults to 44100."
+          default: '44100'
           example: '44100'
     streamsetting_securetoken:
       type: object
@@ -4530,7 +4564,7 @@ components:
                     type: string
                 example:
                 - []
-                - 
+                -
               protocols:
                 type: array
                 description: Supported streaming protocols for each server.
@@ -5152,7 +5186,7 @@ components:
                   type: string
               example:
               - []
-              - 
+              -
             protocols:
               type: array
               description: Supported streaming protocols for each server.
