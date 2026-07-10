@@ -1,13 +1,16 @@
 (function () {
   var css = [
-    "a[href*='dashboard/login'],",
+    "[class*='dai-navbar-buttons'] a[href*='dashboard/login'],",
     "button[data-testid*='login'] {",
-    "  color: #ffffff !important;",
+    "  color: #ffffff;",
     "}",
-    "a[href*='dashboard/login']:hover,",
-    "a[href*='dashboard/login']:focus,",
-    "a[href*='dashboard/login']:active {",
-    "  color: #ffffff !important;",
+    "[class*='dai-navbar-buttons'] a[href*='dashboard/login']:hover,",
+    "[class*='dai-navbar-buttons'] a[href*='dashboard/login']:focus,",
+    "[class*='dai-navbar-buttons'] a[href*='dashboard/login']:active,",
+    "button[data-testid*='login']:hover,",
+    "button[data-testid*='login']:focus,",
+    "button[data-testid*='login']:active {",
+    "  color: #ffffff;",
     "}"
   ].join("\n");
 

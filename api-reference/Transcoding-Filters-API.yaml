@@ -786,6 +786,11 @@ paths:
                   description: "Position of the text overlay on the video frame."
                   enum: [top_left, top_right, bottom_left, bottom_right, center]
                   example: top_left
+                args[blink]:
+                  type: string
+                  description: "Blink timing for the overlay/text, formatted as on/off, where on and off are the number of seconds the overlay is shown and hidden per cycle. Both values must be integers between 1 and 9999. Applies to both overlay and drawtext filters. Optional — omit or send an empty value to disable blinking."
+                  pattern: "^\\d{1,4}/\\d{1,4}$"
+                  example: "3/7"
       deprecated: false
       responses:
         '200':

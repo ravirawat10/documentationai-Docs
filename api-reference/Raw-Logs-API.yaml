@@ -1,0 +1,1103 @@
+openapi: 3.0.0
+info:
+  title: 5centsCDN - Raw Logs
+  description: |
+    API for the Raw Logs section of the 5centsCDN dashboard. Covers three functional tabs:
+
+    - **Raw Logs API** — Real-time CDN access log querying with multi-dimensional filters via DataTables server-side processing.
+    - **Downloader** — S3 log file download: retrieve available log file paths for a date range, then download from OpenStack object storage.
+    - **Syslog** — Manage syslog streaming endpoints; configure protocol, format, IPv4/IPv6 anonymization, and resource assignments.
+
+    `GET /account/logs` bootstraps all three tabs with configuration, credentials, and resource limits.
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+components:
+  securitySchemes:
+    apikeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    Anonymize:
+      type: object
+      description: IPv4 and IPv6 client IP anonymization levels applied to syslog log entries.
+      required:
+        - v4
+        - v6
+      properties:
+        v4:
+          type: string
+          description: |
+            IPv4 anonymization level.
+            - '0': Disabled — full IP preserved
+            - '1': Remove last octet (255.255.255.0)
+            - '2': Remove last 2 octets (255.255.0.0)
+            - '3': Remove last 3 octets (255.0.0.0)
+            - '4': Drop IP entirely (0.0.0.0)
+          enum: ['0', '1', '2', '3', '4']
+          example: '0'
+        v6:
+          type: string
+          description: |
+            IPv6 anonymization level.
+            - '0': Disabled — full IP preserved
+            - '1' to '7': Remove 1–7 groups from the right
+            - '8': Drop IP entirely
+          enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+          example: '0'
+
+    SyslogEndpoint:
+      type: object
+      description: A configured syslog streaming endpoint that forwards CDN access logs to an external receiver.
+      properties:
+        id:
+          type: string
+          description: Unique numeric-string identifier of the syslog endpoint.
+          example: '42'
+        hostname:
+          type: string
+          description: Hostname or IP address of the external syslog receiver.
+          example: 'syslog.example.com'
+        port:
+          type: string
+          description: Port number the syslog receiver listens on. Valid range 1–65535.
+          example: '514'
+        protocol:
+          type: string
+          description: Transport protocol for log delivery.
+          enum:
+            - udp
+            - tcp
+            - tls
+          example: udp
+        format:
+          type: string
+          description: Log line format. 'json' = structured JSON object per line, 'log' = plain text.
+          enum:
+            - json
+            - log
+          example: json
+        anonymize:
+          $ref: '#/components/schemas/Anonymize'
+        resources:
+          type: array
+          description: Resource IDs (zones or streams) whose access logs are forwarded to this endpoint.
+          items:
+            type: string
+          example: ['12345', '67890']
+
+    S3Details:
+      type: object
+      nullable: true
+      description: Internal OpenStack storage metadata for the log container. Null when no object-storage integration is configured.
+      properties:
+        relid:
+          type: integer
+          description: Internal relation ID linking this storage record to the service account.
+          example: 5001
+        type:
+          type: string
+          description: Storage type identifier.
+          example: 's3'
+        projectid:
+          type: string
+          nullable: true
+          description: OpenStack project ID. Null when storage is not yet provisioned.
+          example: 'proj_abc123'
+        active:
+          type: string
+          description: Whether the storage integration is active. '1' = active, '0' = inactive.
+          enum: ['0', '1']
+          example: '1'
+        token:
+          type: string
+          description: Authentication token for the OpenStack storage endpoint.
+          example: 'tok_abc123'
+        updated_at:
+          type: string
+          description: 'Last update timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+          example: '2026-01-15 10:00:00'
+        last_modified:
+          type: string
+          description: 'Last modification timestamp of the storage container in UTC. Format: YYYY-MM-DD HH:mm:ss'
+          example: '2026-01-15 10:00:00'
+
+    CountsBySyslog:
+      type: object
+      description: Per-syslog-endpoint resource count, keyed by syslog endpoint ID string.
+      additionalProperties:
+        type: integer
+      example:
+        '42': 1
+        '43': 2
+
+    RawLogsDataResponse:
+      type: object
+      description: Complete raw logs configuration for a service account. Returned by GET and embedded in successful POST responses.
+      properties:
+        id:
+          type: integer
+          description: Service account ID.
+          example: 10001
+        hashid:
+          type: string
+          description: Unique hash identifier for the service account; also used as the OpenStack project name.
+          example: 'abc123def456'
+        resources_s3:
+          type: array
+          description: Resource IDs currently assigned to S3 (Downloader) log storage.
+          items:
+            type: string
+          example: ['12345']
+        resources_api:
+          type: array
+          description: Resource IDs currently assigned to the Real-time API log query tab.
+          items:
+            type: string
+          example: ['12345', '67890']
+        resources_syslog:
+          type: object
+          description: Map of configured syslog endpoints, keyed by 0-based numeric index string (not the syslog endpoint ID).
+          additionalProperties:
+            $ref: '#/components/schemas/SyslogEndpoint'
+          example:
+            '0':
+              id: '42'
+              hostname: 'syslog.example.com'
+              port: '514'
+              protocol: udp
+              format: json
+              anonymize:
+                v4: '0'
+                v6: '0'
+              resources: ['12345']
+        counts:
+          type: object
+          description: Resource usage counts for each log delivery type.
+          properties:
+            s3:
+              type: integer
+              description: Number of resources assigned to S3 log storage.
+              example: 1
+            api:
+              type: integer
+              description: Number of resources assigned to the API log query tab.
+              example: 2
+            syslog:
+              type: integer
+              description: Total resources assigned across all syslog endpoints.
+              example: 1
+            bySyslog:
+              $ref: '#/components/schemas/CountsBySyslog'
+        resources_syslog_curr:
+          type: array
+          description: Flat union of all resource IDs assigned to any syslog endpoint.
+          items:
+            type: string
+          example: ['12345']
+        limit:
+          type: integer
+          description: Maximum number of resources assignable per log delivery type.
+          example: 10
+        available:
+          type: integer
+          description: Remaining resource slots available for assignment within the current service limit.
+          example: 9
+        ftpdetails:
+          type: object
+          description: OpenStack object storage credentials for authenticating the S3 log file browser.
+          properties:
+            username:
+              type: string
+              description: OpenStack username for the log storage endpoint.
+              example: 'cdn_user_10001'
+            password:
+              type: string
+              description: OpenStack password for the log storage endpoint.
+              example: 'secret_password'
+        s3details:
+          $ref: '#/components/schemas/S3Details'
+        cdnservice:
+          type: object
+          description: OpenStack Horizon file manager connection details for browsing the S3 log directory tree in the Downloader tab.
+          properties:
+            listurl:
+              type: string
+              description: Full URL to the OpenStack Horizon file manager listing endpoint.
+              example: 'https://storage-eu-01.5centscdn.com/fileman/'
+            authtoken:
+              type: string
+              description: Base64-encoded Basic Auth credentials passed as the Authorization header when requesting the Horizon file manager.
+              example: 'dXNlcjpwYXNz'
+        resources:
+          type: object
+          description: Map of all available resource IDs to human-readable display names (zones and streams). Populates resource selector dropdowns across all three tabs.
+          additionalProperties:
+            type: string
+          example:
+            '12345': 'My HTTP Zone'
+            '67890': 'My Livestream'
+        searchOptions:
+          description: Dynamic filter option metadata for the API log query tab (e.g. available edge PoP codes, cache status values). Structure varies per account and may be null.
+          nullable: true
+        openstack:
+          type: object
+          description: OpenStack RC file credentials for generating downloadable v2/v3 RC files on the Downloader resource panel.
+          properties:
+            controller:
+              type: string
+              description: OpenStack controller hostname for the storage region.
+              example: 'storage-eu-01.5centscdn.com'
+            projectname:
+              type: string
+              description: OpenStack project name. Equals the service account hashid.
+              example: 'abc123def456'
+            projectid:
+              type: string
+              nullable: true
+              description: OpenStack project ID. Null when storage is not yet provisioned.
+              example: 'proj_abc123'
+            username:
+              type: string
+              description: OpenStack username.
+              example: 'cdn_user_10001'
+            password:
+              type: string
+              description: OpenStack password.
+              example: 'secret_password'
+
+    RawLogsApiResponse:
+      type: object
+      description: Standard envelope for raw logs configuration responses.
+      properties:
+        result:
+          type: string
+          description: Operation outcome.
+          enum:
+            - success
+            - failure
+          example: success
+        data:
+          $ref: '#/components/schemas/RawLogsDataResponse'
+        message:
+          type: string
+          description: Human-readable error description. Present only when result is not 'success'.
+          example: 'An error occurred while fetching raw logs configuration'
+
+    UpdateResourcePayload:
+      type: object
+      description: JSON payload for replacing the resource list assigned to a specific log delivery type.
+      required:
+        - resources
+        - type
+      properties:
+        resources:
+          type: array
+          description: Complete replacement list of resource IDs. Overwrites all previously assigned resources for the given delivery type.
+          items:
+            type: string
+          example: ['12345', '67890']
+        type:
+          type: string
+          description: Log delivery type to update.
+          enum:
+            - api
+            - s3
+            - syslog
+          example: api
+
+    GeoIP:
+      type: object
+      description: Geographic and network metadata derived from the client IP address.
+      properties:
+        country_name:
+          type: string
+          description: Full country name associated with the client IP.
+          example: India
+        continent_code:
+          type: string
+          description: Two-letter continent code.
+          example: AS
+        asn_org:
+          type: string
+          description: Organisation name registered to the client's Autonomous System.
+          example: 'Jio Platforms Limited'
+        asn_number:
+          type: string
+          description: Autonomous System Number, prefixed with 'AS'.
+          example: 'AS55836'
+
+    RawLogApiEntry:
+      type: object
+      description: A single CDN access log record returned by the API log query endpoint.
+      properties:
+        DT_RowId:
+          type: string
+          description: DataTables row identifier, unique within the current result set.
+          example: 'row_42'
+        e:
+          type: string
+          description: Internal event identifier used for the expandable row detail feature.
+          example: 'evt_abc123'
+        timestamp:
+          type: string
+          description: 'Request timestamp in UTC. Format: YYYY-MM-DD HH:mm:ss'
+          example: '2026-01-20 12:00:00'
+        pop:
+          type: string
+          description: Edge PoP (Point of Presence) code that served the request.
+          example: 'AMS-01'
+        clientip:
+          type: string
+          description: Client IP address. May be masked depending on anonymization settings for the resource.
+          example: '203.0.113.1'
+        verb:
+          type: string
+          description: HTTP method of the request.
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - HEAD
+            - OPTIONS
+            - CONNECT
+            - TRACE
+          example: GET
+        request:
+          type: string
+          description: Request path and query string.
+          example: '/video/sample.mp4'
+        bytes:
+          type: integer
+          description: Response body size in bytes.
+          example: 102400
+        response:
+          type: integer
+          description: HTTP response status code.
+          example: 200
+        cache:
+          type: string
+          description: CDN cache disposition for this response (e.g. HIT, MISS, BYPASS).
+          example: HIT
+        useragent:
+          type: string
+          description: Full User-Agent header string from the request.
+          example: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        httpversion:
+          type: number
+          description: HTTP protocol version used for the request.
+          example: 1.1
+        os_full:
+          type: string
+          description: Operating system name and version parsed from the user-agent.
+          example: 'Windows 10'
+        device:
+          type: string
+          description: Device category parsed from the user-agent.
+          example: Desktop
+        referrer:
+          type: string
+          description: Value of the HTTP Referer header, if present.
+          example: 'https://example.com/'
+        browser_full:
+          type: string
+          description: Browser name and version parsed from the user-agent.
+          example: 'Chrome 120'
+        geoip:
+          $ref: '#/components/schemas/GeoIP'
+        sort:
+          type: number
+          description: Internal numeric sort key used by DataTables for row ordering.
+          example: 1705737600000
+
+    RawLogApiQueryResponse:
+      type: object
+      description: DataTables server-side processing response containing a page of access log records and pagination metadata.
+      properties:
+        draw:
+          type: integer
+          description: Echo of the draw counter from the request. Used by DataTables to correlate async responses with the correct request.
+          example: 1
+        recordsTotal:
+          type: integer
+          description: Total number of records in the unfiltered dataset.
+          example: 5000
+        recordsFiltered:
+          type: integer
+          description: Total number of records matching the active filters. Used by DataTables to calculate total page count.
+          example: 1250
+        data:
+          type: array
+          description: Access log entries for the current page.
+          items:
+            $ref: '#/components/schemas/RawLogApiEntry'
+
+    DownloadLogsSuccessResponse:
+      type: object
+      description: Response containing S3 object paths for CDN access log archive files available for download.
+      properties:
+        result:
+          type: string
+          description: Operation outcome.
+          example: success
+        files:
+          type: array
+          description: |
+            List of S3 object paths relative to the OpenStack storage account. The client constructs
+            full download URLs as: `https://{openstack.controller}/{openstack.username}/{file}`
+
+            Files are gzip-compressed CDN access log archives (.gz). An empty array means no logs
+            were found for the requested date range and resources.
+          items:
+            type: string
+          example:
+            - 'logs/2026/01/20/resource-12345/cdn-access.log.gz'
+            - 'logs/2026/01/20/resource-67890/cdn-access.log.gz'
+
+    SyslogSuccessResponse:
+      type: object
+      description: Success response returned after a syslog endpoint is created or updated.
+      properties:
+        result:
+          type: string
+          description: Operation outcome.
+          enum:
+            - success
+          example: success
+
+    SyslogErrorResponse:
+      type: object
+      description: |
+        Validation error response for syslog create/update failures. Note: HTTP status is 200;
+        check the result field to determine failure.
+      properties:
+        result:
+          type: string
+          description: Operation outcome.
+          enum:
+            - error
+          example: error
+        message:
+          type: string
+          description: High-level error description.
+          example: 'Validation failed'
+        errors:
+          type: array
+          description: Array of specific validation error messages.
+          items:
+            type: string
+          example:
+            - 'Hostname is required'
+            - 'Port must be between 1 and 65535'
+
+security:
+- apikeyAuth: []
+
+tags:
+- name: Raw Logs
+  description: Endpoints for retrieving and updating raw logs configuration, resource assignments for all three delivery types (S3, API, Syslog), and syslog endpoint management.
+- name: Raw Logs API Query
+  description: Server-side DataTables endpoint for querying real-time CDN access logs with filtering by date range, resource, edge PoP, HTTP method, status code, cache status, client IP, and request path.
+- name: Raw Logs Downloader
+  description: Endpoint for retrieving S3 object paths for CDN access log archive files, enabling batch download via the OpenStack object storage endpoint.
+
+paths:
+  /account/logs:
+    get:
+      operationId: getRawLogsConfig
+      tags:
+        - Raw Logs
+      summary: Get Raw Logs Configuration
+      description: |
+        Retrieves the complete raw logs configuration for a service account. The response data
+        bootstraps all three dashboard tabs — Raw Logs API, Downloader, and Syslog — with resource
+        assignments, OpenStack storage credentials, syslog endpoint definitions, and available
+        resource limits.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawLogsApiResponse'
+              example:
+                result: success
+                data:
+                  id: 10001
+                  hashid: abc123def456
+                  resources_s3:
+                    - '12345'
+                  resources_api:
+                    - '12345'
+                    - '67890'
+                  resources_syslog:
+                    '0':
+                      id: '42'
+                      hostname: syslog.example.com
+                      port: '514'
+                      protocol: udp
+                      format: json
+                      anonymize:
+                        v4: '0'
+                        v6: '0'
+                      resources:
+                        - '12345'
+                  counts:
+                    s3: 1
+                    api: 2
+                    syslog: 1
+                    bySyslog:
+                      '42': 1
+                  resources_syslog_curr:
+                    - '12345'
+                  limit: 10
+                  available: 9
+                  ftpdetails:
+                    username: cdn_user_10001
+                    password: secret_password
+                  s3details:
+                    relid: 5001
+                    type: s3
+                    projectid: proj_abc123
+                    active: '1'
+                    token: tok_abc123
+                    updated_at: '2026-01-15 10:00:00'
+                    last_modified: '2026-01-15 10:00:00'
+                  cdnservice:
+                    listurl: 'https://storage-eu-01.5centscdn.com/fileman/'
+                    authtoken: dXNlcjpwYXNz
+                  resources:
+                    '12345': My HTTP Zone
+                    '67890': My Livestream
+                  searchOptions: null
+                  openstack:
+                    controller: storage-eu-01.5centscdn.com
+                    projectname: abc123def456
+                    projectid: proj_abc123
+                    username: cdn_user_10001
+                    password: secret_password
+
+    post:
+      operationId: updateRawLogsConfig
+      tags:
+        - Raw Logs
+      summary: Update Raw Logs Configuration
+      description: |
+        Updates raw logs configuration. Accepts two distinct payload variants on the same endpoint:
+
+        **Variant A — Resource assignment** (`application/json`): Replaces the resource list
+        for a specific delivery type (`api`, `s3`, or `syslog`). Returns the full updated
+        `RawLogsApiResponse` envelope including the refreshed `data` object.
+
+        **Variant B — Syslog endpoint create/update** (`application/x-www-form-urlencoded`):
+        Creates a new syslog endpoint (omit `syslogid`) or updates an existing one (include
+        `syslogid`). Returns a minimal success envelope; the client reloads the full config
+        afterwards via `GET /account/logs`.
+
+        **Anonymization constraint**: a resource may have anonymization (v4 or v6 ≠ '0') active
+        on at most one syslog endpoint at a time. The server returns a validation error if
+        conflicting anonymization is attempted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResourcePayload'
+            example:
+              resources:
+                - '12345'
+                - '67890'
+              type: api
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - type
+                - hostname
+                - port
+                - protocol
+                - format
+                - resources
+              properties:
+                type:
+                  type: string
+                  description: Operation discriminator. Must be 'syslog'.
+                  enum:
+                    - syslog
+                  example: syslog
+                syslogid:
+                  type: string
+                  description: ID of the existing syslog endpoint to update. Omit when creating a new endpoint.
+                  example: '42'
+                hostname:
+                  type: string
+                  description: Hostname or IP address of the syslog receiver.
+                  example: syslog.example.com
+                port:
+                  type: integer
+                  description: Listening port of the syslog receiver. Range 1–65535.
+                  minimum: 1
+                  maximum: 65535
+                  example: 514
+                protocol:
+                  type: string
+                  description: Transport protocol for log delivery.
+                  enum:
+                    - udp
+                    - tcp
+                    - tls
+                  example: udp
+                format:
+                  type: string
+                  description: Log line format. 'log' = plain text, 'json' = JSON.
+                  enum:
+                    - log
+                    - json
+                  example: json
+                'anonymize[v4]':
+                  type: string
+                  description: IPv4 anonymization level. '0' = disabled, '1'–'3' = mask octets, '4' = drop IP.
+                  enum: ['0', '1', '2', '3', '4']
+                  example: '0'
+                'anonymize[v6]':
+                  type: string
+                  description: IPv6 anonymization level. '0' = disabled, '1'–'7' = mask groups, '8' = drop IP.
+                  enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+                  example: '0'
+                'resources[]':
+                  type: array
+                  description: Resource IDs to forward to this syslog endpoint. Replaces current assignments.
+                  items:
+                    type: string
+                  example: ['12345', '67890']
+            example:
+              type: syslog
+              syslogid: '42'
+              hostname: syslog.example.com
+              port: 514
+              protocol: udp
+              format: json
+              'anonymize[v4]': '0'
+              'anonymize[v6]': '0'
+              'resources[]':
+                - '12345'
+      responses:
+        '200':
+          description: |
+            OK — response shape depends on which variant was submitted.
+            Variant A returns a full `RawLogsApiResponse`. Variant B returns a minimal
+            success envelope, or an error envelope (HTTP 200) with a `result` of `'error'`
+            and a `errors` array on validation failure.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RawLogsApiResponse'
+                  - $ref: '#/components/schemas/SyslogSuccessResponse'
+                  - $ref: '#/components/schemas/SyslogErrorResponse'
+              examples:
+                resource_assignment_success:
+                  summary: Resource assignment updated (Variant A)
+                  value:
+                    result: success
+                    data:
+                      id: 10001
+                      hashid: abc123def456
+                      resources_api:
+                        - '12345'
+                        - '67890'
+                      resources_s3:
+                        - '12345'
+                      resources_syslog:
+                        '0':
+                          id: '42'
+                          hostname: syslog.example.com
+                          port: '514'
+                          protocol: udp
+                          format: json
+                          anonymize:
+                            v4: '0'
+                            v6: '0'
+                          resources:
+                            - '12345'
+                      counts:
+                        s3: 1
+                        api: 2
+                        syslog: 1
+                        bySyslog:
+                          '42': 1
+                      resources_syslog_curr:
+                        - '12345'
+                      limit: 10
+                      available: 9
+                syslog_update_success:
+                  summary: Syslog endpoint saved (Variant B — success)
+                  value:
+                    result: success
+                syslog_update_error:
+                  summary: Syslog endpoint validation failed (Variant B — HTTP 200 with result=error)
+                  value:
+                    result: error
+                    message: Validation failed
+                    errors:
+                      - Hostname is required
+                      - Port must be between 1 and 65535
+
+  /account/logs/api:
+    post:
+      operationId: queryRawApiLogs
+      tags:
+        - Raw Logs API Query
+      summary: Query API Logs
+      description: |
+        Server-side DataTables endpoint for querying real-time CDN access logs. Supports pagination
+        and optional filters on resource, edge PoP, HTTP method, status code, cache status,
+        client IP, and request path.
+
+        **Date range constraints**: All timestamps in `r` must be in UTC with minute granularity
+        (seconds always `00`). Maximum supported window is **1 hour**. Preset options available
+        in the UI are: Last 15 Minutes, Last 30 Minutes, and Last 1 Hour. Windows of 2 hours,
+        3 hours, and 6 hours are not supported by the API.
+
+        **Column definitions**: The request must include all 9 DataTables column descriptors
+        (`columns[0]` through `columns[8]`) with the `data` field names in this fixed order:
+        `e`, `timestamp`, `pop`, `clientip`, `verb`, `request`, `bytes`, `response`, `cache`.
+        Each column must also carry `name` (empty string), `searchable` (`'true'`),
+        `orderable` (`'false'`), `search[value]` (empty string), and `search[regex]` (`'false'`).
+        The global `search[value]` and `search[regex]` fields must also be present.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - draw
+                - start
+                - length
+                - r
+                - 'columns[0][data]'
+                - 'columns[1][data]'
+                - 'columns[2][data]'
+                - 'columns[3][data]'
+                - 'columns[4][data]'
+                - 'columns[5][data]'
+                - 'columns[6][data]'
+                - 'columns[7][data]'
+                - 'columns[8][data]'
+                - 'search[value]'
+                - 'search[regex]'
+              properties:
+                draw:
+                  type: string
+                  description: DataTables draw sequence counter. Echoed back in the response so the client can match async responses to requests and discard out-of-order results.
+                  example: '1'
+                'columns[0][data]':
+                  type: string
+                  description: Data field name for column 0. Must be 'e' (expand/collapse toggle).
+                  enum: [e]
+                  example: e
+                'columns[1][data]':
+                  type: string
+                  description: Data field name for column 1. Must be 'timestamp'.
+                  enum: [timestamp]
+                  example: timestamp
+                'columns[2][data]':
+                  type: string
+                  description: Data field name for column 2. Must be 'pop'.
+                  enum: [pop]
+                  example: pop
+                'columns[3][data]':
+                  type: string
+                  description: Data field name for column 3. Must be 'clientip'.
+                  enum: [clientip]
+                  example: clientip
+                'columns[4][data]':
+                  type: string
+                  description: Data field name for column 4. Must be 'verb'.
+                  enum: [verb]
+                  example: verb
+                'columns[5][data]':
+                  type: string
+                  description: Data field name for column 5. Must be 'request'.
+                  enum: [request]
+                  example: request
+                'columns[6][data]':
+                  type: string
+                  description: Data field name for column 6. Must be 'bytes'.
+                  enum: [bytes]
+                  example: bytes
+                'columns[7][data]':
+                  type: string
+                  description: Data field name for column 7. Must be 'response'.
+                  enum: [response]
+                  example: response
+                'columns[8][data]':
+                  type: string
+                  description: Data field name for column 8. Must be 'cache'.
+                  enum: [cache]
+                  example: cache
+                'columns[i][name]':
+                  type: string
+                  description: Column name. Always empty string for all 9 columns.
+                  example: ''
+                'columns[i][searchable]':
+                  type: string
+                  description: Whether the column is searchable. Always 'true'.
+                  enum: ['true']
+                  example: 'true'
+                'columns[i][orderable]':
+                  type: string
+                  description: Whether the column is orderable. Always 'false'.
+                  enum: ['false']
+                  example: 'false'
+                'columns[i][search][value]':
+                  type: string
+                  description: Per-column search value. Always empty string.
+                  example: ''
+                'columns[i][search][regex]':
+                  type: string
+                  description: Whether the per-column search is a regex. Always 'false'.
+                  enum: ['false']
+                  example: 'false'
+                start:
+                  type: string
+                  description: Zero-based record offset for pagination.
+                  example: '0'
+                length:
+                  type: string
+                  description: Number of records per page. The dashboard UI uses 25.
+                  example: '25'
+                'search[value]':
+                  type: string
+                  description: Global search value. Always empty string.
+                  example: ''
+                'search[regex]':
+                  type: string
+                  description: Whether the global search uses a regex. Always 'false'.
+                  enum: ['false']
+                  example: 'false'
+                r:
+                  type: string
+                  description: |
+                    Date range filter in UTC with minute granularity:
+                    "YYYY-MM-DD HH:mm:00 - YYYY-MM-DD HH:mm:00". Maximum window is 1 hour.
+                    Timestamps are converted from local time to UTC by the client before sending.
+                  example: '2026-01-20 11:00:00 - 2026-01-20 12:00:00'
+                'resources[]':
+                  type: array
+                  description: Optional. Filter to the specified resource IDs. When omitted, all resources assigned to the API log tab are queried.
+                  items:
+                    type: string
+                  example: ['12345']
+                'pops[]':
+                  type: array
+                  description: Optional. Filter to requests served by the specified edge PoP codes.
+                  items:
+                    type: string
+                  example: ['AMS-01']
+                'verbs[]':
+                  type: array
+                  description: Optional. Filter to the specified HTTP methods.
+                  items:
+                    type: string
+                    enum: [GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, TRACE]
+                  example: ['GET', 'POST']
+                'responses[]':
+                  type: array
+                  description: Optional. Filter to the specified HTTP response status codes. Accepts values 100–599.
+                  items:
+                    type: string
+                  example: ['200', '404']
+                'caches[]':
+                  type: array
+                  description: Optional. Filter to the specified CDN cache statuses (e.g. HIT, MISS, BYPASS).
+                  items:
+                    type: string
+                  example: ['HIT']
+                'clientips[]':
+                  type: array
+                  description: Optional. Filter to requests from the specified client IPv4 addresses.
+                  items:
+                    type: string
+                    format: ipv4
+                  example: ['203.0.113.1']
+                'requests[]':
+                  type: array
+                  description: Optional. Filter to requests matching the specified path patterns.
+                  items:
+                    type: string
+                  example: ['/video/sample.mp4']
+            example:
+              draw: '1'
+              'columns[0][data]': e
+              'columns[0][name]': ''
+              'columns[0][searchable]': 'true'
+              'columns[0][orderable]': 'false'
+              'columns[0][search][value]': ''
+              'columns[0][search][regex]': 'false'
+              'columns[1][data]': timestamp
+              'columns[1][name]': ''
+              'columns[1][searchable]': 'true'
+              'columns[1][orderable]': 'false'
+              'columns[1][search][value]': ''
+              'columns[1][search][regex]': 'false'
+              'columns[2][data]': pop
+              'columns[2][name]': ''
+              'columns[2][searchable]': 'true'
+              'columns[2][orderable]': 'false'
+              'columns[2][search][value]': ''
+              'columns[2][search][regex]': 'false'
+              'columns[3][data]': clientip
+              'columns[3][name]': ''
+              'columns[3][searchable]': 'true'
+              'columns[3][orderable]': 'false'
+              'columns[3][search][value]': ''
+              'columns[3][search][regex]': 'false'
+              'columns[4][data]': verb
+              'columns[4][name]': ''
+              'columns[4][searchable]': 'true'
+              'columns[4][orderable]': 'false'
+              'columns[4][search][value]': ''
+              'columns[4][search][regex]': 'false'
+              'columns[5][data]': request
+              'columns[5][name]': ''
+              'columns[5][searchable]': 'true'
+              'columns[5][orderable]': 'false'
+              'columns[5][search][value]': ''
+              'columns[5][search][regex]': 'false'
+              'columns[6][data]': bytes
+              'columns[6][name]': ''
+              'columns[6][searchable]': 'true'
+              'columns[6][orderable]': 'false'
+              'columns[6][search][value]': ''
+              'columns[6][search][regex]': 'false'
+              'columns[7][data]': response
+              'columns[7][name]': ''
+              'columns[7][searchable]': 'true'
+              'columns[7][orderable]': 'false'
+              'columns[7][search][value]': ''
+              'columns[7][search][regex]': 'false'
+              'columns[8][data]': cache
+              'columns[8][name]': ''
+              'columns[8][searchable]': 'true'
+              'columns[8][orderable]': 'false'
+              'columns[8][search][value]': ''
+              'columns[8][search][regex]': 'false'
+              start: '0'
+              length: '25'
+              'search[value]': ''
+              'search[regex]': 'false'
+              r: '2026-01-20 11:00:00 - 2026-01-20 12:00:00'
+              'resources[]': ['12345']
+              'verbs[]': ['GET']
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawLogApiQueryResponse'
+              example:
+                draw: 1
+                recordsTotal: 5000
+                recordsFiltered: 1250
+                data:
+                - DT_RowId: row_42
+                  e: evt_abc123
+                  timestamp: '2026-01-20 12:00:00'
+                  pop: AMS-01
+                  clientip: 203.0.113.1
+                  verb: GET
+                  request: /video/sample.mp4
+                  bytes: 102400
+                  response: 200
+                  cache: HIT
+                  useragent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                  httpversion: 1.1
+                  os_full: Windows 10
+                  device: Desktop
+                  referrer: 'https://example.com/'
+                  browser_full: Chrome 120
+                  geoip:
+                    country_name: India
+                    continent_code: AS
+                    asn_org: Jio Platforms Limited
+                    asn_number: AS55836
+                  sort: 1705737600000
+
+  /account/logs/s3:
+    post:
+      operationId: getDownloadableLogFiles
+      tags:
+        - Raw Logs Downloader
+      summary: Get Downloadable Log Files
+      description: |
+        Returns S3 object paths for CDN access log archive files matching the specified date range
+        and resources. An empty `files` array means no logs were found for the given criteria.
+
+        The client constructs full download URLs by prepending the OpenStack controller and username
+        from `GET /account/logs`:
+
+        `https://{openstack.controller}/{openstack.username}/{file}`
+
+        Files are gzip-compressed CDN access log archives (.gz). The Downloader tab downloads files
+        in parallel chunks of 25, packages each chunk as a ZIP using JSZip, and triggers a browser
+        download per chunk (`downloaded-logs-part-N.zip`).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - r
+                - resources
+              properties:
+                r:
+                  type: string
+                  description: 'Date range in UTC format: "YYYY-MM-DD HH:mm:ss - YYYY-MM-DD HH:mm:ss". Defines the time window for which log files are retrieved.'
+                  example: '2026-01-20 00:00:00 - 2026-01-20 23:59:59'
+                resources:
+                  type: array
+                  description: Resource IDs for which log files should be retrieved. Must contain at least one entry.
+                  items:
+                    type: string
+                  minItems: 1
+                  example:
+                    - '12345'
+                    - '67890'
+            example:
+              r: '2026-01-20 00:00:00 - 2026-01-20 23:59:59'
+              resources:
+                - '12345'
+                - '67890'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadLogsSuccessResponse'
+              examples:
+                files_found:
+                  summary: Log files available for the requested range
+                  value:
+                    result: success
+                    files:
+                      - logs/2026/01/20/resource-12345/cdn-access.log.gz
+                      - logs/2026/01/20/resource-67890/cdn-access.log.gz
+                no_files:
+                  summary: No log files found for the requested range and resources
+                  value:
+                    result: success
+                    files: []

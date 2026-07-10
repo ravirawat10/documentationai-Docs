@@ -2549,9 +2549,14 @@ paths:
                   example: 11,211
                 protocols:
                   type: array
-                  description: List of output protocols. Values include HLS, RTMP, DASH, RTSP.
+                  description: "Output protocols to enable for the stream. Send every protocol that should remain enabled; any protocol omitted from the array is disabled. Allowed values: RTMP, RTSP, DASH, HLS (HLS_FMP4 is reserved for future use and is not currently selectable in the UI). Read-only when the stream's protocolsLock is 1; enabling a new output protocol requires review and activation by the support team."
                   items:
                     type: string
+                    enum:
+                    - RTMP
+                    - RTSP
+                    - DASH
+                    - HLS
                   example:
                   - RTSP
                   - HLS
@@ -5748,32 +5753,37 @@ paths:
               properties:
                 ltc:
                   type: integer
-                  description: Number of transcoding profiles assigned. 0 means none.
+                  description: "ID of the Live Transcoder Core (LTC) tier to allocate for this stream — for example 1 = LT1C @ $0.06/hr, up to 16 = LT16C @ $0.96/hr. The selectable range is further capped by the number of LTC cores currently available on the account; tiers above that count are out of stock and rejected."
+                  minimum: 1
+                  maximum: 16
                   example: 3
                 vprofiles:
                   type: array
-                  description: List of video transcoding profile IDs to apply.
+                  description: "Video transcoding profile IDs to apply, from the GET /streams/settings/profiles list. All selected profiles must share the same video codec (h264 or h265) — mixing codecs is rejected. In per-profile billing mode, a maximum of 5 profiles is allowed, further capped by the account's available SD/HD/UHD profile slots; per-minute billing mode has no profile-count limit. Send an empty array for no additional video transcoding."
                   items:
                     type: string
                   example:
                   - '12345'
-                  - '12345'
                 aprofiles:
                   type: array
-                  description: List of audio transcoding profile IDs to apply.
+                  description: "Audio transcoding profile ID to apply, from the GET /streams/settings/profiles list. Single-select — send at most one profile ID in the array, or an empty array for no audio transcoding."
                   items:
-                    type: integer
+                    type: string
+                  maxItems: 1
                   example:
-                  - 126635
+                  - '126635'
                 filters:
                   type: array
-                  description: List of transcoding filter IDs to apply.
+                  description: List of transcoding filter IDs to apply, from the GET /streams/settings/filters list.
                   items:
-                    type: integer
+                    type: string
                   example: []
                 autostop:
                   type: integer
-                  description: Auto-stop the transcoder after inactivity. 0 means disabled.
+                  nullable: true
+                  description: "Controls when the transcoder automatically stops after the source goes offline. -1 = Always Run (keeps running and is billed hourly until manually stopped); 0 or null = Stop After Event Ends (recommended default — stops at the end of the current event or billing hour); 1-48 = stop that many hours after the source goes offline (custom)."
+                  minimum: -1
+                  maximum: 48
                   example: 0
       responses:
         '200':

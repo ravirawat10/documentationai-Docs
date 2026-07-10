@@ -2367,16 +2367,30 @@ paths:
                   example: 212
                 ingests:
                   type: array
-                  description: A list of ingest protocols used to receive the stream. Examples include RTMP.
+                  description: "Input (ingest) protocol for the stream. Send a one-item array with the selected protocol, or an empty array to clear the selection; only one protocol can be active at a time. RTMP is always available. The advanced protocols (RTMPS, RTSP, SRT, WHIP, ZIXI, RIST, ICECAST) are Advanced Protocol Features and can only be submitted once the stream's hasAdvancedFeatures flag is enabled; enabling this flag requires review and activation by the support team. Read-only when the stream's ingestsLock is greater than 0. Allowed values: RTMP, RTMPS, RTSP, SRT, WHIP, ZIXI, RIST, ICECAST."
                   items:
                     type: string
+                    enum:
+                    - RTMP
+                    - RTMPS
+                    - RTSP
+                    - SRT
+                    - WHIP
+                    - ZIXI
+                    - RIST
+                    - ICECAST
                   example:
                   - RTMP
                 protocols:
                   type: array
-                  description: List of output protocols. Values include HLS, RTMP, DASH, RTSP.
+                  description: "Output protocols to enable for the stream. Send every protocol that should remain enabled; any protocol omitted from the array is disabled. Allowed values: RTMP, RTSP, DASH, HLS (HLS_FMP4 is reserved for future use and is not currently selectable in the UI). Read-only when the stream's protocolsLock is 1; enabling a new output protocol requires review and activation by the support team."
                   items:
                     type: string
+                    enum:
+                    - RTMP
+                    - RTSP
+                    - DASH
+                    - HLS
                   example:
                   - HLS
       responses:
