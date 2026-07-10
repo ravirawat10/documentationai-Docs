@@ -215,6 +215,11 @@
             "group": "Raw Logs",
             "pages": [],
             "openapi": "api-reference/Raw-Logs-API.yaml"
+          },
+          {
+            "group": "Critical Backup",
+            "pages": [],
+            "openapi": "api-reference/Critical-Backup-API.yaml"
           }
         ]
       }

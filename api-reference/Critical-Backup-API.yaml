@@ -1,0 +1,1099 @@
+openapi: 3.0.0
+info:
+  title: 5centsCDN - Critical Backup
+  description: API for managing Critical Backup jobs and zone backup links in 5centsCDN (https://www.5centscdn.net)
+  version: 2.0.0
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Critical Backup
+  description: Backup job management and CDN zone backup linking
+
+paths:
+  /cb:
+    get:
+      tags:
+      - Critical Backup
+      summary: List Critical Backups
+      description: List all critical backup jobs configured for the service.
+      operationId: listCriticalBackups
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  backups:
+                    type: array
+                    description: Array of critical backup jobs configured for this service.
+                    items:
+                      $ref: '#/components/schemas/Backup'
+    post:
+      tags:
+      - Critical Backup
+      summary: Create Critical Backup
+      description: Create a new critical backup job.
+      operationId: createCriticalBackup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              - name
+              - meta
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. Always set to PUT to create a new backup.
+                  example: PUT
+                name:
+                  type: string
+                  description: Display name for the backup job. Required.
+                  example: Daily S3 Backup
+                meta:
+                  type: object
+                  required:
+                  - prefix
+                  description: >-
+                    Provider configuration for the backup destination. prefix selects the storage provider and
+                    determines which other keys apply; description is an optional free-text note. All other keys
+                    are provider-specific credential and connection fields defined by the selected provider - for
+                    example ftp requires host (and accepts user, port, pass, tls, and other connection settings),
+                    http requires url, sftp requires host, s3 requires access_key_id and secret_access_key, and
+                    b2 requires account and key. Only ftp, http, sftp, s3, b2, storj, and koofr can be selected
+                    when creating a new backup; other supported providers can be assigned afterwards via the
+                    update endpoint. Depending on the provider field's type, some of these keys are validated
+                    before submission: size-suffix fields must be a number optionally followed by B, K, M, G, T,
+                    or P, or the literal value off; duration fields must be a sequence of optional numeric
+                    components for years (y), months (M), weeks (w), days (d), hours (h), minutes (m), seconds
+                    (s), and milliseconds (ms), for example 1h30m; URL fields must be a valid URL; JSON fields
+                    must contain valid JSON; and CSV fields must contain an even number of comma-separated values.
+                  properties:
+                    prefix:
+                      type: string
+                      enum: [ftp, http, sftp, s3, b2, storj, koofr]
+                      description: Storage provider identifier for the backup destination.
+                      example: s3
+                    description:
+                      type: string
+                      description: Optional free-text note about this backup destination.
+                      example: ""
+                  additionalProperties: true
+                  example:
+                    prefix: s3
+                    description: ""
+                    access_key_id: AKIAIOSFODNN7EXAMPLE
+                    secret_access_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup added. Please link Push Zones & configure for periodic backups
+                  backupid:
+                    type: integer
+                    description: The ID of the newly created backup job.
+                    example: 129017
+
+  /cb/stats:
+    get:
+      tags:
+      - Critical Backup
+      summary: Critical Backup Stats
+      description: Get aggregate statistics across all critical backup jobs for the service.
+      operationId: getCriticalBackupStats
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checks:
+                    type: string
+                    description: Number of files checked for changes across all backups.
+                    example: "1024"
+                  errors:
+                    type: integer
+                    description: Number of errors encountered across all backups.
+                    example: 0
+                  transfers:
+                    type: integer
+                    description: Number of files transferred across all backups.
+                    example: 128
+                  bytes:
+                    type: string
+                    description: Total bytes transferred across all backups.
+                    example: "107374182400"
+                  providers:
+                    type: integer
+                    description: Number of distinct storage providers in use across all backups.
+                    example: 2
+                  links:
+                    type: integer
+                    description: Total number of zones linked across all backups.
+                    example: 5
+
+  /cb/{backupid}:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Critical Backup
+      description: Return the details of a single critical backup job.
+      operationId: getCriticalBackup
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  backup:
+                    $ref: '#/components/schemas/Backup'
+    post:
+      tags:
+      - Critical Backup
+      summary: Update Critical Backup
+      description: Update the settings of an existing critical backup job.
+      operationId: updateCriticalBackup
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - meta
+              properties:
+                name:
+                  type: string
+                  description: Display name for the backup job. Required.
+                  example: Daily S3 Backup
+                meta:
+                  type: object
+                  required:
+                  - prefix
+                  description: >-
+                    Provider configuration for the backup destination, in the same shape as the create endpoint.
+                    prefix identifies the storage provider - not limited to the providers offered at creation
+                    time, since a backup can be reassigned to any supported provider through this endpoint - and
+                    description is an optional free-text note; all other keys are provider-specific settings for
+                    the selected provider. For file or certificate type fields, leaving the field blank retains
+                    the value already stored on the backup rather than clearing it. Depending on the provider
+                    field's type, some of these keys are validated before submission: size-suffix fields must be
+                    a number optionally followed by B, K, M, G, T, or P, or the literal value off; duration
+                    fields must be a sequence of optional numeric components for years (y), months (M), weeks
+                    (w), days (d), hours (h), minutes (m), seconds (s), and milliseconds (ms), for example
+                    1h30m; URL fields must be a valid URL; JSON fields must contain valid JSON; and CSV fields
+                    must contain an even number of comma-separated values.
+                  properties:
+                    prefix:
+                      type: string
+                      enum: [acd, azureblob, b2, box, drive, dropbox, fichier, filefabric, ftp, gcs, gphotos, hdfs, hidrive, http, internetarchive, jottacloud, koofr, mailru, mega, netstorage, onedrive, opendrive, oos, pcloud, premiumizeme, putio, qingstor, s3, seafile, sftp, sharefile, sia, smb, storj, tardigrade, sugarsync, swift, uptobox, webdav, yandex, zoho]
+                      description: Storage provider identifier for the backup destination.
+                      example: s3
+                    description:
+                      type: string
+                      description: Optional free-text note about this backup destination.
+                      example: ""
+                  additionalProperties: true
+                  example:
+                    prefix: s3
+                    description: ""
+                    access_key_id: AKIAIOSFODNN7EXAMPLE
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup updated
+    delete:
+      tags:
+      - Critical Backup
+      summary: Delete Critical Backup
+      description: Delete a critical backup job. To cast request method POST, include parameter _METHOD = DELETE.
+      operationId: deleteCriticalBackup
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be set to DELETE to perform a delete operation.
+                  enum: [DELETE]
+                  example: DELETE
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup 'Daily S3 Backup' deleted
+
+  /cb/{backupid}/stats:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Critical Backup Stats
+      description: Get aggregate statistics for a single critical backup job.
+      operationId: getSingleCriticalBackupStats
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checks:
+                    type: string
+                    description: Number of files checked for changes for this backup.
+                    example: "512"
+                  errors:
+                    type: integer
+                    description: Number of errors encountered for this backup.
+                    example: 0
+                  transfers:
+                    type: integer
+                    description: Number of files transferred for this backup.
+                    example: 64
+                  bytes:
+                    type: string
+                    description: Total bytes transferred for this backup.
+                    example: "53687091200"
+                  links:
+                    type: integer
+                    description: Number of zones linked to this backup.
+                    example: 2
+
+  /cb/{backupid}/zone:
+    post:
+      tags:
+      - Critical Backup
+      summary: Create Backup Zone
+      description: Link a CDN zone to a critical backup job so its content is automatically backed up.
+      operationId: createBackupZone
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              - zoneid
+              - meta
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. Always set to PUT to link a new zone.
+                  example: PUT
+                zoneid:
+                  type: integer
+                  description: ID of the existing CDN zone to link to this backup. Required.
+                  example: 2102
+                meta:
+                  type: object
+                  description: Sync configuration for the linked zone.
+                  properties:
+                    mode:
+                      type: string
+                      description: Sync direction mode identifier.
+                      example: "1"
+                    sync:
+                      type: string
+                      description: Sync mode identifier controlling how content is kept in sync with the origin zone.
+                      example: "3"
+                    compare:
+                      type: string
+                      description: Comparison mode identifier used to detect changed files.
+                      example: "1"
+                    casesync:
+                      type: string
+                      description: Case-sensitivity mode identifier used when comparing file names.
+                      example: "2"
+                    directory:
+                      type: object
+                      description: "Directory paths used for the sync. sink and backup default to push-{zoneid} and push-{zoneid}-backup respectively when left blank, derived from the selected zoneid."
+                      properties:
+                        source:
+                          type: string
+                          description: Source directory path on the zone to back up.
+                          example: /
+                        sink:
+                          type: string
+                          description: Destination sink directory path.
+                          example: ""
+                        backup:
+                          type: string
+                          description: Directory path used to store backed-up or overwritten versions of files.
+                          example: ""
+                    filters:
+                      type: string
+                      description: "Newline-separated filter rules. Each line must start with \"+ \" (include) or \"- \" (exclude)."
+                      example: ""
+                    backup:
+                      type: string
+                      enum: [Y, N]
+                      description: Whether to keep backup copies of files that are deleted or overwritten during sync.
+                      example: Y
+                    backupmode:
+                      type: string
+                      description: Naming strategy used for backup copies.
+                      example: date
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup link added
+
+  /cb/{backupid}/zone/status:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone Statuses
+      description: Get the sync status of every zone linked to a critical backup job, keyed by zone ID.
+      operationId: getBackupZoneStatuses
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                description: "Map of zone ID to its current backup status string. Observed values include Stopped and pending."
+                additionalProperties:
+                  type: string
+                example:
+                  "4224": "Stopped"
+                  "4305": "Stopped"
+                  "4329": "Stopped"
+                  "2102": "Stopped"
+
+  /cb/{backupid}/zone/{zoneid}:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone
+      description: Return the sync configuration of a single zone linked to a critical backup job.
+      operationId: getSingleBackupZone
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cbid:
+                    type: integer
+                    description: ID of the parent critical backup job.
+                    example: 171
+                  zoneid:
+                    type: integer
+                    description: ID of the linked CDN zone.
+                    example: 2102
+                  meta:
+                    type: object
+                    description: Sync configuration for the linked zone.
+                    properties:
+                      mode:
+                        type: string
+                        description: Sync direction mode identifier.
+                        example: "1"
+                      sync:
+                        type: string
+                        description: Sync mode identifier controlling how content is kept in sync with the origin zone.
+                        example: "3"
+                      compare:
+                        type: string
+                        description: Comparison mode identifier used to detect changed files.
+                        example: "1"
+                      casesync:
+                        type: string
+                        description: Case-sensitivity mode identifier used when comparing file names.
+                        example: "2"
+                      directory:
+                        type: object
+                        properties:
+                          source:
+                            type: string
+                            description: Source directory path on the zone being backed up.
+                            example: /
+                          sink:
+                            type: string
+                            description: Destination sink directory path.
+                            example: ""
+                          backup:
+                            type: string
+                            description: Directory path used to store backed-up or overwritten versions of files.
+                            example: ""
+                      filters:
+                        type: string
+                        description: "Newline-separated filter rules. Each line starts with \"+ \" (include) or \"- \" (exclude)."
+                        example: ""
+                      backup:
+                        type: string
+                        description: Whether backup copies of deleted/overwritten files are kept for this zone link.
+                        example: Y
+                      backupmode:
+                        type: string
+                        description: Naming strategy used for backup copies.
+                        example: date
+                      advanced:
+                        type: object
+                        description: Advanced sync tuning settings for this zone link.
+                        properties:
+                          bwlimit:
+                            type: integer
+                            description: Bandwidth limit applied during sync.
+                            example: 8
+                          transfers:
+                            type: integer
+                            description: Number of concurrent file transfers allowed during sync.
+                            example: 2
+                          checkers:
+                            type: integer
+                            description: Number of concurrent checkers used to detect changed files.
+                            example: 2
+                          retries:
+                            type: integer
+                            description: Number of retry attempts for failed transfers.
+                            example: 1
+                          buffersize:
+                            type: integer
+                            description: Transfer buffer size.
+                            example: 32
+                          loglevel:
+                            type: string
+                            description: Logging verbosity level for the sync process.
+                            example: NOTICE
+                  disabled:
+                    type: string
+                    description: Whether this zone link is disabled. 1 = disabled, 0 = enabled.
+                    example: "0"
+                  created_at:
+                    type: string
+                    description: Timestamp when this zone was linked to the backup.
+                    example: "2026-07-09 08:40:07"
+                  lastsynced_at:
+                    type: string
+                    description: Timestamp of the most recent successful sync for this zone link.
+                    example: "1783586407"
+    post:
+      tags:
+      - Critical Backup
+      summary: Update Backup Zone
+      description: Update the sync configuration of a zone linked to a critical backup job.
+      operationId: updateBackupZone
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - meta
+              properties:
+                meta:
+                  type: object
+                  description: Sync configuration for the linked zone.
+                  properties:
+                    mode:
+                      type: string
+                      description: Sync direction mode identifier.
+                      example: "1"
+                    sync:
+                      type: string
+                      description: Sync mode identifier controlling how content is kept in sync with the origin zone.
+                      example: "3"
+                    compare:
+                      type: string
+                      description: Comparison mode identifier used to detect changed files.
+                      example: "1"
+                    casesync:
+                      type: string
+                      description: Case-sensitivity mode identifier used when comparing file names.
+                      example: "2"
+                    filters:
+                      type: string
+                      description: "Newline-separated filter rules. Each line must start with \"+ \" (include) or \"- \" (exclude)."
+                      example: ""
+                    directory:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                          description: Source directory path on the zone being backed up.
+                          example: /
+                        backup:
+                          type: string
+                          description: Directory path used to store backed-up or overwritten versions of files.
+                          example: ""
+                        sink:
+                          type: string
+                          description: Destination sink directory path.
+                          example: ""
+                    backupdirectory:
+                      type: string
+                      description: Directory path used for backup storage, when separate from the sink.
+                      example: ""
+                    backupmode:
+                      type: string
+                      description: Naming strategy used for backup copies.
+                      example: ""
+                    backup:
+                      type: string
+                      description: Whether to keep backup copies of files that are deleted or overwritten during sync.
+                      example: ""
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup link updated
+    delete:
+      tags:
+      - Critical Backup
+      summary: Delete Backup Zone
+      description: Unlink a zone from a critical backup job. To cast request method POST, include parameter _METHOD = DELETE.
+      operationId: deleteBackupZone
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override. Must be set to DELETE to perform a delete operation.
+                  enum: [DELETE]
+                  example: DELETE
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup link deleted
+
+  /cb/{backupid}/zone/{zoneid}/status:
+    post:
+      tags:
+      - Critical Backup
+      summary: Update Backup Zone Status
+      description: Enable or disable backup syncing for a zone linked to a critical backup job.
+      operationId: updateBackupZoneStatus
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - disable
+              properties:
+                disable:
+                  type: string
+                  enum: ["0", "1"]
+                  description: "Whether to disable backup syncing for this zone link. 1 = disable, 0 = enable."
+                  example: "1"
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: CriticalBackup link 'Push #5611' enabled
+
+  /cb/{backupid}/zone/{zoneid}/stats:
+    post:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone Stats
+      description: Get a paginated, filterable table of sync run statistics for a zone linked to a critical backup job.
+      operationId: getBackupZoneStats
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataTableRequest'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draw:
+                    type: integer
+                    description: Echoed draw counter from the request, used to match responses to requests.
+                    example: 1
+                  recordsFiltered:
+                    type: integer
+                    description: Number of records matching the current search/filter.
+                    example: 42
+                  recordsTotal:
+                    type: integer
+                    description: Total number of sync run records for this zone link.
+                    example: 120
+                  data:
+                    type: array
+                    description: Array of sync run statistic rows, shaped by the requested columns.
+                    items: {}
+                    example: []
+
+  /cb/{backupid}/zone/{zoneid}/logs:
+    post:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone Logs
+      description: Get a paginated, filterable table of sync log entries for a zone linked to a critical backup job.
+      operationId: getBackupZoneLogs
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/DataTableRequest'
+              - type: object
+                properties:
+                  levels:
+                    type: array
+                    description: Optional list of log levels to filter by.
+                    items:
+                      type: string
+                      enum: [DEBUG, INFO, WARN, ERROR, FATAL]
+                    example: [ERROR, WARN]
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draw:
+                    type: integer
+                    description: Echoed draw counter from the request, used to match responses to requests.
+                    example: 1
+                  recordsTotal:
+                    type: integer
+                    description: Total number of log entries for this zone link.
+                    example: 300
+                  recordsFiltered:
+                    type: integer
+                    description: Number of log entries matching the current search/filter.
+                    example: 12
+                  data:
+                    type: array
+                    description: Array of log entries.
+                    items:
+                      type: object
+                      properties:
+                        k:
+                          type: integer
+                          description: Unique numeric identifier for this log entry.
+                          example: 1
+                        date:
+                          type: integer
+                          description: Unix timestamp of the log entry, in milliseconds.
+                          example: 1717236000000
+                        level:
+                          type: string
+                          enum: [DEBUG, INFO, WARN, ERROR, FATAL]
+                          description: Severity level of the log entry.
+                          example: FATAL
+                        msg:
+                          type: string
+                          description: Short summary message for the log entry.
+                          example: "Failed to create file system: failed to configure storage provider - authentication token missing"
+                        log:
+                          type: string
+                          description: Full log entry, base64-encoded.
+                          example: "eyJtc2ciOiJTYW1wbGUgbG9nIG1lc3NhZ2UifQ=="
+                        DT_RowClass:
+                          type: string
+                          nullable: true
+                          description: CSS row class hint for rendering this entry, or null if none.
+                          example: null
+
+  /cb/{backupid}/zone/{zoneid}/usage:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone Usage
+      description: Get bandwidth/transfer usage totals for a zone linked to a critical backup job over a given period.
+      operationId: getBackupZoneUsage
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      - in: query
+        name: r
+        required: true
+        schema:
+          type: string
+          description: "Usage period and granularity, in the format YYYY-MM/granularity, where granularity is daily or hourly."
+          example: "2024-09/daily"
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    description: Time-series usage data points for the requested period.
+                    items: {}
+                    example: []
+                  aggs:
+                    type: object
+                    description: Aggregated totals for the requested period.
+                    properties:
+                      checks:
+                        type: string
+                        description: Total number of files checked for changes.
+                        example: "1024"
+                      deletes:
+                        type: string
+                        description: Total number of files deleted.
+                        example: "3"
+                      renames:
+                        type: string
+                        description: Total number of files renamed.
+                        example: "1"
+                      errors:
+                        type: string
+                        description: Total number of errors encountered.
+                        example: "0"
+                      transfers:
+                        type: string
+                        description: Total number of files transferred.
+                        example: "128"
+                      bytes:
+                        type: string
+                        description: Total bytes transferred.
+                        example: "53687091200"
+
+  /cb/{backupid}/zone/{zoneid}/sync:
+    get:
+      tags:
+      - Critical Backup
+      summary: Get Backup Zone Sync Status
+      description: Trigger or retrieve the current sync status for a zone linked to a critical backup job.
+      operationId: getBackupZoneSyncStatus
+      parameters:
+      - $ref: '#/components/parameters/backupIdParam'
+      - $ref: '#/components/parameters/zoneIdParam'
+      deprecated: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable status or result message.
+                    example: Sync request added. Please wait 15m before making another sync request.
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  parameters:
+    backupIdParam:
+      name: backupid
+      in: path
+      description: Critical Backup job ID
+      required: true
+      schema:
+        type: integer
+        example: 42
+    zoneIdParam:
+      name: zoneid
+      in: path
+      description: ID of the CDN zone linked to the backup
+      required: true
+      schema:
+        type: integer
+        example: 2102
+  schemas:
+    Backup:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier of the backup job.
+          example: 42
+        serviceid:
+          type: integer
+          description: Service account identifier.
+          example: 103
+        name:
+          type: string
+          description: Display name of the backup job.
+          example: Daily S3 Backup
+        meta:
+          type: object
+          description: Provider configuration for this backup's destination, in the same shape sent to the create and update endpoints.
+          additionalProperties: true
+          example:
+            prefix: s3
+            description: ""
+        files:
+          type: string
+          description: Summary of files associated with this backup.
+          example: ""
+        created_at:
+          type: string
+          description: Timestamp when this backup job was created.
+          example: "2024-01-15 10:00:00"
+        updated_at:
+          type: string
+          nullable: true
+          description: Timestamp of the most recent update to this backup job, or null if never updated.
+          example: "2024-06-01 08:00:00"
+        deleted_at:
+          type: string
+          nullable: true
+          description: Timestamp when this backup job was deleted, or null if not deleted.
+          example: null
+        linkedZones:
+          type: array
+          description: IDs of the CDN zones currently linked to this backup.
+          items:
+            type: integer
+          example: [2102, 2105]
+        linksCount:
+          type: integer
+          description: Number of zones linked to this backup.
+          example: 2
+        providerText:
+          type: string
+          description: Human-readable name of the storage provider used by this backup.
+          example: Amazon S3
+    DataTableRequest:
+      type: object
+      required:
+      - draw
+      - start
+      - length
+      - search
+      - columns
+      properties:
+        draw:
+          type: integer
+          description: Draw counter, incremented on each request and echoed back in the response to match requests to responses.
+          example: 1
+        start:
+          type: integer
+          description: Zero-based row offset of the first record to return.
+          example: 0
+        length:
+          type: integer
+          description: Number of records to return per page.
+          example: 10
+        search:
+          type: object
+          description: Global search applied across all columns.
+          properties:
+            value:
+              type: string
+              description: Search term.
+              example: ""
+            regex:
+              type: boolean
+              description: Whether the search value should be treated as a regular expression.
+              example: false
+        columns:
+          type: array
+          description: Column definitions describing which fields can be searched and sorted.
+          items:
+            type: object
+            properties:
+              data:
+                type: string
+                description: Field name this column represents.
+                example: date
+              name:
+                type: string
+                description: Optional display name for the column.
+                example: ""
+              searchable:
+                type: boolean
+                description: Whether this column can be searched.
+                example: true
+              orderable:
+                type: boolean
+                description: Whether this column can be sorted.
+                example: false
+              search:
+                type: object
+                description: Per-column search value.
+                properties:
+                  value:
+                    type: string
+                    example: ""
+                  regex:
+                    type: boolean
+                    example: false
