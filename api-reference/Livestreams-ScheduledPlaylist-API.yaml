@@ -21,6 +21,7 @@ tags:
 - name: Transcoding
 - name: Security
 - name: Multistream Platforms
+- name: Ad Insertion
 paths:
   /streams/scheduledplaylist:
     get:
@@ -7240,34 +7241,37 @@ paths:
               properties:
                 vprofiles:
                   type: array
-                  description: List of video transcoding profile IDs to apply.
+                  description: "Video transcoding profile IDs to apply, from the GET /streams/settings/profiles list. All selected profiles must share the same video codec (h264 or h265) — mixing codecs is rejected. In per-profile billing mode, a maximum of 5 profiles is allowed, further capped by the account's available SD/HD/UHD profile slots; per-minute billing mode has no profile-count limit. Send an empty array for no additional video transcoding."
                   items:
                     type: string
                   example:
                   - '12345'
-                  - '12345'
-                  - '12345'
-                  - '12345'
-                  - '12345'
                 aprofiles:
                   type: array
-                  description: List of audio transcoding profile IDs to apply.
+                  description: "Audio transcoding profile ID to apply, from the GET /streams/settings/profiles list. Single-select — send at most one profile ID in the array, or an empty array for no audio transcoding."
                   items:
                     type: string
+                  maxItems: 1
                   example:
                   - '12345'
                 filters:
                   type: array
-                  description: List of transcoding filter IDs to apply.
-                  items: {}
+                  description: List of transcoding filter IDs to apply, from the GET /streams/settings/filters list.
+                  items:
+                    type: string
                   example: []
                 ltc:
                   type: integer
-                  description: Number of transcoding profiles assigned. 0 means none.
+                  description: "ID of the Live Transcoder Core (LTC) tier to allocate for this stream — for example 1 = LT1C @ $0.06/hr, up to 16 = LT16C @ $0.96/hr. The selectable range is further capped by the number of LTC cores currently available on the account; tiers above that count are out of stock and rejected."
+                  minimum: 1
+                  maximum: 16
                   example: 5
                 autostop:
                   type: integer
-                  description: Auto-stop the transcoder after inactivity. 0 means disabled.
+                  nullable: true
+                  description: "Controls when the transcoder automatically stops after the source goes offline. -1 = Always Run (keeps running and is billed hourly until manually stopped); 0 or null = Stop After Event Ends (recommended default — stops at the end of the current event or billing hour); 1-48 = stop that many hours after the source goes offline (custom)."
+                  minimum: -1
+                  maximum: 48
                   example: 0
       responses:
         '200':
@@ -13681,6 +13685,476 @@ paths:
                     type: string
                     description: Human-readable message describing the result.
                     example: Platform disabled
+  /streams/scheduledplaylist/{streamid}/adinsertion:
+    put:
+      tags:
+      - Ad Insertion
+      summary: Enable Ad Insertion
+      description: Creates (or updates) the ad insertion record for the scheduled playlist stream. Requires the service to have Advanced Features enabled and an available ad insertion slot.
+      operationId: adInsertionCreateScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdInsertionCreateRequest'
+            example:
+              enabled: Y
+              policy: 1
+              provider: Google Ad Manager
+              defaultDuration: 30
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+    post:
+      tags:
+      - Ad Insertion
+      summary: Update Ad Insertion Settings
+      description: Updates the ad insertion record for the scheduled playlist stream. The record must already exist (ad insertion must have been enabled with PUT first).
+      operationId: adInsertionUpdateScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdInsertionCreateRequest'
+            example:
+              enabled: Y
+              policy: 1
+              provider: Google Ad Manager
+              defaultDuration: 45
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+    delete:
+      tags:
+      - Ad Insertion
+      summary: Delete Ad Insertion
+      description: Reserved - returns error / Not implemented until a backend method is available.
+      operationId: adInsertionDeleteScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      responses:
+        '200':
+          $ref: '#/components/responses/ErrorResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/server:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Configure Ad Server
+      description: Sets the upstream VAST/VMAP ad server URL, query parameters and custom origin headers. Triggers a stream-adserver provisioning job.
+      operationId: adInsertionUpdateAdServerScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdServerRequest'
+            example:
+              url: https://adserver.example.com/vast.php
+              queryParameters:
+              - name: src_url
+                type: from-variable
+                value: SOURCE_URL
+              - name: break_dur
+                type: from-variable
+                value: ADBREAK_DURATION_S
+              - name: CACHE_BUSTER
+                type: from-variable
+                value: CACHE_BUSTER
+              adOrigin:
+                customHeaders: []
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/preroll:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Configure Pre-Roll Ads
+      description: Enables or disables live ad pre-roll. When enabled is N the pre-roll configuration is removed entirely.
+      operationId: adInsertionUpdateAdPreRollScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdPreRollRequest'
+            example:
+              enabled: Y
+              maxDuration: 30
+              offset: 0
+              startOver: Y
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/replacement:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Configure Ad Replacement
+      description: Enables or disables live ad replacement. When enabled is N the replacement configuration is removed entirely.
+      operationId: adInsertionUpdateAdReplacementScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdReplacementRequest'
+            example:
+              enabled: Y
+              gapFiller: ''
+              maxAdDurationExcess: 0
+              pastAdBreakReplacement: 0
+              pastAdBreakReplacementValue: ''
+              onStartWithinAdBreak: replace
+              scte35:
+                adBreakTriggers:
+                - '0x22'
+                - '0x30'
+                - '0x32'
+                - '0x34'
+                - '0x36'
+                - '0x38'
+                - '0x3a'
+                - splice_insert
+                markersToRemove:
+                - ALL
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/schedule:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Add Ad Break Schedule
+      description: Adds a new ad break schedule. Two schedule types are supported. Maximum 10 schedules per stream.
+      operationId: adInsertionAddScheduleScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - type
+              - duration
+              - value
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to PUT to perform an update operation.
+                  example: PUT
+                type:
+                  type: integer
+                  enum:
+                  - 1
+                  - 2
+                  description: 'Schedule type: 1 for Recurring, 2 for One-time.'
+                  example: 1
+                duration:
+                  type: integer
+                  minimum: 10
+                  maximum: 180
+                  description: Ad break duration in seconds.
+                  example: 60
+                value:
+                  description: Quartz cron expression (type 1) or Unix timestamp (type 2).
+                  oneOf:
+                  - type: string
+                    description: Quartz cron expression (type 1).
+                  - type: integer
+                    description: Unix timestamp (type 2).
+                  example: 0 */5 * * * *
+                mode:
+                  type: string
+                  enum:
+                  - schedule
+                  description: Pass schedule to immediately create triggers.
+                  example: schedule
+                recur:
+                  type: integer
+                  minimum: 0
+                  maximum: 720
+                  description: Maximum number of trigger repetitions. 0 means unlimited.
+                  example: 1
+      responses:
+        '200':
+          description: Schedule add result including trigger counts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    enum:
+                    - success
+                    - error
+                    example: success
+                  message:
+                    type: string
+                    description: Summary of added and failed trigger counts.
+                    example: 'Added: 1, Failed: 151'
+                  messages:
+                    type: object
+                    description: Informational messages related to the stream state.
+                    properties:
+                      added:
+                        type: object
+                        description: Map of Unix timestamp to beanstalkd job ID for successfully queued triggers.
+                        additionalProperties:
+                          type: integer
+                        example:
+                          '1778066400': 1370623
+                      failed:
+                        type: object
+                        description: Map of Unix timestamp to failure reason for triggers that could not be queued.
+                        additionalProperties:
+                          type: string
+                        example:
+                          '1778066700': Recur limit reached
+                          '1778067000': Recur limit reached
+  /streams/scheduledplaylist/{streamid}/adinsertion/schedule/{scheduleid}:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Update Ad Break Schedule
+      description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
+      operationId: adInsertionUpdateScheduleScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - value
+              - duration
+              - recur
+              properties:
+                value:
+                  type: string
+                  description: Updated Quartz 6-field cron expression.
+                  example: 10 */5 1 * * *
+                duration:
+                  type: integer
+                  minimum: 10
+                  maximum: 180
+                  description: Updated ad break duration in seconds.
+                  example: 24
+                recur:
+                  type: integer
+                  minimum: 0
+                  maximum: 720
+                  description: Updated maximum trigger repetitions. 0 means unlimited.
+                  example: 0
+                mode:
+                  type: string
+                  enum:
+                  - replace
+                  description: Pass replace to delete existing triggers and regenerate.
+                  example: replace
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    enum:
+                    - success
+                    - error
+                    example: success
+    delete:
+      tags:
+      - Ad Insertion
+      summary: Delete Ad Break Schedule
+      description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
+      operationId: adInsertionDeleteScheduleScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/scheduleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              - mode
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
+                  example: DELETE
+                mode:
+                  type: string
+                  enum:
+                  - delete
+                  - clear
+                  description: delete removes schedule only; clear also deletes queued triggers.
+                  example: delete
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    enum:
+                    - success
+                    - error
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Schedule Deleted
+  /streams/scheduledplaylist/{streamid}/adinsertion/triggers:
+    post:
+      tags:
+      - Ad Insertion
+      summary: List Ad Triggers
+      description: Returns the queued ad break triggers belonging to this stream.
+      operationId: adInsertionGetTriggersScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggersRequest'
+            example:
+              scheduleIds:
+              - 101
+              - 102
+              viewTriggered: '0'
+              orderByDate: true
+      responses:
+        '200':
+          description: Array of trigger objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trigger'
+  /streams/scheduledplaylist/{streamid}/adinsertion/trigger/{triggerid}:
+    delete:
+      tags:
+      - Ad Insertion
+      summary: Delete Ad Trigger
+      description: Deletes a single queued trigger from both beanstalkd and the database.
+      operationId: adInsertionDeleteTriggerScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/triggerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
+                  example: DELETE
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/cue-out:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Trigger Cue-Out
+      description: Sends a SCTE-35 cue-out signal to the stream encoder.
+      operationId: adInsertionCueOutScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - in: query
+        name: duration
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+        description: Ad break duration in seconds.
+      responses:
+        '200':
+          description: Cue-out sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/cue-in:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Trigger Cue-In
+      description: Sends a SCTE-35 cue-in signal to the stream encoder.
+      operationId: adInsertionCueInScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      responses:
+        '200':
+          description: Cue-in sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueResult'
+  /streams/scheduledplaylist/{streamid}/adinsertion/consumption:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Consumption
+      description: Returns ad insertion consumption data grouped by the requested time resolution.
+      operationId: adInsertionGetConsumptionScheduledPlaylist
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumptionRequest'
+            example:
+              groupBy: month
+              r: 2026-01-01 00:00:00 - 2026-01-01 00:00:00
+      responses:
+        '200':
+          description: Consumption data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumptionResult'
 components:
   securitySchemes:
     ApiKeyAuth:

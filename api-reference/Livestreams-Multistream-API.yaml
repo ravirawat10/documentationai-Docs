@@ -1594,20 +1594,21 @@ paths:
               properties:
                 vprofiles:
                   type: array
-                  description: List of video transcoding profile IDs to apply.
+                  description: "Video transcoding profile IDs to apply, from the GET /streams/settings/profiles list. All selected profiles must share the same video codec (h264 or h265) — mixing codecs is rejected. In per-profile billing mode, a maximum of 5 profiles is allowed, further capped by the account's available SD/HD/UHD profile slots; per-minute billing mode has no profile-count limit. Send an empty array for no additional video transcoding."
                   items:
                     type: string
                   example: []
                 aprofiles:
                   type: array
-                  description: List of audio transcoding profile IDs to apply.
+                  description: "Audio transcoding profile ID to apply, from the GET /streams/settings/profiles list. Single-select — send at most one profile ID in the array, or an empty array for no audio transcoding."
                   items:
                     type: string
+                  maxItems: 1
                   example:
                   - '12345'
                 filters:
                   type: array
-                  description: List of transcoding filter IDs to apply.
+                  description: List of transcoding filter IDs to apply, from the GET /streams/settings/filters list.
                   items:
                     type: string
                   example:
@@ -1615,11 +1616,16 @@ paths:
                   - '4'
                 ltc:
                   type: integer
-                  description: Number of transcoding profiles assigned. 0 means none.
+                  description: "ID of the Live Transcoder Core (LTC) tier to allocate for this stream — for example 1 = LT1C @ $0.06/hr, up to 16 = LT16C @ $0.96/hr. The selectable range is further capped by the number of LTC cores currently available on the account; tiers above that count are out of stock and rejected."
+                  minimum: 1
+                  maximum: 16
                   example: 1
                 autostop:
                   type: integer
-                  description: Auto-stop the transcoder after inactivity. 0 means disabled.
+                  nullable: true
+                  description: "Controls when the transcoder automatically stops after the source goes offline. -1 = Always Run (keeps running and is billed hourly until manually stopped); 0 or null = Stop After Event Ends (recommended default — stops at the end of the current event or billing hour); 1-48 = stop that many hours after the source goes offline (custom)."
+                  minimum: -1
+                  maximum: 48
                   example: 0
       responses:
         '200':
@@ -2135,7 +2141,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_33'
+                type: object
+                properties:
+                  result:
+                    type: string
+                    description: Status of the API response.
+                    example: success
+                  message:
+                    type: string
+                    description: Human-readable message describing the result.
+                    example: Platform Created
+                  errors:
+                    type: array
+                    description: Errors returned with the response.
+                    items: {}
+                    example: []
+                  warnings:
+                    type: array
+                    description: Non-fatal warnings returned with the response.
+                    items: {}
+                    example: []
+                  stream:
+                    $ref: '#/components/schemas/RestreamResult'
       deprecated: false
   /streams/publish/{streamid}/platform/{platformid}:
     post:
@@ -2727,9 +2754,9 @@ components:
           description: Your RTMP key.
           example: 5t1d-hvka-50ga-7dj0-38h0
         auth:
-          type: string
-          description: Values Can be Y or N. Set to Y if Publish Auth should be enabled. Set to N if Publish Auth should be disabled.
-          example: N
+          type: boolean
+          description: Whether RTMP publish authentication is required for this platform. true enables username/password authentication; false disables it.
+          example: false
         username:
           type: string
           description: Enter Your username.
@@ -2740,36 +2767,89 @@ components:
           example: mypassword
         schedule:
           type: string
+          enum:
+          - instant
+          - scheduleontime
+          - scheduleondatetime
           description: The values can be instant, scheduleontime or scheduleondatetime
           example: instant
-        scheduleontime:
+        scheduletime:
           type: string
-          description: Scheduleontime should be in the format of hh:mm:ss. It can be used if the schedule is scheduleontime. Scheduleondatetime format should be yyyy-mm-dd hh:min:sec. It can be used if schedule is scheduleondatetime.
+          description: Scheduletime should be in the format of hh:mm:ss. It can be used if the schedule is scheduleontime. Scheduleondatetime format should be yyyy-mm-dd hh:min:sec. It can be used if schedule is scheduleondatetime.
           example: 08:00:00
         length:
           type: string
           description: Length should be in the format hh:mm:ss. length can be set if type is live.
           example: 01:00:00
-        transcodetype:
+        ltc:
           type: string
-          description: value should be sd, hd or uhd
-          example: hd
+          description: "ID of the Live Transcoder Core (LTC) tier to allocate for this platform's transcode, sent as a numeric string — for example '1' = LT1C @ $0.06/hr, up to '16' = LT16C @ $0.96/hr."
+          example: '1'
         vprofiles:
-          $ref: '#/components/schemas/Editplatform_vprofiles'
+          type: array
+          description: "Video transcoding profile ID to apply to this platform, from the GET /streams/settings/profiles list. Single-select — array with at most one profile ID string, or an empty array for no video transcoding."
+          items:
+            type: string
+          maxItems: 1
+          example:
+          - '12345'
         aprofiles:
-          $ref: '#/components/schemas/Editplatform_vprofiles'
+          type: array
+          description: "Audio transcoding profile ID to apply to this platform, from the GET /streams/settings/profiles list. Single-select — array with at most one profile ID string, or an empty array for no audio transcoding."
+          items:
+            type: string
+          maxItems: 1
+          example:
+          - '12345'
         filters:
-          $ref: '#/components/schemas/Posttranscode_filters'
+          type: array
+          description: Transcoding filter IDs to apply to this platform, from the GET /streams/settings/filters list.
+          items:
+            type: string
+          example:
+          - '3'
+          - '4'
+        transcode:
+          type: object
+          description: "Duplicate copy of this platform's transcode selection, sent alongside the top-level ltc/vprofiles/aprofiles/filters fields above."
+          properties:
+            ltc:
+              type: integer
+              description: Same Live Transcoder Core tier ID as the top-level ltc field, sent as a number instead of a string.
+              minimum: 1
+              maximum: 16
+              example: 1
+            vprofiles:
+              type: array
+              items:
+                type: string
+              maxItems: 1
+              example:
+              - '12345'
+            aprofiles:
+              type: array
+              items:
+                type: string
+              maxItems: 1
+              example:
+              - '12345'
+            filters:
+              type: array
+              items:
+                type: string
+              example:
+              - '3'
+              - '4'
     Postdisabled:
       type: object
       properties:
         disabled:
-          type: integer
+          type: string
           enum:
-          - 0
-          - 1
-          description: Set to 1 to disable the platform, 0 to enable it.
-          example: 0
+          - '0'
+          - '1'
+          description: Set to '1' to disable the platform, '0' to enable it.
+          example: '0'
     streamsetting_geoblock:
       type: object
       properties:
@@ -7342,9 +7422,17 @@ components:
         message:
           type: string
           description: Human-readable message describing the result.
-          example: Stream Updated
-        stream:
-          $ref: '#/components/schemas/streamspullResult'
+          example: Platform Updated
+        errors:
+          type: array
+          description: Errors returned with the response.
+          items: {}
+          example: []
+        warnings:
+          type: array
+          description: Non-fatal warnings returned with the response.
+          items: {}
+          example: []
     inline_response_200_11:
       type: object
       properties:
@@ -7567,9 +7655,9 @@ components:
           description: Your RTMP key.
           example: 5t1d-hvka-50ga-7dj0-38h0
         auth:
-          type: string
-          description: Values Can be Y or N. Set to Y if Publish Auth should be enabled. Set to N if Publish Auth should be disabled.
-          example: N
+          type: boolean
+          description: Whether RTMP publish authentication is required for this platform. true enables username/password authentication; false disables it.
+          example: false
         username:
           type: string
           description: Enter Your username.
@@ -7580,28 +7668,57 @@ components:
           example: mypassword
         schedule:
           type: string
+          enum:
+          - instant
+          - scheduleontime
+          - scheduleondatetime
           description: The values can be instant, scheduleontime or scheduleondatetime
           example: instant
-        scheduleontime:
+        scheduletime:
           type: string
-          description: Scheduleontime should be in the format of hh:mm:ss. It can be used if the schedule is scheduleontime. Scheduleondatetime format should be yyyy-mm-dd hh:min:sec. It can be used if schedule is scheduleondatetime.
+          description: Scheduletime should be in the format of hh:mm:ss. It can be used if the schedule is scheduleontime. Scheduleondatetime format should be yyyy-mm-dd hh:min:sec. It can be used if schedule is scheduleondatetime.
           example: 08:00:00
         length:
           type: string
           description: Length should be in the format hh:mm:ss. length can be set if type is live.
           example: 01:00:00
         vprofiles:
-          type: integer
-          description: video profile values from the GET streams/settings/profiles call
-          example: 1
+          type: array
+          description: "Video transcoding profile ID to apply to this platform, from the GET /streams/settings/profiles list. Single-select — array with at most one profile ID, or an empty array for no video transcoding."
+          items:
+            type: integer
+          maxItems: 1
+          example:
+          - 12345
         aprofiles:
-          type: integer
-          description: audio profile values from the GET streams/settings/profiles call
-          example: 1
+          type: array
+          description: "Audio transcoding profile ID to apply to this platform, from the GET /streams/settings/profiles list. Single-select — array with at most one profile ID, or an empty array for no audio transcoding."
+          items:
+            type: integer
+          maxItems: 1
+          example:
+          - 12345
         filters:
+          type: array
+          description: Transcoding filter IDs to apply to this platform, from the GET /streams/settings/filters list.
+          items:
+            type: integer
+          example:
+          - 3
+          - 4
+        ltc:
           type: integer
-          description: filters values from the GET streams/settings/filters call
+          description: "ID of the Live Transcoder Core (LTC) tier to allocate for this platform's transcode — for example 1 = LT1C @ $0.06/hr, up to 16 = LT16C @ $0.96/hr. The selectable range is further capped by the number of LTC cores currently available on the account."
+          minimum: 1
+          maximum: 16
           example: 1
+        autostop:
+          type: integer
+          nullable: true
+          description: "Controls when this platform's transcoder automatically stops after the source goes offline. -1 = Always Run (billed hourly until manually stopped); 0 or null = Stop After Event Ends (recommended default); 1-48 = stop that many hours after the source goes offline (custom)."
+          minimum: -1
+          maximum: 48
+          example: 0
     Editplatform_vprofiles:
       description: Transcode profile ids from the GET streams/settings/profiles call
       type: array

@@ -629,90 +629,106 @@ paths:
               required:
               - name
               - _METHOD
+              - outdir
               properties:
                 _METHOD:
                   type: string
-                  description: To cast request method POST to PUT.
+                  description: HTTP method override for this request. Always set to PUT to create a new profile.
                   example: PUT
                 name:
                   type: string
-                  description: "Profile display name used throughout the encoding UI. Required; cannot be empty or whitespace only."
+                  description: "Profile display name. Required; must not be empty."
                   example: HD 720p H.264
                 cv:
                   type: string
-                  description: "FFmpeg codec identifier for video encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9."
+                  description: "Video codec used for encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9. mp4, hls, and hlsaes containers support libx264 and libx265; the webm container supports libvpx-vp9 only. AV1 encoding can be added to the profile afterwards via the update endpoint. Defaults to libx264."
                   enum: [libx264, libx265, libvpx-vp9]
+                  default: libx264
                   example: libx264
                 ca:
                   type: string
-                  description: "Audio codec determined by container format (f). mp4/hls/hlsaes use aac; webm uses opus."
-                  enum: [aac, opus]
+                  description: "Audio codec used for encoding. aac and mp3 are available for mp4, hls, and hlsaes containers; opus is used with the webm container. Defaults to aac."
+                  enum: [aac, mp3, opus]
+                  default: aac
                   example: aac
                 f:
                   type: string
-                  description: "Output container format. Selecting this auto-populates codec defaults."
+                  description: "Output container format. Determines which video and audio codecs are available (see cv and ca). Defaults to mp4."
                   enum: [mp4, webm, hls, hlsaes]
+                  default: mp4
                   example: mp4
                 filemode:
                   type: string
-                  description: "Output file organization. single = one output file per profile. combined = multi-bitrate HLS manifest bundle."
+                  description: "Output file organization. single produces one encoded output using the video and audio settings on this profile. combined bundles several existing single-mode profiles (see profiles) into a multi-bitrate output. No default is set - one of the two must be selected."
                   enum: [single, combined]
                   example: single
                 fps:
                   type: string
-                  description: "Target output frame rate as string. 0 copies the source frame rate."
-                  enum: ["0", "24", "25", "30", "48", "50", "60"]
+                  description: "Target output frame rate. 0 copies the source frame rate. Defaults to 0."
+                  enum: ["0", "24", "25", "30", "48", "50"]
+                  default: "0"
                   example: "30"
                 gop:
                   type: string
-                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24–300."
-                  example: "60"
+                  description: "Group of Pictures size in seconds (interval between keyframes). Not applicable while fps is 0. No default is set."
+                  enum: ["2", "4", "6", "8", "10", "12"]
+                  example: "6"
                 preset:
                   type: string
-                  description: "Encoding speed preset. Slower presets produce smaller files at the cost of encoding time."
-                  enum: [ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow]
+                  description: "Encoding speed preset. Slower presets produce smaller files at the cost of encoding time. Defaults to faster."
+                  enum: [superfast, veryfast, faster, fast]
+                  default: faster
                   example: veryfast
                 vlevel:
                   type: string
-                  description: "Codec encoding level constraining maximum resolution, frame rate, and bitrate. Valid values depend on cv and vprofile."
-                  enum: ["3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2"]
+                  description: >-
+                    Codec encoding level, constraining the maximum resolution, video bitrate, and frame rate
+                    for the profile. Which levels are valid depends on vprofile: baseline allows 3.0 and
+                    3.1; main allows 3.1, 4.1, and 4.2; high allows 4.0, 4.1, and 4.2. Selecting a vprofile
+                    automatically sets vlevel to a corresponding default: baseline -> 3.0, high -> 4.0,
+                    main -> 3.1. Defaults to 3.1.
+                  enum: ["3.0", "3.1", "4.0", "4.1", "4.2"]
+                  default: "3.1"
                   example: "4.1"
                 vprofile:
                   type: string
-                  description: "Codec-specific encoding profile. H.264 (libx264): baseline, main, high. H.265 (libx265): main, main10. VP9 (libvpx-vp9): profile0, profile2. Available values are constrained by cv."
+                  description: "Encoding profile. Defaults to main. This set of profile options applies to the libx264 codec; H.265 and VP9-specific profiles can be set afterwards via the update endpoint."
+                  enum: [baseline, main, high]
+                  default: main
                   example: high
                 vpass:
                   type: string
-                  description: "Number of encoding passes. 1 = faster single-pass. 2 = two-pass for more accurate bitrate targeting."
+                  description: "Number of encoding passes. 1 = single pass (faster). 2 = two-pass (more accurate bitrate targeting). Defaults to 1."
                   enum: ["1", "2"]
+                  default: "1"
                   example: "1"
-                tune:
-                  type: string
-                  description: "H.264 encoding tune preset; only applicable when cv=libx264. disabled = no tune applied."
-                  enum: [disabled, film, animation, grain, stillimage, fastdecode]
-                  example: film
                 bv:
                   type: string
-                  description: "Video bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bvvalue to set target kbps)."
+                  description: "Video bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bvvalue to set target kbps). Defaults to 1."
                   enum: ["0", "1"]
+                  default: "1"
                   example: "1"
                 bvvalue:
                   type: string
-                  description: "Target video bitrate in kilobits per second, sent as a string. Required when bv=1."
+                  description: "Target video bitrate in kilobits per second, sent as a string. Required when bv=1. Defaults to 800."
+                  default: "800"
                   example: "4000"
                 ba:
                   type: string
-                  description: "Audio bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bavalue to set target kbps). Forced to 1 when f=webm."
+                  description: "Audio bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bavalue to set target kbps). Defaults to 1."
                   enum: ["0", "1"]
+                  default: "1"
                   example: "1"
                 bavalue:
                   type: string
-                  description: "Target audio bitrate in kilobits per second, sent as a string. Required when ba=1."
+                  description: "Target audio bitrate in kilobits per second, sent as a string. Required when ba=1. Defaults to 128."
+                  default: "128"
                   example: "128"
                 sv:
                   type: string
-                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue. Use 0 to preserve source resolution."
-                  enum: ["2160p", "1440p", "1080p", "720p", "576p", "480p", "360p", "240p", "144p", "0", "as_defined"]
+                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue. Defaults to 720p."
+                  enum: ["2160p", "1440p", "1080p", "720p", "576p", "480p", "360p", "240p", "144p", "as_defined"]
+                  default: "720p"
                   example: "720p"
                 svvalue:
                   type: string
@@ -720,68 +736,70 @@ paths:
                   example: "1920x800"
                 crfv:
                   type: string
-                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0–51; typical H.264 range is 18–28."
+                  description: "Constant Rate Factor for quality-based encoding. 18 = High quality, 24 = Medium quality, 28 = Low quality. Defaults to 24."
+                  enum: ["18", "24", "28"]
+                  default: "24"
                   example: "24"
                 ara:
                   type: string
-                  description: "Audio sample rate in Hz. 0 preserves the source sample rate."
-                  enum: ["0", "44100", "48000"]
+                  description: "Audio sample rate in Hz. Defaults to 44100."
+                  enum: ["44100", "48000"]
+                  default: "44100"
                   example: "48000"
                 aca:
                   type: string
-                  description: "Audio output channel count. 0 = As Source. 1 = Mono. 2 = Stereo."
+                  description: "Audio output channel count. 0 = As Source. 1 = Stereo. 2 = Mono. Defaults to 1 (Stereo)."
                   enum: ["0", "1", "2"]
+                  default: "1"
                   example: "2"
                 bframe:
                   type: string
-                  description: "Number of consecutive B-frames. Higher values improve compression efficiency."
-                  enum: ["0", "1", "2", "3", "4"]
-                  example: "2"
+                  description: "Number of consecutive B-frames. Not currently configurable at creation time; always submitted as 0."
+                  default: "0"
+                  example: "0"
                 tm:
                   type: string
-                  description: "Thumbnail generation mode. interval = generate thumbnails at periodic intervals. fixed = generate thumbnail at exact time tv. disabled = no thumbnails."
-                  enum: [interval, fixed, disabled]
+                  description: "Thumbnail generation mode. disabled = no thumbnails. fixed = capture a single thumbnail at time tv. interval = capture thumbnails repeatedly at the tv interval. sprite = generate a sprite sheet of thumbnails. Defaults to disabled."
+                  enum: [disabled, fixed, interval, sprite]
+                  default: disabled
                   example: interval
                 tv:
                   type: string
-                  description: "Thumbnail time value in HH:MM:SS format. Required when tm=interval or tm=fixed."
+                  description: "Time value for thumbnail capture, in HH:MM:SS format. Applicable when tm is fixed or interval. Defaults to 00:00:00."
+                  default: "00:00:00"
                   example: "0:01:30"
                 upscale:
                   type: string
-                  description: "Whether to allow upscaling when the target resolution exceeds the source resolution. Y = allow upscaling. N = skip if source is lower resolution."
+                  description: "Whether to allow upscaling when the target resolution exceeds the source resolution. Y = allow upscaling. N = skip if source is lower resolution. Defaults to Y."
                   enum: ["Y", "N"]
+                  default: "Y"
                   example: "N"
                 sourcevideo:
                   type: string
-                  description: "Whether to include the video stream in the output. N = creates audio-only output."
+                  description: "Applicable when filemode is combined. Whether to copy the source video stream into the combined output. Defaults to Y."
                   enum: ["Y", "N"]
+                  default: "Y"
                   example: "Y"
                 sourceaudio:
                   type: string
-                  description: "Whether to include the audio stream in the output. N = creates video-only output."
+                  description: "Applicable when filemode is combined. Y copies the original audio track as-is into the combined output. N includes only the single highest-bitrate transcoded audio track from the selected sub-profiles. Defaults to N."
                   enum: ["Y", "N"]
+                  default: "N"
                   example: "Y"
-                hlsUnifiedSegments:
-                  type: boolean
-                  description: "Enables MPEG-TS segment format for HLS output. Defaults to false."
-                  example: false
-                hlsfMP4Segments:
-                  type: boolean
-                  description: "Enables fragmented MP4 format for HLS output; improves seeking. Mutually exclusive with hlsUnifiedSegments."
-                  example: false
                 outdir:
                   type: string
-                  description: "Output directory path relative to the storage root. Empty string stores in root. Characters < > : \\ | ? * are not allowed."
+                  description: "Output directory path relative to the storage root, required. Empty string stores in root. The characters < > : \" | ? * are not allowed. Defaults to mp4/."
+                  default: mp4/
                   example: "output/hd"
                 filters:
                   type: array
-                  description: Array of filter IDs to apply as video overlays during encoding.
+                  description: IDs of transcoding filters to apply, selected from the service's existing filters.
                   items:
                     type: string
                   example: ["1", "2"]
                 profiles:
                   type: array
-                  description: Sub-profiles.
+                  description: IDs of existing single-mode profiles to include as sub-profiles. Applicable when filemode is combined.
                   items:
                     type: string
                   example: []
@@ -806,7 +824,6 @@ paths:
                     type: integer
                     description: Transcoding profile identifier used for this job.
                     example: 129017
-
   /transcoding/profiles/{profileid}:
     post:
       tags:
@@ -825,69 +842,88 @@ paths:
               properties:
                 name:
                   type: string
-                  description: "Profile display name used throughout the encoding UI. Cannot be empty or whitespace only."
+                  description: "Profile display name. Must not be empty or consist only of whitespace."
                   example: Updated Profile
                 cv:
                   type: string
-                  description: "FFmpeg codec identifier for video encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9."
-                  enum: [libx264, libx265, libvpx-vp9]
+                  description: >-
+                    Video codec used for encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9.
+                    libaom-av1 = AV1. mp4, hls, and hlsaes containers support libx264, libx265, and libaom-av1;
+                    the webm container supports libvpx-vp9 and libaom-av1 only. libaom-av1 requires the
+                    account's Advanced Features add-on. The selected codec also determines which vprofile
+                    values are valid (see vprofile).
+                  enum: [libx264, libx265, libvpx-vp9, libaom-av1]
                   example: libx264
                 ca:
                   type: string
-                  description: "Audio codec determined by container format (f). mp4/hls/hlsaes use aac; webm uses opus."
-                  enum: [aac, opus]
+                  description: "Audio codec used for encoding. copy, aac, and libmp3lame are available for mp4, hls, and hlsaes containers; libopus is used with the webm container."
+                  enum: [copy, aac, libmp3lame, libopus]
                   example: aac
                 f:
                   type: string
-                  description: "Output container format. Selecting this auto-populates codec defaults."
+                  description: "Output container format. Determines which video and audio codecs are available (see cv and ca)."
                   enum: [mp4, webm, hls, hlsaes]
                   example: mp4
                 filemode:
                   type: string
-                  description: "Output file organization. single = one output file per profile. combined = multi-bitrate HLS manifest bundle."
+                  description: "Output file organization. single produces one encoded output using the video and audio settings on this profile. combined bundles several existing single-mode profiles (see profiles) into a multi-bitrate output, and requires upscale, sourcevideo, and sourceaudio to be set."
                   enum: [single, combined]
                   example: single
                 fps:
                   type: string
-                  description: "Target output frame rate as string. 0 copies the source frame rate."
+                  description: "Target output frame rate. 0 copies the source frame rate. Changing away from 0 sets gop to 6; changing back to 0 clears gop. Values above the maximum frame rate allowed for the selected cv/vprofile/vlevel combination are not accepted (see vlevel)."
                   enum: ["0", "24", "25", "30", "48", "50", "60"]
                   example: "30"
                 gop:
                   type: string
-                  description: "Group of Pictures size (frames between keyframes). Smaller values improve seeking accuracy. Typical range 24–300."
+                  description: "Group of Pictures size in seconds (interval between keyframes). Not applicable while fps is 0, in which case the existing value is retained. Must be numeric; a gop x fps value below 30 frames or above 300 frames is not recommended."
+                  enum: ["2", "4", "6", "8", "10", "12"]
                   example: "60"
                 preset:
                   type: string
                   description: "Encoding speed preset. Slower presets produce smaller files at the cost of encoding time."
-                  enum: [ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow]
+                  enum: [superfast, veryfast, faster, fast, medium, slow]
                   example: veryfast
                 vlevel:
                   type: string
-                  description: "Codec encoding level constraining maximum resolution, frame rate, and bitrate. Valid values depend on cv and vprofile."
+                  description: >-
+                    Codec encoding level, constraining the maximum resolution, video bitrate, and frame rate
+                    for the profile. Which levels are valid depends on the chosen cv and vprofile: with
+                    libx264, baseline allows 3.0 and 3.1, main allows 3.0 through 4.2, and high allows 3.1
+                    through 5.2; with libx265, main10 allows every level except 3.2, and main allows every
+                    level except 3.0 and 3.1; with libvpx-vp9, profile0 allows 3.2, 4.1, 5.2, and 6.2, and
+                    profile2 allows 3.0 through 4.2 and 5.2; with libaom-av1, main allows 3.0, 3.1, 4.1, 4.2,
+                    and 5.2. Each cv/vprofile/vlevel combination also caps the maximum resolution, video
+                    bitrate, and frame rate that can be submitted - for example libx264/main/4.0 allows up
+                    to 1920x1080 at up to 20000kbps and 30fps, libx264/high/5.1 allows up to 3840x2160 at up
+                    to 240000kbps and 30fps, libx265/main10/5.0 allows up to 3840x2160 at up to 100000kbps
+                    and 60fps, and libaom-av1/main/5.2 allows up to 7680x4320 at up to 24000kbps and 120fps;
+                    values above the selected level's ceiling are not accepted.
                   enum: ["3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2"]
                   example: "4.1"
                 vprofile:
                   type: string
-                  description: "Codec-specific encoding profile. H.264 (libx264): baseline, main, high. H.265 (libx265): main, main10. VP9 (libvpx-vp9): profile0, profile2. Available values are constrained by cv."
+                  description: "Encoding profile. Which values are valid depends on the selected cv: libx264 allows baseline, main, and high; libx265 allows main and main10; libvpx-vp9 allows profile0 and profile2; libaom-av1 allows main only."
+                  enum: [baseline, main, high, main10, profile0, profile2]
                   example: high
                 vpass:
                   type: string
-                  description: "Number of encoding passes. 1 = faster single-pass. 2 = two-pass for more accurate bitrate targeting."
+                  description: "Number of encoding passes. 1 = single pass (faster). 2 = two-pass (more accurate bitrate targeting). Automatically set to 1 when bv is 1 (As Defined) and cleared when bv is 0."
                   enum: ["1", "2"]
                   example: "1"
                 tune:
                   type: string
-                  description: "H.264 encoding tune preset; only applicable when cv=libx264. disabled = no tune applied."
+                  description: "Encoding tune. Available options depend on cv: libx264 allows disabled, film, animation, grain, stillimage, and fastdecode; libx265 allows disabled and fastdecode; libvpx-vp9 and libaom-av1 allow disabled only. Requires the account's Advanced Features add-on - only disabled is available otherwise."
                   enum: [disabled, film, animation, grain, stillimage, fastdecode]
                   example: film
                 bv:
                   type: string
-                  description: "Video bitrate mode. 0 = As Source (copies source bitrate). 1 = As Defined (use bvvalue to set target kbps)."
+                  description: "Video bitrate mode. 0 = As Source (copies source bitrate; not available for the webm container). 1 = As Defined (use bvvalue to set target kbps)."
                   enum: ["0", "1"]
                   example: "1"
                 bvvalue:
                   type: string
-                  description: "Target video bitrate in kilobits per second, sent as a string. Required when bv=1."
+                  description: "Target video bitrate in kilobits per second, sent as a string. Must be numeric and greater than 512. Required when bv=1."
                   example: "4000"
                 ba:
                   type: string
@@ -896,20 +932,29 @@ paths:
                   example: "1"
                 bavalue:
                   type: string
-                  description: "Target audio bitrate in kilobits per second, sent as a string. Required when ba=1."
+                  description: "Target audio bitrate in kilobits per second, sent as a string. Must be numeric and greater than 32. Required when ba=1."
                   example: "128"
                 sv:
                   type: string
-                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue. Use 0 to preserve source resolution."
+                  description: "Output resolution. Use as_defined to specify custom dimensions via svvalue (and the paired svwidth/svheight). Use 0 to preserve source resolution."
                   enum: ["2160p", "1440p", "1080p", "720p", "576p", "480p", "360p", "240p", "144p", "0", "as_defined"]
                   example: "720p"
                 svvalue:
                   type: string
-                  description: "Custom output dimensions as a single WIDTHxHEIGHT string. Only used when sv=as_defined. Both dimensions must be divisible by 2."
+                  description: "Custom output dimensions as a single WIDTHxHEIGHT string. Only used when sv=as_defined. Both dimensions must be numeric and divisible by 2, width must be between 256 and 7680, height must be between 144 and 4320 (both inclusive), and the combined resolution must not exceed the maximum allowed for the selected cv/vprofile/vlevel combination (see vlevel)."
                   example: "1920x800"
+                svwidth:
+                  type: string
+                  description: "Width component of the custom resolution, used only when sv is as_defined. Combined with svheight to form svvalue, and subject to the same 256-7680 range, even-number, and codec/profile/level resolution-ceiling rules as svvalue."
+                  example: "1920"
+                svheight:
+                  type: string
+                  description: "Height component of the custom resolution, used only when sv is as_defined. Combined with svwidth to form svvalue, and subject to the same 144-4320 range, even-number, and codec/profile/level resolution-ceiling rules as svvalue."
+                  example: "800"
                 crfv:
                   type: string
-                  description: "Constant Rate Factor for quality-based encoding. Lower value = better quality. Range 0–51; typical H.264 range is 18–28."
+                  description: "Constant Rate Factor for quality-based encoding. 18 = High quality, 24 = Medium quality, 28 = Low quality."
+                  enum: ["18", "24", "28"]
                   example: "24"
                 ara:
                   type: string
@@ -928,8 +973,8 @@ paths:
                   example: "2"
                 tm:
                   type: string
-                  description: "Thumbnail generation mode. interval = generate thumbnails at periodic intervals. fixed = generate thumbnail at exact time tv. disabled = no thumbnails."
-                  enum: [interval, fixed, disabled]
+                  description: "Thumbnail generation mode. interval = generate thumbnails at periodic intervals. fixed = generate thumbnail at exact time tv. sprite = generate a sprite sheet of thumbnails. disabled = no thumbnails."
+                  enum: [interval, fixed, sprite, disabled]
                   example: interval
                 tv:
                   type: string
@@ -942,42 +987,48 @@ paths:
                   example: "N"
                 sourcevideo:
                   type: string
-                  description: "Whether to include the video stream in the output. N = creates audio-only output."
+                  description: "Applicable when filemode is combined. Whether to copy the source video stream into the combined output."
                   enum: ["Y", "N"]
                   example: "Y"
                 sourceaudio:
                   type: string
-                  description: "Whether to include the audio stream in the output. N = creates video-only output."
+                  description: "Applicable when filemode is combined. Y copies the original audio track as-is into the combined output. N includes only the single highest-bitrate transcoded audio track from the selected sub-profiles."
                   enum: ["Y", "N"]
                   example: "Y"
                 hlsUnifiedSegments:
                   type: boolean
-                  description: "Enables MPEG-TS segment format for HLS output. Defaults to false."
+                  description: "Applicable when f is hls or hlsaes. When true, uses MPEG-TS segments for the HLS output. Requires the account's Advanced Features add-on. Defaults to false."
                   example: false
                 hlsfMP4Segments:
                   type: boolean
-                  description: "Enables fragmented MP4 format for HLS output; improves seeking. Mutually exclusive with hlsUnifiedSegments."
+                  description: "Applicable when f is hls or hlsaes. When true, uses fragmented MP4 segments instead of MPEG-TS, which improves seeking; not supported together with the hlsaes container. Required when cv=libaom-av1 and f=hls. Requires the account's Advanced Features add-on. Defaults to false."
                   example: false
                 outdir:
                   type: string
-                  description: "Output directory path relative to the storage root. Empty string stores in root. Characters < > : \\ | ? * are not allowed."
+                  description: "Output directory path relative to the storage root. Empty string stores in root. Characters < > : \" | ? * are not allowed."
                   example: "output/hd"
                 filters:
                   type: array
-                  description: Array of filter IDs to apply as video overlays during encoding.
+                  description: IDs of transcoding filters to apply, selected from the service's existing filters.
                   items:
                     type: string
                   example: ["1"]
                 profiles:
                   type: array
-                  description: Sub-profiles.
+                  description: IDs of existing single-mode profiles to include as sub-profiles. Applicable when filemode is combined.
                   items:
                     type: string
                   example: []
-                _METHOD:
+                kar:
                   type: string
-                  description: Signal DELETE to the backend when deleting.
-                  example: DELETE
+                  description: "Keep Aspect Ratio. 1 = only height is fixed and width adjusts automatically to preserve the source aspect ratio. 0 = disabled. Requires the account's Advanced Features add-on."
+                  enum: ["0", "1"]
+                  example: "0"
+                ol:
+                  type: string
+                  description: "Orientation Lock. 1 = the landscape or portrait orientation of the source video is preserved. 0 = disabled. Requires the account's Advanced Features add-on."
+                  enum: ["0", "1"]
+                  example: "0"
       deprecated: false
       responses:
         '200':
