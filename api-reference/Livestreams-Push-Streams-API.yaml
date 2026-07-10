@@ -737,16 +737,45 @@ paths:
               properties:
                 server:
                   type: string
-                  description: Server ID(s) for the stream. Use comma-separated values for multiple servers.
+                  description: Server ID(s) for the stream. Use comma-separated values for multiple servers. Value must be one of the server codes returned by the GET /streams/push/servers call.
                   example: '201'
                 codec:
                   type: string
-                  description: Video codec for the stream. Use h264 or h265.
+                  description: "Video codec for the stream. Allowed values: h264, h265."
                   example: h264
                 draft:
                   type: number
                   description: Set to 0 to publish the stream, or 1 to save it as a draft.
                   example: 0
+                protocols:
+                  type: array
+                  description: "Output protocols to enable for the stream. Send every protocol that should remain enabled; any protocol omitted from the array is disabled. Allowed values: RTMP, RTSP, DASH, HLS. Read-only when the stream's protocolsLock is 1; enabling a new output protocol requires review and activation by the support team."
+                  items:
+                    type: string
+                    enum:
+                    - RTMP
+                    - RTSP
+                    - DASH
+                    - HLS
+                  example:
+                  - HLS
+                  - DASH
+                ingests:
+                  type: array
+                  description: "Input (ingest) protocol for the stream. Send a one-item array with the selected protocol, or an empty array to clear the selection; only one protocol can be active at a time. RTMP is always available. The advanced protocols (RTMPS, RTSP, SRT, WHIP, ZIXI, RIST, ICECAST) are Advanced Protocol Features and can only be submitted once the stream's hasAdvancedFeatures flag is enabled; enabling this flag requires review and activation by the support team. Read-only when the stream's ingestsLock is greater than 0. Allowed values: RTMP, RTMPS, RTSP, SRT, WHIP, ZIXI, RIST, ICECAST."
+                  items:
+                    type: string
+                    enum:
+                    - RTMP
+                    - RTMPS
+                    - RTSP
+                    - SRT
+                    - WHIP
+                    - ZIXI
+                    - RIST
+                    - ICECAST
+                  example:
+                  - RTMP
       responses:
         '200':
           description: success
