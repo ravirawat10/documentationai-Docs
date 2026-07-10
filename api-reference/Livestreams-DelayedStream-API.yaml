@@ -2057,9 +2057,14 @@ paths:
                   example: 11465
                 protocols:
                   type: array
-                  description: List of output protocols. Values include HLS, RTMP, DASH, RTSP.
+                  description: "Output protocols to enable for the delayed stream. Send every protocol that should remain enabled; any protocol omitted from the array is disabled. Allowed values: RTMP, RTSP, DASH, HLS (HLS_FMP4 is reserved for future use and is not currently selectable in the UI). Read-only when the stream's protocolsLock is 1; enabling a new output protocol requires review and activation by the support team."
                   items:
                     type: string
+                    enum:
+                    - RTMP
+                    - RTSP
+                    - DASH
+                    - HLS
                   example:
                   - HLS
       responses:
