@@ -389,7 +389,7 @@ paths:
                       example: "2"
                     directory:
                       type: object
-                      description: "Directory paths used for the sync. sink and backup default to push-{zoneid} and push-{zoneid}-backup respectively when left blank, derived from the selected zoneid."
+                      description: "Directory paths used for the sync. When left blank, sink and backup default to a push directory named after the selected zone ID, with backup using the same name plus a -backup suffix."
                       properties:
                         source:
                           type: string
