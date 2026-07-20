@@ -10,12 +10,37 @@ description: >-
 ## Step-by-step
 
 <Steps>
-  <Step title="Get your API key" title-type="p">
-    [Log in to your dashboard](https://www.5centscdn.net/dashboard/login) → **Settings** → **API Keys** → copy your key.
+  <Step title="Create an API key" title-type="p">
+    [Log in to your dashboard](https://www.5centscdn.net/dashboard/login), open the **Settings** menu → **Integration** → **API** to reach your API Keys list, then click **Add New**.
+
+    - **Name** (required)
+    - **Description** (required)
+    - **Permissions** (required, choose at least one) — `Create`, `Read`, `Update`, `Delete`
+    - **IP Whitelist** (optional) — one IP or CIDR per line; leave blank to allow any IP
+
+    **Create** stays disabled until Name, Description, and at least one Permission are set.
+  </Step>
+
+  <Step title="Copy your key — it's shown only once" title-type="p">
+    Creating a key opens its detail page with a banner showing the **plaintext API key**.
+
+    <Callout kind="warning" collapsed="false">
+      This is the only time the plaintext key is displayed — 5centsCDN does not store it. If you lose it, delete the key and create a new one.
+    </Callout>
 
     <Callout kind="note" collapsed="false">
       Never paste your API key into public code, browser consoles, or Git repositories.
     </Callout>
+  </Step>
+
+  <Step title="Manage your key" title-type="p">
+    The key's detail page stays available afterward under **Settings → Integration → API**.
+
+    - **SHA-256 Fingerprint** — once the plaintext is gone, this hash is shown in its place. It uniquely identifies the key without exposing it, so you can reference it safely in logs or support requests.
+    - **Edit** — update Name, Description, Permissions, or IP Whitelist, then click **Save**.
+    - **Delete** — type the key's name to confirm. This cannot be undone.
+
+    Multiple keys can also be selected from the list and deleted together.
   </Step>
 
   <Step title="Verify your key works" title-type="p">
