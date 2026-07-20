@@ -22,7 +22,7 @@ description: >-
   </Step>
 
   <Step title="Copy your key — it's shown only once" title-type="p">
-    Creating a key opens its detail page with a banner showing the **plaintext API key**.
+    Creating a key opens its detail page with a banner showing the **plaintext API key**. Once you leave this page, only its **SHA-256 Fingerprint** remains visible — enough to identify the key, but never the key itself.
 
     <Callout kind="warning" collapsed="false">
       This is the only time the plaintext key is displayed — 5centsCDN does not store it. If you lose it, delete the key and create a new one.
@@ -31,16 +31,6 @@ description: >-
     <Callout kind="note" collapsed="false">
       Never paste your API key into public code, browser consoles, or Git repositories.
     </Callout>
-  </Step>
-
-  <Step title="Manage your key" title-type="p">
-    The key's detail page stays available afterward under **Settings → Integration → API**.
-
-    - **SHA-256 Fingerprint** — once the plaintext is gone, this hash is shown in its place. It uniquely identifies the key without exposing it, so you can reference it safely in logs or support requests.
-    - **Edit** — update Name, Description, Permissions, or IP Whitelist, then click **Save**.
-    - **Delete** — type the key's name to confirm. This cannot be undone.
-
-    Multiple keys can also be selected from the list and deleted together.
   </Step>
 
   <Step title="Verify your key works" title-type="p">
