@@ -784,7 +784,7 @@ paths:
                   example: My Application
                 description:
                   type: string
-                  description: Optional description of the key's purpose.
+                  description: Description of the key's purpose, shown alongside the key in the API Keys list.
                   example: Used by the mobile app
                 permission[]:
                   type: array
@@ -801,6 +801,12 @@ paths:
                   example:
                   - read
                   - update
+                ip_whitelist:
+                  type: string
+                  description: >
+                    Comma-separated list of IPs and/or CIDR ranges allowed to use this key.
+                    Omit or leave empty to allow requests from any IP.
+                  example: '203.0.113.10,10.0.0.0/8'
                 _METHOD:
                   type: string
                   description: Must be set to PUT to trigger API key creation.
@@ -895,10 +901,6 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-              - name
-              - description
-              - permission[]
               properties:
                 name:
                   type: string
@@ -906,11 +908,13 @@ paths:
                   example: My Application
                 description:
                   type: string
-                  description: Optional description of the key's purpose.
+                  description: Description of the key's purpose, shown alongside the key in the API Keys list.
                   example: Used by the mobile app
                 permission[]:
                   type: array
-                  description: Set of CRUD permissions granted to this key.
+                  description: >
+                    Set of CRUD permissions granted to this key. Multiple
+                    values allowed. Replaces the key's existing permission set.
                   items:
                     type: string
                     enum:
@@ -921,6 +925,13 @@ paths:
                   example:
                   - read
                   - update
+                ip_whitelist:
+                  type: string
+                  description: >
+                    Comma-separated list of IPs and/or CIDR ranges allowed to use this key.
+                    Omit or leave empty to allow requests from any IP. Replaces the
+                    key's existing IP whitelist.
+                  example: '203.0.113.10,10.0.0.0/8'
       responses:
         '200':
           description: success
