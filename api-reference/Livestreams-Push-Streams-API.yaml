@@ -8846,7 +8846,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Enable Ad Insertion
-      description: 'Creates (or updates) the ad insertion record for the push stream.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Creates (or updates) the ad insertion record for the push stream.
 
         Requires the service to have **Advanced Features** enabled and an
 
@@ -8870,12 +8872,13 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
     post:
       tags:
       - Ad Insertion
       summary: Update Ad Insertion Settings
-      description: 'Updates the ad insertion record for the push stream. The record must already
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Updates the ad insertion record for the push stream. The record must already
 
         exist (i.e. ad insertion must have been enabled with PUT first).
 
@@ -8897,25 +8900,25 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
     delete:
       tags:
       - Ad Insertion
       summary: Delete Ad Insertion
-      description: Reserved - returns error / Not implemented until a backend method is available.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Reserved - returns error / Not implemented until a backend method is available.'
       operationId: adInsertionDeletePush
       parameters:
       - $ref: '#/components/parameters/streamId'
       responses:
         '200':
           $ref: '#/components/responses/ErrorResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/server:
     post:
       tags:
       - Ad Insertion
       summary: Configure Ad Server
-      description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
         origin headers. Triggers a stream-adserver provisioning job.
 
@@ -8946,13 +8949,14 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/preroll:
     post:
       tags:
       - Ad Insertion
       summary: Configure Pre-Roll Ads
-      description: 'Enables or disables live ad pre-roll. When enabled is N the
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Enables or disables live ad pre-roll. When enabled is N the
 
         pre-roll configuration is removed entirely.
 
@@ -8974,13 +8978,14 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/replacement:
     post:
       tags:
       - Ad Insertion
       summary: Configure Ad Replacement
-      description: 'Enables or disables live ad replacement. When enabled is N the
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Enables or disables live ad replacement. When enabled is N the
 
         replacement configuration is removed entirely.
 
@@ -9016,13 +9021,14 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/schedule:
     post:
       tags:
       - Ad Insertion
       summary: Add Ad Break Schedule
-      description: 'Adds a new ad break schedule. Two schedule types are supported.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B)
+
+        Adds a new ad break schedule. Two schedule types are supported.
 
         Maximum 10 schedules per stream.
 
@@ -9116,13 +9122,12 @@ paths:
                         example:
                           '1778066700': Recur limit reached
                           '1778067000': Recur limit reached
-      deprecated: true
   /streams/push/{streamid}/adinsertion/schedule/{scheduleid}:
     post:
       tags:
       - Ad Insertion
       summary: Update Ad Break Schedule
-      description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.'
       operationId: adInsertionUpdateSchedulePush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9175,12 +9180,11 @@ paths:
                     - success
                     - error
                     example: success
-      deprecated: true
     delete:
       tags:
       - Ad Insertion
       summary: Delete Ad Break Schedule
-      description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Deletes the schedule record. When mode is clear, all queued triggers are also deleted.'
       operationId: adInsertionDeleteSchedulePush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9225,13 +9229,12 @@ paths:
                     type: string
                     description: Human-readable message describing the result.
                     example: Schedule Deleted
-      deprecated: true
   /streams/push/{streamid}/adinsertion/triggers:
     post:
       tags:
       - Ad Insertion
       summary: List Ad Triggers
-      description: Returns the queued ad break triggers belonging to this stream.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Returns the queued ad break triggers belonging to this stream.'
       operationId: adInsertionGetTriggersPush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9256,13 +9259,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Trigger'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/trigger/{triggerid}:
     delete:
       tags:
       - Ad Insertion
       summary: Delete Ad Trigger
-      description: Deletes a single queued trigger from both beanstalkd and the database.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Deletes a single queued trigger from both beanstalkd and the database.'
       operationId: adInsertionDeleteTriggerPush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9283,13 +9285,12 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SuccessResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/cue-out:
     get:
       tags:
       - Ad Insertion
       summary: Trigger Cue-Out
-      description: Sends a SCTE-35 cue-out signal to the stream encoder.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Sends a SCTE-35 cue-out signal to the stream encoder.'
       operationId: adInsertionCueOutPush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9307,13 +9308,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CueResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/cue-in:
     get:
       tags:
       - Ad Insertion
       summary: Trigger Cue-In
-      description: Sends a SCTE-35 cue-in signal to the stream encoder.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Sends a SCTE-35 cue-in signal to the stream encoder.'
       operationId: adInsertionCueInPush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9324,13 +9324,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CueResult'
-      deprecated: true
   /streams/push/{streamid}/adinsertion/consumption:
     post:
       tags:
       - Ad Insertion
       summary: Get Ad Consumption
-      description: Returns ad insertion consumption data grouped by the requested time resolution.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-F59E0B) Returns ad insertion consumption data grouped by the requested time resolution.'
       operationId: adInsertionGetConsumptionPush
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -9350,7 +9349,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsumptionResult'
-      deprecated: true
 components:
   securitySchemes:
     ApiKeyAuth:
