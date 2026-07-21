@@ -8845,6 +8845,9 @@ paths:
     put:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Enable Ad Insertion
       description: 'Creates (or updates) the ad insertion record for the push stream.
 
@@ -8873,6 +8876,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Update Ad Insertion Settings
       description: 'Updates the ad insertion record for the push stream. The record must already
 
@@ -8899,6 +8905,9 @@ paths:
     delete:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Delete Ad Insertion
       description: Reserved - returns error / Not implemented until a backend method is available.
       operationId: adInsertionDeletePush
@@ -8911,6 +8920,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Configure Ad Server
       description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
@@ -8947,6 +8959,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Configure Pre-Roll Ads
       description: 'Enables or disables live ad pre-roll. When enabled is N the
 
@@ -8974,6 +8989,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Configure Ad Replacement
       description: 'Enables or disables live ad replacement. When enabled is N the
 
@@ -9015,6 +9033,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Add Ad Break Schedule
       description: 'Adds a new ad break schedule. Two schedule types are supported.
 
@@ -9114,6 +9135,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Update Ad Break Schedule
       description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
       operationId: adInsertionUpdateSchedulePush
@@ -9171,6 +9195,9 @@ paths:
     delete:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Delete Ad Break Schedule
       description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
       operationId: adInsertionDeleteSchedulePush
@@ -9221,6 +9248,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: List Ad Triggers
       description: Returns the queued ad break triggers belonging to this stream.
       operationId: adInsertionGetTriggersPush
@@ -9251,6 +9281,9 @@ paths:
     delete:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Delete Ad Trigger
       description: Deletes a single queued trigger from both beanstalkd and the database.
       operationId: adInsertionDeleteTriggerPush
@@ -9277,6 +9310,9 @@ paths:
     get:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Trigger Cue-Out
       description: Sends a SCTE-35 cue-out signal to the stream encoder.
       operationId: adInsertionCueOutPush
@@ -9300,6 +9336,9 @@ paths:
     get:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Trigger Cue-In
       description: Sends a SCTE-35 cue-in signal to the stream encoder.
       operationId: adInsertionCueInPush
@@ -9316,6 +9355,9 @@ paths:
     post:
       tags:
       - Ad Insertion
+      x-badges:
+      - content: Custom Plan
+        color: '#F59E0B'
       summary: Get Ad Consumption
       description: Returns ad insertion consumption data grouped by the requested time resolution.
       operationId: adInsertionGetConsumptionPush
