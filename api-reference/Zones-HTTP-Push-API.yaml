@@ -3660,7 +3660,7 @@ paths:
       tags:
       - Restore & Purge
       summary: Zone Cache Prefetch
-      description: Prefetch cache of a HTTP push zone by pre-populating the specified files into the CDN cache before they are requested by users. Used by the Manage Cache "Prefetch" tab, which is gated behind the account's Advanced Features plan.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Prefetch cache of a HTTP push zone by pre-populating the specified files into the CDN cache before they are requested by users. Used by the Manage Cache "Prefetch" tab, which is gated behind the account''s Advanced Features plan.'
       operationId: zonePushCachePrefetch
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
