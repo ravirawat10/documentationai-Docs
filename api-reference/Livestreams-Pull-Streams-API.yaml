@@ -10786,7 +10786,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Enable Ad Insertion
-      description: 'Creates (or updates) the ad insertion record for the pull stream.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Creates (or updates) the ad insertion record for the pull stream.
 
         Requires the service to have **Advanced Features** enabled and an
 
@@ -10814,7 +10816,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Update Ad Insertion Settings
-      description: 'Updates the ad insertion record for the pull stream. The record must already
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Updates the ad insertion record for the pull stream. The record must already
 
         exist (i.e. ad insertion must have been enabled with PUT first).
 
@@ -10840,7 +10844,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Delete Ad Insertion
-      description: Reserved - returns error / Not implemented until a backend method is available.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Reserved - returns error / Not implemented until a backend method is available.'
       operationId: adInsertionDeletePull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -10852,7 +10856,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Configure Ad Server
-      description: 'Sets the upstream VAST/VMAP ad server URL, query parameters and custom
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Sets the upstream VAST/VMAP ad server URL, query parameters and custom
 
         origin headers. Triggers a stream-adserver provisioning job.
 
@@ -10888,7 +10894,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Configure Pre-Roll Ads
-      description: 'Enables or disables live ad pre-roll. When enabled is N the
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Enables or disables live ad pre-roll. When enabled is N the
 
         pre-roll configuration is removed entirely.
 
@@ -10915,7 +10923,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Configure Ad Replacement
-      description: 'Enables or disables live ad replacement. When enabled is N the
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Enables or disables live ad replacement. When enabled is N the
 
         replacement configuration is removed entirely.
 
@@ -10956,7 +10966,9 @@ paths:
       tags:
       - Ad Insertion
       summary: Add Ad Break Schedule
-      description: 'Adds a new ad break schedule. Two schedule types are supported.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+        Adds a new ad break schedule. Two schedule types are supported.
 
         Maximum 10 schedules per stream.
 
@@ -11054,7 +11066,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Update Ad Break Schedule
-      description: Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Updates the cron pattern, duration and recurrence limit of an existing type 1 schedule.'
       operationId: adInsertionUpdateSchedulePull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11111,7 +11123,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Delete Ad Break Schedule
-      description: Deletes the schedule record. When mode is clear, all queued triggers are also deleted.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Deletes the schedule record. When mode is clear, all queued triggers are also deleted.'
       operationId: adInsertionDeleteSchedulePull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11161,7 +11173,7 @@ paths:
       tags:
       - Ad Insertion
       summary: List Ad Triggers
-      description: Returns the queued ad break triggers belonging to this stream.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns the queued ad break triggers belonging to this stream.'
       operationId: adInsertionGetTriggersPull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11191,7 +11203,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Delete Ad Trigger
-      description: Deletes a single queued trigger from both beanstalkd and the database.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Deletes a single queued trigger from both beanstalkd and the database.'
       operationId: adInsertionDeleteTriggerPull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11217,7 +11229,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Trigger Cue-Out
-      description: Sends a SCTE-35 cue-out signal to the stream encoder.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sends a SCTE-35 cue-out signal to the stream encoder.'
       operationId: adInsertionCueOutPull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11240,7 +11252,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Trigger Cue-In
-      description: Sends a SCTE-35 cue-in signal to the stream encoder.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sends a SCTE-35 cue-in signal to the stream encoder.'
       operationId: adInsertionCueInPull
       parameters:
       - $ref: '#/components/parameters/streamId'
@@ -11256,7 +11268,7 @@ paths:
       tags:
       - Ad Insertion
       summary: Get Ad Consumption
-      description: Returns ad insertion consumption data grouped by the requested time resolution.
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns ad insertion consumption data grouped by the requested time resolution.'
       operationId: adInsertionGetConsumptionPull
       parameters:
       - $ref: '#/components/parameters/streamId'

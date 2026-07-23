@@ -2452,7 +2452,7 @@ paths:
       tags:
       - Cache
       summary: Prefetch Cache
-      description: Prefetch specific files into cache for a VoD pull zone
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Prefetch specific files into cache for a VoD pull zone'
       operationId: prefetchCacheZoneVodPull
       parameters:
       - $ref: '#/components/parameters/zoneIdParam'
