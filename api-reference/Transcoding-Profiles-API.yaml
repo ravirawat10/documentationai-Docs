@@ -847,11 +847,13 @@ paths:
                 cv:
                   type: string
                   description: >-
+                    ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) applies to libaom-av1 only.
+
                     Video codec used for encoding. libx264 = H.264/AVC. libx265 = H.265/HEVC. libvpx-vp9 = VP9.
                     libaom-av1 = AV1. mp4, hls, and hlsaes containers support libx264, libx265, and libaom-av1;
                     the webm container supports libvpx-vp9 and libaom-av1 only. libaom-av1 requires the
                     account's Advanced Features add-on. The selected codec also determines which vprofile
-                    values are valid (see vprofile). ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) (libaom-av1 only)
+                    values are valid (see vprofile).
                   enum: [libx264, libx265, libvpx-vp9, libaom-av1]
                   example: libx264
                 ca:
@@ -913,7 +915,9 @@ paths:
                   example: "1"
                 tune:
                   type: string
-                  description: "Encoding tune. Available options depend on cv: libx264 allows disabled, film, animation, grain, stillimage, and fastdecode; libx265 allows disabled and fastdecode; libvpx-vp9 and libaom-av1 allow disabled only. Requires the account's Advanced Features add-on - only disabled is available otherwise. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)"
+                  description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) applies to non-disabled values only.
+
+                    Encoding tune. Available options depend on cv: libx264 allows disabled, film, animation, grain, stillimage, and fastdecode; libx265 allows disabled and fastdecode; libvpx-vp9 and libaom-av1 allow disabled only. Requires the account's Advanced Features add-on - only disabled is available otherwise."
                   enum: [disabled, film, animation, grain, stillimage, fastdecode]
                   example: film
                 bv:
@@ -997,11 +1001,15 @@ paths:
                   example: "Y"
                 hlsUnifiedSegments:
                   type: boolean
-                  description: "Applicable when f is hls or hlsaes. When true, uses MPEG-TS segments for the HLS output. Requires the account's Advanced Features add-on. Defaults to false. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)"
+                  description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+                    Applicable when f is hls or hlsaes. When true, uses MPEG-TS segments for the HLS output. Requires the account's Advanced Features add-on. Defaults to false."
                   example: false
                 hlsfMP4Segments:
                   type: boolean
-                  description: "Applicable when f is hls or hlsaes. When true, uses fragmented MP4 segments instead of MPEG-TS, which improves seeking; not supported together with the hlsaes container. Required when cv=libaom-av1 and f=hls. Requires the account's Advanced Features add-on. Defaults to false. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)"
+                  description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+                    Applicable when f is hls or hlsaes. When true, uses fragmented MP4 segments instead of MPEG-TS, which improves seeking; not supported together with the hlsaes container. Required when cv=libaom-av1 and f=hls. Requires the account's Advanced Features add-on. Defaults to false."
                   example: false
                 outdir:
                   type: string
@@ -1021,12 +1029,16 @@ paths:
                   example: []
                 kar:
                   type: string
-                  description: "Keep Aspect Ratio. 1 = only height is fixed and width adjusts automatically to preserve the source aspect ratio. 0 = disabled. Requires the account's Advanced Features add-on. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)"
+                  description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+                    Keep Aspect Ratio. 1 = only height is fixed and width adjusts automatically to preserve the source aspect ratio. 0 = disabled. Requires the account's Advanced Features add-on."
                   enum: ["0", "1"]
                   example: "0"
                 ol:
                   type: string
-                  description: "Orientation Lock. 1 = the landscape or portrait orientation of the source video is preserved. 0 = disabled. Requires the account's Advanced Features add-on. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)"
+                  description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D)
+
+                    Orientation Lock. 1 = the landscape or portrait orientation of the source video is preserved. 0 = disabled. Requires the account's Advanced Features add-on."
                   enum: ["0", "1"]
                   example: "0"
       deprecated: false

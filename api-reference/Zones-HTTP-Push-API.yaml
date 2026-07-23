@@ -3636,7 +3636,9 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of file paths to purge. The Purge tab's "By Path" and "By Pattern" operation types provide two path input fields, so 1-2 paths is the common case, but more can be sent. Omit this field entirely (send an empty body) to purge the whole zone - this is what the Purge tab's "All" operation type does. ![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) (By Pattern only)
+                  description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) applies to "By Pattern" only.
+
+                    List of file paths to purge. The Purge tab''s "By Path" and "By Pattern" operation types provide two path input fields, so 1-2 paths is the common case, but more can be sent. Omit this field entirely (send an empty body) to purge the whole zone - this is what the Purge tab''s "All" operation type does.'
                   example: ["/videos/file.mp4", "/images/logo.png"]
       deprecated: false
       responses:
