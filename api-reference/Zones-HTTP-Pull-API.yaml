@@ -20,7 +20,7 @@ tags:
   description: SSL, secure token, geo block, domain lock, bandwidth limit, and access control
 - name: Cache
   description: Edge settings, shield, cache configuration, and CDN optimization
-- name: Restore & Purge
+- name: Restore & Cache Purge
   description: Content purge and zone restore operations
 paths:
   /zones/http/pull:
@@ -2566,7 +2566,7 @@ paths:
   /zones/http/pull/{zoneid}/purge:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Zone Purge History
       description: List cache purge and prefetch operation history for a HTTP pull zone. Used by the Manage Cache "History" tab, which paginates 10 records per page and renders each row's operation type, file count, completion state, and created date.
       operationId: zonePullPurgeHistory
@@ -2647,7 +2647,7 @@ paths:
                           example: "1717236060"
     post:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Purge
       description: Purge cache of a HTTP pull zone
       operationId: zoneCachePurgeZonePull
@@ -2669,7 +2669,9 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of file paths to purge. Omit this field entirely (send an empty body) to purge the whole zone.
+                  description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) applies to "By Pattern" only.
+
+                    List of file paths to purge. Omit this field entirely (send an empty body) to purge the whole zone.'
                   example: ["/videos/file.mp4", "/images/logo.png"]
       deprecated: false
       responses:
@@ -2691,7 +2693,7 @@ paths:
   /zones/http/pull/{zoneid}/prefetch:
     post:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Zone Cache Prefetch
       description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Prefetch cache of a HTTP pull zone by pre-populating the specified files into the CDN cache before they are requested by users. Used by the Manage Cache "Prefetch" tab, which is gated behind the account''s Advanced Features plan.'
       operationId: zonePullCachePrefetch
@@ -2732,7 +2734,7 @@ paths:
   /zones/http/pull/{zoneid}/purge/{purgeId}:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Zone Purge Details
       description: Get detailed per-server logs for a specific purge or prefetch operation of a HTTP pull zone. Used when a row is expanded in the Manage Cache "History" tab.
       operationId: zonePullPurgeDetails
@@ -2828,7 +2830,7 @@ paths:
   /zones/http/pull/{zoneid}/restore:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Restore
       description: Restore HTTP pull zone
       operationId: restoreZonePull
