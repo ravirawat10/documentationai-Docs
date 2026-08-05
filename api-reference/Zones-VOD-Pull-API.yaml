@@ -20,7 +20,7 @@ tags:
   description: SSL, secure token, geo block, domain lock, bandwidth limit, and access control
 - name: Cache
   description: Edge settings, shield, cache configuration, and CDN optimization
-- name: Restore & Purge
+- name: Restore & Cache Purge
   description: Content purge and zone restore operations
 paths:
   /zones/vod/pull:
@@ -2490,7 +2490,7 @@ paths:
   /zones/vod/pull/{zoneid}/restore:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Restore
       description: Restore VoD pull zone
       operationId: restoreZoneVodPull
@@ -3411,7 +3411,7 @@ paths:
   /zones/vod/pull/{zoneid}/purge:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Zone Purge History
       description: List cache purge and prefetch operation history for a VoD pull zone. Used by the Manage Cache "History" tab, which paginates 10 records per page and renders each row's operation type, file count, completion state, and created date.
       operationId: zoneVodPullPurgeHistory
@@ -3492,7 +3492,7 @@ paths:
                           example: "1717236060"
     post:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Purge
       description: Purge cache of a VoD pull zone
       operationId: zoneVodPullCachePurge
@@ -3514,7 +3514,9 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of file paths to purge. Omit to purge entire zone.
+                  description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) applies to "By Pattern" only.
+
+                    List of file paths to purge. Omit to purge entire zone.'
                   example: ["/video/file.mp4", "/video/another.mp4"]
       deprecated: false
       responses:
@@ -3536,7 +3538,7 @@ paths:
   /zones/vod/pull/{zoneid}/purge/{purgeId}:
     get:
       tags:
-      - Restore & Purge
+      - Restore & Cache Purge
       summary: Zone Purge Details
       description: Get detailed per-server logs for a specific purge or prefetch operation of a VoD pull zone. Used when a row is expanded in the Manage Cache "History" tab.
       operationId: zoneVodPullPurgeDetails
