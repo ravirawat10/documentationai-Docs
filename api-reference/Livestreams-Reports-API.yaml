@@ -14,14 +14,18 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: Live Transcoding Profiles/Filters
-  description: Live stream transcoding profile and filter management
+- name: Live Transcoding Profiles
+  description: Live stream transcoding profile management
+- name: Live Transcoding Filters
+  description: Live stream transcoding filter management
+- name: DVR Reports
+  description: DVR recording usage and report operations
 paths:
   /streams/reports/dvr:
     post:
       operationId: getRecordingMinutes
       tags:
-      - Live Transcoding Profiles/Filters
+      - DVR Reports
       summary: Get DVR Recording Report
       requestBody:
         content:
@@ -97,7 +101,7 @@ paths:
   /streams/settings/profiles:
     get:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Profiles
       summary: List Live Transcoding Profiles
       description: List Live Transcoding Profiles
       operationId: listLiveTranscodingProfiles
@@ -119,7 +123,7 @@ paths:
   /streams/settings/profiles/new:
     post:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Profiles
       summary: Create Transcoding Profile
       description: add stream profiles setting
       operationId: settings-stream-profiles-add
@@ -152,7 +156,7 @@ paths:
   /streams/settings/profiles/{profileid}:
     post:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Profiles
       summary: Update Transcoding Profile
       description: Update stream profile settings. Every field is validated - required-field checks plus the encoding compatibility rules described on each property below - before the profile is updated. Unlike the Create endpoint, no _METHOD override is required for this request.
       operationId: settings-stream-profiles-update
@@ -308,7 +312,7 @@ paths:
       deprecated: false
     delete:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Profiles
       summary: Delete Transcoding Profile
       description: Delete the profile of stream. To cast request method POST and parameters _METHOD = DELETE
       operationId: deletestreamprofile
@@ -346,7 +350,7 @@ paths:
   /streams/settings/filters:
     get:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Filters
       summary: List Transcoding Filters
       description: List File Transcoding Filters
       operationId: transcodingFileFilter
@@ -418,7 +422,7 @@ paths:
                                       example: Top Right
                                     blink:
                                       type: string
-                                      description: Blink animation for overlay in on/off seconds format such as 5/5. Empty string disables blinking.
+                                      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Blink animation for overlay in on/off seconds format such as 5/5. Empty string disables blinking.'
                                       example: ''
                                     text:
                                       type: string
@@ -458,7 +462,7 @@ paths:
   /streams/settings/filters/new:
     post:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Filters
       summary: Create Transcoding Filter
       description: Create File Transcoding Filters
       operationId: createFileTranscodingFilter
@@ -517,7 +521,7 @@ paths:
                               example: Center
                             blink:
                               type: string
-                              description: "Blink animation in on/off seconds format. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
+                              description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Blink animation in on/off seconds format. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
                               example: 5/5
                     - title: drawtext
                       description: Arguments for the drawtext (text watermark) filter.
@@ -551,7 +555,7 @@ paths:
                               example: Center
                             blink:
                               type: string
-                              description: "Blink animation in on/off seconds format. Example: 3/7 means 3 seconds visible then 7 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
+                              description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Blink animation in on/off seconds format. Example: 3/7 means 3 seconds visible then 7 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
                               example: 3/7
                     - title: img2video
                       description: Arguments for the img2video (static image as video source) filter.
@@ -604,7 +608,7 @@ paths:
   /streams/settings/filters/{filterid}:
     post:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Filters
       summary: Update Transcoding Filter
       description: Edit Transcoding Profile Filter
       operationId: editTranscodingProfileFilter
@@ -649,7 +653,7 @@ paths:
                       example: Center
                     blink:
                       type: string
-                      description: "Blink animation in on/off seconds format. Applicable to overlay and drawtext filters. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
+                      description: "![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Blink animation in on/off seconds format. Applicable to overlay and drawtext filters. Example: 5/5 means 5 seconds visible then 5 seconds hidden. Each value must be a whole number between 1 and 9999. Omit this field to disable blinking."
                       example: 5/5
                     text:
                       type: string
@@ -682,7 +686,7 @@ paths:
                     example: Transcoding Settings Updated
     delete:
       tags:
-      - Live Transcoding Profiles/Filters
+      - Live Transcoding Filters
       summary: Delete Transcoding Filter
       description: Delete the information of Transcoding Profile filter. To cast request method POST and parameters _METHOD = DELETE
       operationId: deleteTranscodingProfileFilter
