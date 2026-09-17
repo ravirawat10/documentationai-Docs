@@ -1,0 +1,3048 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Ad Manager
+  description: >
+    Server-side ad insertion (SSAI) campaign management for the 5centsCDN platform.
+    Covers Ad Manager projects, advertisers, campaigns, targeting, creatives, the
+    ad-pod request/decision log, reports, and the lookup helpers and reference
+    data used to build the other requests. All monetary fields are expressed in
+    micros (divide by 1,000,000 for the currency unit). All endpoints return
+    HTTP 200 regardless of outcome; inspect the `result` field (`success` or
+    `error`) in the response body to determine success.
+  version: "2.0.0"
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+- url: https://api.5centscdn.com/v2
+  description: 5centsCDN API Server - Production
+security:
+- ApiKeyAuth: []
+
+tags:
+- name: Projects
+  description: Ad Manager project management, service-wide usage stats
+- name: Dashboard
+  description: Per-project performance summary and manual advertiser/campaign/creative sync
+- name: Skip Policy
+  description: Project-level ad-skip rule configuration
+- name: Advertisers
+  description: Advertiser management within a project
+- name: Campaigns
+  description: Campaign management, delivery status, and linked creatives
+- name: Targeting
+  description: Campaign audience and content targeting rules
+- name: Creatives
+  description: Creative asset management and upload
+- name: Ad Pods
+  description: Ad-pod request/decision log
+- name: Reports
+  description: Aggregate and time-series delivery reports
+- name: Helpers
+  description: Typeahead/autocomplete lookups used to build targeting, report, and ad-pod filters
+- name: Reference Data
+  description: Static reference data - currencies, timezones, IAB content taxonomy, content search
+
+paths:
+
+  /ad-manager:
+    get:
+      summary: List Projects
+      description: List all Ad Manager projects on the service.
+      operationId: listProjects
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    projects:
+                      type: array
+                      description: Ad Manager projects on the service.
+                      items:
+                        $ref: '#/components/schemas/Project'
+    post:
+      summary: Create Project
+      description: Create a new Ad Manager project.
+      operationId: createProject
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    project:
+                      $ref: '#/components/schemas/Project'
+
+  /ad-manager/stats:
+    get:
+      summary: Ad Manager Stats
+      description: Service-wide project, advertiser, campaign, and creative counters plus the shared billing tenant's monthly hits, hourly throughput, and usage-this-month allowances. Backs the projects landing page stat tiles.
+      operationId: getAdManagerStats
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    stats:
+                      $ref: '#/components/schemas/AdManagerStats'
+
+  /ad-manager/currencies:
+    get:
+      summary: List Currencies
+      description: List selectable currencies for Ad Manager project settings.
+      operationId: listCurrencies
+      tags:
+      - Reference Data
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    currencies:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CurrencyItem'
+
+  /ad-manager/timezones:
+    get:
+      summary: List Timezones
+      description: List selectable timezones for Ad Manager project settings, grouped by region.
+      operationId: listTimezones
+      tags:
+      - Reference Data
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    timezones:
+                      type: object
+                      description: Map of region name to the list of timezone identifiers in that region.
+                      additionalProperties:
+                        type: array
+                        items:
+                          type: string
+                      example:
+                        America: ["America/New_York", "America/Chicago", "America/Los_Angeles"]
+                        Europe: ["Europe/London", "Europe/Paris"]
+
+  /ad-manager/iab-taxonomy:
+    get:
+      summary: List IAB Content Taxonomy
+      description: List the IAB content category taxonomy used for campaign category, competitive category exclusion, and targeting. Returned as a flat list; use `parent_id` and `depth` to reconstruct the hierarchy.
+      operationId: getIabTaxonomy
+      tags:
+      - Reference Data
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    taxonomy:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/IabTaxonomyItem'
+
+  /ad-manager/streams/search:
+    get:
+      summary: Search Content
+      description: Search the service's streams/zones for use as Ad Manager content IDs (VAST/VMAP `content_id`, campaign content targeting).
+      operationId: searchStreams
+      tags:
+      - Reference Data
+      parameters:
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search term matched against content name.
+          example: sports-channel
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    streams:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/StreamSearchItem'
+
+  /ad-manager/{pid}:
+    get:
+      summary: Show Project
+      description: Get a single Ad Manager project, including its settings and the saved skip policy (`settings.skip_policy`). This is the only read path for the skip policy - the skip-policy endpoint itself is write-only.
+      operationId: getProject
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    project:
+                      $ref: '#/components/schemas/Project'
+
+  /ad-manager/{pid}/update:
+    post:
+      summary: Update Project
+      description: Update an Ad Manager project's name and settings.
+      operationId: updateProject
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    project:
+                      $ref: '#/components/schemas/Project'
+
+  /ad-manager/{pid}/delete:
+    post:
+      summary: Delete Project
+      description: Permanently delete an Ad Manager project and all of its advertisers, campaigns, and creatives.
+      operationId: deleteProject
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/skip-policy:
+    post:
+      summary: Save Skip Policy
+      description: >
+        Replace the project's ad-skip policy wholesale with the given `SkipPolicy`.
+        The save is a full replace, so `rules` must always be sent - an empty
+        array clears any saved rules. There is no GET counterpart; read the saved
+        policy back from Show Project's `project.settings.skip_policy`.
+      operationId: saveSkipPolicy
+      tags:
+      - Skip Policy
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - skip_policy
+              properties:
+                skip_policy:
+                  $ref: '#/components/schemas/SkipPolicy'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    skip_policy:
+                      $ref: '#/components/schemas/SkipPolicy'
+
+  /ad-manager/{pid}/summary:
+    post:
+      summary: Project Summary
+      description: Get the performance summary shown on the project dashboard for the given date range.
+      operationId: getProjectSummary
+      tags:
+      - Dashboard
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: Start of the date range (YYYY-MM-DD).
+                  example: "2026-01-01"
+                to:
+                  type: string
+                  description: End of the date range (YYYY-MM-DD).
+                  example: "2026-01-31"
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    summary:
+                      type: object
+                      description: Aggregate delivery metrics for the requested range. Shape mirrors the Reports `summary` object.
+
+  /ad-manager/{pid}/sync:
+    post:
+      summary: Sync Project
+      description: Manually re-sync the project's advertisers, campaigns, and creatives counters.
+      operationId: syncProject
+      tags:
+      - Dashboard
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    synced:
+                      type: object
+                      description: Counts of records re-synced by type.
+                      properties:
+                        advertisers:
+                          type: integer
+                          example: 12
+                        campaigns:
+                          type: integer
+                          example: 34
+                        creatives:
+                          type: integer
+                          example: 56
+
+  /ad-manager/{pid}/advertisers:
+    get:
+      summary: List Advertisers
+      description: List advertisers in a project.
+      operationId: listAdvertisers
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          description: 1-based page number.
+          example: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          description: Number of results per page.
+          example: 20
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search matched against advertiser name.
+          example: acme
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    advertisers:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Advertiser'
+                    total:
+                      type: integer
+                      description: Total number of advertisers matching the query, across all pages.
+                      example: 42
+    post:
+      summary: Create Advertiser
+      description: Create a new advertiser in a project.
+      operationId: createAdvertiser
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdvertiserInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    advertiser:
+                      $ref: '#/components/schemas/Advertiser'
+
+  /ad-manager/{pid}/advertisers/{advId}:
+    get:
+      summary: Show Advertiser
+      description: Get a single advertiser.
+      operationId: getAdvertiser
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/advIdParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    advertiser:
+                      $ref: '#/components/schemas/Advertiser'
+
+  /ad-manager/{pid}/advertisers/{advId}/update:
+    post:
+      summary: Update Advertiser
+      description: Update an advertiser's details.
+      operationId: updateAdvertiser
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/advIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdvertiserInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/advertisers/{advId}/activate:
+    post:
+      summary: Activate Advertiser
+      description: Set an advertiser's status to active.
+      operationId: activateAdvertiser
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/advIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/advertisers/{advId}/pause:
+    post:
+      summary: Pause Advertiser
+      description: Set an advertiser's status to paused. Campaigns belonging to a paused advertiser stop delivering.
+      operationId: pauseAdvertiser
+      tags:
+      - Advertisers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/advIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns:
+    get:
+      summary: List Campaigns
+      description: List campaigns in a project.
+      operationId: listCampaigns
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          example: 20
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search matched against campaign name.
+          example: summer-promo
+      - in: query
+        name: status
+        schema:
+          $ref: '#/components/schemas/CampaignStatus'
+      - in: query
+        name: advertiser_id
+        schema:
+          type: string
+          description: Filter to campaigns belonging to this advertiser.
+          example: adv_8f2a
+      - in: query
+        name: campaign_type
+        schema:
+          $ref: '#/components/schemas/CampaignType'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    campaigns:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Campaign'
+                    total:
+                      type: integer
+                      example: 17
+                    stats:
+                      type: object
+                      description: Campaign counts keyed by status (e.g. `active`, `draft`, `paused`, `archived`), used for list banner tiles.
+                      additionalProperties:
+                        type: integer
+                      example:
+                        active: 5
+                        draft: 2
+                        paused: 1
+                        archived: 9
+    post:
+      summary: Create Campaign
+      description: Create a new campaign in a project.
+      operationId: createCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    campaign:
+                      $ref: '#/components/schemas/Campaign'
+
+  /ad-manager/{pid}/campaigns/{cid}:
+    get:
+      summary: Show Campaign
+      description: Get a single campaign along with its linked creatives.
+      operationId: getCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    campaign:
+                      $ref: '#/components/schemas/Campaign'
+                    linked_creatives:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/LinkedCreative'
+
+  /ad-manager/{pid}/campaigns/{cid}/update:
+    post:
+      summary: Update Campaign
+      description: Update a campaign's settings, budget, pacing, or pod rules. The full `CampaignInput` body is required - each manage tab (Settings, Budget, Pod Rules) merges its changes into the existing campaign client-side before saving.
+      operationId: updateCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    campaign:
+                      $ref: '#/components/schemas/Campaign'
+
+  /ad-manager/{pid}/campaigns/{cid}/archive:
+    post:
+      summary: Archive Campaign
+      description: Archive a campaign. Archived campaigns stop delivering and are excluded from active-campaign counts.
+      operationId: archiveCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns/{cid}/activate:
+    post:
+      summary: Activate Campaign
+      description: Set a campaign's status to active.
+      operationId: activateCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns/{cid}/pause:
+    post:
+      summary: Pause Campaign
+      description: Set a campaign's status to paused.
+      operationId: pauseCampaign
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns/{cid}/delivery:
+    get:
+      summary: Campaign Delivery Status
+      description: Get the current pacing/delivery status of a campaign (budget spent, impressions delivered vs. goal, pacing state).
+      operationId: getCampaignDelivery
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    delivery:
+                      type: object
+                      description: Delivery/pacing status fields for the campaign. Varies by campaign type and pricing model.
+
+  /ad-manager/{pid}/campaigns/{cid}/targeting:
+    get:
+      summary: Show Campaign Targeting
+      description: Get a campaign's targeting rules.
+      operationId: getCampaignTargeting
+      tags:
+      - Targeting
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    targeting:
+                      $ref: '#/components/schemas/Targeting'
+                    from_cache:
+                      type: boolean
+                      description: True when the targeting rules were served from cache rather than read fresh.
+    post:
+      summary: Set Campaign Targeting
+      description: Replace a campaign's targeting rules wholesale.
+      operationId: setCampaignTargeting
+      tags:
+      - Targeting
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Targeting'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns/{cid}/creatives/{creativeId}/link:
+    post:
+      summary: Link Creative to Campaign
+      description: Link a creative to a campaign with an optional rotation weight.
+      operationId: linkCampaignCreative
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      - $ref: '#/components/parameters/creativeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                weight:
+                  type: integer
+                  description: Rotation weight for this creative within the campaign. Higher values are served more often relative to other linked creatives.
+                  example: 100
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/campaigns/{cid}/creatives/{creativeId}/unlink:
+    post:
+      summary: Unlink Creative from Campaign
+      description: Remove a creative's link to a campaign.
+      operationId: unlinkCampaignCreative
+      tags:
+      - Campaigns
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/cidParam'
+      - $ref: '#/components/parameters/creativeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/creatives/search:
+    get:
+      summary: Search Creatives
+      description: Search creatives in a project by name, for use in the campaign creative-linking picker.
+      operationId: searchCreatives
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search matched against creative name.
+          example: summer-30s
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    creatives:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CreativeSearchItem'
+
+  /ad-manager/{pid}/creatives:
+    get:
+      summary: List Creatives
+      description: List creatives in a project.
+      operationId: listCreatives
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          example: 20
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search matched against creative name.
+          example: summer-30s
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    creatives:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Creative'
+                    total:
+                      type: integer
+                      example: 28
+                    approval_stats:
+                      type: object
+                      description: Creative counts keyed by approval status (`pending`, `approved`, `rejected`).
+                      additionalProperties:
+                        type: integer
+                      example:
+                        pending: 3
+                        approved: 24
+                        rejected: 1
+    post:
+      summary: Create Creative
+      description: Create a new creative. `creative_type` determines which fields apply - `media_file` creatives reference an uploaded video (see Get Creative Upload URL), `vast_url` creatives reference a third-party VAST tag.
+      operationId: createCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreativeInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    creative:
+                      $ref: '#/components/schemas/Creative'
+
+  /ad-manager/{pid}/creatives/{rid}:
+    get:
+      summary: Show Creative
+      description: Get a single creative.
+      operationId: getCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/ridParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    creative:
+                      $ref: '#/components/schemas/Creative'
+
+  /ad-manager/{pid}/creatives/{rid}/update:
+    post:
+      summary: Update Creative
+      description: Update a creative's details.
+      operationId: updateCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/ridParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreativeInput'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/creatives/{rid}/activate:
+    post:
+      summary: Activate Creative
+      description: Set a creative's status to active.
+      operationId: activateCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/ridParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/creatives/{rid}/pause:
+    post:
+      summary: Pause Creative
+      description: Set a creative's status to paused. A paused creative is excluded from ad-pod decisioning even if linked to an active campaign.
+      operationId: pauseCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/ridParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/creatives/{rid}/approve:
+    post:
+      summary: Approve Creative
+      description: Set a creative's approval status to approved, allowing it to serve.
+      operationId: approveCreative
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/ridParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdManagerBaseResponse'
+
+  /ad-manager/{pid}/creatives/upload-url:
+    post:
+      summary: Get Creative Upload URL
+      description: Allocate a presigned S3 PUT URL for uploading a `media_file` creative's video asset. Upload the video directly to `presigned_url`, then create the creative with `media_url` set to `object_url`.
+      operationId: getCreativeUploadUrl
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    presigned_url:
+                      type: string
+                      description: Presigned S3 URL to PUT the raw video file to.
+                      example: https://s3.5centscdn.com/ad-manager-uploads/abc123.mp4?X-Amz-Signature=...
+                    object_url:
+                      type: string
+                      description: Public URL of the uploaded object once the PUT completes. Use as `media_url` when creating the creative.
+                      example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+                    creative_uuid:
+                      type: string
+                      description: UUID assigned to the not-yet-created creative, for correlating the upload with the subsequent create request.
+                      example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+
+  /ad-manager/{pid}/creatives/direct-upload:
+    post:
+      summary: Direct Upload Creative
+      description: CORS fallback for browsers that cannot PUT directly to the presigned S3 URL - proxies the raw video body through the API to storage.
+      operationId: creativeDirectUpload
+      tags:
+      - Creatives
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          video/mp4:
+            schema:
+              type: string
+              format: binary
+              description: Raw MP4 video file bytes.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    creative_uuid:
+                      type: string
+                      example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+                    object_url:
+                      type: string
+                      example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+
+  /ad-manager/{pid}/requests:
+    post:
+      summary: List Ad Pod Requests
+      description: List/search the ad-pod request and decision log for a date range, with optional filtering by content, advertiser, campaign, creative, targeting dimension, and IAB break fields.
+      operationId: listAdPodRequests
+      tags:
+      - Ad Pods
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdPodRequestFilters'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      description: Matching ad-pod requests.
+                      items:
+                        $ref: '#/components/schemas/AdPodRequest'
+                    total:
+                      type: integer
+                      example: 963
+
+  /ad-manager/{pid}/requests/{podId}:
+    get:
+      summary: Show Ad Pod Request
+      description: Get the full request, decision, and ad-break timeline detail for a single ad-pod request.
+      operationId: getAdPodRequest
+      tags:
+      - Ad Pods
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - $ref: '#/components/parameters/podIdParam'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    request:
+                      $ref: '#/components/schemas/AdPodRequest'
+
+  /ad-manager/{pid}/reports:
+    post:
+      summary: Run Report
+      description: >
+        Run an aggregate + time-series delivery report for a date range, with
+        optional filtering by advertiser, campaign, creative, content, and
+        targeting dimension. The response is capped at 1,440 time-series data
+        points, so the selected range must not exceed `granularity * 1440` minutes.
+      operationId: getReports
+      tags:
+      - Reports
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportFilters'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/ReportData'
+
+  /ad-manager/{pid}/helpers/targeting:
+    get:
+      summary: Targeting Helper
+      description: Look up selectable values for a campaign targeting dimension (tags, category, language, OS, or browser), optionally filtered by search text. Used to populate targeting typeaheads.
+      operationId: getTargetingHelpers
+      tags:
+      - Helpers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: lookup
+        schema:
+          type: string
+          description: Targeting dimension to look up values for.
+          enum: [tags, category, language, os, browser]
+          example: language
+      - in: query
+        name: q
+        schema:
+          type: string
+          description: Free-text search term.
+          example: eng
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelperItemsResponse'
+
+  /ad-manager/{pid}/helpers/reports:
+    post:
+      summary: Reports Helper
+      description: Look up selectable values for a report filter dimension within a date range, optionally filtered by search text. Used to populate the Reports page's advanced-filter typeaheads.
+      operationId: getReportsHelpers
+      tags:
+      - Helpers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HelperLookupRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelperItemsResponse'
+
+  /ad-manager/{pid}/helpers/requests:
+    post:
+      summary: Ad Pod Requests Helper
+      description: Look up selectable values for an ad-pod request filter dimension within a date range, optionally filtered by search text. Used to populate the Ad Pods page's advanced-filter typeaheads.
+      operationId: getRequestsHelpers
+      tags:
+      - Helpers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HelperLookupRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelperItemsResponse'
+
+  /ad-manager/{pid}/helpers/geo:
+    get:
+      summary: Geo Targeting Helper
+      description: >
+        List geographic targeting nodes. Called with no query parameters, returns
+        the root continent list; called with one of the geoname-id parameters,
+        returns that node's children (e.g. pass `country_geoname_id` to list its
+        subdivisions). Used to populate the hierarchical geo-targeting picker.
+      operationId: getGeoHelpers
+      tags:
+      - Helpers
+      parameters:
+      - $ref: '#/components/parameters/pidParam'
+      - in: query
+        name: continent_geoname_id
+        schema:
+          type: integer
+          example: 6255148
+      - in: query
+        name: country_geoname_id
+        schema:
+          type: integer
+          example: 6252001
+      - in: query
+        name: subdivision_1_geoname_id
+        schema:
+          type: integer
+          example: 5332921
+      - in: query
+        name: subdivision_2_geoname_id
+        schema:
+          type: integer
+          example: 5391959
+      - in: query
+        name: city_geoname_id
+        schema:
+          type: integer
+          example: 5391811
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/AdManagerBaseResponse'
+                - type: object
+                  properties:
+                    geo:
+                      type: array
+                      description: Geo nodes at the requested level. Each item carries exactly one geoname-id field identifying its level (`continent_geoname_id`, `country_geoname_id`, `subdivision_1_geoname_id`, `subdivision_2_geoname_id`, or `city_geoname_id`) plus a display `name`.
+                      items:
+                        $ref: '#/components/schemas/GeoHelperItem'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    pidParam:
+      name: pid
+      in: path
+      description: ID of the Ad Manager project.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 101
+
+    advIdParam:
+      name: advId
+      in: path
+      description: ID of the advertiser.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        example: adv_8f2a
+
+    cidParam:
+      name: cid
+      in: path
+      description: ID of the campaign.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        example: cmp_4c19
+
+    ridParam:
+      name: rid
+      in: path
+      description: ID of the creative.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        example: crv_9a71
+
+    creativeIdParam:
+      name: creativeId
+      in: path
+      description: ID of the creative to link or unlink.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        example: crv_9a71
+
+    podIdParam:
+      name: podId
+      in: path
+      description: ID of the ad-pod request.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        example: pod_7e21c9
+
+  schemas:
+
+    AdManagerBaseResponse:
+      type: object
+      description: Common response envelope for all Ad Manager endpoints. All endpoints return HTTP 200 regardless of outcome; inspect `result` to determine success.
+      properties:
+        result:
+          type: string
+          description: Operation outcome.
+          enum: [success, error]
+          example: success
+        message:
+          type: string
+          description: Human-readable status or error message.
+          example: Saved
+        errors:
+          type: array
+          description: Field-level validation error messages, present on some error responses.
+          items:
+            type: string
+
+    # ── Projects ──
+
+    ProjectUsage:
+      type: object
+      description: Aggregate usage counters for the project for the current calendar month.
+      properties:
+        ad_requests:
+          type: integer
+          example: 128430
+        fill_rate:
+          type: number
+          format: float
+          description: Percentage of ad requests that were filled.
+          example: 87.4
+        impressions:
+          type: integer
+          example: 96210
+        completion_rate:
+          type: number
+          format: float
+          description: Percentage of started ads that played to completion.
+          example: 71.2
+
+    ProjectSettings:
+      type: object
+      properties:
+        timezone:
+          type: string
+          description: IANA timezone identifier used to interpret campaign schedules and reports.
+          example: America/New_York
+        currency_code:
+          type: string
+          description: ISO 4217 currency code for budgets and reports.
+          example: USD
+        currency_symbol:
+          type: string
+          example: $
+        advanced_analytics:
+          type: integer
+          description: 1 when the project has the Ad Manager Advanced Features add-on, which unlocks the advanced report and ad-pod request-log filter dimensions. 0 otherwise.
+          enum: [0, 1]
+          example: 1
+        max_advertisers:
+          type: integer
+          description: Plan-driven limit on the number of advertisers in this project.
+          example: 100
+        max_campaigns:
+          type: integer
+          description: Plan-driven limit on the number of campaigns in this project.
+          example: 500
+        max_creatives:
+          type: integer
+          description: Plan-driven limit on the number of creatives in this project.
+          example: 500
+        analytics_retention_period:
+          type: integer
+          description: Analytics retention window, in years.
+          example: 2
+        skip_policy:
+          allOf:
+          - $ref: '#/components/schemas/SkipPolicy'
+          nullable: true
+          description: The project's saved ad-skip policy. Null/absent when nothing has been saved yet. This is the only read path for the skip policy.
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        uuid:
+          type: string
+          description: Project UUID. Used as the `publisher_id` query parameter on the VAST/VMAP ad decisioning endpoints.
+          example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+        name:
+          type: string
+          example: Main Website
+        settings:
+          $ref: '#/components/schemas/ProjectSettings'
+        advertisers_count:
+          type: integer
+          example: 12
+        campaigns_count:
+          type: integer
+          example: 34
+        creatives_count:
+          type: integer
+          example: 56
+        active_campaigns_count:
+          type: integer
+          example: 9
+        usage_this_month:
+          allOf:
+          - $ref: '#/components/schemas/ProjectUsage'
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2026-02-01T08:00:00Z"
+
+    ProjectInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          description: Project display name. Required.
+          example: Main Website
+        timezone:
+          type: string
+          description: IANA timezone identifier.
+          example: America/New_York
+        currency_code:
+          type: string
+          example: USD
+        currency_symbol:
+          type: string
+          example: $
+        advanced_analytics:
+          type: integer
+          description: 1 to enable the Ad Manager Advanced Features add-on, 0 to disable.
+          enum: [0, 1]
+          example: 1
+
+    # ── Service-wide stats ──
+
+    StatQuota:
+      type: object
+      description: A count measured against a plan limit, with a pre-computed percentage.
+      properties:
+        count:
+          type: integer
+          example: 3
+        limit:
+          type: integer
+          example: 10
+        percent:
+          type: number
+          format: float
+          example: 30
+
+    StatTotal:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 128
+
+    StatMonthlyHits:
+      type: object
+      properties:
+        limit:
+          type: integer
+          example: 1000000
+        limit_formatted:
+          type: string
+          example: "1M"
+        used_percent:
+          type: number
+          format: float
+          example: 42.5
+
+    StatHourlyThroughput:
+      type: object
+      properties:
+        current:
+          type: integer
+          example: 3200
+        current_formatted:
+          type: string
+          example: "3.2k"
+        limit:
+          type: integer
+          example: 10000
+        limit_formatted:
+          type: string
+          example: "10k"
+        percent:
+          type: number
+          format: float
+          example: 32
+
+    StatUsageThisMonth:
+      type: object
+      properties:
+        ad_requests:
+          type: integer
+          example: 128430
+        ad_requests_formatted:
+          type: string
+          example: "128.43k"
+        impressions:
+          type: integer
+          example: 96210
+        impressions_formatted:
+          type: string
+          example: "96.21k"
+        avg_fill_rate:
+          type: number
+          format: float
+          example: 87.4
+        avg_fill_rate_formatted:
+          type: string
+          example: "87.4%"
+        avg_completion_rate:
+          type: number
+          format: float
+          example: 71.2
+        avg_completion_rate_formatted:
+          type: string
+          example: "71.2%"
+
+    AdManagerStats:
+      type: object
+      description: Aggregate counters across every Ad Manager project on the service, plus the shared billing tenant's allowances.
+      properties:
+        projects:
+          $ref: '#/components/schemas/StatQuota'
+        advertisers:
+          $ref: '#/components/schemas/StatTotal'
+        campaigns:
+          $ref: '#/components/schemas/StatTotal'
+        creatives:
+          $ref: '#/components/schemas/StatTotal'
+        monthly_hits:
+          $ref: '#/components/schemas/StatMonthlyHits'
+        hourly_throughput:
+          $ref: '#/components/schemas/StatHourlyThroughput'
+        usage_this_month:
+          $ref: '#/components/schemas/StatUsageThisMonth'
+
+    # ── Skip policy ──
+
+    SkipSpec:
+      type: object
+      description: A single skip decision - whether an ad may be skipped and, if so, after how long. `offset_type`/`offset_value` only apply when `skippable` is true.
+      required:
+      - skippable
+      properties:
+        skippable:
+          type: boolean
+          example: true
+        offset_type:
+          type: string
+          enum: [seconds, percent]
+          description: Unit for `offset_value` - a flat wait in seconds, or a percentage of the ad's own duration.
+          example: seconds
+        offset_value:
+          type: number
+          description: Offset after which the ad becomes skippable, in the unit given by `offset_type`. Omitted when exactly 0.
+          example: 5
+
+    SkipRule:
+      allOf:
+      - $ref: '#/components/schemas/SkipSpec'
+      - type: object
+        description: One project skip rule - exactly one selector (`position`, `longest`, or `shortest`) plus the skip spec applied when it matches.
+        properties:
+          position:
+            type: string
+            description: 1-based position of the ad within the break, or the literal value `last`.
+            example: "1"
+          longest:
+            type: boolean
+            description: Match the longest ad in the break.
+            example: false
+          shortest:
+            type: boolean
+            description: Match the shortest ad in the break.
+            example: false
+
+    SkipPolicy:
+      type: object
+      description: Project-level ad-skip policy - a default skip spec plus up to 20 ordered override rules.
+      required:
+      - default
+      properties:
+        default:
+          $ref: '#/components/schemas/SkipSpec'
+        rules:
+          type: array
+          description: Ordered override rules, evaluated in order. Maximum 20.
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/SkipRule'
+
+    # ── Advertisers ──
+
+    AdvertiserStatus:
+      type: string
+      enum: [active, paused]
+
+    Advertiser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: adv_8f2a
+        publisher_id:
+          type: string
+          example: "10042"
+        name:
+          type: string
+          example: Acme Corp
+        contact_name:
+          type: string
+          example: Jane Smith
+        contact_email:
+          type: string
+          format: email
+          example: jane@acmecorp.com
+        status:
+          $ref: '#/components/schemas/AdvertiserStatus'
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+
+    AdvertiserInput:
+      type: object
+      required:
+      - publisher_id
+      - name
+      properties:
+        publisher_id:
+          type: integer
+          description: Publisher-side identifier for the advertiser.
+          example: 10042
+        name:
+          type: string
+          maxLength: 120
+          description: Advertiser display name. Required.
+          example: Acme Corp
+        contact_name:
+          type: string
+          example: Jane Smith
+        contact_email:
+          type: string
+          format: email
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+          example: jane@acmecorp.com
+
+    # ── Campaigns ──
+
+    PricingModel:
+      type: string
+      enum: [cpm, cpcv, flat, house]
+
+    PacingMode:
+      type: string
+      enum: [even, frontloaded, asap]
+
+    PodPosition:
+      type: string
+      enum: [any, first, last, first_or_last]
+
+    CampaignType:
+      type: string
+      enum: [guaranteed_impressions, budget_based, share_of_voice, house]
+
+    CampaignStatus:
+      type: string
+      enum: [draft, active, paused, archived]
+
+    Budget:
+      type: object
+      required:
+      - pricing_model
+      properties:
+        pricing_model:
+          $ref: '#/components/schemas/PricingModel'
+        cpm_micros:
+          type: integer
+          format: int64
+          description: Cost per thousand impressions, in micros. E.g. 5000000 = $5.00 CPM.
+          example: 5000000
+        total_budget_micros:
+          type: integer
+          format: int64
+          description: Total flight budget, in micros.
+          example: 500000000
+        daily_budget_cap_micros:
+          type: integer
+          format: int64
+          description: Daily budget cap, in micros.
+          example: 50000000
+        impression_goal:
+          type: integer
+          description: Target impression count for the flight.
+          example: 1000000
+        daily_impression_cap:
+          type: integer
+          example: 100000
+        lifetime_impression_cap:
+          type: integer
+          example: 1000000
+
+    Pacing:
+      type: object
+      properties:
+        pacing_mode:
+          $ref: '#/components/schemas/PacingMode'
+
+    PodRules:
+      type: object
+      properties:
+        allow_in_pods:
+          type: boolean
+          description: Whether this campaign's ads may share a break with ads from other campaigns.
+          example: true
+        max_ads_per_pod:
+          type: integer
+          description: Maximum number of this campaign's ads in a single pod.
+          example: 1
+        max_seconds_per_pod:
+          type: integer
+          description: Maximum combined seconds of this campaign's ads in a single pod.
+          example: 30
+        allow_multiple_creatives_per_pod:
+          type: boolean
+          example: false
+        allow_same_creative_repeat:
+          type: boolean
+          description: Whether the same creative may appear more than once in the same pod.
+          example: false
+        preferred_pod_position:
+          $ref: '#/components/schemas/PodPosition'
+        competitive_category:
+          type: array
+          description: IAB taxonomy category IDs this campaign must not share a pod with. Always sent as an array (empty if unused), never omitted.
+          items:
+            type: integer
+          example: [10, 25]
+
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cmp_4c19
+        admanager_id:
+          type: integer
+          example: 4019
+        advertiser_id:
+          type: string
+          example: adv_8f2a
+        advertiser_name:
+          type: string
+          example: Acme Corp
+        name:
+          type: string
+          example: Summer Promo 2026
+        category:
+          type: string
+          description: IAB category ID for the campaign's own content category.
+          example: "3"
+        campaign_type:
+          $ref: '#/components/schemas/CampaignType'
+        status:
+          $ref: '#/components/schemas/CampaignStatus'
+        priority:
+          type: integer
+          description: Delivery priority. Lower values are higher priority (10=Very High, 30=High, 50=Medium, 80=Low).
+          example: 50
+        timezone:
+          type: string
+          example: America/New_York
+        start_at:
+          type: string
+          format: date-time
+          description: Flight start, RFC3339 with the campaign's UTC offset.
+          example: "2026-06-01T00:00:00-04:00"
+        end_at:
+          type: string
+          format: date-time
+          example: "2026-08-31T23:59:59-04:00"
+        budget:
+          $ref: '#/components/schemas/Budget'
+        pacing:
+          $ref: '#/components/schemas/Pacing'
+        pacing_mode:
+          type: string
+          description: Convenience flat copy of `pacing.pacing_mode`.
+          example: even
+        pod_rules:
+          $ref: '#/components/schemas/PodRules'
+        share_of_voice_percent:
+          type: number
+          format: float
+          description: Percentage of eligible pod inventory reserved for this campaign. Only applicable to `share_of_voice` campaigns.
+          example: 25
+        fallback_allowed:
+          type: boolean
+          description: Whether this campaign may fill as a fallback when no other campaign matches.
+          example: false
+        is_house:
+          type: boolean
+          example: false
+        pricing_model:
+          allOf:
+          - $ref: '#/components/schemas/PricingModel'
+          description: Flat copy of `budget.pricing_model`, present on the campaigns LIST endpoint. The detail endpoint nests this field under `budget` instead.
+        cpm_micros:
+          type: integer
+          format: int64
+          description: Flat copy of `budget.cpm_micros`, present on the campaigns LIST endpoint.
+          example: 5000000
+        total_budget_micros:
+          type: integer
+          format: int64
+          description: Flat copy of `budget.total_budget_micros`, present on the campaigns LIST endpoint.
+          example: 500000000
+        daily_budget_cap_micros:
+          type: integer
+          format: int64
+          example: 50000000
+        impression_goal:
+          type: integer
+          example: 1000000
+        daily_impression_cap:
+          type: integer
+          example: 100000
+        lifetime_impression_cap:
+          type: integer
+          example: 1000000
+
+    CampaignInput:
+      type: object
+      required:
+      - name
+      - advertiser_id
+      - campaign_type
+      - budget
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          example: Summer Promo 2026
+        advertiser_id:
+          type: string
+          example: adv_8f2a
+        campaign_type:
+          $ref: '#/components/schemas/CampaignType'
+        budget:
+          $ref: '#/components/schemas/Budget'
+        timezone:
+          type: string
+          example: America/New_York
+        start_at:
+          type: string
+          format: date-time
+          description: Flight start, RFC3339 with UTC offset (e.g. `2026-06-01T00:00:00-04:00`). Space-separated wall-clock timestamps are rejected.
+          example: "2026-06-01T00:00:00-04:00"
+        end_at:
+          type: string
+          format: date-time
+          example: "2026-08-31T23:59:59-04:00"
+        priority:
+          type: integer
+          example: 50
+        pacing:
+          $ref: '#/components/schemas/Pacing'
+        pod_rules:
+          $ref: '#/components/schemas/PodRules'
+        targeting:
+          $ref: '#/components/schemas/Targeting'
+        creative_ids:
+          type: array
+          items:
+            type: string
+          example: [crv_9a71, crv_9a72]
+        creative_weights:
+          type: object
+          description: Rotation weight per creative ID.
+          additionalProperties:
+            type: integer
+          example:
+            crv_9a71: 60
+            crv_9a72: 40
+        fallback_allowed:
+          type: boolean
+          example: false
+        is_house:
+          type: boolean
+          example: false
+        share_of_voice_percent:
+          type: number
+          format: float
+          example: 25
+        category:
+          type: string
+          example: "3"
+        competitive_category:
+          type: array
+          items:
+            type: integer
+          example: [10, 25]
+
+    LinkedCreative:
+      type: object
+      properties:
+        id:
+          type: string
+          example: crv_9a71
+        name:
+          type: string
+          example: Summer 30s Spot
+        creative_type:
+          type: string
+          example: media_file
+        duration_seconds:
+          type: number
+          example: 30
+        status:
+          type: string
+          example: active
+        approval_status:
+          type: string
+          example: approved
+        weight:
+          type: integer
+          description: Rotation weight for this creative within the campaign.
+          example: 100
+
+    # ── Targeting ──
+
+    TargetingPlacement:
+      type: string
+      enum: [preroll, midroll, postroll]
+
+    Targeting:
+      type: object
+      properties:
+        include_tags:
+          type: array
+          description: Content tags to require a match on.
+          items:
+            type: string
+          example: [sports, live]
+        exclude_tags:
+          type: array
+          items:
+            type: string
+          example: [kids]
+        categories:
+          type: array
+          description: IAB content category IDs to target.
+          items:
+            type: integer
+          example: [3, 7]
+        content_ids:
+          type: array
+          description: Content allowlist. Replaces the legacy `stream_ids` field.
+          items:
+            type: string
+          example: ["1024", "1025"]
+        placements:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetingPlacement'
+        devices:
+          type: array
+          description: IAB device-type IDs (1=Mobile/Tablet-General, 2=Personal Computer, 3=Connected TV, 4=Phone, 5=Tablet, 6=Connected Device, 7=Set Top Box, 8=OOH Device).
+          items:
+            type: integer
+          example: [1, 3]
+        languages:
+          type: array
+          items:
+            type: string
+          example: [en, es]
+        oses:
+          type: array
+          items:
+            type: string
+          example: [iOS, Android]
+        browsers:
+          type: array
+          items:
+            type: string
+          example: [Chrome, Safari]
+        continent_geoname_ids:
+          type: array
+          items:
+            type: integer
+          example: [6255149]
+        country_geoname_ids:
+          type: array
+          items:
+            type: integer
+          example: [6252001]
+        subdivision_1_geoname_ids:
+          type: array
+          items:
+            type: integer
+          example: [5332921]
+        subdivision_2_geoname_ids:
+          type: array
+          items:
+            type: integer
+          example: [5391959]
+        city_geoname_ids:
+          type: array
+          items:
+            type: integer
+          example: [5391811]
+
+    # ── Creatives ──
+
+    CreativeType:
+      type: string
+      enum: [media_file, vast_url]
+
+    CreativeStatus:
+      type: string
+      enum: [active, paused]
+
+    ApprovalStatus:
+      type: string
+      enum: [pending, approved, rejected]
+
+    TrackingMode:
+      type: string
+      enum: [proxy, passthrough]
+
+    VastQueryParam:
+      type: object
+      required:
+      - name
+      - type
+      description: A custom query parameter appended to a `vast_url` creative's tag URL when it is called.
+      properties:
+        name:
+          type: string
+          example: cachebuster
+        type:
+          type: string
+          enum: [forward, from-query-parameter, custom, from-variable, from-header]
+          description: |
+            Where the value comes from:
+              - `forward` - forward the incoming request's query parameter of the same name
+              - `from-query-parameter` - read from a differently-named incoming query parameter (given in `value`)
+              - `custom` - use the literal `value`
+              - `from-variable` - substitute a built-in decisioning variable (e.g. `${CACHE_BUSTER}`, `${TIMESTAMP}`, `${DEVICE_IP}`, `${DEVICE_UA}`, `${MAX_DURATION}`, `${MIN_AD_LENGTH}`, `${MAX_AD_LENGTH}`, `${MAX_ADS}`, `${FILL_CEILING_SECONDS}`, `${BREAK_POSITION}`, `${BREAK_ID}`, `${TRANSACTION_ID}`, `${REQUEST_ID}`)
+              - `from-header` - read from an incoming request header (given in `value`)
+          example: from-variable
+        value:
+          type: string
+          example: "${CACHE_BUSTER}"
+
+    AdOriginHeader:
+      type: object
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          example: X-Custom-Auth
+        value:
+          type: string
+          example: secret-token
+
+    AdOrigin:
+      type: object
+      properties:
+        customHeaders:
+          type: array
+          description: Custom headers sent when the decisioning API calls this creative's `vast_url`. Maximum 50.
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/AdOriginHeader'
+
+    Creative:
+      type: object
+      properties:
+        id:
+          type: string
+          example: crv_9a71
+        admanager_id:
+          type: integer
+          example: 9071
+        name:
+          type: string
+          example: Summer 30s Spot
+        creative_type:
+          $ref: '#/components/schemas/CreativeType'
+        status:
+          $ref: '#/components/schemas/CreativeStatus'
+        approval_status:
+          $ref: '#/components/schemas/ApprovalStatus'
+        duration_seconds:
+          type: number
+          example: 30
+        media_url:
+          type: string
+          description: Video asset URL. Set for `media_file` creatives.
+          example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+        vast_url:
+          type: string
+          description: Third-party VAST tag URL. Set for `vast_url` creatives.
+          example: https://ads.example.com/vast?id=123
+        click_url:
+          type: string
+          example: https://acmecorp.com/summer-sale
+        mime_type:
+          type: string
+          example: video/mp4
+        width:
+          type: integer
+          example: 1920
+        height:
+          type: integer
+          example: 1080
+        bitrate:
+          type: integer
+          description: Video bitrate, in bits per second.
+          example: 4000000
+        tracking_mode:
+          $ref: '#/components/schemas/TrackingMode'
+        vast_query_params:
+          type: array
+          items:
+            $ref: '#/components/schemas/VastQueryParam'
+        ad_origin:
+          $ref: '#/components/schemas/AdOrigin'
+        skip_override:
+          allOf:
+          - $ref: '#/components/schemas/SkipSpec'
+          nullable: true
+          description: Per-creative ad-skip override (`media_file` only). When set, wins over the project skip policy and any per-request `skipoffset`/`skip_policy` override.
+        metadata:
+          type: object
+          description: Free-form metadata. Used to store UI-only flags such as `allow_prefetch`.
+
+    CreativeInput:
+      type: object
+      required:
+      - name
+      - creative_type
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          example: Summer 30s Spot
+        creative_type:
+          $ref: '#/components/schemas/CreativeType'
+        duration_seconds:
+          type: number
+          description: Required for `media_file` creatives. Maximum 180 seconds.
+          example: 30
+        media_url:
+          type: string
+          description: Required for `media_file` creatives. Set from `object_url` returned by the upload-url endpoint.
+          example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+        vast_url:
+          type: string
+          description: Required for `vast_url` creatives.
+          example: https://ads.example.com/vast?id=123
+        click_url:
+          type: string
+          example: https://acmecorp.com/summer-sale
+        mime_type:
+          type: string
+          example: video/mp4
+        width:
+          type: integer
+          example: 1920
+        height:
+          type: integer
+          example: 1080
+        bitrate:
+          type: integer
+          example: 4000000
+        tracking_mode:
+          $ref: '#/components/schemas/TrackingMode'
+        vast_query_params:
+          type: array
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/VastQueryParam'
+        ad_origin:
+          $ref: '#/components/schemas/AdOrigin'
+        skip_override:
+          allOf:
+          - $ref: '#/components/schemas/SkipSpec'
+          nullable: true
+        metadata:
+          type: object
+
+    CreativeSearchItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: crv_9a71
+        name:
+          type: string
+          example: Summer 30s Spot
+        creative_type:
+          type: string
+          example: media_file
+        duration_seconds:
+          type: number
+          example: 30
+
+    # ── Ad Pods ──
+
+    FillStatus:
+      type: string
+      enum: [full, underfilled, no_fill]
+
+    BreakPosition:
+      type: integer
+      description: IAB BREAKPOSITION - 1=pre-roll, 2=mid-roll, 3=post-roll, 4=standalone.
+      enum: [1, 2, 3, 4]
+
+    AdPodRequestFilters:
+      type: object
+      description: |
+        If `resource_type`-style filters are omitted, all matching requests in the
+        date range are returned. Array-valued filters are OR'd within the field and
+        AND'd across fields. `content_ids` accepts the sentinel `__none__` to match
+        requests that carried no `content_id`. Most dimensions beyond `content_ids`
+        require the project's Ad Manager Advanced Features add-on.
+      properties:
+        from:
+          type: string
+          example: "2026-01-01"
+        to:
+          type: string
+          example: "2026-01-31"
+        r:
+          type: string
+          description: Combined date range, alternative to `from`/`to`.
+          example: "2026-01-01 00:00:00 - 2026-01-31 23:59:59"
+        page:
+          type: integer
+          example: 1
+        content_ids:
+          type: array
+          items:
+            type: string
+          example: ["1024", "__none__"]
+        advertiser_ids:
+          type: array
+          items:
+            type: string
+          example: [adv_8f2a]
+        campaign_ids:
+          type: array
+          items:
+            type: string
+          example: [cmp_4c19]
+        creative_ids:
+          type: array
+          items:
+            type: string
+          example: [crv_9a71]
+        content_tags:
+          type: array
+          items:
+            type: string
+          example: [sports]
+        placements:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetingPlacement'
+        categories:
+          type: array
+          items:
+            type: integer
+          example: [3]
+        devices:
+          type: array
+          items:
+            type: integer
+          example: [1, 3]
+        languages:
+          type: array
+          items:
+            type: string
+          example: [en]
+        oses:
+          type: array
+          items:
+            type: string
+          example: [iOS]
+        browsers:
+          type: array
+          items:
+            type: string
+          example: [Chrome]
+        fill_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/FillStatus'
+        decision_statuses:
+          type: array
+          items:
+            type: string
+          example: [decided]
+        ip:
+          type: array
+          items:
+            type: string
+          example: ["203.0.113.10"]
+        user_agent:
+          type: array
+          items:
+            type: string
+        max_duration:
+          type: array
+          description: Break fill target, seconds (IAB BREAKMAXDURATION).
+          items:
+            type: integer
+          example: [30]
+        min_ad_length:
+          type: array
+          description: Per-ad minimum duration (IAB BREAKMINADLENGTH).
+          items:
+            type: integer
+        max_ad_length:
+          type: array
+          description: Per-ad maximum duration (IAB BREAKMAXADLENGTH).
+          items:
+            type: integer
+        max_ads:
+          type: array
+          description: Pod-size cap (IAB BREAKMAXADS).
+          items:
+            type: integer
+        fill_ceiling_seconds:
+          type: array
+          items:
+            type: integer
+        break_position:
+          type: array
+          items:
+            $ref: '#/components/schemas/BreakPosition'
+        break_ids:
+          type: array
+          items:
+            type: string
+        transaction_ids:
+          type: array
+          items:
+            type: string
+        continent_geoname_ids:
+          type: array
+          items:
+            type: integer
+        country_geoname_ids:
+          type: array
+          items:
+            type: integer
+        subdivision_1_geoname_ids:
+          type: array
+          items:
+            type: integer
+        subdivision_2_geoname_ids:
+          type: array
+          items:
+            type: integer
+        city_geoname_ids:
+          type: array
+          items:
+            type: integer
+
+    AdPodDecisionItem:
+      type: object
+      description: One ad selected to fill part of the pod.
+      properties:
+        campaign:
+          type: object
+          properties:
+            id:
+              type: string
+              example: cmp_4c19
+            name:
+              type: string
+              example: Summer Promo 2026
+        creative:
+          type: object
+          properties:
+            id:
+              type: string
+              example: crv_9a71
+            name:
+              type: string
+              example: Summer 30s Spot
+        duration_seconds:
+          type: number
+          example: 30
+        selection_reason:
+          type: string
+          description: Why this ad was selected (e.g. pacing/priority explanation).
+          example: highest priority match
+        spend_micros:
+          type: integer
+          format: int64
+          example: 150000
+        events:
+          type: array
+          description: Beacon/tracking events recorded for this pod item.
+          items:
+            type: object
+
+    AdPodDecision:
+      type: object
+      properties:
+        fill_status:
+          $ref: '#/components/schemas/FillStatus'
+        break_duration_seconds:
+          type: number
+          description: Requested break fill target, seconds.
+          example: 30
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdPodDecisionItem'
+
+    AdPodRequest:
+      type: object
+      description: One logged ad-pod request, its decisioning inputs, and the resulting fill decision.
+      properties:
+        id:
+          type: string
+          example: pod_7e21c9
+        request_time:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+        content_id:
+          type: string
+          example: "1024"
+        placement:
+          $ref: '#/components/schemas/TargetingPlacement'
+        device:
+          type: integer
+          description: IAB device-type ID.
+          example: 3
+        language:
+          type: string
+          example: en
+        os:
+          type: string
+          example: iOS
+        browser:
+          type: string
+          example: Chrome
+        category:
+          type: string
+          example: "3"
+        content_tags:
+          type: array
+          items:
+            type: string
+          example: [sports]
+        ip:
+          type: string
+          example: "203.0.113.10"
+        user_agent:
+          type: string
+          example: Mozilla/5.0 (compatible; SSAI-Player/1.0)
+        max_duration:
+          type: integer
+          description: Requested break fill target, seconds (IAB BREAKMAXDURATION).
+          example: 30
+        min_ad_length:
+          type: integer
+          example: 5
+        max_ad_length:
+          type: integer
+          example: 30
+        max_ads:
+          type: integer
+          example: 4
+        fill_ceiling_seconds:
+          type: integer
+          example: 35
+        break_position:
+          $ref: '#/components/schemas/BreakPosition'
+        break_id:
+          type: string
+          example: break-1
+        transaction_id:
+          type: string
+          example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+        decision_status:
+          type: string
+          example: decided
+        fill_status:
+          $ref: '#/components/schemas/FillStatus'
+        warnings:
+          type: array
+          description: Non-fatal parse warnings the decisioning API attached to this request (e.g. an invalid or out-of-range parameter that was ignored).
+          items:
+            type: string
+        selected_duration_seconds:
+          type: number
+          description: Total duration actually filled, seconds.
+          example: 30
+        pod_decision:
+          $ref: '#/components/schemas/AdPodDecision'
+
+    # ── Reports ──
+
+    ReportFilters:
+      type: object
+      properties:
+        from:
+          type: string
+          example: "2026-01-01"
+        to:
+          type: string
+          example: "2026-01-31"
+        granularity:
+          type: integer
+          description: Time-bucket size, in minutes.
+          enum: [1, 5, 10, 15, 30, 60, 180, 360, 720, 1440, 2880, 10080]
+          example: 60
+        advertiser_ids:
+          type: array
+          items:
+            type: string
+        campaign_ids:
+          type: array
+          items:
+            type: string
+        creative_ids:
+          type: array
+          items:
+            type: string
+        content_ids:
+          type: array
+          items:
+            type: string
+        content_tags:
+          type: array
+          items:
+            type: string
+        campaign_categories:
+          type: array
+          items:
+            type: integer
+        categories:
+          type: array
+          items:
+            type: integer
+        placements:
+          type: array
+          items:
+            type: string
+        devices:
+          type: array
+          items:
+            type: integer
+        languages:
+          type: array
+          items:
+            type: string
+        oses:
+          type: array
+          items:
+            type: string
+        browsers:
+          type: array
+          items:
+            type: string
+        fill_statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/FillStatus'
+        break_positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BreakPosition'
+        break_ids:
+          type: array
+          items:
+            type: string
+        transaction_ids:
+          type: array
+          items:
+            type: string
+        continent_geoname_ids:
+          type: array
+          items:
+            type: integer
+        country_geoname_ids:
+          type: array
+          items:
+            type: integer
+        subdivision_1_geoname_ids:
+          type: array
+          items:
+            type: integer
+        subdivision_2_geoname_ids:
+          type: array
+          items:
+            type: integer
+        city_geoname_ids:
+          type: array
+          items:
+            type: integer
+
+    ReportSummary:
+      type: object
+      properties:
+        ad_requests:
+          type: integer
+          example: 128430
+        filled_requests:
+          type: integer
+          example: 112230
+        fill_rate:
+          type: number
+          format: float
+          description: Percentage of ad requests filled.
+          example: 87.4
+        impressions:
+          type: integer
+          example: 96210
+        starts:
+          type: integer
+          example: 95800
+        first_quartiles:
+          type: integer
+          example: 91000
+        midpoints:
+          type: integer
+          example: 85000
+        third_quartiles:
+          type: integer
+          example: 78000
+        completes:
+          type: integer
+          example: 68500
+        completion_rate:
+          type: number
+          format: float
+          description: Percentage of started ads that played to completion.
+          example: 71.2
+        clicks:
+          type: integer
+          example: 1230
+        ctr:
+          type: number
+          format: float
+          description: Click-through rate, percentage.
+          example: 1.28
+        spend_micros:
+          type: integer
+          format: int64
+          example: 481050000
+        ecpm_micros:
+          type: integer
+          format: int64
+          description: Effective CPM, in micros.
+          example: 5000000
+        errors:
+          type: integer
+          example: 12
+
+    ReportTimelinePoint:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:00:00Z"
+        ad_requests:
+          type: integer
+          example: 512
+        fill_rate:
+          type: number
+          format: float
+          example: 88.1
+        impressions:
+          type: integer
+          example: 451
+        clicks:
+          type: integer
+          example: 6
+        ctr:
+          type: number
+          format: float
+          example: 1.33
+        completes:
+          type: integer
+          example: 320
+        completion_rate:
+          type: number
+          format: float
+          example: 71.0
+        spend_micros:
+          type: integer
+          format: int64
+          example: 2255000
+        ecpm_micros:
+          type: integer
+          format: int64
+          example: 5000000
+        errors:
+          type: integer
+          example: 1
+
+    ReportData:
+      type: object
+      properties:
+        summary:
+          $ref: '#/components/schemas/ReportSummary'
+        data:
+          type: array
+          description: Per-time-bucket metrics for the requested range and granularity.
+          items:
+            $ref: '#/components/schemas/ReportTimelinePoint'
+
+    # ── Helpers ──
+
+    HelperLookupRequest:
+      type: object
+      properties:
+        lookup:
+          type: string
+          description: Dimension to look up values for.
+          example: campaign_id
+        from:
+          type: string
+          example: "2026-01-01"
+        to:
+          type: string
+          example: "2026-01-31"
+        q:
+          type: string
+          description: Free-text search term.
+          example: acme
+
+    HelperItem:
+      type: object
+      description: One selectable value. `id`/`value` is the value to submit as a filter; `name`/`label`/`text` is the display label. Both shapes appear depending on `lookup`.
+      properties:
+        id:
+          type: string
+          example: cmp_4c19
+        name:
+          type: string
+          example: Summer Promo 2026
+
+    HelperItemsResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/AdManagerBaseResponse'
+      - type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/HelperItem'
+
+    GeoHelperItem:
+      type: object
+      description: One geo node. Exactly one of the geoname-id fields is present, identifying the node's level.
+      properties:
+        continent_geoname_id:
+          type: integer
+          example: 6255149
+        country_geoname_id:
+          type: integer
+          example: 6252001
+        subdivision_1_geoname_id:
+          type: integer
+          example: 5332921
+        subdivision_2_geoname_id:
+          type: integer
+          example: 5391959
+        city_geoname_id:
+          type: integer
+          example: 5391811
+        name:
+          type: string
+          example: United States
+
+    # ── Reference data ──
+
+    CurrencyItem:
+      type: object
+      properties:
+        code:
+          type: string
+          example: USD
+        name:
+          type: string
+          example: US Dollar
+        symbol:
+          type: string
+          example: $
+
+    IabTaxonomyItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        parent_id:
+          type: integer
+          nullable: true
+          example: null
+        name:
+          type: string
+          example: Business
+        depth:
+          type: integer
+          description: Nesting depth within the taxonomy, used to indent the category tree client-side.
+          example: 1
+
+    StreamSearchItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1024
+        name:
+          type: string
+          example: sports-channel

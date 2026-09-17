@@ -171,6 +171,21 @@
             ]
           },
           {
+            "group": "Ad Manager",
+            "pages": [
+              {
+                "group": "Management",
+                "pages": [],
+                "openapi": "api-reference/Ad-Manager-API.yaml"
+              },
+              {
+                "group": "Ad Decisioning",
+                "pages": [],
+                "openapi": "api-reference/Ad-Manager-Decisioning-API.yaml"
+              }
+            ]
+          },
+          {
             "group": "SimpleDNS",
             "pages": [],
             "openapi": "api-reference/SimpleDNS-API.yaml"
