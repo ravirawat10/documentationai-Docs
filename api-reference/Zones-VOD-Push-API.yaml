@@ -24,6 +24,8 @@ tags:
   description: File import and file manager operations
 - name: Restore & Cache Purge
   description: Content purge and zone restore operations
+- name: Ad Insertion
+  description: Ad insertion configuration and management
 paths:
   /zones/vod/push:
     get:
@@ -4030,6 +4032,833 @@ paths:
                     type: string
                     description: Error message recorded for this operation, or empty string if none.
                     example: ""
+  /zones/vod/push/{zoneid}/adinsertion:
+    put:
+      tags:
+      - Ad Insertion
+      summary: Enable Ad Insertion
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Creates the ad insertion record for the VoD push zone. Requires the service to have Advanced Features enabled and an available ad insertion slot.'
+      operationId: zoneAdInsertionCreatePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneAdInsertionRequest'
+            example:
+              enabled: Y
+              provider: Google Ad Manager
+              advanced_analytics: 1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionResult'
+    post:
+      tags:
+      - Ad Insertion
+      summary: Update Ad Insertion Settings
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Updates the ad insertion record for the VoD push zone. The record must already exist (i.e. ad insertion must have been enabled first).'
+      operationId: zoneAdInsertionUpdatePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneAdInsertionRequest'
+            example:
+              enabled: Y
+              provider: Google Ad Manager
+              advanced_analytics: 1
+              transcodingProfileId: 42
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionResult'
+  /zones/vod/push/{zoneid}/adinsertion/status:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Insertion Status
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns a human-readable provisioning status for the zone''s ad insertion configuration (e.g. not configured, activating, ready).'
+      operationId: zoneAdInsertionGetStatusPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      responses:
+        '200':
+          description: Plain-text status message.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Ad Insertion Not Enabled
+  /zones/vod/push/{zoneid}/adinsertion/server:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Configure Ad Server
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sets the upstream VAST/VMAP ad server URL, query parameters, and custom origin headers. Selecting the avails.5centscdn.com-vmap template unlocks and enforces the Schedules feature.'
+      operationId: zoneAdInsertionUpdateAdServerPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneAdServerRequest'
+            example:
+              template: avails.5centscdn.com-vmap
+              url: https://avails.5centscdn.com/v1/vmap
+              queryParameters:
+              - name: publisher_id
+                type: custom
+                value: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+              adOrigin:
+                customHeaders: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdServerResult'
+  /zones/vod/push/{zoneid}/adinsertion/replacement:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Configure Ad Replacement
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Configures ad splicing behaviour for the zone. Unlike live streams, VoD ad replacement has no independent enable flag - turning ad insertion off entirely is done via Enable/Update Ad Insertion Settings.'
+      operationId: zoneAdInsertionUpdateAdReplacementPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneAdReplacementRequest'
+            example:
+              spliceMode: segment
+              insertionMode: ssai
+              gapFillerEnabled: N
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdReplacementResult'
+  /zones/vod/push/{zoneid}/adinsertion/transcodeprofile/check:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Check SSAI Transcode Profile
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Push zones only. Read-only check of which Video Encoding Profiles a chosen SSAI transcoding profile needs, which already exist, and whether the resulting Combined profile is already linked to the zone''s Auto Video Encoding Profile. Creates or links nothing.'
+      operationId: zoneAdInsertionCheckTranscodeProfilePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneTranscodeProfileRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneTranscodeProfileCheckResult'
+  /zones/vod/push/{zoneid}/adinsertion/transcodeprofile/apply:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Apply SSAI Transcode Profile
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Push zones only. Creates/links the Combined Video Encoding Profile needed for the chosen SSAI transcoding profile. append keeps other linked Combined profiles (multiplies Video Encoding Minutes usage); replace unlinks the others.'
+      operationId: zoneAdInsertionApplyTranscodeProfilePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ZoneTranscodeProfileRequest'
+              - type: object
+                properties:
+                  mode:
+                    type: string
+                    enum:
+                    - append
+                    - replace
+                    description: Required only when other Combined profiles are already linked to this zone; ignored otherwise.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneTranscodeProfileApplyResult'
+  /zones/vod/push/{zoneid}/adinsertion/schedule:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Add Ad Break Schedule
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Adds a new ad break slot to the zone''s timeline. At most one preroll, one postroll, and one midrollinterval are allowed; midroll and midrollinterval are mutually exclusive. There is no separate list endpoint - the saved roster is returned in the zone''s ad insertion settings (see Enable/Update Ad Insertion Settings).'
+      operationId: zoneAdInsertionAddSchedulePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneScheduleAddRequest'
+            example:
+              _METHOD: PUT
+              type: midroll
+              maxDurationS: 30
+              offset: 300
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneScheduleAddResult'
+  /zones/vod/push/{zoneid}/adinsertion/schedule/{scheduleid}:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Update Ad Break Schedule
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Updates an existing ad break slot. type is immutable and cannot be changed after creation.'
+      operationId: zoneAdInsertionUpdateSchedulePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/scheduleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneScheduleUpdateRequest'
+            example:
+              maxDurationS: 24
+              offset: 300
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneScheduleAddResult'
+    delete:
+      tags:
+      - Ad Insertion
+      summary: Delete Ad Break Schedule
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Deletes an ad break slot from the zone''s timeline.'
+      operationId: zoneAdInsertionDeleteSchedulePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/scheduleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - _METHOD
+              properties:
+                _METHOD:
+                  type: string
+                  description: HTTP method override for this request. This endpoint accepts POST, but set this to DELETE to perform a delete operation.
+                  example: DELETE
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneScheduleDeleteResult'
+  /zones/vod/push/{zoneid}/adinsertion/consumption:
+    post:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Consumption
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns ad insertion consumption data (ad insertions, impressions, egress breakdown) grouped by the requested time resolution. Requires the ad service to already be provisioned.'
+      operationId: zoneAdInsertionGetConsumptionPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneConsumptionRequest'
+            example:
+              groupBy: day
+              r: 2026-01-01 00:00:00 - 2026-01-31 23:59:59
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneConsumptionResult'
+  /zones/vod/push/{zoneid}/adinsertion/logs:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Insertion Logs
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns ad insertion log lines for the zone. Not paginated server-side; narrow the marker/end_marker range for large windows.'
+      operationId: zoneAdInsertionGetLogsPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - in: query
+        name: source
+        required: true
+        schema:
+          type: string
+          enum:
+          - live
+          - ad-server
+          - slate
+          - service
+          example: service
+        description: Log source to read from.
+      - in: query
+        name: order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - in: query
+        name: marker
+        schema:
+          type: integer
+          format: int64
+        description: Cursor - start of the time window, Unix epoch milliseconds.
+      - in: query
+        name: end_marker
+        schema:
+          type: integer
+          format: int64
+        description: Cursor - end of the time window, Unix epoch milliseconds.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionLogsResult'
+  /zones/vod/push/{zoneid}/adinsertion/logs/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Ad Insertion Logs
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads ad insertion log lines for an explicit, bounded time range as a CSV file.'
+      operationId: zoneAdInsertionExportLogsPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - in: query
+        name: source
+        required: true
+        schema:
+          type: string
+          enum:
+          - live
+          - ad-server
+          - slate
+          - service
+      - in: query
+        name: from
+        schema:
+          type: integer
+          format: int64
+        description: Start of the export range, Unix epoch milliseconds.
+      - in: query
+        name: to
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: End of the export range, Unix epoch milliseconds.
+      responses:
+        '200':
+          description: CSV file of matching log lines.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/reports:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Tracking Report
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns aggregate and time-series ad insertion delivery metrics for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id. The response is capped at 1,440 time-series data points, so the selected range must not exceed granularity * 1440 minutes.'
+      operationId: zoneAdInsertionGetTrackingReportsPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: granularity
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 5
+          - 10
+          - 15
+          - 30
+          - 60
+          - 180
+          - 360
+          - 720
+          - 1440
+          - 2880
+          - 10080
+          default: 1440
+        description: Time-bucket size, in minutes.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingReportsResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/creatives:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Creative Performance
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns per-creative delivery metrics for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id.'
+      operationId: zoneAdInsertionGetTrackingCreativesPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingCreativesResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/creatives/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Creative Performance
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads the per-creative delivery breakdown for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: zoneAdInsertionExportTrackingCreativesPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/events:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Tracking Events
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns raw VAST tracking beacon events for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id.'
+      operationId: zoneAdInsertionGetTrackingEventsPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: event_type
+        schema:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+      - in: query
+        name: order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingEventsResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/events/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Tracking Events
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads raw VAST tracking beacon events for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: zoneAdInsertionExportTrackingEventsPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: event_type
+        schema:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+  /zones/vod/push/{zoneid}/adinsertion/tracking/helper:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Tracking Filter Helper
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Looks up selectable/autocomplete values for an Advanced Analytics filter dimension, optionally filtered by search text and the current filter/date-range context. Also used to resolve a content_id to a display name.'
+      operationId: zoneAdInsertionGetTrackingHelperPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: lookup
+        required: true
+        schema:
+          type: string
+          enum:
+          - crid
+          - session_id
+          - client_ip
+          - os
+          - browser
+          - content_id
+          - continent_geoname_id
+          - country_geoname_id
+          - subdivision1_geoname_id
+          - subdivision2_geoname_id
+          - city_geoname_id
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Free-text search term.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingHelperResult'
+  /zones/vod/push/{zoneid}/adinsertion/ad-breaks:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Ad Breaks
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns the logged ad breaks for a date range. Requires the Advanced Analytics add-on.'
+      operationId: zoneAdInsertionGetAdBreaksPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: break_type
+        schema:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+      - in: query
+        name: trigger_type
+        schema:
+          type: string
+        description: Filter by the trigger type that started the break (e.g. preroll).
+      - in: query
+        name: fill_status
+        schema:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+      - in: query
+        name: vast_outcome
+        schema:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdBreaksListResult'
+  /zones/vod/push/{zoneid}/adinsertion/ad-breaks/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Ad Breaks
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads the logged ad breaks for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: zoneAdInsertionExportAdBreaksPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: break_type
+        schema:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+      - in: query
+        name: trigger_type
+        schema:
+          type: string
+      - in: query
+        name: fill_status
+        schema:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+      - in: query
+        name: vast_outcome
+        schema:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+  /zones/vod/push/{zoneid}/adinsertion/ad-breaks/{adbreakid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Break
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns full detail for a single ad break, including its filled creatives and their tracking event timelines. Requires the Advanced Analytics add-on.'
+      operationId: zoneAdInsertionGetAdBreakPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/adBreakId'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdBreakDetailResult'
+  /zones/vod/push/{zoneid}/adinsertion/sessions/{sessionid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Insertion Session
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns playback session detail (client, device, geo) for a single ad insertion session. Requires the Advanced Analytics add-on.'
+      operationId: zoneAdInsertionGetSessionPush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/sessionIdPath'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionSessionResult'
+  /zones/vod/push/{zoneid}/adinsertion/creatives/{crid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Insertion Creative
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns creative metadata (title, advertiser, media details) for a single creative ID. Requires the Advanced Analytics add-on.'
+      operationId: zoneAdInsertionGetCreativePush
+      parameters:
+      - $ref: '#/components/parameters/zoneIdParam'
+      - $ref: '#/components/parameters/crIdPath'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionCreativeResult'
 components:
   parameters:
     zoneIdParam:
@@ -4104,6 +4933,108 @@ components:
       description: show detailed media info if 1
       schema:
         type: string
+    scheduleId:
+      name: scheduleid
+      in: path
+      description: ID of the ad break schedule slot.
+      required: true
+      schema:
+        type: integer
+        example: 501
+    adBreakId:
+      name: adbreakid
+      in: path
+      description: ID of the ad break.
+      required: true
+      schema:
+        type: string
+    sessionIdPath:
+      name: sessionid
+      in: path
+      description: ID of the ad insertion playback session.
+      required: true
+      schema:
+        type: string
+    crIdPath:
+      name: crid
+      in: path
+      description: Creative ID (VAST/VMAP `<Creative id>`).
+      required: true
+      schema:
+        type: string
+    trackingR:
+      in: query
+      name: r
+      description: 'Date-time range: YYYY-MM-DD HH:MM:SS - YYYY-MM-DD HH:MM:SS'
+      schema:
+        type: string
+        example: 2026-01-01 00:00:00 - 2026-01-31 23:59:59
+    trackingCrid:
+      in: query
+      name: crid
+      description: Filter to a specific creative ID.
+      schema:
+        type: string
+    trackingSessionId:
+      in: query
+      name: session_id
+      description: Filter to a specific ad insertion playback session ID.
+      schema:
+        type: string
+    trackingClientIp:
+      in: query
+      name: client_ip
+      description: Filter to a specific viewer client IP. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingOs:
+      in: query
+      name: os
+      description: Filter to a specific viewer operating system. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingBrowser:
+      in: query
+      name: browser
+      description: Filter to a specific viewer browser. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingContentId:
+      in: query
+      name: content_id
+      description: Filter to a specific content ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingContinentGeonameId:
+      in: query
+      name: continent_geoname_id
+      description: Filter to a specific continent geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingCountryGeonameId:
+      in: query
+      name: country_geoname_id
+      description: Filter to a specific country geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingSubdivision1GeonameId:
+      in: query
+      name: subdivision1_geoname_id
+      description: Filter to a specific first-level subdivision geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingSubdivision2GeonameId:
+      in: query
+      name: subdivision2_geoname_id
+      description: Filter to a specific second-level subdivision geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingCityGeonameId:
+      in: query
+      name: city_geoname_id
+      description: Filter to a specific city geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -6733,3 +7664,1345 @@ components:
           type: string
           description: Timestamp of the last file modification in the S3 bucket.
           example: ""
+
+    # ── Ad Insertion ──
+    ZoneAdInsertionActionResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneAdInsertionRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: string
+          enum:
+          - Y
+          - N
+          description: Enable or disable ad insertion on the zone.
+        provider:
+          type: string
+          description: Ad server provider identifier.
+          example: Google Ad Manager
+        advanced_analytics:
+          type: integer
+          enum:
+          - 0
+          - 1
+          description: 1 to enable the Advanced Analytics add-on, which unlocks the Ad Insertion Logs tab and the Advanced Analytics tab (tracking reports, creatives, events, ad breaks). 0 otherwise.
+          example: 1
+        transcodingProfileId:
+          type: integer
+          nullable: true
+          description: SSAI transcoding profile ID from the SSAI catalog (see Check/Apply SSAI Transcode Profile). Write-only; omit to leave unchanged.
+          example: 42
+    ZoneAdInsertionResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneAdServerQueryParam:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
+          type: string
+          description: The query parameter key sent to the ad server.
+          example: publisher_id
+        type:
+          type: string
+          enum:
+          - custom
+          - forward
+          - from-variable
+          - from-header
+          - from-query-parameter
+          description: Controls where the parameter value comes from. custom is a static value you define manually; forward forwards a parameter from the incoming playback request as-is; from-query-parameter maps an incoming request parameter to a differently named ad server parameter; from-variable populates the parameter with a server-side system variable; from-header reads a value from an HTTP request header.
+          example: custom
+        value:
+          type: string
+          description: The parameter value or source identifier, depending on type.
+          example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+    ZoneAdOriginHeader:
+      type: object
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          example: X-Api-Key
+        value:
+          type: string
+          example: Bearer abc123
+    ZoneAdServerRequest:
+      type: object
+      required:
+      - url
+      properties:
+        template:
+          type: string
+          enum:
+          - generic
+          - avails.5centscdn.com-vmap
+          default: generic
+          description: Ad server integration template. avails.5centscdn.com-vmap unlocks and enforces the Schedules feature; generic does not.
+        url:
+          type: string
+          format: uri
+          description: The VAST or VMAP ad server endpoint URL.
+          example: https://avails.5centscdn.com/v1/vmap
+        queryParameters:
+          type: array
+          description: A dynamic list of query parameters appended to every ad server request.
+          items:
+            $ref: '#/components/schemas/ZoneAdServerQueryParam'
+        adOrigin:
+          type: object
+          properties:
+            customHeaders:
+              type: array
+              description: Custom HTTP headers sent to the ad origin server with each ad request.
+              items:
+                $ref: '#/components/schemas/ZoneAdOriginHeader'
+    ZoneAdServerResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 36
+        tenantId:
+          type: integer
+          example: 103
+        type:
+          type: string
+          example: ad-server
+        name:
+          type: string
+          example: 5-103-push-5611-adserver
+        url:
+          type: string
+          format: uri
+          example: https://avails.5centscdn.com/v1/vmap
+        template:
+          type: string
+          example: avails.5centscdn.com-vmap
+        queryParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZoneAdServerQueryParam'
+        adOrigin:
+          type: object
+          properties:
+            customHeaders:
+              type: array
+              items:
+                $ref: '#/components/schemas/ZoneAdOriginHeader'
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneAdReplacementRequest:
+      type: object
+      properties:
+        spliceMode:
+          type: string
+          enum:
+          - segment
+          - keyframe
+          description: Ad splice boundary alignment. keyframe requires the Advanced Features entitlement; without it the zone is limited to segment.
+          example: segment
+        insertionMode:
+          type: string
+          enum:
+          - ssai
+          - sgai
+          description: Server-side ad insertion (ssai) or server-guided ad insertion (sgai, beta).
+          example: ssai
+        gapFillerEnabled:
+          type: string
+          enum:
+          - Y
+          - N
+          description: Whether to show a slate/gap-filler asset when a break is underfilled.
+        gapFillerUrl:
+          type: string
+          description: Slate/gap-filler asset URL. Required, and only sent, when gapFillerEnabled is Y.
+          example: https://cdn.5centscdn.com/slates/default.mp4
+        gapFillerFillAlways:
+          type: string
+          enum:
+          - '1'
+          - '0'
+          description: '1 tops off an underfilled break with the gap filler even when some real ads served; 0 only uses it on a total no-fill.'
+    ZoneAdReplacementResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 18
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-5611-adinsertion
+        hash:
+          type: string
+          example: 3d27526ed69afdff653283e6148f3477
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/3d27526ed69afdff653283e6148f3477/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T11:20:21.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T04:28:13.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 33
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-5611-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-sg-ovh01.cdnized.com/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 36
+            spliceMode:
+              type: string
+              example: segment
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                minAdLengthS:
+                  type: integer
+                  example: 10
+        insertionMode:
+          type: string
+          example: ssai
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneScheduleAddResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 18
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-5611-adinsertion
+        hash:
+          type: string
+          example: 3d27526ed69afdff653283e6148f3477
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/3d27526ed69afdff653283e6148f3477/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T11:20:21.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T04:44:44.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 33
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-5611-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-sg-ovh01.cdnized.com/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 36
+            spliceMode:
+              type: string
+              example: segment
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                minAdLengthS:
+                  type: integer
+                  example: 10
+            midRolls:
+              type: array
+              items:
+                type: object
+                properties:
+                  offsetS:
+                    type: integer
+                    example: 300
+                  maxDurationS:
+                    type: integer
+                    example: 30
+        insertionMode:
+          type: string
+          example: ssai
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneScheduleDeleteResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 19
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-4162-adinsertion
+        hash:
+          type: string
+          example: ea696299629d461ba530b1125d10ddae
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/ea696299629d461ba530b1125d10ddae/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T17:55:55.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T06:02:35.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 40
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-4162-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-gb-lon-sl01.cdnized.com:443/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+            assetSample:
+              type: string
+              example: v1/AUTH_1234567890/vineeth_103_push_5611/mp4/raw/badguy_3B-L2-30fps-128kbps-44.1kHz.mp4
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 39
+            spliceMode:
+              type: string
+              example: keyframe
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                maxAds:
+                  type: integer
+                  example: 2
+                minAdLengthS:
+                  type: integer
+                  example: 10
+        insertionMode:
+          type: string
+          example: sgai
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneTranscodeProfileRequest:
+      type: object
+      required:
+      - transcodingProfileId
+      properties:
+        transcodingProfileId:
+          type: integer
+          description: SSAI transcoding profile ID from the SSAI catalog.
+          example: 42
+    ZoneTranscodeProfileCheckResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        combinedName:
+          type: string
+          description: Name of the Combined Video Encoding Profile this SSAI profile maps to.
+          example: 5Q-L1-24fps-128kbps-44.1kHz
+        singleProfilesNeeded:
+          type: array
+          description: Encoding rungs that do not yet exist and would be created by Apply.
+          items:
+            type: string
+        combinedNeeded:
+          type: boolean
+          description: Whether the Combined profile row does not exist yet.
+        alreadyLinked:
+          type: boolean
+          description: Whether the Combined profile is already linked to the zone's Auto Video Encoding Profile.
+        existingProfiles:
+          type: array
+          description: Other Combined profiles already linked to this zone, excluding this one.
+          items:
+            type: string
+        existingProfilesCount:
+          type: integer
+          example: 0
+    ZoneTranscodeProfileApplyResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        combinedId:
+          type: integer
+          description: ID of the (possibly newly created) Combined Video Encoding Profile now linked to the zone.
+          example: 129017
+    ZoneScheduleAddRequest:
+      type: object
+      required:
+      - _METHOD
+      - type
+      - maxDurationS
+      properties:
+        _METHOD:
+          type: string
+          description: HTTP method override for this request. Always set to PUT to add a new schedule.
+          example: PUT
+        type:
+          type: string
+          enum:
+          - preroll
+          - midroll
+          - postroll
+          - midrollinterval
+          description: Ad break slot type. Immutable after creation. At most one preroll, one postroll, and one midrollinterval per zone; midroll and midrollinterval are mutually exclusive.
+        maxDurationS:
+          type: integer
+          minimum: 1
+          maximum: 3600
+          description: Ad break duration in seconds.
+          example: 30
+        offset:
+          type: integer
+          minimum: 0
+          description: Playback offset in seconds from the start of the asset. Required for midroll; no two midroll slots on the same zone may share an offset.
+          example: 300
+        intervalS:
+          type: integer
+          description: Interval in seconds between recurring mid-roll breaks. Required for midrollinterval. Send alongside intervalSeconds with the same value.
+          example: 600
+        intervalSeconds:
+          type: integer
+          description: Alias of intervalS, sent alongside it for compatibility. Required for midrollinterval.
+          example: 600
+        maxBreaks:
+          type: integer
+          minimum: 0
+          description: Maximum number of recurring breaks to generate. midrollinterval only. 0 or omitted means unlimited.
+        breakId:
+          type: string
+          nullable: true
+          description: Correlation id, or id-prefix for midrollinterval (defaults to mid).
+        maxAds:
+          type: integer
+          minimum: 0
+          description: Per-break pod-size cap.
+        minAdLengthS:
+          type: integer
+          minimum: 0
+        maxAdLengthS:
+          type: integer
+          minimum: 0
+        fillCeilingS:
+          type: integer
+          minimum: 0
+          description: Per-break overshoot ceiling, seconds.
+    ZoneScheduleUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/ZoneScheduleAddRequest'
+      description: Same fields as Add Ad Break Schedule, minus _METHOD and type (type is immutable after creation).
+
+    # ── Ad Insertion: Consumption ──
+    ZoneConsumptionRequest:
+      type: object
+      required:
+      - groupBy
+      - r
+      properties:
+        groupBy:
+          type: string
+          enum:
+          - day
+          - hour
+          description: Time resolution for aggregating consumption data.
+        r:
+          type: string
+          description: 'Date-time range: YYYY-MM-DD HH:MM:SS - YYYY-MM-DD HH:MM:SS'
+          example: 2026-01-01 00:00:00 - 2026-01-31 23:59:59
+    ZoneConsumptionResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        from:
+          type: string
+          example: 2026-01-01 00:00:00
+        to:
+          type: string
+          example: 2026-01-31 23:59:59
+        serviceIds:
+          type: array
+          items:
+            type: integer
+          example: [10001]
+        groupBy:
+          type: string
+          enum:
+          - day
+          - hour
+        totalAdInsertions:
+          type: integer
+          example: 1284
+        totalAdImpressions:
+          type: integer
+          example: 3720
+        totalEgress:
+          type: string
+          example: 0 B
+        egressDetails:
+          type: object
+          properties:
+            manifests:
+              type: string
+              example: 0 B
+            segments:
+              type: string
+              example: 0 B
+            ssat:
+              type: string
+              description: Egress attributable to server-side ad-tracking (SSAT) beacon relaying.
+              example: 0 B
+            transcoding:
+              type: string
+              description: Egress attributable to ad creative transcoding output.
+              example: 0 B
+            other:
+              type: string
+              example: 0 B
+        adInsertionsChart:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+        adImpressionsChart:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+        egressChart:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+        trackingBreakdown:
+          type: object
+          properties:
+            impressions:
+              type: integer
+              example: 0
+            starts:
+              type: integer
+              example: 0
+            firstQuartiles:
+              type: integer
+              example: 0
+            midpoints:
+              type: integer
+              example: 0
+            thirdQuartiles:
+              type: integer
+              example: 0
+            completes:
+              type: integer
+              example: 0
+            completionRate:
+              type: number
+              example: 0
+    ConsumptionChartPoint:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Date/time bucket label for this data point.
+          example: "2026-01-15"
+        value:
+          type: number
+          example: 42
+
+    # ── Ad Insertion: Logs ──
+    AdInsertionLogEntry:
+      type: object
+      description: One log line. Additional fields beyond those listed may be present depending on action.
+      properties:
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds.
+          example: 1778066400000
+        level:
+          type: string
+          enum:
+          - info
+          - warn
+          - error
+        action:
+          type: string
+          example: adserver.request
+        name:
+          type: string
+          example: Ad Server Request
+        id:
+          type: integer
+          example: 18
+        state:
+          type: string
+          example: enabled
+        message:
+          type: string
+          example: Fetched VAST response in 214ms
+      additionalProperties: true
+    AdInsertionLogsResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdInsertionLogEntry'
+
+    # ── Ad Insertion: Advanced Analytics ──
+    TrackingSummary:
+      type: object
+      properties:
+        from:
+          type: string
+          example: "2026-01-01T00:00:00Z"
+        to:
+          type: string
+          example: "2026-01-31T23:59:59Z"
+        impressions:
+          type: integer
+          example: 96210
+        starts:
+          type: integer
+          example: 95800
+        first_quartiles:
+          type: integer
+          example: 91000
+        midpoints:
+          type: integer
+          example: 85000
+        third_quartiles:
+          type: integer
+          example: 78000
+        completes:
+          type: integer
+          example: 68500
+        view_rate_25:
+          type: number
+          format: float
+          example: 94.6
+        view_rate_50:
+          type: number
+          format: float
+          example: 88.3
+        view_rate_75:
+          type: number
+          format: float
+          example: 81.1
+        completion_rate:
+          type: number
+          format: float
+          example: 71.2
+        unique_sessions:
+          type: integer
+          example: 42130
+    TrackingSeriesPoint:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:00:00Z"
+        impressions:
+          type: integer
+          example: 512
+        starts:
+          type: integer
+          example: 508
+        first_quartiles:
+          type: integer
+          example: 480
+        midpoints:
+          type: integer
+          example: 450
+        third_quartiles:
+          type: integer
+          example: 410
+        completes:
+          type: integer
+          example: 360
+    TrackingReportsResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        summary:
+          $ref: '#/components/schemas/TrackingSummary'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingSeriesPoint'
+    TrackingCreativeBreakdown:
+      type: object
+      properties:
+        crid:
+          type: string
+          example: creative-abc123
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        advertiser:
+          type: string
+          example: Acme Corp
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        durationS:
+          type: number
+          example: 30
+        impressions:
+          type: integer
+          example: 4200
+        starts:
+          type: integer
+          example: 4180
+        first_quartiles:
+          type: integer
+          example: 4000
+        midpoints:
+          type: integer
+          example: 3800
+        third_quartiles:
+          type: integer
+          example: 3500
+        completes:
+          type: integer
+          example: 3100
+        view_rate_25:
+          type: number
+          format: float
+          example: 95.2
+        view_rate_50:
+          type: number
+          format: float
+          example: 90.5
+        view_rate_75:
+          type: number
+          format: float
+          example: 83.3
+        completion_rate:
+          type: number
+          format: float
+          example: 74.0
+    TrackingCreativesResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCreativeBreakdown'
+        total:
+          type: integer
+          example: 46
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 3
+    TrackingEventItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: evt_9f21c8
+        service_id:
+          type: integer
+          example: 10001
+        session_id:
+          type: string
+          example: sess_4a1b2c
+        ad_break_id:
+          type: string
+          example: brk_7e21c9
+        sequence:
+          type: integer
+          example: 1
+        crid:
+          type: string
+          example: creative-abc123
+        event_type:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+        seg:
+          type: integer
+          example: 3
+        total_segs:
+          type: integer
+          example: 6
+        beacon_count:
+          type: integer
+          example: 1
+        beacon_urls:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:32:14Z"
+    TrackingEventsResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingEventItem'
+        total:
+          type: integer
+          example: 15230
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 762
+    TrackingHelperItem:
+      type: object
+      properties:
+        value:
+          type: string
+          example: creative-abc123
+        name:
+          type: string
+          example: Summer Promo 2026
+        count:
+          type: integer
+          example: 128
+    TrackingHelperResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingHelperItem'
+    AdBreak:
+      type: object
+      properties:
+        id:
+          type: string
+          example: brk_7e21c9
+        serviceId:
+          type: integer
+          example: 10001
+        sessionId:
+          type: string
+          example: sess_4a1b2c
+        contentId:
+          type: string
+          example: "1024"
+        breakType:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+        triggerType:
+          type: string
+          example: preroll
+        declaredDurationS:
+          type: number
+          example: 30
+        vastOutcome:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+        vastUrl:
+          type: string
+          example: https://avails.5centscdn.com/v1/vast?...
+        creativeCount:
+          type: integer
+          example: 2
+        fulfilledDurationS:
+          type: number
+          example: 28
+        fillStatus:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+    AdBreakCreativeMetadata:
+      type: object
+      properties:
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        advertiser:
+          type: string
+          example: Acme Corp
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        category:
+          type: string
+          example: "3"
+    AdBreakTrackingEvent:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:05Z"
+    AdBreakCreativeDetail:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          example: 1
+        crid:
+          type: string
+          example: creative-abc123
+        isGapFiller:
+          type: boolean
+          example: false
+        durationS:
+          type: number
+          example: 15
+        metadata:
+          $ref: '#/components/schemas/AdBreakCreativeMetadata'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdBreakTrackingEvent'
+    AdBreaksListResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdBreak'
+        total:
+          type: integer
+          example: 963
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 49
+    AdBreakDetailResult:
+      allOf:
+      - $ref: '#/components/schemas/AdBreak'
+      - type: object
+        properties:
+          result:
+            type: string
+            enum:
+            - success
+            - error
+          creatives:
+            type: array
+            items:
+              $ref: '#/components/schemas/AdBreakCreativeDetail'
+    SessionGeoPlace:
+      type: object
+      properties:
+        geonameId:
+          type: integer
+          example: 6252001
+        name:
+          type: string
+          example: United States
+    SessionGeo:
+      type: object
+      properties:
+        continent:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        country:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        subdivision1:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        subdivision2:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        city:
+          $ref: '#/components/schemas/SessionGeoPlace'
+    AdInsertionSessionResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        sessionId:
+          type: string
+          example: sess_4a1b2c
+        serviceId:
+          type: integer
+          example: 10001
+        clientIp:
+          type: string
+          example: "203.0.113.10"
+        userAgent:
+          type: string
+          example: Mozilla/5.0 (compatible; SSAI-Player/1.0)
+        os:
+          type: string
+          example: iOS
+        browser:
+          type: string
+          example: Safari
+        requestTime:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+        geo:
+          $ref: '#/components/schemas/SessionGeo'
+    AdInsertionCreativeResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        crid:
+          type: string
+          example: creative-abc123
+        mediaUrl:
+          type: string
+          example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        advertiser:
+          type: string
+          example: Acme Corp
+        category:
+          type: string
+          example: "3"
+        creativeId:
+          type: string
+          example: crv_9a71
+        adId:
+          type: string
+          example: ad_4c19
+        adIdVast:
+          type: string
+          example: "20026"
+        universalAdId:
+          type: string
+          example: 8465-abc123
+        mediaWidth:
+          type: integer
+          example: 1920
+        mediaHeight:
+          type: integer
+          example: 1080
+        mediaBitrate:
+          type: integer
+          example: 4000000
+        durationS:
+          type: number
+          example: 30

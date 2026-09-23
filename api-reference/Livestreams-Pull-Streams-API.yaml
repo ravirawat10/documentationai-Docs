@@ -11015,8 +11015,9 @@ paths:
                 mode:
                   type: string
                   enum:
+                  - create
                   - schedule
-                  description: Pass schedule to immediately create triggers.
+                  description: Pass create to save the schedule without generating triggers, or schedule to immediately create triggers as well.
                   example: schedule
                 recur:
                   type: integer
@@ -11184,9 +11185,9 @@ paths:
             schema:
               $ref: '#/components/schemas/TriggersRequest'
             example:
-              scheduleIds:
-              - 101
-              - 102
+              scheduleIds[]:
+              - '101'
+              - '102'
               viewTriggered: '0'
               orderByDate: true
       responses:
@@ -11229,17 +11230,27 @@ paths:
       tags:
       - Ad Insertion
       summary: Trigger Cue-Out
-      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sends a SCTE-35 cue-out signal to the stream encoder.'
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sends a SCTE-35 cue-out signal to the stream encoder, using the stream''s saved default ad break duration.'
       operationId: adInsertionCueOutPull
       parameters:
       - $ref: '#/components/parameters/streamId'
-      - in: query
-        name: duration
-        required: false
-        schema:
-          type: integer
-          minimum: 1
-        description: Ad break duration in seconds.
+      responses:
+        '200':
+          description: Cue-out sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CueResult'
+  /streams/pull/{streamid}/adinsertion/cue-out/{duration}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Trigger Cue-Out (Custom Duration)
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Sends a SCTE-35 cue-out signal to the stream encoder, overriding the stream''s saved default ad break duration for this break only.'
+      operationId: adInsertionCueOutWithDurationPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/adInsertionDuration'
       responses:
         '200':
           description: Cue-out sent
@@ -11288,6 +11299,571 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsumptionResult'
+  /streams/pull/{streamid}/adinsertion/status:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Insertion Status
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns a human-readable provisioning status for the stream''s ad insertion configuration (e.g. not configured, activating, ready).'
+      operationId: adInsertionGetStatusPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      responses:
+        '200':
+          description: Plain-text status message.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Ad Insertion Not Enabled
+  /streams/pull/{streamid}/adinsertion/logs:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Ad Insertion Logs
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns ad insertion log lines for the stream. Not paginated server-side; narrow the marker/end_marker range for large windows.'
+      operationId: adInsertionGetLogsPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - in: query
+        name: source
+        required: true
+        schema:
+          type: string
+          enum:
+          - live
+          - ad-server
+          - slate
+          - service
+          example: service
+        description: Log source to read from.
+      - in: query
+        name: order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort order by time.
+      - in: query
+        name: marker
+        schema:
+          type: integer
+          format: int64
+        description: Cursor - start of the time window, Unix epoch milliseconds.
+      - in: query
+        name: end_marker
+        schema:
+          type: integer
+          format: int64
+        description: Cursor - end of the time window, Unix epoch milliseconds.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionLogsResult'
+  /streams/pull/{streamid}/adinsertion/logs/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Ad Insertion Logs
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads ad insertion log lines for an explicit, bounded time range as a CSV file.'
+      operationId: adInsertionExportLogsPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - in: query
+        name: source
+        required: true
+        schema:
+          type: string
+          enum:
+          - live
+          - ad-server
+          - slate
+          - service
+        description: Log source to export.
+      - in: query
+        name: from
+        schema:
+          type: integer
+          format: int64
+        description: Start of the export range, Unix epoch milliseconds.
+      - in: query
+        name: to
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: End of the export range, Unix epoch milliseconds.
+      responses:
+        '200':
+          description: CSV file of matching log lines.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /streams/pull/{streamid}/adinsertion/tracking/reports:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Get Tracking Report
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns aggregate and time-series ad insertion delivery metrics for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id. The response is capped at 1,440 time-series data points, so the selected range must not exceed granularity * 1440 minutes.'
+      operationId: adInsertionGetTrackingReportsPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: granularity
+        schema:
+          type: integer
+          enum:
+          - 1
+          - 5
+          - 10
+          - 15
+          - 30
+          - 60
+          - 180
+          - 360
+          - 720
+          - 1440
+          - 2880
+          - 10080
+          default: 1440
+        description: Time-bucket size, in minutes.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingReportsResult'
+  /streams/pull/{streamid}/adinsertion/tracking/creatives:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Creative Performance
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns per-creative delivery metrics for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id.'
+      operationId: adInsertionGetTrackingCreativesPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingCreativesResult'
+  /streams/pull/{streamid}/adinsertion/tracking/creatives/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Creative Performance
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads the per-creative delivery breakdown for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: adInsertionExportTrackingCreativesPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /streams/pull/{streamid}/adinsertion/tracking/events:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Tracking Events
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns raw VAST tracking beacon events for a date range. Requires the Advanced Analytics add-on for filters beyond crid/session_id.'
+      operationId: adInsertionGetTrackingEventsPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: event_type
+        schema:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+        description: Filter to a specific tracking event type.
+      - in: query
+        name: order
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort order by event time.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingEventsResult'
+  /streams/pull/{streamid}/adinsertion/tracking/events/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Tracking Events
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads raw VAST tracking beacon events for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: adInsertionExportTrackingEventsPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: event_type
+        schema:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /streams/pull/{streamid}/adinsertion/tracking/helper:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Tracking Filter Helper
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Looks up selectable/autocomplete values for an Advanced Analytics filter dimension, optionally filtered by search text and the current filter/date-range context. Also used to resolve a content_id to a display name.'
+      operationId: adInsertionGetTrackingHelperPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: lookup
+        required: true
+        schema:
+          type: string
+          enum:
+          - crid
+          - session_id
+          - client_ip
+          - os
+          - browser
+          - content_id
+          - continent_geoname_id
+          - country_geoname_id
+          - subdivision1_geoname_id
+          - subdivision2_geoname_id
+          - city_geoname_id
+        description: Filter dimension to look up values for.
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Free-text search term.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingHelperResult'
+  /streams/pull/{streamid}/adinsertion/ad-breaks:
+    get:
+      tags:
+      - Ad Insertion
+      summary: List Ad Breaks
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns the logged ad breaks for a date range. Requires the Advanced Analytics add-on.'
+      operationId: adInsertionGetAdBreaksPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: break_type
+        schema:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+        description: Filter by break type.
+      - in: query
+        name: trigger_type
+        schema:
+          type: string
+          example: splice_insert
+        description: Filter by the SCTE-35 splice command type (or preroll) that started the break.
+      - in: query
+        name: fill_status
+        schema:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+      - in: query
+        name: vast_outcome
+        schema:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdBreaksListResult'
+  /streams/pull/{streamid}/adinsertion/ad-breaks/export:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Export Ad Breaks
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Downloads the logged ad breaks for a date range as a CSV file. Limited to 25,000 matching rows.'
+      operationId: adInsertionExportAdBreaksPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/trackingR'
+      - $ref: '#/components/parameters/trackingCrid'
+      - $ref: '#/components/parameters/trackingSessionId'
+      - $ref: '#/components/parameters/trackingClientIp'
+      - $ref: '#/components/parameters/trackingOs'
+      - $ref: '#/components/parameters/trackingBrowser'
+      - $ref: '#/components/parameters/trackingContentId'
+      - $ref: '#/components/parameters/trackingContinentGeonameId'
+      - $ref: '#/components/parameters/trackingCountryGeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision1GeonameId'
+      - $ref: '#/components/parameters/trackingSubdivision2GeonameId'
+      - $ref: '#/components/parameters/trackingCityGeonameId'
+      - in: query
+        name: break_type
+        schema:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+      - in: query
+        name: trigger_type
+        schema:
+          type: string
+      - in: query
+        name: fill_status
+        schema:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+      - in: query
+        name: vast_outcome
+        schema:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+      responses:
+        '200':
+          description: CSV file of matching rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Export could not be generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /streams/pull/{streamid}/adinsertion/ad-breaks/{adbreakid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Break
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns full detail for a single ad break, including its filled creatives and their tracking event timelines. Requires the Advanced Analytics add-on.'
+      operationId: adInsertionGetAdBreakPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/adBreakId'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdBreakDetailResult'
+  /streams/pull/{streamid}/adinsertion/sessions/{sessionid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Insertion Session
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns playback session detail (client, device, geo) for a single ad insertion session. Requires the Advanced Analytics add-on.'
+      operationId: adInsertionGetSessionPull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/sessionIdPath'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionSessionResult'
+  /streams/pull/{streamid}/adinsertion/creatives/{crid}:
+    get:
+      tags:
+      - Ad Insertion
+      summary: Show Ad Insertion Creative
+      description: '![Custom Plan](https://img.shields.io/badge/Custom%20Plan-4FA83D) Returns creative metadata (title, advertiser, media details) for a single creative ID. Requires the Advanced Analytics add-on.'
+      operationId: adInsertionGetCreativePull
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/crIdPath'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdInsertionCreativeResult'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -11402,6 +11978,117 @@ components:
       schema:
         type: integer
       description: Numeric trigger ID.
+    adInsertionDuration:
+      in: path
+      name: duration
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 180
+      description: Ad break duration in seconds, overriding the stream's saved default for this cue-out only.
+    adBreakId:
+      in: path
+      name: adbreakid
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      description: ID of the ad break.
+    sessionIdPath:
+      in: path
+      name: sessionid
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      description: ID of the ad insertion playback session.
+    crIdPath:
+      in: path
+      name: crid
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      description: Creative ID (VAST/VMAP `<Creative id>`).
+    trackingR:
+      in: query
+      name: r
+      description: 'Date-time range: YYYY-MM-DD HH:MM:SS - YYYY-MM-DD HH:MM:SS'
+      schema:
+        type: string
+        example: 2026-01-01 00:00:00 - 2026-01-31 23:59:59
+    trackingCrid:
+      in: query
+      name: crid
+      description: Filter to a specific creative ID.
+      schema:
+        type: string
+    trackingSessionId:
+      in: query
+      name: session_id
+      description: Filter to a specific ad insertion playback session ID.
+      schema:
+        type: string
+    trackingClientIp:
+      in: query
+      name: client_ip
+      description: Filter to a specific viewer client IP. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingOs:
+      in: query
+      name: os
+      description: Filter to a specific viewer operating system. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingBrowser:
+      in: query
+      name: browser
+      description: Filter to a specific viewer browser. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingContentId:
+      in: query
+      name: content_id
+      description: Filter to a specific content ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: string
+    trackingContinentGeonameId:
+      in: query
+      name: continent_geoname_id
+      description: Filter to a specific continent geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingCountryGeonameId:
+      in: query
+      name: country_geoname_id
+      description: Filter to a specific country geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingSubdivision1GeonameId:
+      in: query
+      name: subdivision1_geoname_id
+      description: Filter to a specific first-level subdivision geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingSubdivision2GeonameId:
+      in: query
+      name: subdivision2_geoname_id
+      description: Filter to a specific second-level subdivision geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
+    trackingCityGeonameId:
+      in: query
+      name: city_geoname_id
+      description: Filter to a specific city geoname ID. Requires the Advanced Analytics add-on.
+      schema:
+        type: integer
   schemas:
     CreatePushStream:
       required:
@@ -17169,6 +17856,17 @@ components:
           maximum: 180
           default: 30
           description: Default ad break duration in seconds.
+        ssai_provider:
+          type: string
+          description: SSAI engine used to serve ad insertion for this stream. Currently always 5centsCDN.
+          example: 5centsCDN
+        advanced_analytics:
+          type: integer
+          enum:
+          - 0
+          - 1
+          description: 1 to enable the Advanced Analytics add-on, which unlocks the Ad Insertion Logs tab and the Advanced Analytics tab (tracking reports, creatives, events, ad breaks). 0 otherwise.
+          example: 1
     AdServerRequest:
       type: object
       required:
@@ -17210,7 +17908,7 @@ components:
           - from-variable
           - from-header
           - from-query-parameter
-          description: "Controls where the parameter value comes from. custom: a static value you define manually. forward: forwards a parameter from the viewer's original playback request as-is. from-query-parameter: maps a viewer request parameter to a differently named ad server parameter. from-variable: populates the parameter with a server-side system variable (CLIENT_IP, CACHE_BUSTER, ADBREAK_DURATION_S, ADBREAK_DURATION_MS, UPID_ASCII, UPID_HEX, ADFR_FORMAT, ADFR_VERSION, ADFR_CHANNEL, ADFR_DATE, ADFR_CODE, ADFR_DURATION, CURRENT_SPOT_INDEX, SOURCE_URL). from-header: reads a value from an HTTP request header sent by the viewer."
+          description: "Controls where the parameter value comes from. custom: a static value you define manually. forward: forwards a parameter from the viewer's original playback request as-is. from-query-parameter: maps a viewer request parameter to a differently named ad server parameter. from-variable: populates the parameter with a server-side system variable (CLIENT_IP, CACHE_BUSTER, ADBREAK_DURATION_S, ADBREAK_DURATION_MS, UPID_ASCII, UPID_HEX, ADFR_FORMAT, ADFR_VERSION, ADFR_CHANNEL, ADFR_DATE, ADFR_CODE, ADFR_DURATION, CURRENT_SPOT_INDEX, SOURCE_URL, TIMESTAMP, CONTENT_ID, SERVER_UA, SERVER_SIDE). from-header: reads a value from an HTTP request header sent by the viewer."
           example: from-variable
         value:
           type: string
@@ -17330,11 +18028,11 @@ components:
     TriggersRequest:
       type: object
       properties:
-        scheduleIds:
+        scheduleIds[]:
           type: array
           items:
-            type: integer
-          description: Filter to specific schedule IDs.
+            type: string
+          description: Filter to specific schedule IDs (as strings). Always sent with a leading empty-string entry as a "no filter" sentinel when no schedule is selected.
         viewTriggered:
           type: string
           enum:
@@ -17406,21 +18104,671 @@ components:
         message:
           type: string
           description: Human-readable message describing the result.
-        totalAdInsertionHours:
-          type: number
-          description: Total ad insertion hours in the requested range.
-        adInsertionHoursChart:
+        from:
+          type: string
+          description: Start of the requested range.
+          example: 2026-01-01 00:00:00
+        to:
+          type: string
+          description: End of the requested range.
+          example: 2026-01-31 23:59:59
+        serviceIds:
           type: array
-          description: Time-series data points.
+          description: Service account IDs included in this result.
           items:
-            type: object
-            properties:
-              date:
-                type: string
-                description: Date/time label for this data point.
-              value:
-                type: number
-                description: Numeric value for this data point.
+            type: integer
+          example: [10001]
+        groupBy:
+          type: string
+          enum:
+          - day
+          - hour
+          description: Time resolution the chart series are bucketed by.
+          example: day
+        totalAdInsertions:
+          type: integer
+          description: Total number of ad insertions triggered in the requested range.
+          example: 1284
+        totalAdImpressions:
+          type: integer
+          description: Total number of ad impressions delivered in the requested range.
+          example: 3720
+        totalEgress:
+          type: integer
+          format: int64
+          description: Total egress bytes attributable to ad insertion in the requested range.
+          example: 128430000000
+        egressDetails:
+          type: object
+          description: Breakdown of total egress bytes by source.
+          properties:
+            manifests:
+              type: integer
+              format: int64
+              example: 1200000
+            segments:
+              type: integer
+              format: int64
+              example: 120000000000
+            ssat:
+              type: integer
+              format: int64
+              description: Egress attributable to server-side ad-tracking (SSAT) beacon relaying.
+              example: 300000
+            transcoding:
+              type: integer
+              format: int64
+              description: Egress attributable to ad creative transcoding output.
+              example: 8000000000
+            other:
+              type: integer
+              format: int64
+              example: 100000
+        adInsertionsChart:
+          type: array
+          description: Time-series data points for ad insertions.
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+        adImpressionsChart:
+          type: array
+          description: Time-series data points for ad impressions.
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+        egressChart:
+          type: array
+          description: Time-series data points for egress bytes.
+          items:
+            $ref: '#/components/schemas/ConsumptionChartPoint'
+    ConsumptionChartPoint:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Date/time bucket label for this data point.
+          example: "2026-01-15"
+        value:
+          type: number
+          description: Numeric value for this data point.
+          example: 42
+
+    # ── Ad Insertion: Logs ──
+    AdInsertionLogEntry:
+      type: object
+      description: One log line. Additional fields beyond those listed may be present depending on `action`.
+      properties:
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp in milliseconds.
+          example: 1778066400000
+        level:
+          type: string
+          enum:
+          - info
+          - warn
+          - error
+          example: info
+        action:
+          type: string
+          example: adserver.request
+        name:
+          type: string
+          example: Ad Server Request
+        message:
+          type: string
+          example: Fetched VAST response in 214ms
+      additionalProperties: true
+    AdInsertionLogsResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdInsertionLogEntry'
+
+    # ── Ad Insertion: Advanced Analytics ──
+    TrackingSummary:
+      type: object
+      properties:
+        from:
+          type: string
+          example: "2026-01-01T00:00:00Z"
+        to:
+          type: string
+          example: "2026-01-31T23:59:59Z"
+        impressions:
+          type: integer
+          example: 96210
+        starts:
+          type: integer
+          example: 95800
+        first_quartiles:
+          type: integer
+          example: 91000
+        midpoints:
+          type: integer
+          example: 85000
+        third_quartiles:
+          type: integer
+          example: 78000
+        completes:
+          type: integer
+          example: 68500
+        view_rate_25:
+          type: number
+          format: float
+          example: 94.6
+        view_rate_50:
+          type: number
+          format: float
+          example: 88.3
+        view_rate_75:
+          type: number
+          format: float
+          example: 81.1
+        completion_rate:
+          type: number
+          format: float
+          example: 71.2
+        unique_sessions:
+          type: integer
+          example: 42130
+    TrackingSeriesPoint:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:00:00Z"
+        impressions:
+          type: integer
+          example: 512
+        starts:
+          type: integer
+          example: 508
+        first_quartiles:
+          type: integer
+          example: 480
+        midpoints:
+          type: integer
+          example: 450
+        third_quartiles:
+          type: integer
+          example: 410
+        completes:
+          type: integer
+          example: 360
+    TrackingReportsResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        summary:
+          $ref: '#/components/schemas/TrackingSummary'
+        data:
+          type: array
+          description: Per-time-bucket metrics for the requested range and granularity.
+          items:
+            $ref: '#/components/schemas/TrackingSeriesPoint'
+    TrackingCreativeBreakdown:
+      type: object
+      properties:
+        crid:
+          type: string
+          example: creative-abc123
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        advertiser:
+          type: string
+          example: Acme Corp
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        durationS:
+          type: number
+          example: 30
+        impressions:
+          type: integer
+          example: 4200
+        starts:
+          type: integer
+          example: 4180
+        first_quartiles:
+          type: integer
+          example: 4000
+        midpoints:
+          type: integer
+          example: 3800
+        third_quartiles:
+          type: integer
+          example: 3500
+        completes:
+          type: integer
+          example: 3100
+        view_rate_25:
+          type: number
+          format: float
+          example: 95.2
+        view_rate_50:
+          type: number
+          format: float
+          example: 90.5
+        view_rate_75:
+          type: number
+          format: float
+          example: 83.3
+        completion_rate:
+          type: number
+          format: float
+          example: 74.0
+    TrackingCreativesResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingCreativeBreakdown'
+        total:
+          type: integer
+          example: 46
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 3
+    TrackingEventItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: evt_9f21c8
+        service_id:
+          type: integer
+          example: 10001
+        session_id:
+          type: string
+          example: sess_4a1b2c
+        ad_break_id:
+          type: string
+          example: brk_7e21c9
+        sequence:
+          type: integer
+          description: 1-based position of the creative within its ad break.
+          example: 1
+        crid:
+          type: string
+          example: creative-abc123
+        event_type:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+          example: complete
+        seg:
+          type: integer
+          description: Segment number this event was recorded on.
+          example: 3
+        total_segs:
+          type: integer
+          example: 6
+        beacon_count:
+          type: integer
+          description: Number of tracking beacon calls fired for this event.
+          example: 1
+        beacon_urls:
+          type: array
+          items:
+            type: string
+          example: ["https://tracking.example.com/complete?crid=creative-abc123"]
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:32:14Z"
+    TrackingEventsResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingEventItem'
+        total:
+          type: integer
+          example: 15230
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 762
+    TrackingHelperItem:
+      type: object
+      properties:
+        value:
+          type: string
+          example: creative-abc123
+        name:
+          type: string
+          example: Summer Promo 2026
+        count:
+          type: integer
+          description: Number of matching rows for this value in the current filter/date-range context.
+          example: 128
+    TrackingHelperResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingHelperItem'
+    AdBreak:
+      type: object
+      properties:
+        id:
+          type: string
+          example: brk_7e21c9
+        serviceId:
+          type: integer
+          example: 10001
+        sessionId:
+          type: string
+          example: sess_4a1b2c
+        contentId:
+          type: string
+          example: "1024"
+        breakType:
+          type: string
+          enum:
+          - pre-roll
+          - mid-roll
+          example: mid-roll
+        triggerType:
+          type: string
+          description: SCTE-35 splice command type or preroll that started this break.
+          example: splice_insert
+        declaredDurationS:
+          type: number
+          example: 30
+        vastOutcome:
+          type: string
+          enum:
+          - ok
+          - timeout
+          - http_4xx
+          - http_5xx
+          - network
+          - parse
+          - no_creative
+          - wrapper_exceeded
+          example: ok
+        vastUrl:
+          type: string
+          example: https://adserver.example.com/vast.php?...
+        creativeCount:
+          type: integer
+          example: 2
+        fulfilledDurationS:
+          type: number
+          example: 28
+        fillStatus:
+          type: string
+          enum:
+          - full
+          - underfilled
+          - no_fill
+          example: full
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+    AdBreakCreativeMetadata:
+      type: object
+      properties:
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        advertiser:
+          type: string
+          example: Acme Corp
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        category:
+          type: string
+          example: "3"
+    AdBreakTrackingEvent:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - impression
+          - start
+          - firstQuartile
+          - midpoint
+          - thirdQuartile
+          - complete
+          example: start
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:05Z"
+    AdBreakCreativeDetail:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          example: 1
+        crid:
+          type: string
+          example: creative-abc123
+        isGapFiller:
+          type: boolean
+          example: false
+        durationS:
+          type: number
+          example: 15
+        metadata:
+          $ref: '#/components/schemas/AdBreakCreativeMetadata'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdBreakTrackingEvent'
+    AdBreaksListResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdBreak'
+        total:
+          type: integer
+          example: 963
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        pages:
+          type: integer
+          example: 49
+    AdBreakDetailResult:
+      allOf:
+      - $ref: '#/components/schemas/AdBreak'
+      - type: object
+        properties:
+          result:
+            type: string
+            enum:
+            - success
+            - error
+          message:
+            type: string
+          creatives:
+            type: array
+            items:
+              $ref: '#/components/schemas/AdBreakCreativeDetail'
+    SessionGeoPlace:
+      type: object
+      properties:
+        geonameId:
+          type: integer
+          example: 6252001
+        name:
+          type: string
+          example: United States
+    SessionGeo:
+      type: object
+      properties:
+        continent:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        country:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        subdivision1:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        subdivision2:
+          $ref: '#/components/schemas/SessionGeoPlace'
+        city:
+          $ref: '#/components/schemas/SessionGeoPlace'
+    AdInsertionSessionResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        sessionId:
+          type: string
+          example: sess_4a1b2c
+        serviceId:
+          type: integer
+          example: 10001
+        clientIp:
+          type: string
+          example: "203.0.113.10"
+        userAgent:
+          type: string
+          example: Mozilla/5.0 (compatible; SSAI-Player/1.0)
+        os:
+          type: string
+          example: iOS
+        browser:
+          type: string
+          example: Safari
+        requestTime:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+        geo:
+          $ref: '#/components/schemas/SessionGeo'
+    AdInsertionCreativeResult:
+      type: object
+      properties:
+        result:
+          type: string
+          enum:
+          - success
+          - error
+        message:
+          type: string
+        crid:
+          type: string
+          example: creative-abc123
+        mediaUrl:
+          type: string
+          example: https://cdn.5centscdn.com/ad-manager-uploads/abc123.mp4
+        adSystem:
+          type: string
+          example: Google Ad Manager
+        adTitle:
+          type: string
+          example: Summer Promo 2026
+        advertiser:
+          type: string
+          example: Acme Corp
+        category:
+          type: string
+          example: "3"
+        creativeId:
+          type: string
+          example: crv_9a71
+        adId:
+          type: string
+          example: ad_4c19
+        adIdVast:
+          type: string
+          description: Raw VAST `<Ad id>` attribute.
+          example: "20026"
+        universalAdId:
+          type: string
+          example: 8465-abc123
+        mediaWidth:
+          type: integer
+          example: 1920
+        mediaHeight:
+          type: integer
+          example: 1080
+        mediaBitrate:
+          type: integer
+          example: 4000000
+        durationS:
+          type: number
+          example: 30
   responses:
     SuccessResult:
       description: Operation result
