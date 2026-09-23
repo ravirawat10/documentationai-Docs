@@ -4131,7 +4131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+                $ref: '#/components/schemas/ZoneAdServerResult'
   /zones/vod/push/{zoneid}/adinsertion/replacement:
     post:
       tags:
@@ -4157,7 +4157,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+                $ref: '#/components/schemas/ZoneAdReplacementResult'
   /zones/vod/push/{zoneid}/adinsertion/transcodeprofile/check:
     post:
       tags:
@@ -4237,7 +4237,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+                $ref: '#/components/schemas/ZoneScheduleAddResult'
   /zones/vod/push/{zoneid}/adinsertion/schedule/{scheduleid}:
     post:
       tags:
@@ -4263,7 +4263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+                $ref: '#/components/schemas/ZoneScheduleAddResult'
     delete:
       tags:
       - Ad Insertion
@@ -4292,7 +4292,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZoneAdInsertionActionResult'
+                $ref: '#/components/schemas/ZoneScheduleDeleteResult'
   /zones/vod/push/{zoneid}/adinsertion/consumption:
     post:
       tags:
@@ -7674,8 +7674,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
     ZoneAdInsertionRequest:
       type: object
       required:
@@ -7711,12 +7709,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
-        errors:
-          type: array
-          items:
-            type: string
     ZoneAdServerQueryParam:
       type: object
       required:
@@ -7783,6 +7775,47 @@ components:
               description: Custom HTTP headers sent to the ad origin server with each ad request.
               items:
                 $ref: '#/components/schemas/ZoneAdOriginHeader'
+    ZoneAdServerResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 36
+        tenantId:
+          type: integer
+          example: 103
+        type:
+          type: string
+          example: ad-server
+        name:
+          type: string
+          example: 5-103-push-5611-adserver
+        url:
+          type: string
+          format: uri
+          example: https://avails.5centscdn.com/v1/vmap
+        template:
+          type: string
+          example: avails.5centscdn.com-vmap
+        queryParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZoneAdServerQueryParam'
+        adOrigin:
+          type: object
+          properties:
+            customHeaders:
+              type: array
+              items:
+                $ref: '#/components/schemas/ZoneAdOriginHeader'
+        result:
+          type: string
+          enum:
+          - success
+          - error
     ZoneAdReplacementRequest:
       type: object
       properties:
@@ -7816,6 +7849,368 @@ components:
           - '1'
           - '0'
           description: '1 tops off an underfilled break with the gap filler even when some real ads served; 0 only uses it on a total no-fill.'
+    ZoneAdReplacementResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 18
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-5611-adinsertion
+        hash:
+          type: string
+          example: 3d27526ed69afdff653283e6148f3477
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/3d27526ed69afdff653283e6148f3477/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T11:20:21.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T04:28:13.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 33
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-5611-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-sg-ovh01.cdnized.com/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 36
+            spliceMode:
+              type: string
+              example: segment
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                minAdLengthS:
+                  type: integer
+                  example: 10
+        insertionMode:
+          type: string
+          example: ssai
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneScheduleAddResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 18
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-5611-adinsertion
+        hash:
+          type: string
+          example: 3d27526ed69afdff653283e6148f3477
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/3d27526ed69afdff653283e6148f3477/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T11:20:21.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T04:44:44.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 33
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-5611-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-sg-ovh01.cdnized.com/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 36
+            spliceMode:
+              type: string
+              example: segment
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                minAdLengthS:
+                  type: integer
+                  example: 10
+            midRolls:
+              type: array
+              items:
+                type: object
+                properties:
+                  offsetS:
+                    type: integer
+                    example: 300
+                  maxDurationS:
+                    type: integer
+                    example: 30
+        insertionMode:
+          type: string
+          example: ssai
+        result:
+          type: string
+          enum:
+          - success
+          - error
+    ZoneScheduleDeleteResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        id:
+          type: integer
+          example: 19
+        tenantId:
+          type: integer
+          example: 103
+        name:
+          type: string
+          example: 5-103-push-4162-adinsertion
+        hash:
+          type: string
+          example: ea696299629d461ba530b1125d10ddae
+        type:
+          type: string
+          example: ad-insertion
+        url:
+          type: string
+          format: uri
+          example: https://adinsertion.5centscdn.com/ea696299629d461ba530b1125d10ddae/
+        state:
+          type: string
+          example: enabled
+        creationDate:
+          type: string
+          format: date-time
+          example: '2026-07-30T17:55:55.000Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2026-09-23T06:02:35.000Z'
+        source:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 40
+            tenantId:
+              type: integer
+              example: 103
+            type:
+              type: string
+              example: asset-catalog
+            name:
+              type: string
+              example: 5-103-push-4162-assetcatalog
+            url:
+              type: string
+              format: uri
+              example: https://fm-gb-lon-sl01.cdnized.com:443/
+            format:
+              type: string
+              example: HLS
+            origin:
+              type: object
+              properties:
+                customHeaders:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ZoneAdOriginHeader'
+            assetSample:
+              type: string
+              example: v1/AUTH_1234567890/vineeth_103_push_5611/mp4/raw/badguy_3B-L2-30fps-128kbps-44.1kHz.mp4
+        enableAdTranscoding:
+          type: boolean
+          example: true
+        transcodingProfile:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2287
+            name:
+              type: string
+              example: 3B-L2-30fps-128kbps-44.1kHz
+        serverSideAdTracking:
+          type: object
+          properties:
+            enable:
+              type: boolean
+              example: false
+            checkAdMediaSegmentAvailability:
+              type: boolean
+              example: false
+        vodAdBreakPolicy:
+          type: object
+          properties:
+            adServer:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 39
+            spliceMode:
+              type: string
+              example: keyframe
+            preRoll:
+              type: object
+              properties:
+                maxDurationS:
+                  type: integer
+                  example: 30
+                maxAds:
+                  type: integer
+                  example: 2
+                minAdLengthS:
+                  type: integer
+                  example: 10
+        insertionMode:
+          type: string
+          example: sgai
+        result:
+          type: string
+          enum:
+          - success
+          - error
     ZoneTranscodeProfileRequest:
       type: object
       required:
@@ -7833,8 +8228,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         combinedName:
           type: string
           description: Name of the Combined Video Encoding Profile this SSAI profile maps to.
@@ -7866,8 +8259,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         combinedId:
           type: integer
           description: ID of the (possibly newly created) Combined Video Encoding Profile now linked to the zone.
@@ -7957,13 +8348,14 @@ components:
     ZoneConsumptionResult:
       type: object
       properties:
+        statusCode:
+          type: integer
+          example: 200
         result:
           type: string
           enum:
           - success
           - error
-        message:
-          type: string
         from:
           type: string
           example: 2026-01-01 00:00:00
@@ -7987,34 +8379,28 @@ components:
           type: integer
           example: 3720
         totalEgress:
-          type: integer
-          format: int64
-          example: 128430000000
+          type: string
+          example: 0 B
         egressDetails:
           type: object
           properties:
             manifests:
-              type: integer
-              format: int64
-              example: 1200000
+              type: string
+              example: 0 B
             segments:
-              type: integer
-              format: int64
-              example: 120000000000
+              type: string
+              example: 0 B
             ssat:
-              type: integer
-              format: int64
+              type: string
               description: Egress attributable to server-side ad-tracking (SSAT) beacon relaying.
-              example: 300000
+              example: 0 B
             transcoding:
-              type: integer
-              format: int64
+              type: string
               description: Egress attributable to ad creative transcoding output.
-              example: 8000000000
+              example: 0 B
             other:
-              type: integer
-              format: int64
-              example: 100000
+              type: string
+              example: 0 B
         adInsertionsChart:
           type: array
           items:
@@ -8027,6 +8413,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConsumptionChartPoint'
+        trackingBreakdown:
+          type: object
+          properties:
+            impressions:
+              type: integer
+              example: 0
+            starts:
+              type: integer
+              example: 0
+            firstQuartiles:
+              type: integer
+              example: 0
+            midpoints:
+              type: integer
+              example: 0
+            thirdQuartiles:
+              type: integer
+              example: 0
+            completes:
+              type: integer
+              example: 0
+            completionRate:
+              type: number
+              example: 0
     ConsumptionChartPoint:
       type: object
       properties:
@@ -8060,6 +8470,12 @@ components:
         name:
           type: string
           example: Ad Server Request
+        id:
+          type: integer
+          example: 18
+        state:
+          type: string
+          example: enabled
         message:
           type: string
           example: Fetched VAST response in 214ms
@@ -8072,8 +8488,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         data:
           type: array
           items:
@@ -8154,13 +8568,14 @@ components:
     TrackingReportsResult:
       type: object
       properties:
+        statusCode:
+          type: integer
+          example: 200
         result:
           type: string
           enum:
           - success
           - error
-        message:
-          type: string
         summary:
           $ref: '#/components/schemas/TrackingSummary'
         data:
@@ -8222,13 +8637,14 @@ components:
     TrackingCreativesResult:
       type: object
       properties:
+        statusCode:
+          type: integer
+          example: 200
         result:
           type: string
           enum:
           - success
           - error
-        message:
-          type: string
         items:
           type: array
           items:
@@ -8300,8 +8716,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         items:
           type: array
           items:
@@ -8338,8 +8752,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         data:
           type: array
           items:
@@ -8460,8 +8872,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         items:
           type: array
           items:
@@ -8488,8 +8898,6 @@ components:
             enum:
             - success
             - error
-          message:
-            type: string
           creatives:
             type: array
             items:
@@ -8524,8 +8932,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         sessionId:
           type: string
           example: sess_4a1b2c
@@ -8558,8 +8964,6 @@ components:
           enum:
           - success
           - error
-        message:
-          type: string
         crid:
           type: string
           example: creative-abc123
