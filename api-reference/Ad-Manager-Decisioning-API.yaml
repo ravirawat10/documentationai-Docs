@@ -1,0 +1,364 @@
+openapi: 3.0.3
+info:
+  title: 5centsCDN - Ad Manager Decisioning
+  description: >
+    Public ad-decisioning endpoints called directly by a video player or SSAI
+    system to request ad markup for a break. Returns industry-standard VAST
+    (single ad break) or VMAP (a full ad-break schedule) XML. These endpoints
+    are unauthenticated - `publisher_id` (an Ad Manager project's UUID) scopes
+    the request to a project instead of an API key.
+  version: "2.0.0"
+  contact:
+    email: help@5centscdn.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+- url: https://avails.5centscdn.com
+  description: 5centsCDN Ad Decisioning Server - Production
+
+tags:
+- name: VAST
+  description: Single ad-break VAST decisioning
+- name: VMAP
+  description: Full ad-break schedule VMAP decisioning
+
+paths:
+
+  /v1/vast:
+    get:
+      summary: Get VAST
+      description: Request VAST ad markup for a single ad break.
+      operationId: getVast
+      tags:
+      - VAST
+      parameters:
+      - $ref: '#/components/parameters/publisherIdParam'
+      - $ref: '#/components/parameters/contentIdParam'
+      - $ref: '#/components/parameters/placementParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/categoryParam'
+      - $ref: '#/components/parameters/deviceParam'
+      - $ref: '#/components/parameters/deviceUaParam'
+      - $ref: '#/components/parameters/languageParam'
+      - $ref: '#/components/parameters/userKeyParam'
+      - $ref: '#/components/parameters/deviceIpParam'
+      - $ref: '#/components/parameters/continentGeonameIdParam'
+      - $ref: '#/components/parameters/countryGeonameIdParam'
+      - $ref: '#/components/parameters/subdivision1GeonameIdParam'
+      - $ref: '#/components/parameters/subdivision2GeonameIdParam'
+      - $ref: '#/components/parameters/cityGeonameIdParam'
+      - $ref: '#/components/parameters/countryParam'
+      - $ref: '#/components/parameters/regionParam'
+      - $ref: '#/components/parameters/cityParam'
+      - name: max_duration
+        in: query
+        description: Break fill target, seconds (IAB BREAKMAXDURATION). 0 if absent or invalid, no warning.
+        schema:
+          type: integer
+          example: 30
+      - name: min_ad_length
+        in: query
+        description: Per-ad minimum duration, seconds (IAB BREAKMINADLENGTH). 0 if absent or invalid, no warning.
+        schema:
+          type: integer
+          example: 5
+      - name: max_ad_length
+        in: query
+        description: Per-ad maximum duration, seconds (IAB BREAKMAXADLENGTH). 0 if absent or invalid, no warning.
+        schema:
+          type: integer
+          example: 30
+      - name: max_ads
+        in: query
+        description: Pod-size cap override (IAB BREAKMAXADS). 0 (service default) if absent or invalid, no warning.
+        schema:
+          type: integer
+          example: 4
+      - name: fill_ceiling_seconds
+        in: query
+        description: Hard overshoot ceiling, distinct from the fill target. 0 (= max_duration) if absent or invalid, no warning.
+        schema:
+          type: integer
+          example: 35
+      - name: break_position
+        in: query
+        description: IAB BREAKPOSITION - 1=pre-roll, 2=mid-roll, 3=post-roll, 4=standalone. Invalid value ignored with a warning.
+        schema:
+          type: integer
+          enum: [1, 2, 3, 4]
+          example: 1
+      - name: break_id
+        in: query
+        description: Correlates the response to a VMAP ad break.
+        schema:
+          type: string
+          example: break-1
+      - name: transaction_id
+        in: query
+        description: IAB TRANSACTIONID correlator. Left blank if absent (not auto-generated for VAST).
+        schema:
+          type: string
+          example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+      - name: skipoffset
+        in: query
+        description: Uniform ad-skip override, written to VAST's `<Linear skipoffset>`. Accepts `false` (not skippable), `N%`, or a number of seconds (including `0`, meaning skippable immediately - not the same as `false`). A malformed value is dropped with a warning.
+        schema:
+          type: string
+          example: "5"
+      - name: skip_policy
+        in: query
+        description: Full rule-based ad-skip override, URL-encoded JSON matching the `SkipPolicy` shape from the Ad Manager management API. Highest precedence, above `skipoffset` and the project's saved default. Malformed/invalid JSON is dropped with a warning and falls back to `skipoffset`/the saved default.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: VAST XML ad response for the requested break.
+          content:
+            text/xml:
+              schema:
+                type: string
+                description: VAST-formatted XML document.
+        '400':
+          description: Missing or invalid required parameter (e.g. missing/invalid `publisher_id`).
+
+  /v1/vmap:
+    get:
+      summary: Get VMAP
+      description: Request a VMAP ad-break schedule spanning one or more ad breaks in a single call.
+      operationId: getVmap
+      tags:
+      - VMAP
+      parameters:
+      - $ref: '#/components/parameters/publisherIdParam'
+      - $ref: '#/components/parameters/contentIdParam'
+      - $ref: '#/components/parameters/placementParam'
+      - $ref: '#/components/parameters/tagsParam'
+      - $ref: '#/components/parameters/categoryParam'
+      - $ref: '#/components/parameters/deviceParam'
+      - $ref: '#/components/parameters/deviceUaParam'
+      - $ref: '#/components/parameters/languageParam'
+      - $ref: '#/components/parameters/userKeyParam'
+      - $ref: '#/components/parameters/deviceIpParam'
+      - $ref: '#/components/parameters/continentGeonameIdParam'
+      - $ref: '#/components/parameters/countryGeonameIdParam'
+      - $ref: '#/components/parameters/subdivision1GeonameIdParam'
+      - $ref: '#/components/parameters/subdivision2GeonameIdParam'
+      - $ref: '#/components/parameters/cityGeonameIdParam'
+      - $ref: '#/components/parameters/countryParam'
+      - $ref: '#/components/parameters/regionParam'
+      - $ref: '#/components/parameters/cityParam'
+      - name: transaction_id
+        in: query
+        description: Correlator spanning the whole VMAP/pod chain. Auto-generated if absent and reused across every ad-break callback.
+        schema:
+          type: string
+          example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+      - name: resolution
+        in: query
+        description: '`lazy` returns a callback URL per break (resolved later against `GET /v1/vast`); `eager` inlines the ad data for every break in this response. Any other value returns 400.'
+        schema:
+          type: string
+          enum: [lazy, eager]
+          default: lazy
+          example: lazy
+      - name: break
+        in: query
+        required: true
+        description: |
+          One ad break, pipe-delimited: `offset|type|max_duration_s|break_id|max_ads|min_ad_length|max_ad_length|fill_ceiling_seconds`.
+          Only `offset`, `type`, and `max_duration_s` are required; trailing optional fields may be omitted.
+            1. `offset` - `start` / `end` / `HH:MM:SS[.mmm]` / `SS[.mmm]` / `n%` (required)
+            2. `type` - `preroll` / `midroll` / `postroll` (required)
+            3. `max_duration_s` - break fill target, seconds (required)
+            4. `break_id` - correlation id (optional; defaults to `break-1`, `break-2`, ... in order)
+            5. `max_ads` - per-break pod-size cap (optional; blank/0 = unspecified)
+            6. `min_ad_length` - per-ad minimum duration (optional; blank/0 = unspecified)
+            7. `max_ad_length` - per-ad maximum duration (optional; blank/0 = unspecified)
+            8. `fill_ceiling_seconds` - per-break overshoot ceiling (optional; blank/0 = unspecified)
+
+          Repeat this parameter once per break. At least one is required, else 400.
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: true
+        example: "30%|midroll|30|break-1|4|5|30|35"
+      - name: content_duration_s
+        in: query
+        description: VoD asset duration, seconds. Used to resolve percentage-based `offset` values and to drop out-of-range breaks. Must be non-negative, else 400.
+        schema:
+          type: number
+          example: 1800
+      - name: skipoffset
+        in: query
+        description: Same uniform ad-skip override as `GET /v1/vast`, resolved once for the whole call.
+        schema:
+          type: string
+          example: "5"
+      - name: skip_policy
+        in: query
+        description: Same rule-based ad-skip override as `GET /v1/vast`, resolved once for the whole call.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: VMAP XML ad-break schedule.
+          content:
+            text/xml:
+              schema:
+                type: string
+                description: VMAP-formatted XML document. In `lazy` resolution each break contains an AdTagURI callback into `GET /v1/vast`; in `eager` resolution ad data is inlined.
+        '400':
+          description: Missing or invalid required parameter (e.g. missing `publisher_id`, missing `break`, invalid `resolution`, or negative `content_duration_s`).
+
+components:
+  parameters:
+    publisherIdParam:
+      name: publisher_id
+      in: query
+      required: true
+      description: Ad Manager project UUID. Scopes the request to a project. Missing or invalid value returns 400.
+      schema:
+        type: string
+        format: uuid
+        example: 8f2a1c3e-4b5d-4a6e-9f1a-2b3c4d5e6f7a
+
+    contentIdParam:
+      name: content_id
+      in: query
+      description: Content the break is attached to, matched against campaign content targeting allowlists.
+      schema:
+        type: string
+        example: "1024"
+
+    placementParam:
+      name: placement
+      in: query
+      description: Ad placement identifier.
+      schema:
+        type: string
+        enum: [preroll, midroll, postroll]
+        example: preroll
+
+    tagsParam:
+      name: tags
+      in: query
+      description: Comma-separated content tags, matched against campaign content-tag targeting.
+      schema:
+        type: string
+        example: "sports,live"
+
+    categoryParam:
+      name: category
+      in: query
+      description: IAB content-category ID, matched against campaign category targeting. Invalid value is ignored with a warning.
+      schema:
+        type: integer
+        example: 3
+
+    deviceParam:
+      name: device
+      in: query
+      description: IAB device-type ID (1-8), matched against campaign device targeting. Out-of-range value is ignored with a warning.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 8
+        example: 3
+
+    deviceUaParam:
+      name: device_ua
+      in: query
+      description: User-Agent override, for SSAI proxies masking the player's real UA. Falls back to the request's `User-Agent` header.
+      schema:
+        type: string
+
+    languageParam:
+      name: language
+      in: query
+      description: Content/ad language targeting.
+      schema:
+        type: string
+        example: en
+
+    userKeyParam:
+      name: user_key
+      in: query
+      description: Frequency-capping / user correlation key.
+      schema:
+        type: string
+
+    deviceIpParam:
+      name: device_ip
+      in: query
+      description: Client IP override, used for GeoIP resolution and outbound forwarding. Falls back to `X-Forwarded-For`, then the connection's remote address.
+      schema:
+        type: string
+        example: "203.0.113.10"
+
+    continentGeonameIdParam:
+      name: continent_geoname_id
+      in: query
+      description: Explicit geo-targeting override.
+      schema:
+        type: integer
+        example: 6255149
+
+    countryGeonameIdParam:
+      name: country_geoname_id
+      in: query
+      description: Explicit geo-targeting override.
+      schema:
+        type: integer
+        example: 6252001
+
+    subdivision1GeonameIdParam:
+      name: subdivision_1_geoname_id
+      in: query
+      description: Explicit geo-targeting override.
+      schema:
+        type: integer
+        example: 5332921
+
+    subdivision2GeonameIdParam:
+      name: subdivision_2_geoname_id
+      in: query
+      description: Explicit geo-targeting override.
+      schema:
+        type: integer
+        example: 5391959
+
+    cityGeonameIdParam:
+      name: city_geoname_id
+      in: query
+      description: Explicit geo-targeting override.
+      schema:
+        type: integer
+        example: 5391811
+
+    countryParam:
+      name: country
+      in: query
+      description: Text geo-targeting fallback, used when the geoname-id overrides are not supplied.
+      schema:
+        type: string
+        example: US
+
+    regionParam:
+      name: region
+      in: query
+      description: Text geo-targeting fallback.
+      schema:
+        type: string
+        example: NY
+
+    cityParam:
+      name: city
+      in: query
+      description: Text geo-targeting fallback.
+      schema:
+        type: string
+        example: New York
